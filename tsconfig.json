@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    /* Language */
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "module": "ESNext",
+    "strict": true,
+
+    /* Modules */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+
+    /* Output */
+    "noEmit": true,
+
+    /* Linting */
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
