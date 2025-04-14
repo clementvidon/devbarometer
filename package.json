@@ -2,12 +2,20 @@
   "name": "redditclimate",
   "type": "module",
   "scripts": {
-    "start": "npx tsx index.ts"
+    "start": "npx tsx index.ts",
+    "prepare": "husky",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "lint-staged": {
+  "**/*.ts": ["eslint --fix", "prettier --write --ignore-unknown"]
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",
     "eslint": "^9.24.0",
     "globals": "^16.0.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
     "prettier": "3.5.3",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3",
