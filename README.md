@@ -6,7 +6,7 @@ The dev job market barometer — powered by Reddit sentiment.
 
 1. [Overview](#overview)
 2. [Quick Start](#quick-start)
-3. [Project Structure](#project-structure)
+3. [Automation](#automation)
 4. [License](#license)
 
 ---
@@ -34,16 +34,41 @@ cd devbarometer
 
 > _NOTE: Ensure your Node version matches the one specified in the `engines` field of `package.json`._
 
+3. Get an OpenAI API key: <https://platform.openai.com/>
+
+> _NOTE: Make sure your OpenAI account has billing enabled and some credit — a few dollars are enough for testing._
+
 ### Run the app
 
-1. **Install dependencies**:
-   ```bash
-   npm install
-   ```
-2. **Run the project**:
-   ```bash
-   npm start
-   ```
+Copy the `.env.example` file to `.env` in each subdirectory where it exists, and activate direnv.
+
+1. **Set up environment variables**:
+
+```bash
+cp .env.example .env
+```
+
+Then open `.env` and replace the placeholder with your actual API key:
+
+```env
+OPENAI_API_KEY=sk-...
+```
+
+2. **Install dependencies**:
+
+```bash
+npm install
+```
+
+3. **Run the project**:
+
+```bash
+npm start
+```
+
+## Automation
+
+This runs daily via GitHub Actions and pushes public/index.html to GitHub Pages.
 
 ---
 
