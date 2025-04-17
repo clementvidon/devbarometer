@@ -1,26 +1,9 @@
-interface DataPoint {
-  upvotes: number;
-  title: string;
-  content: string;
-  topComment: string | null;
-}
-
-interface RedditPostData {
-  id: string;
-  title: string;
-  selftext: string;
-  ups: number;
-}
-
-interface RedditPostWrapper {
-  data: RedditPostData;
-}
-
-interface RedditAPIResponse {
-  data: {
-    children: RedditPostWrapper[];
-  };
-}
+import type {
+  DataPoint,
+  RedditAPIResponse,
+  RedditPostWrapper,
+  RedditPostData,
+} from './types';
 
 const BASE_URL = 'https://www.reddit.com';
 

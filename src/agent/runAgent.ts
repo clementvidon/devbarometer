@@ -1,5 +1,5 @@
 // import { getRedditDataPoints } from './redditData.ts';
-import { runLLM } from './llm';
+import { runLLM } from '../llm/llm.ts';
 
 export const runAgent = async (): Promise<string[]> => {
   // const dataPoints = await getRedditDataPoints('developpeurs', 100, 'week');

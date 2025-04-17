@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { getRedditDataPoints } from '../src/redditData';
+import { getRedditDataPoints } from '../src/reddit/redditData';
 import sampleResponse from '../mocks/reddit-top-response.json';
-import type { RedditAPIResponse } from '../src/redditData';
+import type { RedditAPIResponse } from '../src/reddit/types';
 
 const getMockFetch = () => fetch as unknown as vi.Mock;
 

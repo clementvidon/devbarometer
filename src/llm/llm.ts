@@ -1,10 +1,5 @@
 import { ai } from './ai';
-import type { Chat } from 'openai/resources';
-
-type AgentMessage =
-  | Chat.Completions.ChatCompletionAssistantMessageParam
-  | Chat.Completions.ChatCompletionUserMessageParam
-  | Chat.Completions.ChatCompletionToolMessageParam;
+import type { AgentMessage } from './types';
 
 export const runLLM = async (model: string, message: AgentMessage) => {
   const response = await ai.chat.completions.create({
