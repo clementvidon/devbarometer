@@ -18,6 +18,18 @@
       "topComment":"Les entreprises font tellement bien leur travail qu'il faut maintenant utiliser une IA pour que leur IA remarque ton CV..."
    },
    {
+      "upvotes":26,
+      "title":"L'informatique embarquée c'est aussi bouché que le reste ?",
+      "content":"`Bonjour, tout est dans le titre, désolé. Je fais rien d'original :) (H30) En gros, j'ai signé une rupture conventionnelle et j'ai quitté ma boite au printemps 2024.   Je faisais du dépannage d'appareil électronique, avec un peu d'interventions de brasures, puis j'ai été promu responsable de mon service pendant 3 ans et demi et j'ai fais de l'administratif et de la logistique en plus. Actuellement, je bosse dans un taf qui n'a rien à voir avec le dev ou mes études et je finis fin mai.   J'ai un BTS Système numérique, obtenu il y a maintenant 7 ans. Comme je fais un peu de conception électronique (des trucs basiques, genre un shield Arduino, ou un truc différent, mais qui reste une base Arduino) et un peu de dev dessus (encore une fois, du Arduino).    Une connaissance de la fac de Mulhouse m'a parlé d'une licence pro Informatique Embarquée.   Selon lui, c'est un domaine \"en tension\" mais j'ai des doutes là dessus car: \\-Je vois aucune offre du genre sur les sites de recherche d'emploi (j'ai pas non plus le nez collé France travail)   \\-Globalement, les devs c'est pas ce qui manque, j'imagine qu'en informatique embarquée c'est pas différent J'ai un profil hardware, avec des bases correctes là-dessus, mais j'ai vraiment des doutes sur mon niveau en sortie de licence et mon employabilité après. D'autant que c'est en initial. Bref, est-ce que vous pensez que c'est une piste à envisager ou simplement une dead end ?`",
+      "topComment":"Deviens électricien. Taura tellement de sous et de tafe que tu saura plus quoi en faire, ou j'habite faut attendre 6mois pr quils soient dispo, soit ils sont sur des gros chantier soit chez des particuliers"
+   },
+   {
+      "upvotes":23,
+      "title":"(ESN) Dans quel domaine aller : l'industrie j'en peux plus",
+      "content":"Bonjour à tous ; Question simple, c'est quoi pour vous le type de client pour qui vous avez fait des missions en ESN? Je suis dans un groupe industriel/defense et j'en peux plus. Lent, que des executants, techno oldschool, process à outrance, j'ai pas codé 50% de mon temps en 2025... Y'a des domaines plus cools selon vous? Bancaire? Médical? Telecom? Oui je quitte l'ESN dès que possible. ;-)",
+      "topComment":"Start up tech. Le problème c'est que il faut être hyper bon. En général très difficile de rejoindre une startup tech quand tu es resté dans un secteur avec des stacks pourries. Pas au niveau. A ta place je rejoindrais un client final dans la défense. Il va y avoir une forte croissance dans les années a venir. Tu auras toujours une stack de merde mais tu auras une situation stable."
+   },
+   {
       "upvotes":19,
       "title":"Offre de CDI après stage : 34k brut en ESN, c’est correct ?",
       "content":"Je suis actuellement étudiant en école d’ingénieur et je fais mon stage de fin d’études dans une ESN hors paris. À l’issue du stage, ils m’ont proposé un CDI en tant que développeur junior avec un salaire de 34k brut annuel, ainsi que des tickets resto. Pensez-vous que cette proposition est correcte pour un premier poste ? Est-ce dans la moyenne ? Merci d’avance pour vos retours ! ",
@@ -34,6 +46,12 @@
       "title":"Que pensez vous des profils IT sortant de 42 ?",
       "content":"Bonjour, je me demandais ce que vous pensez des profils IT issus de l’école 42. Ont-ils, selon vous, des avantages ou des inconvénients par rapport à ceux qui viennent de formations plus classiques comme les écoles d’ingénieurs ou l’université ? Les avis que j’entends sont souvent très partagés, parfois aux deux extrêmes.",
       "topComment":"Y'a du très bon et y'a du moins bon. J'ai vu des véritables crack du code. Des gens qui étaient plus tourner vers l'ambition de création de start up et gère très bien la gestion de projet. Y'a ceux qui font ce qu'on leur demande sans plus. Et y'a les branleurs. Bref c'est pas les études qui font un bon dev (ou autre profil IT) ça aide, mais ça fait pas tout. J'ai vu des énormes merdes sortir de master en terme de dev et de très bon dev sortir de 42. L'inverse est tout aussi commun à mon avis."
+   },
+   {
+      "upvotes":13,
+      "title":"Temps partiel au smic pour ne pas trop se sentir exclu",
+      "content":"Hello, comme beaucoup ici j'ai de la difficulté à trouver un emploi de développeur et pourtant j'ai beaucoup charbonner dans ce domaine.  Je commence vraiment à me sentir exclu.. et de plus en plus pauvre... J'ai postulé à McDonald's pour un temps partiel (mais j'ai jamais travaillé dans la restauration rapide) c'est la deuxième fois que je postule, la première fois je n'avais même pas été retenu après rencontre avec le manager... (c'est vrai qu'un informaticien/cadre qui a bossé dans des boites du CAC40.. qu'est ce qu'il vient foutre comme employé chez MacDo. Mais j'ai pas de chômage ni aucun revenu et je sais pas ce qu'il foute avec mon RSA mais je le reçois pas.)    Connaissez vous des boites qui recrutent pour du temps partiel et ou on rentre facilement ? Décathlon et Macdo je vise.. mais je fais banqueroute pour l'instant ... :(.    Merci",
+      "topComment":"`Je ne sais pas où tu habites, mais il y a pas mal de restau/bars qui recrutent des saisonniers pour juin-septembre en ce moment. Au pire tu te présentes comme plongeur ou serveur. Pas besoin de t'étendre sur le fait que tu as bossé dans le CAC 40, tu dis que tu as besoin de bosser pour faire la jointure pendant quelques mois et voilà. Ma technique c'est d'aller prendre un café et de discuter avec le patron : \"alors vous avez trouvé tous vos saisonniers pour la saison ?... vous connaissez des gens qui recrutent pour un petit boulot, même à temps partiel ?...\" etc.`"
    },
    {
       "upvotes":10,
