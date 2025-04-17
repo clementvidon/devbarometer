@@ -1,6 +1,7 @@
-import { getRedditDataPoints } from './redditData';
+import 'dotenv/config';
+import { runAgent } from './agent';
 
 export const run = async () => {
-  const dataPoints = await getRedditDataPoints('developpeurs', 100, 'week');
-  console.log(dataPoints);
+  const response = await runAgent();
+  console.log(response);
 };
