@@ -1,4 +1,6 @@
+import type { Chat } from 'openai/resources';
+
 export type AgentMessage =
-  | Chat.Completions.ChatCompletionAssistantMessageParam
+  | Chat.Completions.ChatCompletionSystemMessageParam
   | Chat.Completions.ChatCompletionUserMessageParam
-  | Chat.Completions.ChatCompletionToolMessageParam;
+  | Chat.Completions.ChatCompletionAssistantMessageParam;
