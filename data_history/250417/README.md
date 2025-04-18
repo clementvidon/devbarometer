@@ -1,50 +1,49 @@
 ## Agent Messages
 
-1. **DataPoints.json**
+1.  **DataPoints.json**
 
     const makeDataPointsMessages = (dp: DataPoint) => [
     {
-        role: 'system' as const,
-        content: `
-        Vous êtes un expert du marché de l'emploi des développeurs en France.
-        Vous aidez à filtrer les posts Reddit pour ne garder que ceux qui apportent un éclairage pertinent sur le sentiment du marché de l'emploi tech.
+    role: 'system' as const,
+    content: `
+    Vous êtes un expert du marché de l'emploi des développeurs en France.
+    Vous aidez à filtrer les posts Reddit pour ne garder que ceux qui apportent un éclairage pertinent sur le sentiment du marché de l'emploi tech.
 
         Analysez la donnée fourni dans son entièreté et répondez STRICTEMENT par un "Oui" si vous les jugez pertinentes pour analyser le sentiment actuel du marché de l'emploi tech, sinon "Non".
         Vérifiez encore une fois pour vous assurer de la pertinence de ces données pour la mesure du climat général actuel du marché de l'emploi tech. En cas de doute, répondez "Non".
         `.trim(),
+
     },
     {
-        role: 'user' as const,
-        content: `
-        Analysez ces données :
-        titre        : ${dp.title}
-        contenu      : ${dp.content}
-        meilleur com.: ${dp.topComment}
-        `.trim(),
+    role: 'user' as const,
+    content: `     Analysez ces données :
+    titre        : ${dp.title}
+    contenu      : ${dp.content}
+    meilleur com.: ${dp.topComment}
+    `.trim(),
     },
     ];
 
-
-2. **sentiments.json**
+2.  **sentiments.json**
     const makeSentimentMessages = (dp: DataPoint) => [
     {
-        role: 'system' as const,
-        content: `
-        Vous êtes un expert en analyse émotionnelle selon le NRC Emotion Lexicon.
-        Analysez la donnée fourni dans son entièreté et répondez STRICTEMENT par un JSON brut contenant uniquement ces clés :
-        anger, fear, anticipation, trust, surprise, sadness, joy, disgust, negative, positive.
-        Les valeurs doivent être des nombres entre 0.0 et 1.0.
-        Aucune autre clé, explication ou mise en forme.
-        `.trim(),
+    role: 'system' as const,
+    content: `
+    Vous êtes un expert en analyse émotionnelle selon le NRC Emotion Lexicon.
+    Analysez la donnée fourni dans son entièreté et répondez STRICTEMENT par un JSON brut contenant uniquement ces clés :
+    anger, fear, anticipation, trust, surprise, sadness, joy, disgust, negative, positive.
+    Les valeurs doivent être des nombres entre 0.0 et 1.0.
+    Aucune autre clé, explication ou mise en forme.
+    `.trim(),
     },
     {
-        role: 'user' as const,
-        content: `
-        Analysez ces données :
-        titre        : ${dp.title}
-        contenu      : ${dp.content}
-        meilleur com.: ${dp.topComment}
-        `.trim(),
+    role: 'user' as const,
+    content: `
+    Analysez ces données :
+    titre : ${dp.title}
+    contenu : ${dp.content}
+    meilleur com.: ${dp.topComment}
+    `.trim(),
     },
     ];
 
