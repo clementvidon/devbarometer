@@ -80,4 +80,29 @@ describe('getRedditDataPoints - Error handling', () => {
       /Failed to fetch Reddit posts: Error: API down/,
     );
   });
+
+  test('returns empty array when Reddit API response is invalid', async () => {
+    const mockFetch = mockFetchGlobal();
+
+    mockFetch.mockResolvedValueOnce({
+      json: async () => ({ invalid: true }),
+    });
+
+    const dataPoints = await getRedditDataPoints('fakeSubreddit', 10, 'week');
+    expect(dataPoints).toEqual([]);
+  });
+
+  test('throws when fetchAllPosts response throws sync error', async () => {
+    const mockFetch = mockFetchGlobal();
+
+    mockFetch.mockResolvedValueOnce({
+      json: () => {
+        throw new Error('sync JSON error');
+      },
+    });
+
+    await expect(
+      getRedditDataPoints('crashSubreddit', 10, 'week'),
+    ).rejects.toThrow(/Failed to fetch Reddit posts: Error: sync JSON error/);
+  });
 });
