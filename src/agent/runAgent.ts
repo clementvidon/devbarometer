@@ -2,13 +2,14 @@ import { getRedditDataPoints } from '../reddit/redditData.ts';
 import { filterDataPoints } from './filterDataPoints';
 import { analyzeSentiments } from './analyzeSentiments.ts';
 import { compressSentiments } from './compressSentiments.ts';
-import { interpretSentiment } from './interpretSentiment.ts';
+import { generateReport } from './generateReport.ts';
+import type { sentimentReport } from './generateReport.ts';
 
-export const runAgent = async (): Promise<string[]> => {
+export const runAgent = async (): Promise<sentimentReport> => {
   const dataPoints = await getRedditDataPoints('developpeurs', 100, 'week');
   const relevantDataPoints = await filterDataPoints(dataPoints);
   const sentiments = await analyzeSentiments(relevantDataPoints);
-  const sentiment = await compressSentiments(sentiments);
-  const report = await interpretSentiment(sentiment);
+  const sentimentSummary = await compressSentiments(sentiments);
+  const report = await generateReport(sentimentSummary);
   return report;
 };
