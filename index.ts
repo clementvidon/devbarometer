@@ -1,3 +1,3 @@
-import { run } from './src/main';
-
-await run();
+import 'dotenv/config';
+import { runAgent } from './src/agent/runAgent';
+await runAgent().then(console.log);
