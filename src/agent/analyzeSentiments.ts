@@ -1,7 +1,8 @@
-import { runLLM } from '../llm/llm';
 import { z } from 'zod';
 import pLimit from 'p-limit';
+import { runLLM } from '../llm/llm';
 import type { DataPoint } from '../reddit/types';
+import { stripCodeFences } from '../utils/stripCodeFences';
 
 const CONCURRENCY_LIMIT = 10;
 
@@ -17,12 +18,25 @@ const EmotionSchema = z.object({
   negative: z.number().min(0).max(1),
   positive: z.number().min(0).max(1),
 });
-export type EmotionScores = z.infer<typeof EmotionSchema>;
+type EmotionScores = z.infer<typeof EmotionSchema>;
 
-export type SentimentResult = {
+type SentimentResult = {
   title: string;
   upvotes: number;
   emotions: EmotionScores;
+};
+
+const EMPTY_EMOTIONS: EmotionScores = {
+  anger: 0,
+  fear: 0,
+  anticipation: 0,
+  trust: 0,
+  surprise: 0,
+  sadness: 0,
+  joy: 0,
+  disgust: 0,
+  negative: 0,
+  positive: 0,
 };
 
 const makeSentimentMessages = (dp: DataPoint) => [
@@ -47,39 +61,23 @@ const makeSentimentMessages = (dp: DataPoint) => [
   },
 ];
 
-function stripCodeFences(raw: string): string {
-  return raw
-    .split('\n')
-    .filter((line) => !line.includes('```'))
-    .join('\n')
-    .trim();
-}
-
-const EMPTY_EMOTIONS: EmotionScores = {
-  anger: 0,
-  fear: 0,
-  anticipation: 0,
-  trust: 0,
-  surprise: 0,
-  sadness: 0,
-  joy: 0,
-  disgust: 0,
-  negative: 0,
-  positive: 0,
-};
-
 async function fetchEmotions(dp: DataPoint): Promise<EmotionScores> {
   try {
     const raw = await runLLM('gpt-4o-mini', makeSentimentMessages(dp));
+    // console.debug(`LLM raw output for "${dp.title}":\n`, raw);
     const cleaned = stripCodeFences(raw);
     const parsed = JSON.parse(cleaned);
     const result = EmotionSchema.safeParse(parsed);
     if (!result.success) {
-      throw new Error(JSON.stringify(result.error.format()));
+      console.error(
+        `Validation failed for "${dp.title}":`,
+        result.error.flatten(),
+      );
+      return EMPTY_EMOTIONS;
     }
     return result.data;
   } catch (error) {
-    console.error(`Error at "${dp.title}" :`, error);
+    console.error(`Error at "${dp.title}":`, error);
     return EMPTY_EMOTIONS;
   }
 }
