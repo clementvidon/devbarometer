@@ -1,19 +1,15 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { getRedditDataPoints } from '../src/reddit/redditData';
-import sampleResponse from '../mocks/reddit-developpeurs-top-100-week.json';
-import type { RedditAPIResponse } from '../src/reddit/types';
+import { getRedditDataPoints } from '../src/agent/getRedditDataPoints.ts';
 
-const getMockFetch = () => fetch as unknown as vi.Mock;
+import redditData from '../mocks/redditData.json';
+
+const mockFetchGlobal = () => fetch as unknown as vi.Mock;
 
 const mockTopComment = (body: string) => [
   {},
   {
     data: {
-      children: [
-        {
-          data: { body },
-        },
-      ],
+      children: [{ data: { body } }],
     },
   },
 ];
@@ -25,13 +21,13 @@ describe('getRedditDataPoints - Functional', () => {
   });
 
   test('returns DataPoints from local JSON (mock fetch)', async () => {
-    const mockFetch = getMockFetch();
+    const mockFetch = mockFetchGlobal();
 
     mockFetch.mockResolvedValueOnce({
-      json: async () => sampleResponse as RedditAPIResponse,
+      json: async () => redditData,
     });
 
-    for (let i = 0; i < sampleResponse.data.children.length; i++) {
+    for (let i = 0; i < redditData.data.children.length; i++) {
       mockFetch.mockResolvedValueOnce({
         json: async () => mockTopComment(`Mocked top comment for post ${i}`),
       });
@@ -56,8 +52,8 @@ describe('getRedditDataPoints - Error handling', () => {
   });
 
   test('returns null when fetchTopComment throws', async () => {
-    const mockFetch = getMockFetch();
-    const mockResponse = structuredClone(sampleResponse);
+    const mockFetch = mockFetchGlobal();
+    const mockResponse = structuredClone(redditData);
     mockResponse.data.children[0].data.ups = 100;
 
     mockFetch.mockResolvedValueOnce({
