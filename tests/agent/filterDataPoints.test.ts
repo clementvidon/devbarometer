@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach, beforeAll } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { filterDataPoints } from '../../src/agent/filterDataPoints';
 
 vi.mock('../../src/llm/llm', () => ({
@@ -29,21 +29,12 @@ const fakeDataPoints = [
 ];
 
 describe('filterDataPoints', () => {
-  beforeAll(() => {
-    vi.stubGlobal('console', {
-      error: vi.fn(),
-      log: vi.fn(),
-      warn: vi.fn(),
-      info: vi.fn(),
-    });
-  });
-
   describe('Happy path', () => {
     beforeEach(() => {
       vi.clearAllMocks();
     });
 
-    test('filters only relevant data points', async () => {
+    test('filters relevant data points correctly', async () => {
       (runLLM as vi.Mock).mockImplementation(async (_model, messages) => {
         const content = messages[1].content;
         if (content.includes('Relevant')) {
@@ -51,10 +42,10 @@ describe('filterDataPoints', () => {
         }
         return '{ "relevant": false }';
       });
+      const relevantDataPoints = await filterDataPoints(fakeDataPoints);
 
-      const filtered = await filterDataPoints(fakeDataPoints);
-      expect(filtered).toHaveLength(2);
-      expect(filtered.map((dp) => dp.title)).toEqual([
+      expect(relevantDataPoints).toHaveLength(2);
+      expect(relevantDataPoints.map((dp) => dp.title)).toEqual([
         'Relevant Post A',
         'Relevant Post B',
       ]);
