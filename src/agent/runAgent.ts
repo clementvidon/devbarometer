@@ -1,4 +1,4 @@
-import { getRedditDataPoints } from '../reddit/redditData.ts';
+import { getRedditDataPoints } from './getRedditDataPoints.ts';
 import { filterDataPoints } from './filterDataPoints';
 import { analyzeSentiments } from './analyzeSentiments.ts';
 import { compressSentiments } from './compressSentiments.ts';
