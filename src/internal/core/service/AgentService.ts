@@ -14,29 +14,28 @@ export class AgentService {
   ) {}
 
   async run(subreddit: string, limit: number, period: string): Promise<Report> {
-    const raw = await getRedditDataPoints(
+    const posts = await getRedditDataPoints(
       this.fetcher,
       subreddit,
       limit,
       period,
     );
-    // const items = await fetchRedditData(this.fetcher, subreddit, limit, period);
-    console.log(raw);
+    console.log(posts);
+    // const posts = await fetchRedditPosts(this.fetcher, subreddit, limit, period);
+    // console.log(posts);
 
-    const relevantDataPoints = await filterDataPoints(raw, this.llm);
-    // const relevantItems = await filterRelevantItems(raw, this.llm);
-    console.log(relevantDataPoints);
+    const relevantPosts = await filterDataPoints(posts, this.llm);
+    console.log(relevantPosts);
+    // const relevantPosts = await filterRelevantPosts(posts, this.llm);
+    // console.log(relevantPosts);
 
-    const sentiments = await analyzeSentiments(relevantDataPoints, this.llm);
-    // const sentimentPerItem = await analyzeSentiments(relevantDataPoints, this.llm);
-    console.log(sentiments);
+    const sentimentPerPost = await analyzeSentiments(relevantPosts, this.llm);
+    console.log(sentimentPerPost);
 
-    const sentimentSummary = compressSentiments(sentiments);
-    // const averageSentiment = compressSentiments(sentiments);
-    console.log(sentimentSummary);
+    const averageSentiment = compressSentiments(sentimentPerPost);
+    console.log(averageSentiment);
 
-    const report = await generateSentimentReport(sentimentSummary, this.llm);
-    // const report = await generateReport(sentimentSummary, this.llm);
+    const report = await generateSentimentReport(averageSentiment, this.llm);
 
     return report;
   }
