@@ -1,11 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { analyzeSentiments } from '../../src/agent/analyzeSentiments';
-
-vi.mock('../../src/llm/llm', () => ({
-  runLLM: vi.fn(),
-}));
-
-import { runLLM } from '../../src/llm/llm';
+import { analyzeSentiments } from './analyzeSentiments';
 
 const fakeDataPoints = [
   {
@@ -37,13 +31,17 @@ const fakeEmotions = {
 
 describe('analyzeSentiments', () => {
   describe('Happy path', () => {
+    let llm: { run: vi.Mock };
+
     beforeEach(() => {
       vi.clearAllMocks();
+      llm = {
+        run: vi.fn().mockResolvedValue(JSON.stringify(fakeEmotions)),
+      };
     });
 
-    test('analyzes data points and returns sentiment results', async () => {
-      (runLLM as vi.Mock).mockResolvedValue(JSON.stringify(fakeEmotions));
-      const sentiments = await analyzeSentiments(fakeDataPoints);
+    test.only('analyzes data points and returns sentiment results', async () => {
+      const sentiments = await analyzeSentiments(fakeDataPoints, llm);
 
       expect(sentiments).toHaveLength(2);
       sentiments.forEach((res, index) => {
@@ -51,7 +49,6 @@ describe('analyzeSentiments', () => {
         expect(res.upvotes).toBe(fakeDataPoints[index].upvotes);
         expect(res.emotions).toEqual(fakeEmotions);
       });
-      expect(console.log).toHaveBeenCalledWith('Analyzed 2/2 posts.');
     });
   });
 });

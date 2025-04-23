@@ -1,23 +1,26 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { runAgent } from '../../src/agent/runAgent';
+import { AgentService } from './AgentService';
 
-vi.mock('../../src/agent/getRedditDataPoints', () => ({
+const fetcher = { fetch: vi.fn() };
+const llm = { run: vi.fn() };
+
+vi.mock('../../usecase/getRedditDataPoints', () => ({
   getRedditDataPoints: vi.fn().mockResolvedValue(['dataPoint']),
 }));
 
-vi.mock('../../src/agent/filterDataPoints', () => ({
+vi.mock('../../usecase/filterDataPoints', () => ({
   filterDataPoints: vi.fn().mockResolvedValue(['filteredDataPoint']),
 }));
 
-vi.mock('../../src/agent/analyzeSentiments', () => ({
+vi.mock('../../usecase/analyzeSentiments', () => ({
   analyzeSentiments: vi.fn().mockResolvedValue(['sentiment']),
 }));
 
-vi.mock('../../src/agent/compressSentiments', () => ({
-  compressSentiments: vi.fn().mockResolvedValue({ emotions: { joy: 1 } }),
+vi.mock('../../usecase/compressSentiments', () => ({
+  compressSentiments: vi.fn().mockResolvedValue({ joy: 1 }),
 }));
 
-vi.mock('../../src/agent/generateReport', () => ({
+vi.mock('../../usecase/generateReport', () => ({
   generateReport: vi.fn().mockResolvedValue({
     text: 'Everything looks great!',
     emoji: '☀️',
@@ -25,14 +28,15 @@ vi.mock('../../src/agent/generateReport', () => ({
   }),
 }));
 
-describe('runAgent', () => {
-  describe('Happy path', () => {
+describe('AgentService', () => {
+  describe('run', () => {
     beforeEach(() => {
       vi.clearAllMocks();
     });
 
     test('executes full pipeline and returns a report', async () => {
-      const report = await runAgent();
+      const agent = new AgentService(fetcher, llm);
+      const report = await agent.run('anySub', 10, 'day');
 
       expect(report).toEqual({
         text: 'Everything looks great!',

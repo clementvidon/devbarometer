@@ -1,5 +1,6 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { getRedditDataPoints } from '../../src/agent/getRedditDataPoints.ts';
+import { getRedditDataPoints } from './getRedditDataPoints';
+import type { FetchPort } from '../core/port/FetchPort';
 
 const fakePosts = [
   { data: { id: '00', title: '1st\nPost', selftext: 'Content\n1', ups: 15 } },
@@ -9,18 +10,21 @@ const fakePosts = [
 
 describe('getRedditDataPoints', () => {
   describe('Happy path', () => {
+    let fetcher: FetchPort;
+
     beforeEach(() => {
       vi.restoreAllMocks();
-      vi.stubGlobal(
-        'fetch',
-        vi.fn((url: string) => {
+      fetcher = {
+        fetch: vi.fn((url: string) => {
           if (url.includes('/top.json')) {
             return Promise.resolve({
+              status: 200,
               json: async () => ({ data: { children: fakePosts } }),
             });
           }
           if (url.includes('/comments/')) {
             return Promise.resolve({
+              status: 200,
               json: async () => [
                 {},
                 {
@@ -31,11 +35,16 @@ describe('getRedditDataPoints', () => {
           }
           return Promise.reject(new Error(`Unexpected fetch URL: ${url}`));
         }),
-      );
+      };
     });
 
-    test('maps, filters (ups>=10), and sanitizes correctly', async () => {
-      const dataPoints = await getRedditDataPoints('anySub', 10, 'day');
+    test.only('maps, filters (ups>=10), and sanitizes correctly', async () => {
+      const dataPoints = await getRedditDataPoints(
+        fetcher,
+        'anySub',
+        10,
+        'day',
+      );
 
       expect(dataPoints).toHaveLength(2);
       expect(dataPoints[0]).toMatchObject({

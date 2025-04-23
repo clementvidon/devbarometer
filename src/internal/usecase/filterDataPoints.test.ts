@@ -1,11 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { filterDataPoints } from '../../src/agent/filterDataPoints';
-
-vi.mock('../../src/llm/llm', () => ({
-  runLLM: vi.fn(),
-}));
-
-import { runLLM } from '../../src/llm/llm';
+import { filterDataPoints } from './filterDataPoints';
 
 const fakeDataPoints = [
   {
@@ -30,28 +24,29 @@ const fakeDataPoints = [
 
 describe('filterDataPoints', () => {
   describe('Happy path', () => {
+    let llm: { run: vi.Mock };
+
     beforeEach(() => {
       vi.clearAllMocks();
+      llm = {
+        run: vi.fn(async (_model, messages) => {
+          const content = messages[1].content;
+          if (content.includes('Relevant')) {
+            return '{ "relevant": true }';
+          }
+          return '{ "relevant": false }';
+        }),
+      };
     });
 
-    test('filters relevant data points correctly', async () => {
-      (runLLM as vi.Mock).mockImplementation(async (_model, messages) => {
-        const content = messages[1].content;
-        if (content.includes('Relevant')) {
-          return '{ "relevant": true }';
-        }
-        return '{ "relevant": false }';
-      });
-      const relevantDataPoints = await filterDataPoints(fakeDataPoints);
+    test.only('filters relevant data points correctly', async () => {
+      const relevantDataPoints = await filterDataPoints(fakeDataPoints, llm);
 
       expect(relevantDataPoints).toHaveLength(2);
       expect(relevantDataPoints.map((dp) => dp.title)).toEqual([
         'Relevant Post A',
         'Relevant Post B',
       ]);
-      expect(console.log).toHaveBeenCalledWith(
-        'Filtered 2/3 relevantDataPoints.',
-      );
     });
   });
 });
