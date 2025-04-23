@@ -15,14 +15,14 @@ const WeatherEmoji = z.enum([
   '🌩️',
 ]);
 
-export const ReportSchema = z.object({
+export const SentimentReportSchema = z.object({
   text: z.string().max(200),
   emoji: WeatherEmoji,
   timestamp: z.string().nonempty(),
 });
-export type Report = z.infer<typeof ReportSchema>;
+export type SentimentReport = z.infer<typeof SentimentReportSchema>;
 
-const FALLBACK: Report = {
+const FALLBACK: SentimentReport = {
   text: 'Rapport indisponible.',
   emoji: '?',
   timestamp: new Date().toISOString(),
@@ -52,17 +52,17 @@ function makeMessages(emotionsText: string) {
   ];
 }
 
-export async function generateReport(
+export async function generateSentimentReport(
   emotions: Record<string, number>,
   llm: LlmPort,
-): Promise<Report> {
+): Promise<SentimentReport> {
   const emotionsJson = JSON.stringify(emotions);
 
   try {
     const raw = await llm.run('gpt-4o-mini', makeMessages(emotionsJson));
     const cleaned = stripCodeFences(raw);
     const parsed = JSON.parse(cleaned);
-    return ReportSchema.parse({
+    return SentimentReportSchema.parse({
       ...parsed,
       timestamp: new Date().toISOString(),
     });

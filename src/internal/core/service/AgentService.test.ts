@@ -20,8 +20,8 @@ vi.mock('../../usecase/compressSentiments', () => ({
   compressSentiments: vi.fn().mockResolvedValue({ joy: 1 }),
 }));
 
-vi.mock('../../usecase/generateReport', () => ({
-  generateReport: vi.fn().mockResolvedValue({
+vi.mock('../../usecase/generateSentimentReport', () => ({
+  generateSentimentReport: vi.fn().mockResolvedValue({
     text: 'Everything looks great!',
     emoji: '☀️',
     timestamp: '2025-01-01T00:00:00Z',

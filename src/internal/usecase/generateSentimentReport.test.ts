@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { generateReport } from './generateReport';
+import { generateSentimentReport } from './generateSentimentReport';
 
 const fakeLLMResponse = `
 {
@@ -8,7 +8,7 @@ const fakeLLMResponse = `
 }
 `;
 
-describe('generateReport', () => {
+describe('generateSentimentReport', () => {
   describe('Happy path', () => {
     let llm: { run: vi.Mock };
 
@@ -21,7 +21,7 @@ describe('generateReport', () => {
 
     test.only('returns valid report from correct LLM output', async () => {
       const emotions = { joy: 0.7, sadness: 0.1 };
-      const report = await generateReport(emotions, llm);
+      const report = await generateSentimentReport(emotions, llm);
 
       expect(report.text).toBe(
         'Le climat est globalement positif avec quelques nuages.',

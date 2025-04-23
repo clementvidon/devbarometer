@@ -1,4 +1,4 @@
-export interface Report {
+export interface SentimentReport {
   text: string;
   emoji: string;
   timestamp: string;
