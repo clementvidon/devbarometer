@@ -43,7 +43,7 @@ async function isRelevant(dp: DataPoint, llm: LlmPort): Promise<boolean> {
   }
 }
 
-export async function filterDataPoints(
+export async function filterRelevantPosts(
   dataPoints: DataPoint[],
   llm: LlmPort,
 ): Promise<DataPoint[]> {

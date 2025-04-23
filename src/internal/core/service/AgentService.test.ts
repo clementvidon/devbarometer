@@ -4,12 +4,12 @@ import { AgentService } from './AgentService';
 const fetcher = { fetch: vi.fn() };
 const llm = { run: vi.fn() };
 
-vi.mock('../../usecase/getRedditDataPoints', () => ({
-  getRedditDataPoints: vi.fn().mockResolvedValue(['dataPoint']),
+vi.mock('../../usecase/fetchRedditPosts', () => ({
+  fetchRedditPosts: vi.fn().mockResolvedValue(['dataPoint']),
 }));
 
-vi.mock('../../usecase/filterDataPoints', () => ({
-  filterDataPoints: vi.fn().mockResolvedValue(['filteredDataPoint']),
+vi.mock('../../usecase/filterRelevantPosts', () => ({
+  filterRelevantPosts: vi.fn().mockResolvedValue(['filteredDataPoint']),
 }));
 
 vi.mock('../../usecase/analyzeSentiments', () => ({

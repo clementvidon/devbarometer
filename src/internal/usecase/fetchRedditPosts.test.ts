@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { getRedditDataPoints } from './getRedditDataPoints';
+import { fetchRedditPosts } from './fetchRedditPosts';
 import type { FetchPort } from '../core/port/FetchPort';
 
 const fakePosts = [
@@ -8,7 +8,7 @@ const fakePosts = [
   { data: { id: '02', title: '3rd Post', selftext: '', ups: 20 } },
 ];
 
-describe('getRedditDataPoints', () => {
+describe('fetchRedditPosts', () => {
   describe('Happy path', () => {
     let fetcher: FetchPort;
 
@@ -39,12 +39,7 @@ describe('getRedditDataPoints', () => {
     });
 
     test.only('maps, filters (ups>=10), and sanitizes correctly', async () => {
-      const dataPoints = await getRedditDataPoints(
-        fetcher,
-        'anySub',
-        10,
-        'day',
-      );
+      const dataPoints = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
 
       expect(dataPoints).toHaveLength(2);
       expect(dataPoints[0]).toMatchObject({

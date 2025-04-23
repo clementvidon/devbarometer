@@ -1,5 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { filterDataPoints } from './filterDataPoints';
+import { filterRelevantPosts } from './filterRelevantPosts';
 
 const fakeDataPoints = [
   {
@@ -22,7 +22,7 @@ const fakeDataPoints = [
   },
 ];
 
-describe('filterDataPoints', () => {
+describe('filterRelevantPosts', () => {
   describe('Happy path', () => {
     let llm: { run: vi.Mock };
 
@@ -40,7 +40,7 @@ describe('filterDataPoints', () => {
     });
 
     test.only('filters relevant data points correctly', async () => {
-      const relevantDataPoints = await filterDataPoints(fakeDataPoints, llm);
+      const relevantDataPoints = await filterRelevantPosts(fakeDataPoints, llm);
 
       expect(relevantDataPoints).toHaveLength(2);
       expect(relevantDataPoints.map((dp) => dp.title)).toEqual([

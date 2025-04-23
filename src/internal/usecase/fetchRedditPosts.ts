@@ -145,7 +145,7 @@ function buildDataPoint(
   };
 }
 
-export async function getRedditDataPoints(
+export async function fetchRedditPosts(
   fetcher: FetchPort,
   subreddit: string,
   limit: number,
