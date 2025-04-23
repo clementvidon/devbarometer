@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { FetchPort } from '../core/port/FetchPort';
-import type { DataPoint } from '../core/entity/DataPoint';
+import type { Post } from '../core/entity/RedditPost';
 
 const BASE_URL = 'https://www.reddit.com';
 const USER_AGENT = 'devbarometer/0.1 by clementvidon';
@@ -8,18 +8,18 @@ const TIMEOUT_MS = 5000;
 const HEADERS = { 'User-Agent': USER_AGENT };
 const MAX_RETRIES = 3;
 
-const RedditPostDataSchema = z.object({
+const PostSchema = z.object({
   id: z.string(),
   title: z.string(),
   selftext: z.string(),
   ups: z.number(),
 });
-const RedditPostWrapperSchema = z.object({ data: RedditPostDataSchema });
-const RedditAPIResponseSchema = z.object({
-  data: z.object({ children: z.array(RedditPostWrapperSchema) }),
+const PostChildSchema = z.object({ data: PostSchema });
+const PostsResponseSchema = z.object({
+  data: z.object({ children: z.array(PostChildSchema) }),
 });
 
-const RedditCommentResponseSchema = z.array(
+const CommentsResponseSchema = z.array(
   z.object({
     data: z
       .object({
@@ -37,8 +37,8 @@ const RedditCommentResponseSchema = z.array(
   }),
 );
 
-type RedditPostData = z.infer<typeof RedditPostDataSchema>;
-type RedditPostWrapper = z.infer<typeof RedditPostWrapperSchema>;
+type APIResponsePost = z.infer<typeof PostSchema>;
+type APIResponsePostChild = z.infer<typeof PostChildSchema>;
 
 async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   const timeout = new Promise<never>((_, reject) =>
@@ -85,7 +85,7 @@ async function fetchAllPosts(
   subreddit: string,
   limit: number,
   timeRange: string,
-): Promise<RedditPostWrapper[]> {
+): Promise<APIResponsePostChild[]> {
   const url = `${BASE_URL}/r/${subreddit}/top.json?limit=${limit}&t=${timeRange}`;
   const json = await fetchWithRateLimit<unknown>(fetcher, url, {
     headers: HEADERS,
@@ -93,7 +93,7 @@ async function fetchAllPosts(
 
   if (!json) return [];
 
-  const parsed = RedditAPIResponseSchema.safeParse(json);
+  const parsed = PostsResponseSchema.safeParse(json);
   if (!parsed.success) {
     console.error(
       `[Invalid Post JSON] URL: ${url}, Errors:`,
@@ -117,7 +117,7 @@ async function fetchTopComment(
 
   if (!json) return null;
 
-  const parsed = RedditCommentResponseSchema.safeParse(json);
+  const parsed = CommentsResponseSchema.safeParse(json);
   if (!parsed.success) {
     console.error(
       `[Invalid Comment JSON] URL: ${url}, Errors:`,
@@ -133,10 +133,7 @@ function sanitize(input: string): string {
   return input.replace(/\n+/g, ' ').trim();
 }
 
-function buildDataPoint(
-  post: RedditPostData,
-  comment: string | null,
-): DataPoint {
+function buildPost(post: APIResponsePost, comment: string | null): Post {
   return {
     upvotes: post.ups,
     title: sanitize(post.title),
@@ -150,14 +147,19 @@ export async function fetchRedditPosts(
   subreddit: string,
   limit: number,
   timeRange: string,
-): Promise<DataPoint[]> {
-  const wrappers = await fetchAllPosts(fetcher, subreddit, limit, timeRange);
-  const filtered = wrappers.filter((w) => w.data.ups >= 10);
-  const points = await Promise.all(
+): Promise<Post[]> {
+  const postChildren = await fetchAllPosts(
+    fetcher,
+    subreddit,
+    limit,
+    timeRange,
+  );
+  const filtered = postChildren.filter((w) => w.data.ups >= 10);
+  const posts = await Promise.all(
     filtered.map(async ({ data }) => {
       const comment = await fetchTopComment(fetcher, subreddit, data.id);
-      return buildDataPoint(data, comment);
+      return buildPost(data, comment);
     }),
   );
-  return points;
+  return posts;
 }

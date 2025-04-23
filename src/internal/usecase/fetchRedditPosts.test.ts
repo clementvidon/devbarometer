@@ -39,16 +39,16 @@ describe('fetchRedditPosts', () => {
     });
 
     test.only('maps, filters (ups>=10), and sanitizes correctly', async () => {
-      const dataPoints = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
+      const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
 
-      expect(dataPoints).toHaveLength(2);
-      expect(dataPoints[0]).toMatchObject({
+      expect(posts).toHaveLength(2);
+      expect(posts[0]).toMatchObject({
         upvotes: 15,
         title: '1st Post',
         content: 'Content 1',
         topComment: 'Fake top comment',
       });
-      expect(dataPoints[1]).toMatchObject({
+      expect(posts[1]).toMatchObject({
         upvotes: 20,
         title: '3rd Post',
         content: '',

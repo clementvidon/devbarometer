@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
-import type { DataPoint } from '../core/entity/DataPoint';
+import type { Post } from '../core/entity/RedditPost';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 
 const CONCURRENCY = 10;
 const RelevanceSchema = z.object({ relevant: z.boolean() });
 
-function makeMessages(dp: DataPoint) {
+function makeMessages(post: Post) {
   return [
     {
       role: 'system' as const,
@@ -24,17 +24,17 @@ function makeMessages(dp: DataPoint) {
       role: 'user' as const,
       content: `
       Analysez cette donnée :
-        titre        : ${dp.title}
-      contenu      : ${dp.content}
-      meilleur com.: ${dp.topComment}
+        titre        : ${post.title}
+      contenu      : ${post.content}
+      meilleur com.: ${post.topComment}
       `.trim(),
     },
   ];
 }
 
-async function isRelevant(dp: DataPoint, llm: LlmPort): Promise<boolean> {
+async function isRelevant(post: Post, llm: LlmPort): Promise<boolean> {
   try {
-    const raw = await llm.run('gpt-4o-mini', makeMessages(dp));
+    const raw = await llm.run('gpt-4o-mini', makeMessages(post));
     const json = JSON.parse(stripCodeFences(raw));
     const result = RelevanceSchema.safeParse(json);
     return result.success && result.data.relevant;
@@ -44,14 +44,14 @@ async function isRelevant(dp: DataPoint, llm: LlmPort): Promise<boolean> {
 }
 
 export async function filterRelevantPosts(
-  dataPoints: DataPoint[],
+  posts: Post[],
   llm: LlmPort,
-): Promise<DataPoint[]> {
+): Promise<Post[]> {
   const limit = pLimit(CONCURRENCY);
-  const checks = await Promise.all(
-    dataPoints.map((dp) =>
-      limit(async () => ({ dp, ok: await isRelevant(dp, llm) })),
+  const relevantPosts = await Promise.all(
+    posts.map((post) =>
+      limit(async () => ({ post, ok: await isRelevant(post, llm) })),
     ),
   );
-  return checks.filter((c) => c.ok).map((c) => c.dp);
+  return relevantPosts.filter((r) => r.ok).map((r) => r.post);
 }

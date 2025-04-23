@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { filterRelevantPosts } from './filterRelevantPosts';
 
-const fakeDataPoints = [
+const fakePosts = [
   {
     title: 'Relevant Post A',
     content: 'Insightful',
@@ -40,10 +40,10 @@ describe('filterRelevantPosts', () => {
     });
 
     test.only('filters relevant data points correctly', async () => {
-      const relevantDataPoints = await filterRelevantPosts(fakeDataPoints, llm);
+      const relevantPosts = await filterRelevantPosts(fakePosts, llm);
 
-      expect(relevantDataPoints).toHaveLength(2);
-      expect(relevantDataPoints.map((dp) => dp.title)).toEqual([
+      expect(relevantPosts).toHaveLength(2);
+      expect(relevantPosts.map((post) => post.title)).toEqual([
         'Relevant Post A',
         'Relevant Post B',
       ]);

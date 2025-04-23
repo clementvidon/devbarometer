@@ -5,15 +5,15 @@ const fetcher = { fetch: vi.fn() };
 const llm = { run: vi.fn() };
 
 vi.mock('../../usecase/fetchRedditPosts', () => ({
-  fetchRedditPosts: vi.fn().mockResolvedValue(['dataPoint']),
+  fetchRedditPosts: vi.fn().mockResolvedValue(['post']),
 }));
 
 vi.mock('../../usecase/filterRelevantPosts', () => ({
-  filterRelevantPosts: vi.fn().mockResolvedValue(['filteredDataPoint']),
+  filterRelevantPosts: vi.fn().mockResolvedValue(['relevantPost']),
 }));
 
 vi.mock('../../usecase/analyzeSentiments', () => ({
-  analyzeSentiments: vi.fn().mockResolvedValue(['sentiment']),
+  analyzeSentiments: vi.fn().mockResolvedValue(['postSentiment']),
 }));
 
 vi.mock('../../usecase/compressSentiments', () => ({

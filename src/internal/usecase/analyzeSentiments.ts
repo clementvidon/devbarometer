@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
-import type { DataPoint } from '../core/entity/DataPoint';
+import type { Post } from '../core/entity/RedditPost';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 
 const CONCURRENCY = 10;
@@ -32,7 +32,7 @@ const FALLBACK: EmotionScores = {
   positive: 0,
 };
 
-function makeMessages(dp: DataPoint) {
+function makeMessages(post: Post) {
   return [
     {
       role: 'system' as const,
@@ -48,20 +48,17 @@ function makeMessages(dp: DataPoint) {
       role: 'user' as const,
       content: `
       Analysez ces données :
-        titre        : ${dp.title}
-      contenu      : ${dp.content}
-      meilleur com.: ${dp.topComment}
+        titre        : ${post.title}
+      contenu      : ${post.content}
+      meilleur com.: ${post.topComment}
       `.trim(),
     },
   ];
 }
 
-async function fetchEmotions(
-  dp: DataPoint,
-  llm: LlmPort,
-): Promise<EmotionScores> {
+async function fetchEmotions(post: Post, llm: LlmPort): Promise<EmotionScores> {
   try {
-    const raw = await llm.run('gpt-4o-mini', makeMessages(dp));
+    const raw = await llm.run('gpt-4o-mini', makeMessages(post));
     const json = JSON.parse(stripCodeFences(raw));
     const parsed = EmotionSchema.safeParse(json);
     return parsed.success ? parsed.data : FALLBACK;
@@ -77,15 +74,15 @@ export type SentimentResult = {
 };
 
 export async function analyzeSentiments(
-  dataPoints: DataPoint[],
+  posts: Post[],
   llm: LlmPort,
 ): Promise<SentimentResult[]> {
   const limit = pLimit(CONCURRENCY);
-  const sentiments = dataPoints.map((dp) =>
+  const sentiments = posts.map((post) =>
     limit(async () => ({
-      title: dp.title,
-      upvotes: dp.upvotes,
-      emotions: await fetchEmotions(dp, llm),
+      title: post.title,
+      upvotes: post.upvotes,
+      emotions: await fetchEmotions(post, llm),
     })),
   );
   return Promise.all(sentiments);

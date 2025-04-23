@@ -1,4 +1,4 @@
-export interface DataPoint {
+export interface RedditPost {
   upvotes: number;
   title: string;
   content: string;

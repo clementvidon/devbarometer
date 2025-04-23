@@ -1,7 +1,7 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { analyzeSentiments } from './analyzeSentiments';
 
-const fakeDataPoints = [
+const fakePosts = [
   {
     title: 'Post A',
     content: 'Great job market',
@@ -41,12 +41,12 @@ describe('analyzeSentiments', () => {
     });
 
     test.only('analyzes data points and returns sentiment results', async () => {
-      const sentiments = await analyzeSentiments(fakeDataPoints, llm);
+      const sentiments = await analyzeSentiments(fakePosts, llm);
 
       expect(sentiments).toHaveLength(2);
       sentiments.forEach((res, index) => {
-        expect(res.title).toBe(fakeDataPoints[index].title);
-        expect(res.upvotes).toBe(fakeDataPoints[index].upvotes);
+        expect(res.title).toBe(fakePosts[index].title);
+        expect(res.upvotes).toBe(fakePosts[index].upvotes);
         expect(res.emotions).toEqual(fakeEmotions);
       });
     });
