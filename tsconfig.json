@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* Language */
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM"],
     "target": "ESNext",
     "module": "ESNext",
     "strict": true,
