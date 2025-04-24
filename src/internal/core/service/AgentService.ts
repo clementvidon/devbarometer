@@ -1,5 +1,6 @@
 import type { FetchPort } from '../port/FetchPort';
 import type { LlmPort } from '../port/LlmPort';
+import type { SentimentReport } from '../entity/SentimentReport';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts';
 import { filterRelevantPosts } from '../../usecase/filterRelevantPosts';
 import { analyzeSentiments } from '../../usecase/analyzeSentiments';
