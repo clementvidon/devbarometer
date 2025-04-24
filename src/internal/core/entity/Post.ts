@@ -5,3 +5,5 @@ export interface Post {
   upvotes: number;
   topComment?: string | null;
 }
+
+export type RelevantPost = Post;

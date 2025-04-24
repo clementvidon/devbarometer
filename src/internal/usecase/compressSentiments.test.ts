@@ -29,10 +29,10 @@ describe('compressSentiments', () => {
       expect(result.joy).toBeCloseTo(0.5333, 4);
       expect(result.sadness).toBeCloseTo(0.4667, 4);
     });
-
-    test('returns zero emotions if no sentiments are provided', () => {
-      const result = compressSentiments([]);
-      expect(result).toEqual({});
+  });
+  describe('Error handling', () => {
+    test('throws if no sentiments are provided', () => {
+      expect(() => compressSentiments([])).toThrow(/No sentiments to compress/);
     });
   });
 });

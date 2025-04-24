@@ -1,4 +1,4 @@
-export interface Sentiment {
+export interface EmotionScores {
   anger: number;
   fear: number;
   anticipation: number;
@@ -9,4 +9,10 @@ export interface Sentiment {
   disgust: number;
   negative: number;
   positive: number;
+}
+
+export interface Sentiment {
+  title: string;
+  upvotes: number;
+  emotions: EmotionScores;
 }

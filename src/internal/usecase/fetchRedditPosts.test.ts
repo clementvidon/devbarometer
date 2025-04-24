@@ -38,7 +38,7 @@ describe('fetchRedditPosts', () => {
       };
     });
 
-    test.only('maps, filters (ups>=10), and sanitizes correctly', async () => {
+    test('maps, filters (ups>=10), and sanitizes correctly', async () => {
       const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
 
       expect(posts).toHaveLength(2);

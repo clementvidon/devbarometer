@@ -20,7 +20,7 @@ describe('generateSentimentReport', () => {
       };
     });
 
-    test.only('returns valid report from correct LLM output', async () => {
+    test('returns valid report from correct LLM output', async () => {
       const emotions = { joy: 0.7, sadness: 0.1 };
       const report = await generateSentimentReport(emotions, llm);
 

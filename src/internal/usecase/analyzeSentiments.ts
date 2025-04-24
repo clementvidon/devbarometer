@@ -2,9 +2,11 @@ import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
 import type { Post } from '../core/entity/Post';
+import type { EmotionScores, Sentiment } from '../core/entity/Sentiment';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 
 const CONCURRENCY = 10;
+
 const EmotionSchema = z.object({
   anger: z.number().min(0).max(1),
   fear: z.number().min(0).max(1),
@@ -17,7 +19,6 @@ const EmotionSchema = z.object({
   negative: z.number().min(0).max(1),
   positive: z.number().min(0).max(1),
 });
-type EmotionScores = z.infer<typeof EmotionSchema>;
 
 const FALLBACK: EmotionScores = {
   anger: 0,
@@ -37,20 +38,20 @@ function makeMessages(post: Post) {
     {
       role: 'system' as const,
       content: `
-      Vous êtes un expert en analyse émotionnelle selon le NRC Emotion Lexicon.
-        Analysez la donnée fourni dans son entièreté et répondez STRICTEMENT par un JSON brut contenant uniquement ces clés :
-        anger, fear, anticipation, trust, surprise, sadness, joy, disgust, negative, positive.
-        Les valeurs doivent être des nombres entre 0.0 et 1.0.
-        Aucune autre clé, explication ou mise en forme.
+Vous êtes un expert en analyse émotionnelle selon le NRC Emotion Lexicon.
+Analysez la donnée fourni dans son entièreté et répondez STRICTEMENT par un JSON brut contenant uniquement ces clés :
+anger, fear, anticipation, trust, surprise, sadness, joy, disgust, negative, positive.
+Les valeurs doivent être des nombres entre 0.0 et 1.0.
+Aucune autre clé, explication ou mise en forme.
         `.trim(),
     },
     {
       role: 'user' as const,
       content: `
-      Analysez ces données :
-        titre        : ${post.title}
-      contenu      : ${post.content}
-      meilleur com.: ${post.topComment}
+Analysez ces données :
+titre        : ${post.title}
+contenu      : ${post.content}
+meilleur com.: ${post.topComment}
       `.trim(),
     },
   ];
@@ -67,16 +68,10 @@ async function fetchEmotions(post: Post, llm: LlmPort): Promise<EmotionScores> {
   }
 }
 
-export type SentimentResult = {
-  title: string;
-  upvotes: number;
-  emotions: EmotionScores;
-};
-
 export async function analyzeSentiments(
   posts: Post[],
   llm: LlmPort,
-): Promise<SentimentResult[]> {
+): Promise<Sentiment[]> {
   const limit = pLimit(CONCURRENCY);
   const sentiments = posts.map((post) =>
     limit(async () => ({

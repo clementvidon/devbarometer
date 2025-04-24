@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { LlmPort } from '../core/port/LlmPort';
 import { stripCodeFences } from '../../utils/stripCodeFences';
+import type { SentimentReport } from '../core/entity/SentimentReport';
 
 const WeatherEmoji = z.enum([
   '☀️',
@@ -15,13 +16,11 @@ const WeatherEmoji = z.enum([
   '🌩️',
 ]);
 
-export const SentimentReportSchema = z.object({
+const SentimentReportSchema = z.object({
   text: z.string().max(200),
   emoji: WeatherEmoji,
   timestamp: z.string().nonempty(),
 });
-
-export type SentimentReport = z.infer<typeof SentimentReportSchema>;
 
 const FALLBACK: SentimentReport = {
   text: 'Rapport indisponible.',
@@ -63,10 +62,11 @@ export async function generateSentimentReport(
     const raw = await llm.run('gpt-4o-mini', makeMessages(emotionsJson));
     const cleaned = stripCodeFences(raw);
     const parsed = JSON.parse(cleaned);
-    return SentimentReportSchema.parse({
+    const valid = SentimentReportSchema.parse({
       ...parsed,
       timestamp: new Date().toISOString(),
     });
+    return valid;
   } catch {
     return FALLBACK;
   }

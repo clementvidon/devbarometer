@@ -1,41 +1,21 @@
 import { z } from 'zod';
 import type { FetchPort } from '../core/port/FetchPort';
 import type { Post } from '../core/entity/Post';
+import {
+  PostSchema,
+  PostChildSchema,
+  PostsResponseSchema,
+  CommentsResponseSchema,
+} from './RedditSchemas';
 
 const BASE_URL = 'https://www.reddit.com';
 const USER_AGENT = 'devbarometer/0.1 by clementvidon';
-const TIMEOUT_MS = 5000;
 const HEADERS = { 'User-Agent': USER_AGENT };
+
 const MAX_RETRIES = 3;
+const TIMEOUT_MS = 5000;
 
-const PostSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  selftext: z.string(),
-  ups: z.number(),
-});
-const PostChildSchema = z.object({ data: PostSchema });
-const PostsResponseSchema = z.object({
-  data: z.object({ children: z.array(PostChildSchema) }),
-});
-
-const CommentsResponseSchema = z.array(
-  z.object({
-    data: z
-      .object({
-        children: z
-          .array(
-            z.object({
-              data: z.object({
-                body: z.string().optional(),
-              }),
-            }),
-          )
-          .optional(),
-      })
-      .optional(),
-  }),
-);
+const MIN_UPVOTES = 10;
 
 type APIResponsePost = z.infer<typeof PostSchema>;
 type APIResponsePostChild = z.infer<typeof PostChildSchema>;
@@ -91,7 +71,9 @@ async function fetchAllPosts(
     headers: HEADERS,
   });
 
-  if (!json) return [];
+  if (json == null) {
+    return [];
+  }
 
   const parsed = PostsResponseSchema.safeParse(json);
   if (!parsed.success) {
@@ -115,7 +97,9 @@ async function fetchTopComment(
     headers: HEADERS,
   });
 
-  if (!json) return null;
+  if (json == null) {
+    return null;
+  }
 
   const parsed = CommentsResponseSchema.safeParse(json);
   if (!parsed.success) {
@@ -129,16 +113,15 @@ async function fetchTopComment(
   return parsed.data[1]?.data?.children?.[0]?.data?.body ?? null;
 }
 
-function sanitize(input: string): string {
-  return input.replace(/\n+/g, ' ').trim();
-}
+const sanitize = (s: string) => s.replace(/\s+/g, ' ').trim();
 
 function buildPost(post: APIResponsePost, comment: string | null): Post {
   return {
+    id: post.id,
     upvotes: post.ups,
     title: sanitize(post.title),
     content: sanitize(post.selftext),
-    topComment: comment ? sanitize(comment) : null,
+    topComment: comment != null && comment !== '' ? sanitize(comment) : null,
   };
 }
 
@@ -154,7 +137,7 @@ export async function fetchRedditPosts(
     limit,
     timeRange,
   );
-  const filtered = postChildren.filter((w) => w.data.ups >= 10);
+  const filtered = postChildren.filter((w) => w.data.ups >= MIN_UPVOTES);
   const posts = await Promise.all(
     filtered.map(async ({ data }) => {
       const comment = await fetchTopComment(fetcher, subreddit, data.id);

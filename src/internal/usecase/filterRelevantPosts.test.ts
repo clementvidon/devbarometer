@@ -29,18 +29,21 @@ describe('filterRelevantPosts', () => {
 
     beforeEach(() => {
       vi.clearAllMocks();
+
+      type AgentMessage = { role: 'system' | 'user'; content: string };
       llm = {
-        run: vi.fn(async (_model, messages) => {
-          const content = messages[1].content;
-          if (content.includes('Relevant')) {
-            return '{ "relevant": true }';
-          }
-          return '{ "relevant": false }';
-        }),
+        run: vi.fn(
+          async (_model: string, messages: AgentMessage[]): Promise<string> => {
+            const content = messages[1].content;
+            return content.includes('Relevant')
+              ? '{ "relevant": true }'
+              : '{ "relevant": false }';
+          },
+        ),
       };
     });
 
-    test.only('filters relevant data points correctly', async () => {
+    test('filters relevant data points correctly', async () => {
       const relevantPosts = await filterRelevantPosts(fakePosts, llm);
 
       expect(relevantPosts).toHaveLength(2);

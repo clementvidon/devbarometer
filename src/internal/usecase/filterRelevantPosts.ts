@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
-import type { Post } from '../core/entity/Post';
+import type { Post, RelevantPost } from '../core/entity/Post';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 
 const CONCURRENCY = 10;
@@ -46,7 +46,7 @@ async function isRelevant(post: Post, llm: LlmPort): Promise<boolean> {
 export async function filterRelevantPosts(
   posts: Post[],
   llm: LlmPort,
-): Promise<Post[]> {
+): Promise<RelevantPost[]> {
   const limit = pLimit(CONCURRENCY);
   const relevantPosts = await Promise.all(
     posts.map((post) =>

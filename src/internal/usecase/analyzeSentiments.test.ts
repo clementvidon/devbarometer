@@ -41,7 +41,7 @@ describe('analyzeSentiments', () => {
       };
     });
 
-    test.only('analyzes data points and returns sentiment results', async () => {
+    test('analyzes data points and returns sentiment results', async () => {
       const sentiments = await analyzeSentiments(fakePosts, llm);
 
       expect(sentiments).toHaveLength(2);

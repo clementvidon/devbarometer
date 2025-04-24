@@ -1,5 +1,17 @@
+export type WeatherEmoji =
+  | '☀️'
+  | '🌤️'
+  | '⛅'
+  | '🌥️'
+  | '☁️'
+  | '🌦️'
+  | '🌧️'
+  | '⛈️'
+  | '❄️'
+  | '🌩️';
+
 export interface SentimentReport {
   text: string;
-  emoji: '☀️' | '🌤️' | '⛅' | '🌥️' | '☁️' | '🌦️' | '🌧️' | '⛈️' | '❄️' | '🌩️';
+  emoji: WeatherEmoji;
   timestamp: string;
 }
