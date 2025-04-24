@@ -1,6 +1,8 @@
-import type { Sentiment, EmotionScores } from '../core/entity/Sentiment';
+import type { AverageSentiment, EmotionScores } from '../core/entity/Sentiment';
 
-export function compressSentiments(sentiments: Sentiment[]): EmotionScores {
+export function compressSentiments(
+  sentiments: AverageSentiment[],
+): EmotionScores {
   if (sentiments.length === 0) {
     throw new Error('No sentiments to compress – possible pipeline failure');
   }
@@ -30,5 +32,8 @@ export function compressSentiments(sentiments: Sentiment[]): EmotionScores {
     averages[key as keyof EmotionScores] =
       weightSum > 0 ? averages[key as keyof EmotionScores] / weightSum : 0;
   }
-  return averages;
+  return {
+    emotions: averages,
+    timestamp: new Date().toISOString(),
+  };
 }

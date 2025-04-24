@@ -22,12 +22,10 @@ describe('compressSentiments', () => {
       ];
       const result = compressSentiments(sentiments);
 
-      // Weighted average calculation:
-      // joy: (0.8*10 + 0.4*20) / 30 = 0.5333
-      // sadness: (0.2*10 + 0.6*20) / 30 = 0.4667
-
-      expect(result.joy).toBeCloseTo(0.5333, 4);
-      expect(result.sadness).toBeCloseTo(0.4667, 4);
+      expect(result.emotions.joy).toBeCloseTo(0.5333, 4);
+      expect(result.emotions.sadness).toBeCloseTo(0.4667, 4);
+      expect(typeof result.timestamp).toBe('string');
+      expect(() => new Date(result.timestamp).toISOString()).not.toThrow();
     });
   });
   describe('Error handling', () => {
