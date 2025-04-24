@@ -1,4 +1,5 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, beforeEach, vi } from 'vitest';
+import type { Mock } from 'vitest';
 import { generateSentimentReport } from './generateSentimentReport';
 
 const fakeLLMResponse = `
@@ -10,7 +11,7 @@ const fakeLLMResponse = `
 
 describe('generateSentimentReport', () => {
   describe('Happy path', () => {
-    let llm: { run: vi.Mock };
+    let llm: { run: Mock };
 
     beforeEach(() => {
       vi.clearAllMocks();

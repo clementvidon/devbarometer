@@ -20,11 +20,12 @@ export const SentimentReportSchema = z.object({
   emoji: WeatherEmoji,
   timestamp: z.string().nonempty(),
 });
+
 export type SentimentReport = z.infer<typeof SentimentReportSchema>;
 
 const FALLBACK: SentimentReport = {
   text: 'Rapport indisponible.',
-  emoji: '?',
+  emoji: '☁️',
   timestamp: new Date().toISOString(),
 };
 

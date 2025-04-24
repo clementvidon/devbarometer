@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
-import type { Post } from '../core/entity/RedditPost';
+import type { Post } from '../core/entity/Post';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 
 const CONCURRENCY = 10;

@@ -1,4 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
+import type { Mock } from 'vitest';
 import { analyzeSentiments } from './analyzeSentiments';
 
 const fakePosts = [
@@ -31,7 +32,7 @@ const fakeEmotions = {
 
 describe('analyzeSentiments', () => {
   describe('Happy path', () => {
-    let llm: { run: vi.Mock };
+    let llm: { run: Mock };
 
     beforeEach(() => {
       vi.clearAllMocks();

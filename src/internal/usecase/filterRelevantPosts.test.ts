@@ -1,4 +1,5 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
+import type { Mock } from 'vitest';
 import { filterRelevantPosts } from './filterRelevantPosts';
 
 const fakePosts = [
@@ -24,7 +25,7 @@ const fakePosts = [
 
 describe('filterRelevantPosts', () => {
   describe('Happy path', () => {
-    let llm: { run: vi.Mock };
+    let llm: { run: Mock };
 
     beforeEach(() => {
       vi.clearAllMocks();

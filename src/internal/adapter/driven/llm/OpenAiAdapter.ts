@@ -14,6 +14,13 @@ export class OpenAiAdapter implements LlmPort {
       temperature: 0.1,
       messages,
     });
-    return res.choices[0].message.content;
+
+    const content = res.choices[0].message.content;
+
+    if (content === null) {
+      throw new Error('No content returned from OpenAI API');
+    }
+
+    return content;
   }
 }

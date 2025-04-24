@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { FetchPort } from '../core/port/FetchPort';
-import type { Post } from '../core/entity/RedditPost';
+import type { Post } from '../core/entity/Post';
 
 const BASE_URL = 'https://www.reddit.com';
 const USER_AGENT = 'devbarometer/0.1 by clementvidon';

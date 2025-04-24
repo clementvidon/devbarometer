@@ -5,7 +5,6 @@ import { filterRelevantPosts } from '../../usecase/filterRelevantPosts';
 import { analyzeSentiments } from '../../usecase/analyzeSentiments';
 import { compressSentiments } from '../../usecase/compressSentiments';
 import { generateSentimentReport } from '../../usecase/generateSentimentReport';
-import type { Report } from '../entity/Report';
 
 export class AgentService {
   constructor(
@@ -13,7 +12,11 @@ export class AgentService {
     private readonly llm: LlmPort,
   ) {}
 
-  async run(subreddit: string, limit: number, period: string): Promise<Report> {
+  async run(
+    subreddit: string,
+    limit: number,
+    period: string,
+  ): Promise<SentimentReport> {
     const posts = await fetchRedditPosts(
       this.fetcher,
       subreddit,

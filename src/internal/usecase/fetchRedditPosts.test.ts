@@ -20,7 +20,7 @@ describe('fetchRedditPosts', () => {
             return Promise.resolve({
               status: 200,
               json: async () => ({ data: { children: fakePosts } }),
-            });
+            } as unknown as Response);
           }
           if (url.includes('/comments/')) {
             return Promise.resolve({
@@ -31,7 +31,7 @@ describe('fetchRedditPosts', () => {
                   data: { children: [{ data: { body: 'Fake top comment' } }] },
                 },
               ],
-            });
+            } as unknown as Response);
           }
           return Promise.reject(new Error(`Unexpected fetch URL: ${url}`));
         }),
