@@ -1,7 +1,10 @@
 import { z } from 'zod';
 import type { LlmPort } from '../core/port/LlmPort';
 import { stripCodeFences } from '../../utils/stripCodeFences';
-import type { SentimentReport } from '../core/entity/SentimentReport';
+import type {
+  SentimentReport,
+  WeatherEmoji,
+} from '../core/entity/SentimentReport';
 
 const WeatherEmoji = z.enum([
   '☀️',
@@ -14,7 +17,7 @@ const WeatherEmoji = z.enum([
   '⛈️',
   '❄️',
   '🌩️',
-]);
+] as [WeatherEmoji, ...WeatherEmoji[]]);
 
 const SentimentReportSchema = z.object({
   text: z.string().max(200),
