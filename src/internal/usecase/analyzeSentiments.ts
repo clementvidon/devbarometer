@@ -75,6 +75,7 @@ export async function analyzeSentiments(
   const limit = pLimit(CONCURRENCY);
   const sentiments = posts.map((post) =>
     limit(async () => ({
+      postId: post.id,
       title: post.title,
       upvotes: post.upvotes,
       emotions: await fetchEmotions(post, llm),

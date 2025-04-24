@@ -17,6 +17,7 @@ export interface AverageSentiment {
 }
 
 export interface Sentiment {
+  postId: string;
   title: string;
   upvotes: number;
   emotions: EmotionScores;

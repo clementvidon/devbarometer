@@ -4,12 +4,14 @@ import { analyzeSentiments } from './analyzeSentiments';
 
 const fakePosts = [
   {
+    id: 'idA',
     title: 'Post A',
     content: 'Great job market',
     topComment: 'I agree',
     upvotes: 15,
   },
   {
+    id: 'idB',
     title: 'Post B',
     content: 'Not sure about this',
     topComment: 'Interesting',
@@ -46,6 +48,7 @@ describe('analyzeSentiments', () => {
 
       expect(sentiments).toHaveLength(2);
       sentiments.forEach((res, index) => {
+        expect(res.postId).toBe(fakePosts[index].id);
         expect(res.title).toBe(fakePosts[index].title);
         expect(res.upvotes).toBe(fakePosts[index].upvotes);
         expect(res.emotions).toEqual(fakeEmotions);
