@@ -10,9 +10,20 @@
     "test": "vitest --coverage"
   },
   "lint-staged": {
-    "**/*.ts": [
+    "*.ts": [
       "eslint --fix",
-      "prettier --write --ignore-unknown"
+      "prettier --write",
+      "tsc --noEmit --skipLibCheck",
+      "vitest --run --coverage false"
+    ],
+    "*.tsx": [
+      "eslint --fix",
+      "prettier --write",
+      "tsc --noEmit --skipLibCheck",
+      "vitest --run --coverage false"
+    ],
+    "*.{js,json,md}": [
+      "prettier --write"
     ]
   },
   "engines": {
