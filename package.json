@@ -7,22 +7,24 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "test": "vitest --coverage"
+    "format:check": "prettier --check .",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
   },
   "lint-staged": {
     "*.ts": [
       "eslint --fix",
       "prettier --write",
       "tsc --noEmit --skipLibCheck",
-      "vitest --run --coverage false"
+      "vitest --run --changed"
     ],
     "*.tsx": [
       "eslint --fix",
       "prettier --write",
       "tsc --noEmit --skipLibCheck",
-      "vitest --run --coverage false"
+      "vitest --run --changed"
     ],
-    "*.{js,json,md}": [
+    "*.{js,json,yml,md}": [
       "prettier --write"
     ]
   },

@@ -1,0 +1,46 @@
+name: 🧪 PR Checks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lint-type-test:
+    name: 🧪 Lint + Type Check + Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Type Check
+        run: npm run type-check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format Check
+        run: npm run format:check
+
+      - name: Run Tests
+        run: npm run test:coverage
+
+      - name: Celebrate success with random emoji
+        if: success()
+        run: |
+          EMOJIS=("🎉" "🚀" "✅" "🥳" "✨" "🍰" "💫" "🧠" "🌈" "🔥")
+          RANDOM_INDEX=$(($RANDOM % ${#EMOJIS[@]}))
+          echo "CI Passed ${EMOJIS[$RANDOM_INDEX]}"
