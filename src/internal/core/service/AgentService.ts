@@ -35,10 +35,7 @@ export class AgentService {
     const averageSentiment = compressSentiments(sentimentPerPost);
     console.log(averageSentiment);
 
-    const report = await generateSentimentReport(
-      averageSentiment.emotions,
-      this.llm,
-    );
+    const report = await generateSentimentReport(averageSentiment, this.llm);
     return report;
   }
 }

@@ -5,6 +5,7 @@ import type {
   SentimentReport,
   WeatherEmoji,
 } from '../core/entity/SentimentReport';
+import type { AverageSentiment } from '../core/entity/Sentiment';
 
 const WeatherEmoji = z.enum([
   '☀️',
@@ -19,11 +20,11 @@ const WeatherEmoji = z.enum([
   '🌩️',
 ] as [WeatherEmoji, ...WeatherEmoji[]]);
 
-const SentimentReportSchema = z.object({
+const LLMOutputSchema = z.object({
   text: z.string().max(200),
   emoji: WeatherEmoji,
-  timestamp: z.string().nonempty(),
 });
+type LlmOutput = z.infer<typeof LLMOutputSchema>;
 
 const FALLBACK: SentimentReport = {
   text: 'Rapport indisponible.',
@@ -56,21 +57,28 @@ Générez le JSON demandé.
 }
 
 export async function generateSentimentReport(
-  emotions: Record<string, number>,
+  averageSentiment: AverageSentiment,
   llm: LlmPort,
 ): Promise<SentimentReport> {
-  const emotionsJson = JSON.stringify(emotions);
+  const emotionsJson = JSON.stringify(averageSentiment.emotions);
 
   try {
     const raw = await llm.run('gpt-4o-mini', makeMessages(emotionsJson));
     const cleaned = stripCodeFences(raw);
-    const parsed = JSON.parse(cleaned);
-    const valid = SentimentReportSchema.parse({
-      ...parsed,
-      timestamp: new Date().toISOString(),
-    });
-    return valid;
-  } catch {
+    const json: unknown = JSON.parse(cleaned);
+    const llmResult = LLMOutputSchema.safeParse(json);
+    if (!llmResult.success) {
+      console.error('Invalid LLM output:', llmResult.error);
+      return FALLBACK;
+    }
+    const report: SentimentReport = {
+      text: llmResult.data.text,
+      emoji: llmResult.data.emoji,
+      timestamp: averageSentiment.timestamp,
+    };
+    return report;
+  } catch (err) {
+    console.error('LLM Error:', err);
     return FALLBACK;
   }
 }

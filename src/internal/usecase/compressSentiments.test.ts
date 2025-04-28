@@ -1,33 +1,56 @@
 import { describe, test, expect } from 'vitest';
 import { compressSentiments } from './compressSentiments';
+import type { Sentiment } from '../core/entity/Sentiment';
+
+const fakeSentiments: Sentiment[] = [
+  {
+    postId: '1',
+    title: 'Post 1',
+    upvotes: 10,
+    emotions: {
+      anger: 0,
+      fear: 0,
+      anticipation: 0,
+      trust: 0,
+      surprise: 0,
+      sadness: 0.2,
+      joy: 0.8,
+      disgust: 0,
+      negative: 0,
+      positive: 0,
+    },
+  },
+  {
+    postId: '2',
+    title: 'Post 2',
+    upvotes: 20,
+    emotions: {
+      anger: 0.1,
+      fear: 0.2,
+      anticipation: 0.3,
+      trust: 0.4,
+      surprise: 0.5,
+      sadness: 0.1,
+      joy: 0.6,
+      disgust: 0.05,
+      negative: 0.15,
+      positive: 0.85,
+    },
+  },
+];
 
 describe('compressSentiments', () => {
   describe('Happy path', () => {
     test('calculates weighted averages correctly', () => {
-      const sentiments = [
-        {
-          upvotes: 10,
-          emotions: {
-            joy: 0.8,
-            sadness: 0.2,
-          },
-        },
-        {
-          upvotes: 20,
-          emotions: {
-            joy: 0.4,
-            sadness: 0.6,
-          },
-        },
-      ];
-      const result = compressSentiments(sentiments);
+      const result = compressSentiments(fakeSentiments);
 
-      expect(result.emotions.joy).toBeCloseTo(0.5333, 4);
-      expect(result.emotions.sadness).toBeCloseTo(0.4667, 4);
+      expect(result.emotions.joy).toBeCloseTo(0.6667, 4);
+      expect(result.emotions.sadness).toBeCloseTo(0.1333, 4);
       expect(typeof result.timestamp).toBe('string');
       expect(() => new Date(result.timestamp).toISOString()).not.toThrow();
     });
   });
+
   describe('Error handling', () => {
     test('throws if no sentiments are provided', () => {
       expect(() => compressSentiments([])).toThrow(/No sentiments to compress/);

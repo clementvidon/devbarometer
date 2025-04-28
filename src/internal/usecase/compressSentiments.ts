@@ -1,12 +1,14 @@
-import type { AverageSentiment, EmotionScores } from '../core/entity/Sentiment';
+import type {
+  Sentiment,
+  AverageSentiment,
+  EmotionScores,
+} from '../core/entity/Sentiment';
 
-export function compressSentiments(
-  sentiments: AverageSentiment[],
-): EmotionScores {
+export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
   if (sentiments.length === 0) {
     throw new Error('No sentiments to compress – possible pipeline failure');
   }
-  const totals = {
+  const totals: EmotionScores = {
     anger: 0,
     fear: 0,
     anticipation: 0,
@@ -17,7 +19,7 @@ export function compressSentiments(
     disgust: 0,
     negative: 0,
     positive: 0,
-  } as const satisfies EmotionScores;
+  };
   let weightSum = 0;
   for (const s of sentiments) {
     const weight = s.upvotes;

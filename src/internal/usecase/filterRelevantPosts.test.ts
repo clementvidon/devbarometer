@@ -1,21 +1,25 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import { filterRelevantPosts } from './filterRelevantPosts';
+import type { Post } from '../core/entity/Post';
 
-const fakePosts = [
+const fakePosts: Post[] = [
   {
+    id: 'a1',
     title: 'Relevant Post A',
     content: 'Insightful',
     topComment: 'Top comment',
     upvotes: 10,
   },
   {
+    id: 'b2',
     title: 'Relevant Post B',
     content: 'Insightful',
     topComment: 'Top comment',
     upvotes: 5,
   },
   {
+    id: 'c3',
     title: 'Irrelevant Post',
     content: 'Off-topic',
     topComment: 'Top comment',
@@ -29,7 +33,6 @@ describe('filterRelevantPosts', () => {
 
     beforeEach(() => {
       vi.clearAllMocks();
-
       type AgentMessage = { role: 'system' | 'user'; content: string };
       llm = {
         run: vi.fn(

@@ -62,7 +62,7 @@ async function fetchEmotions(post: Post, llm: LlmPort): Promise<EmotionScores> {
     const raw = await llm.run('gpt-4o-mini', makeMessages(post));
     const json = JSON.parse(stripCodeFences(raw));
     const parsed = EmotionSchema.safeParse(json);
-    return parsed.success ? parsed.data : FALLBACK;
+    return parsed.success ? (parsed.data as EmotionScores) : FALLBACK;
   } catch {
     return FALLBACK;
   }

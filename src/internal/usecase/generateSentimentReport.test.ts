@@ -1,6 +1,8 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
 import type { Mock } from 'vitest';
 import { generateSentimentReport } from './generateSentimentReport';
+import type { AverageSentiment } from '../core/entity/Sentiment';
+import type { SentimentReport } from '../core/entity/SentimentReport';
 
 const fakeLLMResponse = `
 {
@@ -9,27 +11,41 @@ const fakeLLMResponse = `
 }
 `;
 
+const fakeAverageSentiment: AverageSentiment = {
+  emotions: {
+    anger: 0,
+    fear: 0,
+    anticipation: 0,
+    trust: 0,
+    surprise: 0,
+    sadness: 0.1,
+    joy: 0.7,
+    disgust: 0,
+    negative: 0,
+    positive: 0,
+  },
+  timestamp: '2025-01-01T00:00:00Z',
+};
+
+const fakeSentimentReport: SentimentReport = {
+  text: 'Le climat est globalement positif avec quelques nuages.',
+  emoji: '🌤️',
+  timestamp: fakeAverageSentiment.timestamp,
+};
+
 describe('generateSentimentReport', () => {
-  describe('Happy path', () => {
-    let llm: { run: Mock };
+  let llm: { run: Mock };
 
-    beforeEach(() => {
-      vi.clearAllMocks();
-      llm = {
-        run: vi.fn().mockResolvedValue(fakeLLMResponse),
-      };
-    });
+  beforeEach(() => {
+    vi.clearAllMocks();
+    llm = {
+      run: vi.fn().mockResolvedValue(fakeLLMResponse),
+    };
+  });
 
-    test('returns valid report from correct LLM output', async () => {
-      const emotions = { joy: 0.7, sadness: 0.1 };
-      const report = await generateSentimentReport(emotions, llm);
+  test('returns valid SentimentReport from correct LLM output', async () => {
+    const report = await generateSentimentReport(fakeAverageSentiment, llm);
 
-      expect(report.text).toBe(
-        'Le climat est globalement positif avec quelques nuages.',
-      );
-      expect(report.emoji).toBe('🌤️');
-      expect(typeof report.timestamp).toBe('string');
-      expect(new Date(report.timestamp).toString()).not.toBe('Invalid Date');
-    });
+    expect(report).toEqual(fakeSentimentReport); // ✅ Direct object comparison
   });
 });
