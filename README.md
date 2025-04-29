@@ -1,4 +1,8 @@
-[![codecov](https://codecov.io/gh/clementvidon/devbarometer/branch/main/graph/badge.svg)](https://codecov.io/gh/clementvidon/devbarometer)
+![CI](https://github.com/clementvidon/devbarometer/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://codecov.io/gh/clementvidon/devbarometer/branch/main/graph/badge.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-✓-blue)
+![License](https://img.shields.io/github/license/clementvidon/devbarometer)
+![Last commit](https://img.shields.io/github/last-commit/clementvidon/devbarometer)
 
 # DevBarometer
 
@@ -76,7 +80,7 @@ This runs daily via GitHub Actions and pushes public/index.html to GitHub Pages.
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT)
+[MIT](LICENSE)
 
 This project is open source and freely available under the MIT License.
 You are free to use, modify, and distribute it with attribution.
