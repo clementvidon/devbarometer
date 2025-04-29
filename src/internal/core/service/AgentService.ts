@@ -1,5 +1,6 @@
 import type { FetchPort } from '../port/FetchPort';
 import type { LlmPort } from '../port/LlmPort';
+import type { PersistencePort } from '../port/PersistencePort';
 import type { SentimentReport } from '../entity/SentimentReport';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts';
 import { filterRelevantPosts } from '../../usecase/filterRelevantPosts';
@@ -11,6 +12,7 @@ export class AgentService {
   constructor(
     private readonly fetcher: FetchPort,
     private readonly llm: LlmPort,
+    private readonly persistence: PersistencePort,
   ) {}
 
   async run(
@@ -49,6 +51,15 @@ export class AgentService {
     const report = await generateSentimentReport(averageSentiment, this.llm);
     console.log('[AgentService] Generated final sentiment report.');
 
+    await this.persistence.storeSnapshot({
+      subreddit,
+      fetchUrl: '',
+      posts,
+      relevantPosts,
+      sentimentPerPost,
+      averageSentiment,
+      report,
+    });
     return report;
   }
 }
