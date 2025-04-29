@@ -68,7 +68,7 @@ describe('generateSentimentReport', () => {
         expect(report).toMatchObject({
           text: 'Report unavailable.',
           emoji: '☁️',
-          timestamp: fakeAverageSentiment.timestamp, // timestamp should follow input
+          timestamp: fakeAverageSentiment.timestamp,
         });
       });
 

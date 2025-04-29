@@ -4,24 +4,24 @@
   "scripts": {
     "start": "npx tsx src/cmd/run.ts",
     "prepare": "husky",
-    "type-check": "tsc --noEmit",
+    "type-check": "tsc --noEmit --skipLibCheck",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest",
+    "test": "vitest run",
     "test:coverage": "vitest --coverage"
   },
   "lint-staged": {
     "*.ts": [
       "eslint --fix",
       "prettier --write",
-      "tsc --noEmit --skipLibCheck",
+      "npm run type-check",
       "vitest --run --changed"
     ],
     "*.tsx": [
       "eslint --fix",
       "prettier --write",
-      "tsc --noEmit --skipLibCheck",
+      "npm run type-check",
       "vitest --run --changed"
     ],
     "*.{js,json,yml,md}": [
@@ -48,6 +48,9 @@
     "vitest": "^3.1.1"
   },
   "dependencies": {
+    "lowdb": "^7.0.1",
+    "p-limit": "^5.0.0",
+    "uuid": "^11.1.0",
     "zod": "^3.24.3"
   }
 }

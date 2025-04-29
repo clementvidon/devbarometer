@@ -2,6 +2,7 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { AgentService } from './AgentService';
 import type { FetchPort } from '../port/FetchPort';
 import type { LlmPort } from '../port/LlmPort';
+import type { PersistencePort } from '../port/PersistencePort';
 import type { SentimentReport } from '../entity/SentimentReport';
 import type { AgentMessage } from '../types/AgentMessage';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts';
@@ -12,6 +13,11 @@ const fetcher: FetchPort = {
 
 const llm: LlmPort = {
   run: vi.fn(async (_model: string, _msg: AgentMessage[]) => ''),
+};
+
+const persistence: PersistencePort = {
+  storeSnapshot: vi.fn(async () => {}),
+  getSnapshots: vi.fn(async () => []),
 };
 
 vi.mock('../../usecase/fetchRedditPosts', () => ({
@@ -54,7 +60,7 @@ describe('AgentService', () => {
 
     beforeEach(() => {
       vi.clearAllMocks();
-      agent = new AgentService(fetcher, llm);
+      agent = new AgentService(fetcher, llm, persistence);
     });
 
     test('executes full pipeline and returns a report', async () => {
@@ -65,6 +71,7 @@ describe('AgentService', () => {
         emoji: '☀️',
         timestamp: '2025-01-01T00:00:00Z',
       });
+      expect(persistence.storeSnapshot).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -73,7 +80,7 @@ describe('AgentService', () => {
 
     beforeEach(() => {
       vi.clearAllMocks();
-      agent = new AgentService(fetcher, llm);
+      agent = new AgentService(fetcher, llm, persistence);
     });
 
     test('handles empty posts gracefully', async () => {
@@ -86,6 +93,7 @@ describe('AgentService', () => {
         emoji: '☀️',
         timestamp: '2025-01-01T00:00:00Z',
       });
+      expect(persistence.storeSnapshot).toHaveBeenCalledTimes(1);
     });
   });
 });
