@@ -7,6 +7,7 @@ import { filterRelevantPosts } from '../../usecase/filterRelevantPosts';
 import { analyzeSentiments } from '../../usecase/analyzeSentiments';
 import { compressSentiments } from '../../usecase/compressSentiments';
 import { generateSentimentReport } from '../../usecase/generateSentimentReport';
+import { makeRedditTopUrl } from '../../../utils/redditUrl';
 
 export class AgentService {
   constructor(
@@ -20,6 +21,7 @@ export class AgentService {
     limit: number,
     period: string,
   ): Promise<SentimentReport> {
+    const fetchUrl = makeRedditTopUrl(subreddit, limit, period);
     const posts = await fetchRedditPosts(
       this.fetcher,
       subreddit,
@@ -53,7 +55,7 @@ export class AgentService {
 
     await this.persistence.storeSnapshot({
       subreddit,
-      fetchUrl: '',
+      fetchUrl: fetchUrl,
       posts,
       relevantPosts,
       sentimentPerPost,
