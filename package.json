@@ -8,8 +8,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest run",
-    "test:coverage": "vitest --coverage"
+    "test": "vitest run --silent",
+    "test:coverage": "vitest --coverage --silent"
   },
   "lint-staged": {
     "*.ts": [
