@@ -1,0 +1,14 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 2%
+  ignore:
+    - 'src/cmd/*'
+    - 'src/internal/core/entity/*'
+    - 'src/internal/core/port/*'
+    - 'src/internal/core/types/*'
+    - 'src/internal/adapter/**/*'
+    - 'vitest.config.ts'
+    - 'eslint.config.js'
