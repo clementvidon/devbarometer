@@ -38,9 +38,5 @@ jobs:
       - name: Run Tests
         run: npm run test:coverage
 
-      - name: Celebrate success with random emoji
-        if: success()
-        run: |
-          EMOJIS=("🎉" "🚀" "✅" "🥳" "✨" "🍰" "💫" "🧠" "🌈" "🔥")
-          RANDOM_INDEX=$(($RANDOM % ${#EMOJIS[@]}))
-          echo "CI Passed ${EMOJIS[$RANDOM_INDEX]}"
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5

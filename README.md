@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/clementvidon/devbarometer/branch/main/graph/badge.svg)](https://codecov.io/gh/clementvidon/devbarometer)
+
 # DevBarometer
 
 The dev job market barometer — powered by Reddit sentiment.
