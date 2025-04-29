@@ -24,18 +24,31 @@ export class AgentService {
       limit,
       period,
     );
-    console.log(posts);
+
+    if (!posts.length) {
+      console.warn('[AgentService] No posts fetched.');
+    } else {
+      console.log(
+        `[AgentService] Fetched ${posts.length} top posts from "r/${subreddit}" for the past ${period}.`,
+      );
+    }
 
     const relevantPosts = await filterRelevantPosts(posts, this.llm);
-    console.log(relevantPosts);
+    console.log(
+      `[AgentService] Selected ${relevantPosts.length} posts relevant to the tech job market.`,
+    );
 
     const sentimentPerPost = await analyzeSentiments(relevantPosts, this.llm);
-    console.log(sentimentPerPost);
+    console.log(
+      '[AgentService] Completed sentiment analysis on selected posts.',
+    );
 
     const averageSentiment = compressSentiments(sentimentPerPost);
-    console.log(averageSentiment);
+    console.log('[AgentService] Computed average sentiment:', averageSentiment);
 
     const report = await generateSentimentReport(averageSentiment, this.llm);
+    console.log('[AgentService] Generated final sentiment report.');
+
     return report;
   }
 }

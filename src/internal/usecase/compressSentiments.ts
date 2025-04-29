@@ -5,9 +5,6 @@ import type {
 } from '../core/entity/Sentiment';
 
 export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
-  if (sentiments.length === 0) {
-    throw new Error('No sentiments to compress – possible pipeline failure');
-  }
   const totals: EmotionScores = {
     anger: 0,
     fear: 0,
@@ -20,6 +17,18 @@ export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
     negative: 0,
     positive: 0,
   };
+
+  if (sentiments.length === 0) {
+    console.error(
+      '[compressSentiments] No sentiments provided. Returning empty average.',
+    );
+    const noEmotionScores: EmotionScores = { ...totals };
+    return {
+      emotions: noEmotionScores,
+      timestamp: new Date().toISOString(),
+    };
+  }
+
   let weightSum = 0;
   for (const s of sentiments) {
     const weight = s.upvotes;

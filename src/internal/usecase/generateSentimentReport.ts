@@ -26,10 +26,9 @@ const LLMOutputSchema = z.object({
 });
 type LlmOutput = z.infer<typeof LLMOutputSchema>;
 
-const FALLBACK: SentimentReport = {
-  text: 'Rapport indisponible.',
+const FALLBACK: Omit<SentimentReport, 'timestamp'> = {
+  text: 'Report unavailable.',
   emoji: '☁️',
-  timestamp: new Date().toISOString(),
 };
 
 function makeMessages(emotionsText: string) {
@@ -68,8 +67,14 @@ export async function generateSentimentReport(
     const json: unknown = JSON.parse(cleaned);
     const llmResult = LLMOutputSchema.safeParse(json);
     if (!llmResult.success) {
-      console.error('Invalid LLM output:', llmResult.error);
-      return FALLBACK;
+      console.error(
+        '[generateSentimentReport] LLM returned invalid JSON format.',
+        llmResult.error,
+      );
+      return {
+        ...FALLBACK,
+        timestamp: averageSentiment.timestamp,
+      };
     }
     const report: SentimentReport = {
       text: llmResult.data.text,
@@ -78,7 +83,13 @@ export async function generateSentimentReport(
     };
     return report;
   } catch (err) {
-    console.error('LLM Error:', err);
-    return FALLBACK;
+    console.error(
+      '[generateSentimentReport] LLM call failed. Returning fallback report.',
+      err,
+    );
+    return {
+      ...FALLBACK,
+      timestamp: averageSentiment.timestamp,
+    };
   }
 }

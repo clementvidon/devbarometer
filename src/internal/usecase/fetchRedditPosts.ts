@@ -27,12 +27,12 @@ async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   return Promise.race([promise, timeout]);
 }
 
-async function fetchWithRateLimit<T>(
+async function fetchWithRateLimit(
   fetcher: FetchPort,
   url: string,
   options: RequestInit,
   retries = MAX_RETRIES,
-): Promise<T | null> {
+): Promise<unknown | null> {
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
       const res = await withTimeout(fetcher.fetch(url, options), TIMEOUT_MS);
@@ -67,9 +67,7 @@ async function fetchAllPosts(
   timeRange: string,
 ): Promise<APIResponsePostChild[]> {
   const url = `${BASE_URL}/r/${subreddit}/top.json?limit=${limit}&t=${timeRange}`;
-  const json = await fetchWithRateLimit<unknown>(fetcher, url, {
-    headers: HEADERS,
-  });
+  const json = await fetchWithRateLimit(fetcher, url, { headers: HEADERS });
 
   if (json == null) {
     return [];
@@ -93,9 +91,7 @@ async function fetchTopComment(
   postId: string,
 ): Promise<string | null> {
   const url = `${BASE_URL}/r/${subreddit}/comments/${postId}.json?limit=1`;
-  const json = await fetchWithRateLimit<unknown>(fetcher, url, {
-    headers: HEADERS,
-  });
+  const json = await fetchWithRateLimit(fetcher, url, { headers: HEADERS });
 
   if (json == null) {
     return null;
@@ -137,7 +133,17 @@ export async function fetchRedditPosts(
     limit,
     timeRange,
   );
+  if (postChildren.length === 0) {
+    console.error(
+      `[fetchAllPosts] No posts found for subreddit "${subreddit}".`,
+    );
+  }
   const filtered = postChildren.filter((w) => w.data.ups >= MIN_UPVOTES);
+  if (filtered.length === 0) {
+    console.error(
+      `[fetchRedditPosts] No posts with enough upvotes found (min ${MIN_UPVOTES}).`,
+    );
+  }
   const posts = await Promise.all(
     filtered.map(async ({ data }) => {
       const comment = await fetchTopComment(fetcher, subreddit, data.id);
