@@ -9,11 +9,9 @@ export default defineConfig({
       reportsDirectory: './.coverage',
       provider: 'v8',
       exclude: [
-        'cmd/**',
         'internal/core/entity/**',
         'internal/core/port/**',
         'internal/core/types/**',
-        'internal/adapter/**',
       ],
     },
   },
