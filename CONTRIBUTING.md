@@ -15,6 +15,10 @@ Your contributions help improve this project.
 2. Follow the [Git Workflow](docs/git_workflow.md) to make your changes.
 3. Submit your pull request (PR) clearly explaining the purpose of your changes.
 
+## Commit messages
+
+Please follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for your commit messages, for better readability and release automation.
+
 ## Code review
 
 Your PR will be reviewed promptly. We may suggest improvements or discuss changes before merging.

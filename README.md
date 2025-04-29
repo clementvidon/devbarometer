@@ -1,7 +1,7 @@
 ![CI](https://github.com/clementvidon/devbarometer/actions/workflows/ci.yml/badge.svg)
 ![Coverage](https://codecov.io/gh/clementvidon/devbarometer/branch/main/graph/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![TypeScript](https://img.shields.io/badge/TypeScript-✓-blue)
-![License](https://img.shields.io/github/license/clementvidon/devbarometer)
 ![Last commit](https://img.shields.io/github/last-commit/clementvidon/devbarometer)
 
 # DevBarometer
@@ -13,7 +13,8 @@ The dev job market barometer — powered by Reddit sentiment.
 1. [Overview](#overview)
 2. [Quick Start](#quick-start)
 3. [Automation](#automation)
-4. [License](#license)
+4. [Contributing](#contributing)
+5. [License](#license)
 
 ---
 
@@ -75,6 +76,31 @@ npm start
 ## Automation
 
 This runs daily via GitHub Actions and pushes public/index.html to GitHub Pages.
+
+---
+
+## Contributing
+
+We welcome contributions to **improve the reliability and scalability of DevBarometer!**
+
+### Focus Areas for Contribution
+
+- **Data Quality and Sources**
+  Help expand beyond Reddit by integrating other relevant communities or platforms.
+  The goal is to reduce sampling bias and improve the richness and diversity of the dataset.
+
+- **Model Improvement**
+  Help refine emotion and relevance analysis by proposing or integrating better LLM models,
+  for more precise and reliable sentiment detection.
+
+- **Scalability**
+  Help extend DevBarometer beyond the developer market.
+  The methodology can be adapted into a broader **WorkBarometer** (or other domain-specific barometers)
+  to assess sentiment trends in different professions or industries.
+
+We are especially looking for contributions that make DevBarometer more **truthful, diverse, and extensible**.
+
+Please read the [Contributing Guide](CONTRIBUTING.md) before submitting a pull request.
 
 ---
 
