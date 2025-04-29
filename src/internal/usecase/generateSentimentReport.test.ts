@@ -24,13 +24,11 @@ const fakeAverageSentiment: AverageSentiment = {
     negative: 0,
     positive: 0,
   },
-  timestamp: '2025-01-01T00:00:00Z',
 };
 
 const fakeSentimentReport: SentimentReport = {
   text: 'Le climat est globalement positif avec quelques nuages.',
   emoji: '🌤️',
-  timestamp: fakeAverageSentiment.timestamp,
 };
 
 describe('generateSentimentReport', () => {
@@ -68,7 +66,6 @@ describe('generateSentimentReport', () => {
         expect(report).toMatchObject({
           text: 'Report unavailable.',
           emoji: '☁️',
-          timestamp: fakeAverageSentiment.timestamp,
         });
       });
 
@@ -80,7 +77,6 @@ describe('generateSentimentReport', () => {
         expect(report).toMatchObject({
           text: 'Report unavailable.',
           emoji: '☁️',
-          timestamp: fakeAverageSentiment.timestamp,
         });
       });
 
@@ -94,7 +90,6 @@ describe('generateSentimentReport', () => {
         expect(report).toMatchObject({
           text: 'Report unavailable.',
           emoji: '☁️',
-          timestamp: fakeAverageSentiment.timestamp,
         });
       });
     });

@@ -26,7 +26,7 @@ const LLMOutputSchema = z.object({
 });
 type LlmOutput = z.infer<typeof LLMOutputSchema>;
 
-const FALLBACK: Omit<SentimentReport, 'timestamp'> = {
+const FALLBACK: SentimentReport = {
   text: 'Report unavailable.',
   emoji: '☁️',
 };
@@ -73,13 +73,11 @@ export async function generateSentimentReport(
       );
       return {
         ...FALLBACK,
-        timestamp: averageSentiment.timestamp,
       };
     }
     const report: SentimentReport = {
       text: llmResult.data.text,
       emoji: llmResult.data.emoji,
-      timestamp: averageSentiment.timestamp,
     };
     return report;
   } catch (err) {
@@ -87,9 +85,6 @@ export async function generateSentimentReport(
       '[generateSentimentReport] LLM call failed. Returning fallback report.',
       err,
     );
-    return {
-      ...FALLBACK,
-      timestamp: averageSentiment.timestamp,
-    };
+    return { ...FALLBACK };
   }
 }

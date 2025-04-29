@@ -13,7 +13,6 @@ export interface EmotionScores {
 
 export interface AverageSentiment {
   emotions: EmotionScores;
-  timestamp: string;
 }
 
 export interface Sentiment {
