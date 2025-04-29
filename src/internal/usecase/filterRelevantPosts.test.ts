@@ -56,4 +56,29 @@ describe('filterRelevantPosts', () => {
       ]);
     });
   });
+
+  describe('Error handling', () => {
+    let llm: { run: Mock };
+
+    beforeEach(() => {
+      vi.clearAllMocks();
+      llm = {
+        run: vi.fn(),
+      };
+    });
+
+    test('skips all posts if LLM throws an error', async () => {
+      llm.run.mockRejectedValue(new Error('LLM failure'));
+      const relevantPosts = await filterRelevantPosts(fakePosts, llm);
+
+      expect(relevantPosts).toEqual([]);
+    });
+
+    test('skips all posts if LLM returns invalid JSON', async () => {
+      llm.run.mockResolvedValue('this is not valid JSON');
+      const relevantPosts = await filterRelevantPosts(fakePosts, llm);
+
+      expect(relevantPosts).toEqual([]);
+    });
+  });
 });

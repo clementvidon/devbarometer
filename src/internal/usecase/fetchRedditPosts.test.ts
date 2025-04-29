@@ -56,4 +56,32 @@ describe('fetchRedditPosts', () => {
       });
     });
   });
+
+  describe('Error handling', () => {
+    let fetcher: FetchPort;
+
+    beforeEach(() => {
+      vi.restoreAllMocks();
+      fetcher = {
+        fetch: vi.fn(),
+      };
+    });
+
+    test('returns empty array if Reddit post JSON is invalid', async () => {
+      fetcher.fetch = vi.fn(() =>
+        Promise.resolve({
+          status: 200,
+          json: async () => ({ wrong: 'format' }),
+        } as unknown as Response),
+      );
+      const posts = await fetchRedditPosts(
+        fetcher,
+        'invalidSubreddit',
+        10,
+        'day',
+      );
+
+      expect(posts).toEqual([]);
+    });
+  });
 });

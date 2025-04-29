@@ -61,5 +61,31 @@ describe('analyzeSentiments', () => {
         expect(res.emotions).toEqual(fakeSentiment.emotions);
       });
     });
+
+    describe('Error handling', () => {
+      let llm: { run: Mock };
+
+      beforeEach(() => {
+        vi.clearAllMocks();
+        llm = {
+          run: vi.fn(),
+        };
+      });
+
+      test('returns fallback emotions if LLM call fails', async () => {
+        llm.run.mockRejectedValue(new Error('LLM Failure'));
+        const sentiments = await analyzeSentiments(fakePosts, llm);
+
+        expect(sentiments).toHaveLength(2);
+        sentiments.forEach((res, index) => {
+          expect(res.postId).toBe(fakePosts[index].id);
+          expect(res.title).toBe(fakePosts[index].title);
+          expect(res.upvotes).toBe(fakePosts[index].upvotes);
+          expect(Object.values(res.emotions)).toSatisfy((values: number[]) =>
+            values.every((v) => v === 0),
+          );
+        });
+      });
+    });
   });
 });

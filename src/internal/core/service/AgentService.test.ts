@@ -4,6 +4,7 @@ import type { FetchPort } from '../port/FetchPort';
 import type { LlmPort } from '../port/LlmPort';
 import type { SentimentReport } from '../entity/SentimentReport';
 import type { AgentMessage } from '../types/AgentMessage';
+import { fetchRedditPosts } from '../../usecase/fetchRedditPosts';
 
 const fetcher: FetchPort = {
   fetch: vi.fn(async () => new Response()),
@@ -23,7 +24,21 @@ vi.mock('../../usecase/analyzeSentiments', () => ({
   analyzeSentiments: vi.fn().mockResolvedValue(['sentiment']),
 }));
 vi.mock('../../usecase/compressSentiments', () => ({
-  compressSentiments: vi.fn().mockReturnValue({ joy: 1 }),
+  compressSentiments: vi.fn().mockReturnValue({
+    emotions: {
+      anger: 0,
+      fear: 0,
+      anticipation: 0,
+      trust: 0,
+      surprise: 0,
+      sadness: 0,
+      joy: 1,
+      disgust: 0,
+      negative: 0,
+      positive: 0,
+    },
+    timestamp: '2025-01-01T00:00:00Z',
+  }),
 }));
 vi.mock('../../usecase/generateSentimentReport', () => ({
   generateSentimentReport: vi.fn().mockResolvedValue({
@@ -34,20 +49,43 @@ vi.mock('../../usecase/generateSentimentReport', () => ({
 }));
 
 describe('AgentService', () => {
-  let agent: AgentService;
+  describe('Happy path', () => {
+    let agent: AgentService;
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-    agent = new AgentService(fetcher, llm);
+    beforeEach(() => {
+      vi.clearAllMocks();
+      agent = new AgentService(fetcher, llm);
+    });
+
+    test('executes full pipeline and returns a report', async () => {
+      const report = await agent.run('anySub', 10, 'day');
+
+      expect(report).toEqual<SentimentReport>({
+        text: 'Everything looks great!',
+        emoji: '☀️',
+        timestamp: '2025-01-01T00:00:00Z',
+      });
+    });
   });
 
-  test('executes full pipeline and returns a report', async () => {
-    const report = await agent.run('anySub', 10, 'day');
+  describe('Error handling', () => {
+    let agent: AgentService;
 
-    expect(report).toEqual<SentimentReport>({
-      text: 'Everything looks great!',
-      emoji: '☀️',
-      timestamp: '2025-01-01T00:00:00Z',
+    beforeEach(() => {
+      vi.clearAllMocks();
+      agent = new AgentService(fetcher, llm);
+    });
+
+    test('handles empty posts gracefully', async () => {
+      vi.mocked(fetchRedditPosts).mockResolvedValue([]);
+
+      const report = await agent.run('anySub', 10, 'day');
+
+      expect(report).toEqual<SentimentReport>({
+        text: 'Everything looks great!',
+        emoji: '☀️',
+        timestamp: '2025-01-01T00:00:00Z',
+      });
     });
   });
 });

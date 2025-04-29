@@ -52,8 +52,26 @@ describe('compressSentiments', () => {
   });
 
   describe('Error handling', () => {
-    test('throws if no sentiments are provided', () => {
-      expect(() => compressSentiments([])).toThrow(/No sentiments to compress/);
+    test('returns empty average if no sentiments are provided', () => {
+      const result = compressSentiments([]);
+
+      expect(Object.values(result.emotions).every((v) => v === 0)).toBe(true);
+      expect(typeof result.timestamp).toBe('string');
+      expect(() => new Date(result.timestamp).toISOString()).not.toThrow();
+      expect(Object.keys(result.emotions).sort()).toEqual(
+        [
+          'anger',
+          'anticipation',
+          'disgust',
+          'fear',
+          'joy',
+          'negative',
+          'positive',
+          'sadness',
+          'surprise',
+          'trust',
+        ].sort(),
+      );
     });
   });
 });
