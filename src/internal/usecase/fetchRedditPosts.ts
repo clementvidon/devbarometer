@@ -7,8 +7,9 @@ import {
   PostsResponseSchema,
   CommentsResponseSchema,
 } from './RedditSchemas';
+import { makeRedditTopUrl } from '../../utils/redditUrl';
+import { makeRedditCommentsUrl } from '../../utils/redditUrl';
 
-const BASE_URL = 'https://www.reddit.com';
 const USER_AGENT = 'devbarometer/0.1 by clementvidon';
 const HEADERS = { 'User-Agent': USER_AGENT };
 
@@ -64,9 +65,9 @@ async function fetchAllPosts(
   fetcher: FetchPort,
   subreddit: string,
   limit: number,
-  timeRange: string,
+  period: string,
 ): Promise<APIResponsePostChild[]> {
-  const url = `${BASE_URL}/r/${subreddit}/top.json?limit=${limit}&t=${timeRange}`;
+  const url = makeRedditTopUrl(subreddit, limit, period);
   const json = await fetchWithRateLimit(fetcher, url, { headers: HEADERS });
 
   if (json == null) {
@@ -90,7 +91,7 @@ async function fetchTopComment(
   subreddit: string,
   postId: string,
 ): Promise<string | null> {
-  const url = `${BASE_URL}/r/${subreddit}/comments/${postId}.json?limit=1`;
+  const url = makeRedditCommentsUrl(subreddit, postId, 1);
   const json = await fetchWithRateLimit(fetcher, url, { headers: HEADERS });
 
   if (json == null) {
@@ -125,14 +126,9 @@ export async function fetchRedditPosts(
   fetcher: FetchPort,
   subreddit: string,
   limit: number,
-  timeRange: string,
+  period: string,
 ): Promise<Post[]> {
-  const postChildren = await fetchAllPosts(
-    fetcher,
-    subreddit,
-    limit,
-    timeRange,
-  );
+  const postChildren = await fetchAllPosts(fetcher, subreddit, limit, period);
   if (postChildren.length === 0) {
     console.error(
       `[fetchAllPosts] No posts found for subreddit "${subreddit}".`,

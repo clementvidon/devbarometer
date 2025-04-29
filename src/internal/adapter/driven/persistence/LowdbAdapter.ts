@@ -30,9 +30,9 @@ export class LowdbAdapter {
   ): Promise<void> {
     const db = await this.getDb();
     db.data.snapshots.push({
-      ...snapshot,
       id: uuidv4(),
       createdAt: new Date().toISOString(),
+      ...snapshot,
     });
     await db.write();
   }
