@@ -46,8 +46,6 @@ describe('compressSentiments', () => {
 
       expect(result.emotions.joy).toBeCloseTo(0.6667, 4);
       expect(result.emotions.sadness).toBeCloseTo(0.1333, 4);
-      expect(typeof result.timestamp).toBe('string');
-      expect(() => new Date(result.timestamp).toISOString()).not.toThrow();
     });
   });
 
@@ -56,8 +54,6 @@ describe('compressSentiments', () => {
       const result = compressSentiments([]);
 
       expect(Object.values(result.emotions).every((v) => v === 0)).toBe(true);
-      expect(typeof result.timestamp).toBe('string');
-      expect(() => new Date(result.timestamp).toISOString()).not.toThrow();
       expect(Object.keys(result.emotions).sort()).toEqual(
         [
           'anger',

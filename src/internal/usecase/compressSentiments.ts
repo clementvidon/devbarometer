@@ -23,10 +23,7 @@ export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
       '[compressSentiments] No sentiments provided. Returning empty average.',
     );
     const noEmotionScores: EmotionScores = { ...totals };
-    return {
-      emotions: noEmotionScores,
-      timestamp: new Date().toISOString(),
-    };
+    return { emotions: noEmotionScores };
   }
 
   let weightSum = 0;
@@ -43,8 +40,5 @@ export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
     averages[key as keyof EmotionScores] =
       weightSum > 0 ? averages[key as keyof EmotionScores] / weightSum : 0;
   }
-  return {
-    emotions: averages,
-    timestamp: new Date().toISOString(),
-  };
+  return { emotions: averages };
 }
