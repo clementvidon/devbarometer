@@ -36,20 +36,20 @@ function makeMessages(emotionsText: string) {
     {
       role: 'system' as const,
       content: `
-Vous êtes un météorologue spécialisé dans l'analyse émotionnelle.
-Répondez STRICTEMENT un JSON brut avec ces clés :
-- "text" : une phrase ≤20 mots, style bulletin météo, décrivant le sentiment global de l'objet "emotions".
-- "emoji" : un seul emoji parmi ${WeatherEmoji.options.join(' ')}.
-Aucune autre clé ou mise en forme.
+      Vous êtes un météorologue spécialisé dans l'analyse émotionnelle.
+        Répondez STRICTEMENT un JSON brut avec ces clés :
+        - "text" : une phrase ≤20 mots, style bulletin météo, décrivant le sentiment global de l'objet "emotions".
+        - "emoji" : un seul emoji parmi ${WeatherEmoji.options.join(' ')}.
+        Aucune autre clé ou mise en forme.
         `.trim(),
     },
     {
       role: 'user' as const,
       content: `
-Voici l'objet "emotions" en JSON:
-${emotionsText}
+      Voici l'objet "emotions" en JSON:
+        ${emotionsText}
 
-Générez le JSON demandé.
+      Générez le JSON demandé.
         `.trim(),
     },
   ];
@@ -63,6 +63,9 @@ export async function generateSentimentReport(
 
   try {
     const raw = await llm.run('gpt-4o-mini', 0.1, makeMessages(emotionsJson));
+    if (!raw || raw.trim() === '') {
+      throw new Error('Empty LLM response');
+    }
     const cleaned = stripCodeFences(raw);
     const json: unknown = JSON.parse(cleaned);
     const llmResult = LLMOutputSchema.safeParse(json);
@@ -71,9 +74,7 @@ export async function generateSentimentReport(
         '[generateSentimentReport] LLM returned invalid JSON format.',
         llmResult.error,
       );
-      return {
-        ...FALLBACK,
-      };
+      return { ...FALLBACK };
     }
     const report: SentimentReport = {
       text: llmResult.data.text,

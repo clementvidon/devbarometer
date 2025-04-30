@@ -58,7 +58,7 @@ describe('generateSentimentReport', () => {
         };
       });
 
-      test('returns fallback report if LLM throws an error', async () => {
+      test('returns fallback report on LLM failure', async () => {
         llm.run.mockRejectedValue(new Error('LLM Failure'));
 
         const report = await generateSentimentReport(fakeAverageSentiment, llm);

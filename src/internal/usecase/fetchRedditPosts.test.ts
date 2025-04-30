@@ -116,7 +116,7 @@ describe('fetchRedditPosts', () => {
       expect(posts).toHaveLength(2);
     });
 
-    test('retries if fetch throws an error', async () => {
+    test('retries if fetch rejects', async () => {
       fetcher.fetch = vi
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))

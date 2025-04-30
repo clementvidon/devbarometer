@@ -37,7 +37,7 @@ async function isRelevant(post: Post, llm: LlmPort): Promise<boolean> {
     const raw = await llm.run('gpt-4o-mini', 0.1, makeMessages(post));
     const json = JSON.parse(stripCodeFences(raw));
     const result = RelevanceSchema.safeParse(json);
-    return result.success && result.data.relevant;
+    return result.success ? result.data.relevant : false;
   } catch {
     return false;
   }
