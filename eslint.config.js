@@ -19,7 +19,7 @@ export default defineConfig([
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: './backend/tsconfig.json',
         sourceType: 'module',
       },
     },
@@ -40,7 +40,7 @@ export default defineConfig([
     plugins: { vitest },
     languageOptions: {
       parserOptions: {
-        project: './tsconfig.json',
+        project: './backend/tsconfig.json',
       },
       globals: {
         vi: true,

@@ -2,20 +2,19 @@
   "name": "devbarometer",
   "type": "module",
   "scripts": {
-    "start": "npx tsx src/cmd/run.ts",
+    "start": "npx tsx backend/src/cmd/run.ts",
     "prepare": "husky",
-    "type-check": "tsc --noEmit --skipLibCheck",
-    "lint": "eslint .",
+    "type-check": "tsc -p backend/tsconfig.json",
+    "lint": "eslint backend",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest run --silent",
-    "test:coverage": "vitest --coverage --silent"
+    "test": "vitest run --silent --config backend/vitest.config.ts",
+    "test:coverage": "vitest --coverage --silent --config backend/vitest.config.ts"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write",
-      "npm run type-check",
       "vitest run --changed"
     ],
     "*.{js,json,yml,md}": [
