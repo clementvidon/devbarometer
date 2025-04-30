@@ -5,10 +5,14 @@ import type { AgentMessage } from '../../../core/types';
 export class OpenAiAdapter implements LlmPort {
   constructor(private readonly client: OpenAI) {}
 
-  async run(model: string, messages: AgentMessage[]): Promise<string> {
+  async run(
+    model: string,
+    temperature: number,
+    messages: AgentMessage[],
+  ): Promise<string> {
     const res = await this.client.chat.completions.create({
       model,
-      temperature: 0.1,
+      temperature,
       messages,
     });
 

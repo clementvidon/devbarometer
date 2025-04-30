@@ -59,7 +59,7 @@ meilleur com.: ${post.topComment}
 
 async function fetchEmotions(post: Post, llm: LlmPort): Promise<EmotionScores> {
   try {
-    const raw = await llm.run('gpt-4o-mini', makeMessages(post));
+    const raw = await llm.run('gpt-4o-mini', 0.1, makeMessages(post));
     const json = JSON.parse(stripCodeFences(raw));
     const parsed = EmotionSchema.safeParse(json);
     return parsed.success ? (parsed.data as EmotionScores) : FALLBACK;

@@ -1,5 +1,9 @@
 import type { AgentMessage } from '../types';
 
 export interface LlmPort {
-  run(model: string, messages: AgentMessage[]): Promise<string>;
+  run(
+    model: string,
+    temperature: number,
+    messages: AgentMessage[],
+  ): Promise<string>;
 }

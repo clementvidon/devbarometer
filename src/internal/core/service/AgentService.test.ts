@@ -12,7 +12,9 @@ const fetcher: FetchPort = {
 };
 
 const llm: LlmPort = {
-  run: vi.fn(async (_model: string, _msg: AgentMessage[]) => ''),
+  run: vi.fn(
+    async (_model: string, _temperature: number, _msg: AgentMessage[]) => '',
+  ),
 };
 
 const persistence: PersistencePort = {
