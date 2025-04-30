@@ -12,17 +12,11 @@
     "test:coverage": "vitest --coverage --silent"
   },
   "lint-staged": {
-    "*.ts": [
+    "*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write",
       "npm run type-check",
-      "vitest --run --changed"
-    ],
-    "*.tsx": [
-      "eslint --fix",
-      "prettier --write",
-      "npm run type-check",
-      "vitest --run --changed"
+      "vitest run --changed"
     ],
     "*.{js,json,yml,md}": [
       "prettier --write"
