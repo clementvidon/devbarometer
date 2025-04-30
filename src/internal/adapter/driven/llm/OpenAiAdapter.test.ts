@@ -20,7 +20,8 @@ describe('OpenAiAdapter', () => {
     const openAiClient = new OpenAI() as unknown as OpenAI;
     const adapter = new OpenAiAdapter(openAiClient);
     const messages: AgentMessage[] = [{ role: 'user', content: 'Say hello' }];
-    const response = await adapter.run('gpt-3.5-turbo', messages);
+    const temperature = 0.1;
+    const response = await adapter.run('gpt-3.5-turbo', temperature, messages);
 
     expect(response).toBe('Hello world!');
   });

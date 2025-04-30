@@ -62,7 +62,7 @@ export async function generateSentimentReport(
   const emotionsJson = JSON.stringify(averageSentiment.emotions);
 
   try {
-    const raw = await llm.run('gpt-4o-mini', makeMessages(emotionsJson));
+    const raw = await llm.run('gpt-4o-mini', 0.1, makeMessages(emotionsJson));
     const cleaned = stripCodeFences(raw);
     const json: unknown = JSON.parse(cleaned);
     const llmResult = LLMOutputSchema.safeParse(json);
