@@ -5,7 +5,7 @@ import type {
 } from '../core/entity/Sentiment';
 
 export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
-  const totals: EmotionScores = {
+  const totals = {
     anger: 0,
     fear: 0,
     anticipation: 0,
@@ -16,7 +16,7 @@ export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
     disgust: 0,
     negative: 0,
     positive: 0,
-  };
+  } satisfies EmotionScores;
 
   if (sentiments.length === 0) {
     console.error(

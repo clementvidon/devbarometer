@@ -8,12 +8,12 @@ export class OpenAiAdapter implements LlmPort {
   async run(
     model: string,
     temperature: number,
-    messages: AgentMessage[],
+    messages: readonly AgentMessage[],
   ): Promise<string> {
     const res = await this.client.chat.completions.create({
       model,
       temperature,
-      messages,
+      messages: [...messages],
     });
 
     const content = res.choices?.[0]?.message?.content;

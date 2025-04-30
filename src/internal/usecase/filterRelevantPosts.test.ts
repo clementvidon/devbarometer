@@ -33,14 +33,14 @@ describe('filterRelevantPosts', () => {
 
     beforeEach(() => {
       vi.clearAllMocks();
-      type AgentMessage = { role: 'system' | 'user'; content: string };
+      type LocalMsg = { role: 'system' | 'user'; content: string };
       llm = {
         run: vi.fn(
           async (
             _model: string,
             _temperature: number,
-            messages: AgentMessage[],
-          ): Promise<string> => {
+            messages: LocalMsg[],
+          ) => {
             const content = messages[1].content;
             return content.includes('Relevant')
               ? '{ "relevant": true }'
@@ -54,7 +54,7 @@ describe('filterRelevantPosts', () => {
       const relevantPosts = await filterRelevantPosts(fakePosts, llm);
 
       expect(relevantPosts).toHaveLength(2);
-      expect(relevantPosts.map((post) => post.title)).toEqual([
+      expect(relevantPosts.map((p) => p.title)).toEqual([
         'Relevant Post A',
         'Relevant Post B',
       ]);

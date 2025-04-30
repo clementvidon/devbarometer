@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { LlmPort } from '../core/port/LlmPort';
+import type { AgentMessage } from '../core/types';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 import type {
   SentimentReport,
@@ -7,7 +8,7 @@ import type {
 } from '../core/entity/SentimentReport';
 import type { AverageSentiment } from '../core/entity/Sentiment';
 
-const WeatherEmoji = z.enum([
+const emojiList = [
   '☀️',
   '🌤️',
   '⛅',
@@ -18,7 +19,9 @@ const WeatherEmoji = z.enum([
   '⛈️',
   '❄️',
   '🌩️',
-] as [WeatherEmoji, ...WeatherEmoji[]]);
+] as const;
+
+const WeatherEmoji = z.enum(emojiList);
 
 const LLMOutputSchema = z.object({
   text: z.string().max(200),
@@ -26,12 +29,12 @@ const LLMOutputSchema = z.object({
 });
 type LlmOutput = z.infer<typeof LLMOutputSchema>;
 
-const FALLBACK: SentimentReport = {
+const FALLBACK = {
   text: 'Report unavailable.',
   emoji: '☁️',
-};
+} satisfies SentimentReport;
 
-function makeMessages(emotionsText: string) {
+function makeMessages(emotionsText: string): readonly AgentMessage[] {
   return [
     {
       role: 'system' as const,
@@ -52,7 +55,7 @@ function makeMessages(emotionsText: string) {
       Générez le JSON demandé.
         `.trim(),
     },
-  ];
+  ] as const satisfies readonly AgentMessage[];
 }
 
 export async function generateSentimentReport(

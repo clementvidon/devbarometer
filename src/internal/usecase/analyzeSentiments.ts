@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
+import type { AgentMessage } from '../core/types';
 import type { Post } from '../core/entity/Post';
 import type { EmotionScores, Sentiment } from '../core/entity/Sentiment';
 import { stripCodeFences } from '../../utils/stripCodeFences';
@@ -33,7 +34,7 @@ const FALLBACK: EmotionScores = {
   positive: 0,
 };
 
-function makeMessages(post: Post) {
+function makeMessages(post: Post): readonly AgentMessage[] {
   return [
     {
       role: 'system' as const,
@@ -54,7 +55,7 @@ contenu      : ${post.content}
 meilleur com.: ${post.topComment}
       `.trim(),
     },
-  ];
+  ] as const satisfies readonly AgentMessage[];
 }
 
 async function fetchEmotions(post: Post, llm: LlmPort): Promise<EmotionScores> {

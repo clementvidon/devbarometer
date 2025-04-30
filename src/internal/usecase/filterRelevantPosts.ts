@@ -2,12 +2,13 @@ import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
 import type { Post, RelevantPost } from '../core/entity/Post';
+import type { AgentMessage } from '../core/types';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 
 const CONCURRENCY = 10;
 const RelevanceSchema = z.object({ relevant: z.boolean() });
 
-function makeMessages(post: Post) {
+function makeMessages(post: Post): readonly AgentMessage[] {
   return [
     {
       role: 'system' as const,
@@ -29,7 +30,7 @@ contenu      : ${post.content}
 meilleur com.: ${post.topComment}
       `.trim(),
     },
-  ];
+  ] as const satisfies readonly AgentMessage[];
 }
 
 async function isRelevant(post: Post, llm: LlmPort): Promise<boolean> {
