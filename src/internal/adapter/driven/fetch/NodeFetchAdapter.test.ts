@@ -3,14 +3,12 @@ import { NodeFetchAdapter } from './NodeFetchAdapter';
 
 describe('NodeFetchAdapter', () => {
   test('delegates fetch call to injected fetch function', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValue(
-        new Response('{"success":true}', {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        }),
-      );
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response('{"success":true}', {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
     const adapter = new NodeFetchAdapter(fetchMock);
     const response = await adapter.fetch('https://example.com', {
       method: 'GET',
