@@ -5,37 +5,18 @@ import vitest from 'eslint-plugin-vitest';
 import globals from 'globals';
 
 export default defineConfig([
-  { ignores: ['node_modules', 'public', 'dist'] },
+  {
+    ignores: ['node_modules', 'public', 'dist'],
+  },
 
-  // JS config
+  // JS files
   {
     files: ['**/*.{js,mjs,cjs}'],
     plugins: { js },
     extends: ['js/recommended'],
   },
 
-  // TS config — BACKEND
-  {
-    files: ['backend/**/*.ts'],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        project: './backend/tsconfig.json',
-        sourceType: 'module',
-      },
-    },
-    plugins: {
-      '@typescript-eslint': tseslint.plugin,
-    },
-    rules: {
-      ...tseslint.configs.recommended.rules,
-      '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/strict-boolean-expressions': 'warn',
-      '@typescript-eslint/no-misused-promises': 'error',
-    },
-  },
-
-  // TS config — FRONTEND
+  // TS files
   {
     files: ['frontend/**/*.{ts,tsx}'],
     languageOptions: {
@@ -55,28 +36,7 @@ export default defineConfig([
     },
   },
 
-  // Vitest config — BACKEND
-  {
-    files: ['backend/**/*.test.{ts,tsx}'],
-    plugins: { vitest },
-    languageOptions: {
-      parserOptions: {
-        project: './backend/tsconfig.json',
-      },
-      globals: {
-        vi: true,
-        describe: true,
-        test: true,
-        expect: true,
-        beforeEach: true,
-        afterEach: true,
-        it: true,
-      },
-    },
-    rules: {},
-  },
-
-  // Vitest config — FRONTEND
+  // Vitest files
   {
     files: ['frontend/**/*.test.{ts,tsx}'],
     plugins: { vitest },

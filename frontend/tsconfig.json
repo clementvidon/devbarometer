@@ -6,5 +6,10 @@
     "isolatedModules": true,
     "moduleDetection": "force"
   },
-  "include": ["src", "vite.config.ts"]
+   "include": [
+    "src",
+    "src/global.d.ts",
+    "vite.config.ts",
+    "setupTests.ts"
+ ]
 }
