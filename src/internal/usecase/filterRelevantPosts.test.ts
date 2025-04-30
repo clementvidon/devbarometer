@@ -71,7 +71,7 @@ describe('filterRelevantPosts', () => {
       };
     });
 
-    test('skips all posts if LLM throws an error', async () => {
+    test('returns [] if LLM fails', async () => {
       llm.run.mockRejectedValue(new Error('LLM failure'));
       const relevantPosts = await filterRelevantPosts(fakePosts, llm);
 
