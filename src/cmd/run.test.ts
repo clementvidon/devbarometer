@@ -1,4 +1,4 @@
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, afterEach } from 'vitest';
 import type { Mock } from 'vitest';
 
 vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter', () => ({
@@ -11,8 +11,11 @@ vi.mock('../internal/adapter/driven/persistence/LowdbAdapter', () => ({
   LowdbAdapter: vi.fn(),
 }));
 
-let runMock: Mock = vi.fn();
+vi.mock('openai', () => ({
+  default: vi.fn().mockImplementation(() => ({})),
+}));
 
+let runMock: Mock = vi.fn();
 vi.mock('../internal/core/service/AgentService', () => ({
   AgentService: vi.fn(() => ({ run: runMock })),
 }));
@@ -27,6 +30,8 @@ async function importCLI() {
   vi.resetModules();
   await import('./run');
 }
+
+afterEach(() => vi.clearAllMocks());
 
 describe('run.ts entrypoint', () => {
   describe('Happy path', () => {
