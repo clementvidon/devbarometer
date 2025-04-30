@@ -13,7 +13,11 @@ const fetcher: FetchPort = {
 
 const llm: LlmPort = {
   run: vi.fn(
-    async (_model: string, _temperature: number, _msg: AgentMessage[]) => '',
+    async (
+      _model: string,
+      _temperature: number,
+      _msg: readonly AgentMessage[],
+    ) => '',
   ),
 };
 

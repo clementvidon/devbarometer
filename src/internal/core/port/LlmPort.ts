@@ -4,6 +4,6 @@ export interface LlmPort {
   run(
     model: string,
     temperature: number,
-    messages: AgentMessage[],
+    messages: readonly AgentMessage[],
   ): Promise<string>;
 }
