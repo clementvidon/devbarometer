@@ -9,6 +9,10 @@
   "scripts": {
     "prepare": "husky",
 
+    "format:frontend": "npm --workspace frontend run format",
+    "format:backend": "npm --workspace backend run format",
+    "format": "npm-run-all --parallel --print-label format:frontend format:backend",
+
     "format:check:frontend": "npm --workspace frontend run format:check",
     "format:check:backend": "npm --workspace backend run format:check",
     "format:check": "npm-run-all --parallel --print-label format:check:frontend format:check:backend",
