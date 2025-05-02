@@ -4,14 +4,14 @@
   "type": "module",
   "scripts": {
     "start": "tsx src/cmd/run.ts",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "type-check": "tsc --noEmit",
     "test": "vitest run --silent",
     "test:changed": "vitest run --silent --changed || true",
     "test:coverage": "vitest --coverage --silent",
-    "check": "npm-run-all --sequential lint format:check type-check test"
+    "check": "npm-run-all --sequential format:check lint type-check test"
   },
   "dependencies": {
     "dotenv": "^16.5.0",
