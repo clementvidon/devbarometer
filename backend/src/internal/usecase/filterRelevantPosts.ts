@@ -48,11 +48,21 @@ export async function filterRelevantPosts(
   posts: Post[],
   llm: LlmPort,
 ): Promise<RelevantPost[]> {
+  if (posts.length === 0) {
+    console.error('[filterRelevantPosts] Received empty posts array.');
+    return [];
+  }
   const limit = pLimit(CONCURRENCY);
-  const relevantPosts = await Promise.all(
+  const labeledPosts = await Promise.all(
     posts.map((post) =>
       limit(async () => ({ post, ok: await isRelevant(post, llm) })),
     ),
   );
-  return relevantPosts.filter((r) => r.ok).map((r) => r.post);
+
+  const relevantPosts = labeledPosts.filter((r) => r.ok).map((r) => r.post);
+  if (relevantPosts.length === 0) {
+    console.error('[filterRelevantPosts] No relevant posts identified.');
+  }
+
+  return relevantPosts;
 }

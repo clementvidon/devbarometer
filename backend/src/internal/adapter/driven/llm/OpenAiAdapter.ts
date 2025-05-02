@@ -18,7 +18,7 @@ export class OpenAiAdapter implements LlmPort {
 
     const content = res.choices?.[0]?.message?.content;
     if (typeof content !== 'string' || content.trim() === '') {
-      console.warn('[OpenAiAdapter] No content returned from OpenAI API');
+      console.error('[OpenAiAdapter] No content returned from OpenAI API');
       return '';
     }
     return content;

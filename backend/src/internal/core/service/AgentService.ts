@@ -22,24 +22,20 @@ export class AgentService {
     period: string,
   ): Promise<SentimentReport> {
     const fetchUrl = makeRedditTopUrl(subreddit, limit, period);
+
     const posts = await fetchRedditPosts(
       this.fetcher,
       subreddit,
       limit,
       period,
     );
-
-    if (!posts.length) {
-      console.warn('[AgentService] No posts fetched.');
-    } else {
-      console.log(
-        `[AgentService] Fetched ${posts.length} top posts from "r/${subreddit}" for the past ${period}.`,
-      );
-    }
+    console.log(
+      `[AgentService] Fetched ${posts.length} top posts from "r/${subreddit}" for the past ${period}.`,
+    );
 
     const relevantPosts = await filterRelevantPosts(posts, this.llm);
     console.log(
-      `[AgentService] Selected ${relevantPosts.length} posts relevant to the tech job market.`,
+      `[AgentService] Selected ${relevantPosts.length}/${posts.length} posts relevant to the tech job market.`,
     );
 
     const sentimentPerPost = await analyzeSentiments(relevantPosts, this.llm);

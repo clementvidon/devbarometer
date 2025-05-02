@@ -28,13 +28,17 @@ export class LowdbAdapter {
   async storeSnapshot(
     snapshot: Omit<PipelineSnapshot, 'id' | 'createdAt'>,
   ): Promise<void> {
-    const db = await this.getDb();
-    db.data.snapshots.push({
-      id: uuidv4(),
-      createdAt: new Date().toISOString(),
-      ...snapshot,
-    });
-    await db.write();
+    try {
+      const db = await this.getDb();
+      db.data.snapshots.push({
+        id: uuidv4(),
+        createdAt: new Date().toISOString(),
+        ...snapshot,
+      });
+      await db.write();
+    } catch (err) {
+      console.error('[LowdbAdapter] Failed to store snapshot:', err);
+    }
   }
 
   async getSnapshots(): Promise<PipelineSnapshot[]> {
