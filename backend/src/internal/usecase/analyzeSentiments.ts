@@ -2,7 +2,7 @@ import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
 import type { AgentMessage } from '../core/types';
-import type { Post } from '../core/entity/Post';
+import type { RelevantPost } from '../core/entity/Post';
 import type { EmotionScores, Sentiment } from '../core/entity/Sentiment';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 
@@ -34,7 +34,7 @@ const FALLBACK: EmotionScores = {
   positive: 0,
 };
 
-function makeMessages(post: Post): readonly AgentMessage[] {
+function makeMessages(post: RelevantPost): readonly AgentMessage[] {
   return [
     {
       role: 'system' as const,
@@ -58,21 +58,36 @@ meilleur com.: ${post.topComment}
   ] as const satisfies readonly AgentMessage[];
 }
 
-async function fetchEmotions(post: Post, llm: LlmPort): Promise<EmotionScores> {
+async function fetchEmotions(
+  post: RelevantPost,
+  llm: LlmPort,
+): Promise<EmotionScores> {
   try {
     const raw = await llm.run('gpt-4o-mini', 0.1, makeMessages(post));
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = EmotionSchema.safeParse(json);
-    return parsed.success ? parsed.data : FALLBACK;
-  } catch {
+
+    if (!parsed.success) {
+      console.warn(
+        `[fetchEmotions] Invalid emotion format for post "${post.id}".`,
+      );
+      return FALLBACK;
+    }
+    return parsed.data;
+  } catch (err) {
+    console.warn(`[fetchEmotions] Failed to analyze post "${post.id}":`, err);
     return FALLBACK;
   }
 }
 
 export async function analyzeSentiments(
-  posts: Post[],
+  posts: RelevantPost[],
   llm: LlmPort,
 ): Promise<Sentiment[]> {
+  if (posts.length === 0) {
+    console.error('[analyzeSentiments] Received empty posts array.');
+    return [];
+  }
   const limit = pLimit(CONCURRENCY);
   const sentiments = posts.map((post) =>
     limit(async () => ({

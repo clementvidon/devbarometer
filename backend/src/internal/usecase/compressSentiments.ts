@@ -19,9 +19,7 @@ export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
   } satisfies EmotionScores;
 
   if (sentiments.length === 0) {
-    console.error(
-      '[compressSentiments] No sentiments provided. Returning empty average.',
-    );
+    console.error('[compressSentiments] No sentiments provided.');
     const noEmotionScores: EmotionScores = { ...totals };
     return { emotions: noEmotionScores };
   }

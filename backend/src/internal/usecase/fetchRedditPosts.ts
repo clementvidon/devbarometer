@@ -42,7 +42,7 @@ async function fetchWithRateLimit(
         const reset = parseFloat(res.headers.get('X-Ratelimit-Reset') ?? '1');
         const backoff = Math.pow(2, attempt) * reset * 1000;
         console.warn(
-          `[Rate Limit] URL: ${url}, Waiting ${backoff}ms before retry...`,
+          `[fetchWithRateLimit] URL: ${url}, Waiting ${backoff}ms before retry...`,
         );
         await new Promise((r) => setTimeout(r, backoff));
         continue;
@@ -51,13 +51,18 @@ async function fetchWithRateLimit(
       const json: unknown = await res.json();
       return json;
     } catch (err) {
-      console.error(`[Fetch Error] URL: ${url}, Attempt ${attempt + 1}:`, err);
+      console.error(
+        `[fetchWithRateLimit] URL: ${url}, Attempt ${attempt + 1}:`,
+        err,
+      );
       const backoff = Math.pow(2, attempt) * 100;
       await new Promise((r) => setTimeout(r, backoff));
     }
   }
 
-  console.error(`[Fetch Failed] URL: ${url}, after ${MAX_RETRIES} attempts.`);
+  console.error(
+    `[fetchWithRateLimit] URL: ${url}, after ${MAX_RETRIES} attempts.`,
+  );
   return null;
 }
 
@@ -77,7 +82,7 @@ async function fetchAllPosts(
   const parsed = PostsResponseSchema.safeParse(json);
   if (!parsed.success) {
     console.error(
-      `[Invalid Post JSON] URL: ${url}, Errors:`,
+      `[fetchAllPosts] URL: ${url}, Errors:`,
       parsed.error.flatten(),
     );
     return [];
@@ -101,7 +106,7 @@ async function fetchTopComment(
   const parsed = CommentsResponseSchema.safeParse(json);
   if (!parsed.success) {
     console.error(
-      `[Invalid Comment JSON] URL: ${url}, Errors:`,
+      `[fetchTopComment] URL: ${url}, Errors:`,
       parsed.error.flatten(),
     );
     return null;
@@ -131,7 +136,7 @@ export async function fetchRedditPosts(
   const postChildren = await fetchAllPosts(fetcher, subreddit, limit, period);
   if (postChildren.length === 0) {
     console.error(
-      `[fetchAllPosts] No posts found for subreddit "${subreddit}".`,
+      `[fetchRedditPosts] No posts found for subreddit "${subreddit}".`,
     );
   }
   const filtered = postChildren.filter((w) => w.data.ups >= MIN_UPVOTES);
