@@ -6,10 +6,11 @@
     "isolatedModules": true,
     "moduleDetection": "force"
   },
-   "include": [
+  "include": [
     "src",
     "src/global.d.ts",
     "vite.config.ts",
+    "vitest.config.ts",
     "setupTests.ts"
- ]
+  ]
 }

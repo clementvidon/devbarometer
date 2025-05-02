@@ -4,26 +4,19 @@ import type { FetchPort } from '../port/FetchPort';
 import type { LlmPort } from '../port/LlmPort';
 import type { PersistencePort } from '../port/PersistencePort';
 import type { SentimentReport } from '../entity/SentimentReport';
-import type { AgentMessage } from '../types/AgentMessage';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts';
 
 const fetcher: FetchPort = {
-  fetch: vi.fn(async () => new Response()),
+  fetch: vi.fn(() => Promise.resolve(new Response())),
 };
 
 const llm: LlmPort = {
-  run: vi.fn(
-    async (
-      _model: string,
-      _temperature: number,
-      _msg: readonly AgentMessage[],
-    ) => '',
-  ),
+  run: vi.fn(() => Promise.resolve('')),
 };
 
 const persistence: PersistencePort = {
-  storeSnapshot: vi.fn(async () => {}),
-  getSnapshots: vi.fn(async () => []),
+  storeSnapshot: vi.fn(() => Promise.resolve()),
+  getSnapshots: vi.fn(() => Promise.resolve([])),
 };
 
 vi.mock('../../usecase/fetchRedditPosts', () => ({
@@ -55,12 +48,13 @@ vi.mock('../../usecase/generateSentimentReport', () => ({
   generateSentimentReport: vi.fn().mockResolvedValue({
     text: 'Everything looks great!',
     emoji: '☀️',
-  } as SentimentReport),
+  } satisfies SentimentReport),
 }));
 
 describe('AgentService', () => {
   describe('Happy path', () => {
     let agent: AgentService;
+    const spy = vi.spyOn(persistence, 'storeSnapshot');
 
     beforeEach(() => {
       vi.clearAllMocks();
@@ -74,12 +68,14 @@ describe('AgentService', () => {
         text: 'Everything looks great!',
         emoji: '☀️',
       });
-      expect(persistence.storeSnapshot).toHaveBeenCalledTimes(1);
+
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('Error handling', () => {
     let agent: AgentService;
+    const spy = vi.spyOn(persistence, 'storeSnapshot');
 
     beforeEach(() => {
       vi.clearAllMocks();
@@ -95,7 +91,7 @@ describe('AgentService', () => {
         text: 'Everything looks great!',
         emoji: '☀️',
       });
-      expect(persistence.storeSnapshot).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalledTimes(1);
     });
   });
 });
