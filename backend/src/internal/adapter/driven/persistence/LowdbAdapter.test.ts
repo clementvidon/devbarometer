@@ -3,11 +3,18 @@ import { LowdbAdapter } from './LowdbAdapter';
 import type { PipelineSnapshot } from '../../../core/types/PipelineSnapshot';
 import type { WeatherEmoji } from '../../../core/entity/SentimentReport';
 
+interface MockedLowdb {
+  data: { snapshots: PipelineSnapshot[] };
+  write: () => void;
+}
+
+const mockLowdb: MockedLowdb = {
+  data: { snapshots: [] },
+  write: vi.fn(),
+};
+
 vi.mock('lowdb/node', () => ({
-  JSONFilePreset: vi.fn(() => ({
-    data: { snapshots: [] },
-    write: vi.fn(),
-  })),
+  JSONFilePreset: vi.fn(() => mockLowdb),
 }));
 
 vi.mock('uuid', () => ({
@@ -47,6 +54,7 @@ describe('LowdbAdapter', () => {
 
   beforeEach(() => {
     vi.restoreAllMocks();
+    mockLowdb.data.snapshots = [];
     adapter = new LowdbAdapter();
   });
 
@@ -56,10 +64,8 @@ describe('LowdbAdapter', () => {
       const snapshots = await adapter.getSnapshots();
 
       expect(snapshots).toHaveLength(1);
-      expect(snapshots[0]).toMatchObject({
-        id: 'mocked-uuid',
-        createdAt: expect.any(String),
-      });
+      expect(snapshots[0].id).toBe('mocked-uuid');
+      expect(typeof snapshots[0].createdAt).toBe('string');
     });
   });
 });

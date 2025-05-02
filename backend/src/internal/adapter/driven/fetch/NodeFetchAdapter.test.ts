@@ -19,7 +19,7 @@ describe('NodeFetchAdapter', () => {
       method: 'GET',
     });
     expect(response.status).toBe(200);
-    const body = await response.json();
+    const body = (await response.json()) as { success: boolean };
     expect(body).toEqual({ success: true });
   });
 

@@ -7,23 +7,59 @@
     "backend"
   ],
   "scripts": {
-    "prepare": "husky",
-    "dev:frontend": "npm --workspace frontend run dev",
-    "dev:backend": "npm --workspace backend run start",
-    "type-check": "npm --workspace frontend run type-check && npm --workspace backend run type-check",
-    "lint": "npm --workspace frontend run lint && npm --workspace backend run lint",
-    "format": "npm --workspace frontend run format && npm --workspace backend run format",
-    "format:check": "npm --workspace frontend run format:check && npm --workspace backend run format:check",
-    "test": "npm --workspace frontend run test && npm --workspace backend run test",
-    "test:coverage": "npm --workspace frontend run test:coverage && npm --workspace backend run test:coverage"
+    "prepare":       "husky",
+
+    "lint:frontend": "npm --workspace frontend run lint",
+    "lint:backend":  "npm --workspace backend  run lint",
+    "lint": "npm-run-all --parallel --print-label lint:frontend lint:backend",
+
+    "format:check:frontend": "npm --workspace frontend run format:check",
+    "format:check:backend":  "npm --workspace backend  run format:check",
+    "format:check": "npm-run-all --parallel --print-label format:check:frontend format:check:backend",
+
+    "type-check:frontend": "npm --workspace frontend run type-check",
+    "type-check:backend":  "npm --workspace backend  run type-check",
+    "type-check": "npm-run-all --parallel --print-label type-check:frontend type-check:backend",
+
+    "test:frontend": "npm --workspace frontend run test",
+    "test:backend":  "npm --workspace backend  run test",
+    "test": "npm-run-all --parallel --print-label test:frontend test:backend",
+
+    "test:coverage:frontend": "npm --workspace frontend run test:coverage",
+    "test:coverage:backend":  "npm --workspace backend  run test:coverage",
+    "test:coverage": "npm-run-all --parallel --print-label test:coverage:frontend test:coverage:backend",
+
+    "check": "npm-run-all --sequential lint format:check type-check test"
+  },
+  "lint-staged": {
+    "frontend/src/**/*.{ts,tsx}": [
+      "npm --workspace frontend run lint",
+      "npm --workspace frontend run test:changed"
+    ],
+    "backend/src/**/*.{ts,tsx}": [
+      "npm --workspace backend run lint",
+      "npm --workspace backend run test:changed"
+    ]
   },
   "devDependencies": {
     "husky": "^9.1.7",
-    "lint-staged": "^15.5.1"
+    "lint-staged": "^15.5.1",
+    "npm-run-all": "^4.1.5",
+
+    "typescript": "5.7.2",
+    "prettier": "3.5.3",
+    "eslint": "^9.24.0",
+    "@eslint/js": "^9.24.0",
+    "@typescript-eslint/parser": "^8.29.1",
+    "@typescript-eslint/eslint-plugin": "^8.29.1",
+    "vitest": "^3.1.2",
+    "@vitest/coverage-v8": "^3.1.1",
+    "eslint-plugin-vitest": "^0.5.4",
+    "tsx": "^4.19.3"
   },
-  "lint-staged": {
-    "frontend/src/**/*.{ts,tsx}": ["npm --workspace frontend run lint", "npm --workspace frontend run test:changed"],
-    "backend/src/**/*.{ts,tsx}": ["npm --workspace backend run lint", "npm --workspace backend run test:changed"]
+  "overrides": {
+    "typescript": "5.7.2",
+    "prettier":  "3.5.3"
   },
   "engines": {
     "node": ">=22"

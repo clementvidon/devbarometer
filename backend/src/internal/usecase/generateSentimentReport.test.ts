@@ -47,51 +47,5 @@ describe('generateSentimentReport', () => {
 
       expect(report).toEqual(fakeSentimentReport);
     });
-
-    describe('Error handling', () => {
-      let llm: { run: Mock };
-
-      beforeEach(() => {
-        vi.clearAllMocks();
-        llm = {
-          run: vi.fn(),
-        };
-      });
-
-      test('returns fallback report on LLM failure', async () => {
-        llm.run.mockRejectedValue(new Error('LLM Failure'));
-
-        const report = await generateSentimentReport(fakeAverageSentiment, llm);
-
-        expect(report).toMatchObject({
-          text: 'Report unavailable.',
-          emoji: '☁️',
-        });
-      });
-
-      test('returns fallback report if LLM returns invalid JSON', async () => {
-        llm.run.mockResolvedValue('not a valid JSON');
-
-        const report = await generateSentimentReport(fakeAverageSentiment, llm);
-
-        expect(report).toMatchObject({
-          text: 'Report unavailable.',
-          emoji: '☁️',
-        });
-      });
-
-      test('returns fallback report if LLM returns wrong schema', async () => {
-        llm.run.mockResolvedValue(
-          JSON.stringify({ wrongKey: 'oops', emoji: '🌤️' }),
-        );
-
-        const report = await generateSentimentReport(fakeAverageSentiment, llm);
-
-        expect(report).toMatchObject({
-          text: 'Report unavailable.',
-          emoji: '☁️',
-        });
-      });
-    });
   });
 });

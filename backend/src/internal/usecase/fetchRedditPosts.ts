@@ -33,7 +33,7 @@ async function fetchWithRateLimit(
   url: string,
   options: RequestInit,
   retries = MAX_RETRIES,
-): Promise<unknown | null> {
+): Promise<unknown> {
   for (let attempt = 0; attempt < retries; attempt++) {
     try {
       const res = await withTimeout(fetcher.fetch(url, options), TIMEOUT_MS);
@@ -48,7 +48,7 @@ async function fetchWithRateLimit(
         continue;
       }
 
-      const json = await res.json();
+      const json: unknown = await res.json();
       return json;
     } catch (err) {
       console.error(`[Fetch Error] URL: ${url}, Attempt ${attempt + 1}:`, err);

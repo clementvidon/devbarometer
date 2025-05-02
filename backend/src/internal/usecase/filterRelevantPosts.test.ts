@@ -36,11 +36,7 @@ describe('filterRelevantPosts', () => {
       type LocalMsg = { role: 'system' | 'user'; content: string };
       llm = {
         run: vi.fn(
-          async (
-            _model: string,
-            _temperature: number,
-            messages: LocalMsg[],
-          ) => {
+          (_model: string, _temperature: number, messages: LocalMsg[]) => {
             const content = messages[1].content;
             return content.includes('Relevant')
               ? '{ "relevant": true }'

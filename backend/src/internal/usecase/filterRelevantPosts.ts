@@ -36,9 +36,9 @@ meilleur com.: ${post.topComment}
 async function isRelevant(post: Post, llm: LlmPort): Promise<boolean> {
   try {
     const raw = await llm.run('gpt-4o-mini', 0.1, makeMessages(post));
-    const json = JSON.parse(stripCodeFences(raw));
-    const result = RelevanceSchema.safeParse(json);
-    return result.success ? result.data.relevant : false;
+    const json: unknown = JSON.parse(stripCodeFences(raw));
+    const parsed = RelevanceSchema.safeParse(json);
+    return parsed.success ? parsed.data.relevant : false;
   } catch {
     return false;
   }

@@ -20,7 +20,7 @@ afterAll(() => {
 });
 
 const fakeResponse = (
-  body: any,
+  body: unknown,
   status = 200,
   headers: Record<string, string> = {},
 ) =>
