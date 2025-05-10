@@ -1,5 +1,5 @@
-import { describe, test, expect } from 'vitest';
-import { makeRedditTopUrl, makeRedditCommentsUrl } from './redditUrl';
+import { describe, expect, test } from 'vitest';
+import { makeRedditCommentsUrl, makeRedditTopUrl } from './redditUrl.ts';
 
 const BASE = 'https://www.reddit.com';
 

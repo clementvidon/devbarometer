@@ -1,6 +1,6 @@
-import { describe, test, expect } from 'vitest';
-import { compressSentiments } from './compressSentiments';
-import type { Sentiment } from '../core/entity/Sentiment';
+import { describe, expect, test } from 'vitest';
+import type { Sentiment } from '../core/entity/Sentiment.ts';
+import { compressSentiments } from './compressSentiments.ts';
 
 const fakeSentiments: Sentiment[] = [
   {

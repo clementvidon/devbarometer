@@ -1,9 +1,9 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
-import { AgentService } from '../internal/core/service/AgentService';
-import { NodeFetchAdapter } from '../internal/adapter/driven/fetch/NodeFetchAdapter';
-import { OpenAiAdapter } from '../internal/adapter/driven/llm/OpenAiAdapter';
-import { LowdbAdapter } from '../internal/adapter/driven/persistence/LowdbAdapter';
+import { NodeFetchAdapter } from '../internal/adapter/driven/fetch/NodeFetchAdapter.ts';
+import { OpenAiAdapter } from '../internal/adapter/driven/llm/OpenAiAdapter.ts';
+import { LowdbAdapter } from '../internal/adapter/driven/persistence/LowdbAdapter.ts';
+import { AgentService } from '../internal/core/service/AgentService.ts';
 
 (async () => {
   const fetcher = new NodeFetchAdapter(globalThis.fetch);

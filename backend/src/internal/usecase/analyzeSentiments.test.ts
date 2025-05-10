@@ -1,8 +1,8 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
-import { analyzeSentiments } from './analyzeSentiments';
-import type { Post } from '../core/entity/Post';
-import type { Sentiment } from '../core/entity/Sentiment';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import type { Post } from '../core/entity/Post.ts';
+import type { Sentiment } from '../core/entity/Sentiment.ts';
+import { analyzeSentiments } from './analyzeSentiments.ts';
 
 const fakePosts: Post[] = [
   {

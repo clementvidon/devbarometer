@@ -1,6 +1,9 @@
 import type { Post, RelevantPost } from '../../core/entity/Post.ts';
-import type { SentimentReport } from '../../core/entity/SentimentReport';
-import type { Sentiment, AverageSentiment } from '../../core/entity/Sentiment';
+import type {
+  AverageSentiment,
+  Sentiment,
+} from '../../core/entity/Sentiment.ts';
+import type { SentimentReport } from '../../core/entity/SentimentReport.ts';
 
 export type PipelineSnapshot = {
   id: string;

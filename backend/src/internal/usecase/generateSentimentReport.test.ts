@@ -1,8 +1,8 @@
-import { describe, test, expect, beforeEach, vi } from 'vitest';
 import type { Mock } from 'vitest';
-import { generateSentimentReport } from './generateSentimentReport';
-import type { AverageSentiment } from '../core/entity/Sentiment';
-import type { SentimentReport } from '../core/entity/SentimentReport';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import type { AverageSentiment } from '../core/entity/Sentiment.ts';
+import type { SentimentReport } from '../core/entity/SentimentReport.ts';
+import { generateSentimentReport } from './generateSentimentReport.ts';
 
 const fakeLLMResponse = `
 {

@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import type { LlmPort } from '../core/port/LlmPort';
-import type { AgentMessage } from '../core/types/AgentMessage';
-import { stripCodeFences } from '../../utils/stripCodeFences';
-import { WEATHER_EMOJIS } from '../core/entity/SentimentReport';
-import type { SentimentReport } from '../core/entity/SentimentReport';
-import type { AverageSentiment } from '../core/entity/Sentiment';
+import { stripCodeFences } from '../../utils/stripCodeFences.ts';
+import type { AverageSentiment } from '../core/entity/Sentiment.ts';
+import type { SentimentReport } from '../core/entity/SentimentReport.ts';
+import { WEATHER_EMOJIS } from '../core/entity/SentimentReport.ts';
+import type { LlmPort } from '../core/port/LlmPort.ts';
+import type { AgentMessage } from '../core/types/AgentMessage.ts';
 
 const LLMOutputSchema = z.object({
   text: z.string().max(200),

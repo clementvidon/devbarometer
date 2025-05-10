@@ -1,7 +1,7 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { LowdbAdapter } from './LowdbAdapter';
-import type { PipelineSnapshot } from '../../../core/types/PipelineSnapshot';
-import type { WeatherEmoji } from '../../../core/entity/SentimentReport';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import type { WeatherEmoji } from '../../../core/entity/SentimentReport.ts';
+import type { PipelineSnapshot } from '../../../core/types/PipelineSnapshot.ts';
+import { LowdbAdapter } from './LowdbAdapter.ts';
 
 interface MockedLowdb {
   data: { snapshots: PipelineSnapshot[] };

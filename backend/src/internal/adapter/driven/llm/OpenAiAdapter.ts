@@ -1,9 +1,13 @@
 import type OpenAI from 'openai';
-import type { LlmPort } from '../../../core/port/LlmPort';
-import type { AgentMessage } from '../../../core/types/AgentMessage';
+import type { LlmPort } from '../../../core/port/LlmPort.ts';
+import type { AgentMessage } from '../../../core/types/AgentMessage.ts';
 
 export class OpenAiAdapter implements LlmPort {
-  constructor(private readonly client: OpenAI) {}
+  private readonly client: OpenAI;
+
+  constructor(client: OpenAI) {
+    this.client = client;
+  }
 
   async run(
     model: string,
