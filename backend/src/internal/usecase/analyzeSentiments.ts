@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
-import type { AgentMessage } from '../core/types';
+import type { AgentMessage } from '../core/types/AgentMessage';
 import type { RelevantPost } from '../core/entity/Post';
 import type { EmotionScores, Sentiment } from '../core/entity/Sentiment';
 import { stripCodeFences } from '../../utils/stripCodeFences';

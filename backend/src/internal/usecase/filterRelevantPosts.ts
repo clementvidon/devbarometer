@@ -2,7 +2,7 @@ import { z } from 'zod';
 import pLimit from 'p-limit';
 import type { LlmPort } from '../core/port/LlmPort';
 import type { Post, RelevantPost } from '../core/entity/Post';
-import type { AgentMessage } from '../core/types';
+import type { AgentMessage } from '../core/types/AgentMessage';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 
 const CONCURRENCY = 10;
