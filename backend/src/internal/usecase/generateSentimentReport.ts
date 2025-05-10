@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { LlmPort } from '../core/port/LlmPort';
-import type { AgentMessage } from '../core/types';
+import type { AgentMessage } from '../core/types/AgentMessage';
 import { stripCodeFences } from '../../utils/stripCodeFences';
 import { WEATHER_EMOJIS } from '../core/entity/SentimentReport';
 import type { SentimentReport } from '../core/entity/SentimentReport';

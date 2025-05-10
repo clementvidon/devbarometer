@@ -1,6 +1,6 @@
 import type OpenAI from 'openai';
 import type { LlmPort } from '../../../core/port/LlmPort';
-import type { AgentMessage } from '../../../core/types';
+import type { AgentMessage } from '../../../core/types/AgentMessage';
 
 export class OpenAiAdapter implements LlmPort {
   constructor(private readonly client: OpenAI) {}
