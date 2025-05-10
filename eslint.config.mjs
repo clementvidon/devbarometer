@@ -20,7 +20,10 @@ export default defineConfig([
     languageOptions: {
       parser: tsparser,
       parserOptions: {
-        project: './tsconfig.json',
+        project: [
+          './frontend/tsconfig.json',
+          './backend/tsconfig.json',
+        ],
         tsconfigRootDir: new URL('.', import.meta.url),
       },
       globals: {
