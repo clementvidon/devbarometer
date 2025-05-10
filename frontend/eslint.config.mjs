@@ -1,6 +1,6 @@
-import { defineConfig } from 'eslint/config';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
+import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import sharedConfig from '../eslint.config.mjs';
 

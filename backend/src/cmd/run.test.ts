@@ -1,5 +1,5 @@
-import { describe, test, expect, vi, afterEach } from 'vitest';
 import type { Mock } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter', () => ({
   NodeFetchAdapter: vi.fn(),
@@ -23,12 +23,12 @@ vi.mock('../internal/core/service/AgentService', () => ({
 const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 const exitSpy = vi
-  .spyOn(process as unknown as { exit(code?: number): void }, 'exit')
-  .mockImplementation(() => undefined);
+  .spyOn(process, 'exit')
+  .mockImplementation((() => {}) as (code?: number) => never);
 
 async function importCLI() {
   vi.resetModules();
-  await import('./run');
+  await import('./run.ts');
 }
 
 afterEach(() => vi.clearAllMocks());

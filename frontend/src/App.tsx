@@ -1,5 +1,5 @@
 import './App.css';
-import Report from './components/Report';
+import Report from './components/Report.ts';
 
 function App() {
   return (

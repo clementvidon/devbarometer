@@ -1,7 +1,7 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
-import { filterRelevantPosts } from './filterRelevantPosts';
-import type { Post } from '../core/entity/Post';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import type { Post } from '../core/entity/Post.ts';
+import { filterRelevantPosts } from './filterRelevantPosts.ts';
 
 const fakePosts: Post[] = [
   {

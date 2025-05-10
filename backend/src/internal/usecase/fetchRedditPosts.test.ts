@@ -1,14 +1,14 @@
 import {
-  describe,
-  test,
-  expect,
-  vi,
-  beforeEach,
-  beforeAll,
   afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+  vi,
 } from 'vitest';
-import { fetchRedditPosts } from './fetchRedditPosts';
-import type { FetchPort } from '../core/port/FetchPort';
+import type { FetchPort } from '../core/port/FetchPort.ts';
+import { fetchRedditPosts } from './fetchRedditPosts.ts';
 
 beforeAll(() => {
   vi.spyOn(console, 'error').mockImplementation(() => {});

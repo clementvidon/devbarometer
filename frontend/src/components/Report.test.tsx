@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import Report from './Report';
+import { describe, expect, it } from 'vitest';
+import Report from './Report.tsx';
 
 describe('Report component', () => {
   it('renders loading message', () => {

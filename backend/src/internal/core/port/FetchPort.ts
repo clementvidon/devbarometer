@@ -1,3 +1,3 @@
 export interface FetchPort {
-  fetch(input: RequestInfo, init?: RequestInit): Promise<Response>;
+  fetch(_input: RequestInfo, _init?: RequestInit): Promise<Response>;
 }

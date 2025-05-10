@@ -1,7 +1,7 @@
-import { describe, test, expect, vi } from 'vitest';
-import { OpenAiAdapter } from './OpenAiAdapter';
-import type { AgentMessage } from '../../../core/types/AgentMessage';
 import type OpenAI from 'openai';
+import { describe, expect, test, vi } from 'vitest';
+import type { AgentMessage } from '../../../core/types/AgentMessage.ts';
+import { OpenAiAdapter } from './OpenAiAdapter.ts';
 
 function createMockOpenAI(content: string | null): OpenAI {
   return {

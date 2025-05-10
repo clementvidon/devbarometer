@@ -1,10 +1,10 @@
-import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { AgentService } from './AgentService';
-import type { FetchPort } from '../port/FetchPort';
-import type { LlmPort } from '../port/LlmPort';
-import type { PersistencePort } from '../port/PersistencePort';
-import type { SentimentReport } from '../entity/SentimentReport';
-import { fetchRedditPosts } from '../../usecase/fetchRedditPosts';
+import { beforeEach, describe, expect, test, vi } from 'vitest';
+import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
+import type { SentimentReport } from '../entity/SentimentReport.ts';
+import type { FetchPort } from '../port/FetchPort.ts';
+import type { LlmPort } from '../port/LlmPort.ts';
+import type { PersistencePort } from '../port/PersistencePort.ts';
+import { AgentService } from './AgentService.ts';
 
 const fetcher: FetchPort = {
   fetch: vi.fn(() => Promise.resolve(new Response())),

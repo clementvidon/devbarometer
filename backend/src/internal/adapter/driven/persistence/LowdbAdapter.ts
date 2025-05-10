@@ -1,6 +1,6 @@
 import { JSONFilePreset } from 'lowdb/node';
 import { v4 as uuidv4 } from 'uuid';
-import type { PipelineSnapshot } from '../../../core/types/PipelineSnapshot';
+import type { PipelineSnapshot } from '../../../core/types/PipelineSnapshot.ts';
 
 type Data = {
   snapshots: PipelineSnapshot[];

@@ -1,8 +1,8 @@
 import type {
-  Sentiment,
   AverageSentiment,
   EmotionScores,
-} from '../core/entity/Sentiment';
+  Sentiment,
+} from '../core/entity/Sentiment.ts';
 
 export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
   const totals = {

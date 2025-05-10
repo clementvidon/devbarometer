@@ -1,20 +1,24 @@
-import type { FetchPort } from '../port/FetchPort';
-import type { LlmPort } from '../port/LlmPort';
-import type { PersistencePort } from '../port/PersistencePort';
-import type { SentimentReport } from '../entity/SentimentReport';
-import { fetchRedditPosts } from '../../usecase/fetchRedditPosts';
-import { filterRelevantPosts } from '../../usecase/filterRelevantPosts';
-import { analyzeSentiments } from '../../usecase/analyzeSentiments';
-import { compressSentiments } from '../../usecase/compressSentiments';
-import { generateSentimentReport } from '../../usecase/generateSentimentReport';
-import { makeRedditTopUrl } from '../../../utils/redditUrl';
+import { makeRedditTopUrl } from '../../../utils/redditUrl.ts';
+import { analyzeSentiments } from '../../usecase/analyzeSentiments.ts';
+import { compressSentiments } from '../../usecase/compressSentiments.ts';
+import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
+import { filterRelevantPosts } from '../../usecase/filterRelevantPosts.ts';
+import { generateSentimentReport } from '../../usecase/generateSentimentReport.ts';
+import type { SentimentReport } from '../entity/SentimentReport.ts';
+import type { FetchPort } from '../port/FetchPort.ts';
+import type { LlmPort } from '../port/LlmPort.ts';
+import type { PersistencePort } from '../port/PersistencePort.ts';
 
 export class AgentService {
-  constructor(
-    private readonly fetcher: FetchPort,
-    private readonly llm: LlmPort,
-    private readonly persistence: PersistencePort,
-  ) {}
+  private readonly fetcher: FetchPort;
+  private readonly llm: LlmPort;
+  private readonly persistence: PersistencePort;
+
+  constructor(fetcher: FetchPort, llm: LlmPort, persistence: PersistencePort) {
+    this.fetcher = fetcher;
+    this.llm = llm;
+    this.persistence = persistence;
+  }
 
   async run(
     subreddit: string,

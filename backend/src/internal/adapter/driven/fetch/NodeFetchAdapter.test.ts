@@ -1,5 +1,5 @@
-import { describe, test, expect, vi } from 'vitest';
-import { NodeFetchAdapter } from './NodeFetchAdapter';
+import { describe, expect, test, vi } from 'vitest';
+import { NodeFetchAdapter } from './NodeFetchAdapter.ts';
 
 describe('NodeFetchAdapter', () => {
   test('delegates fetch call to injected fetch function', async () => {

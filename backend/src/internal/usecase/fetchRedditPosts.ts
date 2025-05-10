@@ -1,14 +1,16 @@
 import { z } from 'zod';
-import type { FetchPort } from '../core/port/FetchPort';
-import type { Post } from '../core/entity/Post';
 import {
-  PostSchema,
-  PostChildSchema,
-  PostsResponseSchema,
+  makeRedditCommentsUrl,
+  makeRedditTopUrl,
+} from '../../utils/redditUrl.ts';
+import type { Post } from '../core/entity/Post.ts';
+import type { FetchPort } from '../core/port/FetchPort.ts';
+import {
   CommentsResponseSchema,
-} from './RedditSchemas';
-import { makeRedditTopUrl } from '../../utils/redditUrl';
-import { makeRedditCommentsUrl } from '../../utils/redditUrl';
+  PostChildSchema,
+  PostSchema,
+  PostsResponseSchema,
+} from './RedditSchemas.ts';
 
 const USER_AGENT = 'devbarometer/0.1 by clementvidon';
 const HEADERS = { 'User-Agent': USER_AGENT };
