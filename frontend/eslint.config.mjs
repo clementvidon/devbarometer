@@ -5,6 +5,9 @@ import globals from 'globals';
 import sharedConfig from '../eslint.config.mjs';
 
 export default defineConfig([
+  {
+    ignores: ['vite.config.ts'],
+  },
   sharedConfig,
   {
     files: ['**/*.{ts,tsx}'],
