@@ -24,7 +24,7 @@ const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 const exitSpy = vi
   .spyOn(process, 'exit')
-  .mockImplementation((() => {}) as (code?: number) => never);
+  .mockImplementation((() => {}) as (code?: string | number | null) => never);
 
 async function importCLI() {
   vi.resetModules();
