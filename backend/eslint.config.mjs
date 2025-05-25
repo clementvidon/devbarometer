@@ -5,6 +5,9 @@ import globals from 'globals';
 import sharedConfig from '../eslint.config.mjs';
 
 export default defineConfig([
+  {
+    ignores: ['drizzle.config.ts'],
+  },
   sharedConfig,
   {
     files: ['**/*.ts'],
