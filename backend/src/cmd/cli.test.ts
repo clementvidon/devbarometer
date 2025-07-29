@@ -27,12 +27,12 @@ const exitSpy = vi
 
 async function importCLI() {
   vi.resetModules();
-  await import('./run.ts');
+  await import('./cli.ts');
 }
 
 afterEach(() => vi.clearAllMocks());
 
-describe('run.ts entrypoint', () => {
+describe('cli.ts entrypoint', () => {
   describe('Happy path', () => {
     test('logs the report and does not exit', async () => {
       await importCLI();
