@@ -15,12 +15,11 @@ vi.mock('openai', () => ({
   default: vi.fn().mockImplementation(() => ({})),
 }));
 
-let runMock: Mock = vi.fn();
+let updateReportMock: Mock = vi.fn();
 vi.mock('../internal/core/service/AgentService', () => ({
-  AgentService: vi.fn(() => ({ run: runMock })),
+  AgentService: vi.fn(() => ({ updateReport: updateReportMock })),
 }));
 
-const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 const exitSpy = vi
   .spyOn(process, 'exit')
@@ -36,11 +35,9 @@ afterEach(() => vi.clearAllMocks());
 describe('run.ts entrypoint', () => {
   describe('Happy path', () => {
     test('logs the report and does not exit', async () => {
-      runMock = vi.fn().mockResolvedValue('Report OK');
       await importCLI();
 
-      expect(runMock).toHaveBeenCalled();
-      expect(logSpy).toHaveBeenCalledWith('Report OK');
+      expect(updateReportMock).toHaveBeenCalled();
       expect(exitSpy).not.toHaveBeenCalled();
     });
   });
@@ -48,7 +45,7 @@ describe('run.ts entrypoint', () => {
   describe('Error handling', () => {
     test('logs the error and exits with code 1', async () => {
       const boom = new Error('Boom');
-      runMock = vi.fn().mockRejectedValue(boom);
+      updateReportMock.mockRejectedValue(boom);
       await importCLI();
 
       expect(errSpy).toHaveBeenCalledWith('Agent run failed:', boom);

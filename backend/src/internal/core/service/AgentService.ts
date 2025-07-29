@@ -19,7 +19,11 @@ export class AgentService {
     this.persistence = persistence;
   }
 
-  async run(subreddit: string, limit: number, period: string): Promise<void> {
+  async updateReport(
+    subreddit: string,
+    limit: number,
+    period: string,
+  ): Promise<void> {
     const fetchUrl = makeRedditTopUrl(subreddit, limit, period);
 
     const posts = await fetchRedditPosts(
