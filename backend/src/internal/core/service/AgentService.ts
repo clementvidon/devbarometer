@@ -51,8 +51,9 @@ export class AgentService {
     console.log('[AgentService] Computed average sentiment:', averageSentiment);
 
     const report = await generateSentimentReport(averageSentiment, this.llm);
-    console.log('[AgentService] Generated final sentiment report.');
-    console.log(report);
+    console.log(
+      `[AgentService] New report generated at ${new Date().toISOString()}`,
+    );
 
     await this.persistence.storeSnapshot({
       subreddit,
