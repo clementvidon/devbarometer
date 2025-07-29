@@ -12,8 +12,10 @@ import {
   PostsResponseSchema,
 } from './RedditSchemas.ts';
 
-const USER_AGENT = 'devbarometer/0.1 by clementvidon';
-const HEADERS = { 'User-Agent': USER_AGENT };
+const HEADERS = {
+  'User-Agent': 'devbarometer/0.1 by clementvidon',
+  Accept: 'application/json',
+};
 
 const MAX_RETRIES = 3;
 const TIMEOUT_MS = 5000;
@@ -48,6 +50,15 @@ async function fetchWithRateLimit(
         );
         await new Promise((r) => setTimeout(r, backoff));
         continue;
+      }
+
+      const contentType = res.headers.get('content-type') || '';
+      if (!contentType.includes('application/json')) {
+        const html = await res.text();
+        console.warn(
+          `[fetchWithRateLimit] Non-JSON response at ${url} (status ${res.status}):\n${html.slice(0, 200)}...`,
+        );
+        return null;
       }
 
       const json: unknown = await res.json();
