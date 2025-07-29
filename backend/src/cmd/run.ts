@@ -14,7 +14,7 @@ import { AgentService } from '../internal/core/service/AgentService.ts';
   const persistence = new LowdbAdapter();
   const agent = new AgentService(fetcher, llm, persistence);
 
-  await agent.run('developpeurs', 100, 'week');
+  await agent.updateReport('developpeurs', 100, 'week');
 })().catch((err) => {
   console.error('Agent run failed:', err);
   process.exit(1);

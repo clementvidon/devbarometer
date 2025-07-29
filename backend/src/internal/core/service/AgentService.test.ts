@@ -62,12 +62,16 @@ describe('AgentService', () => {
     });
 
     test('executes full pipeline and returns a report', async () => {
-      const report = await agent.run('anySub', 10, 'day');
+      await agent.updateReport('anySub', 10, 'day');
 
-      expect(report).toEqual<SentimentReport>({
-        text: 'Everything looks great!',
-        emoji: '☀️',
-      });
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          report: {
+            text: 'Everything looks great!',
+            emoji: '☀️',
+          },
+        }),
+      );
 
       expect(spy).toHaveBeenCalledTimes(1);
     });
@@ -85,12 +89,16 @@ describe('AgentService', () => {
     test('handles empty posts gracefully', async () => {
       vi.mocked(fetchRedditPosts).mockResolvedValue([]);
 
-      const report = await agent.run('anySub', 10, 'day');
+      await agent.updateReport('anySub', 10, 'day');
 
-      expect(report).toEqual<SentimentReport>({
-        text: 'Everything looks great!',
-        emoji: '☀️',
-      });
+      expect(spy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          report: {
+            text: 'Everything looks great!',
+            emoji: '☀️',
+          },
+        }),
+      );
       expect(spy).toHaveBeenCalledTimes(1);
     });
   });
