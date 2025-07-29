@@ -4,7 +4,6 @@ import { compressSentiments } from '../../usecase/compressSentiments.ts';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
 import { filterRelevantPosts } from '../../usecase/filterRelevantPosts.ts';
 import { generateSentimentReport } from '../../usecase/generateSentimentReport.ts';
-import type { SentimentReport } from '../entity/SentimentReport.ts';
 import type { FetchPort } from '../port/FetchPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
@@ -20,11 +19,7 @@ export class AgentService {
     this.persistence = persistence;
   }
 
-  async run(
-    subreddit: string,
-    limit: number,
-    period: string,
-  ): Promise<SentimentReport> {
+  async run(subreddit: string, limit: number, period: string): Promise<void> {
     const fetchUrl = makeRedditTopUrl(subreddit, limit, period);
 
     const posts = await fetchRedditPosts(
@@ -52,6 +47,7 @@ export class AgentService {
 
     const report = await generateSentimentReport(averageSentiment, this.llm);
     console.log('[AgentService] Generated final sentiment report.');
+    console.log(report);
 
     await this.persistence.storeSnapshot({
       subreddit,
@@ -62,6 +58,5 @@ export class AgentService {
       averageSentiment,
       report,
     });
-    return report;
   }
 }
