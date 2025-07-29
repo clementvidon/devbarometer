@@ -26,7 +26,10 @@ const fakeResponse = (
 ) =>
   new Response(JSON.stringify(body), {
     status,
-    headers: new Headers(headers),
+    headers: new Headers({
+      'Content-Type': 'application/json',
+      ...headers,
+    }),
   });
 
 const fakePosts = [
@@ -188,6 +191,27 @@ describe('fetchRedditPosts', () => {
         return Promise.reject(new Error('Unexpected fetch URL'));
       });
 
+      const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
+      expect(posts[0].topComment).toBeNull();
+    });
+
+    test('returns null if top comment response is HTML instead of JSON', async () => {
+      fetcher.fetch = vi.fn((url: string) => {
+        if (url.includes('/top.json')) {
+          return Promise.resolve(
+            fakeResponse({ data: { children: fakePosts } }),
+          );
+        }
+        if (url.includes('/comments/')) {
+          return Promise.resolve(
+            new Response('<!doctype html><body>Access denied</body>', {
+              status: 200,
+              headers: { 'Content-Type': 'text/html' },
+            }),
+          );
+        }
+        return Promise.reject(new Error('Unexpected fetch URL'));
+      });
       const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
       expect(posts[0].topComment).toBeNull();
     });
