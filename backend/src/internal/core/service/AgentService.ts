@@ -21,9 +21,9 @@ export class AgentService {
   }
 
   async updateReport(
-    subreddit: string,
-    limit: number,
-    period: string,
+    subreddit: string = 'developpeurs',
+    limit: number = 100,
+    period: string = 'week',
   ): Promise<void> {
     const fetchUrl = makeRedditTopUrl(subreddit, limit, period);
 
