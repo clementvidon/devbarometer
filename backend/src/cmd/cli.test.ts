@@ -1,55 +1,66 @@
-import type { Mock } from 'vitest';
-import { afterEach, describe, expect, test, vi } from 'vitest';
-
-vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter', () => ({
-  NodeFetchAdapter: vi.fn(),
-}));
-vi.mock('../internal/adapter/driven/llm/OpenAiAdapter', () => ({
-  OpenAiAdapter: vi.fn(),
-}));
-vi.mock('../internal/adapter/driven/persistence/LowdbAdapter', () => ({
-  LowdbAdapter: vi.fn(),
-}));
-
-vi.mock('openai', () => ({
-  default: vi.fn().mockImplementation(() => ({})),
-}));
+import {
+  afterEach,
+  beforeEach,
+  describe,
+  expect,
+  test,
+  vi,
+  type Mock,
+} from 'vitest';
 
 let updateReportMock: Mock = vi.fn();
-vi.mock('../internal/core/service/AgentService', () => ({
-  AgentService: vi.fn(() => ({ updateReport: updateReportMock })),
+
+vi.mock('../internal/core/service/makeAgentService.ts', () => ({
+  makeAgentService: vi.fn(() => ({
+    updateReport: updateReportMock,
+  })),
 }));
 
-const errSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-const exitSpy = vi
-  .spyOn(process, 'exit')
-  .mockImplementation((() => {}) as (code?: string | number | null) => never);
+const exitSpy = vi.spyOn(process, 'exit').mockImplementation(((
+  code?: number,
+) => {
+  throw new Error(`process.exit: ${code}`);
+}) as never);
+
+const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 async function importCLI() {
   vi.resetModules();
-  await import('./cli.ts');
+  return import('./cli.ts');
 }
 
-afterEach(() => vi.clearAllMocks());
+beforeEach(() => {
+  vi.clearAllMocks();
+  updateReportMock = vi.fn();
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 describe('cli.ts entrypoint', () => {
-  describe('Happy path', () => {
-    test('logs the report and does not exit', async () => {
-      await importCLI();
+  test('calls updateReport once and does NOT exit (happy path)', async () => {
+    updateReportMock.mockResolvedValue(undefined);
 
-      expect(updateReportMock).toHaveBeenCalled();
-      expect(exitSpy).not.toHaveBeenCalled();
-    });
+    await importCLI();
+
+    expect(updateReportMock).toHaveBeenCalledTimes(1);
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(exitSpy).not.toHaveBeenCalled();
   });
 
-  describe('Error handling', () => {
-    test('logs the error and exits with code 1', async () => {
-      const boom = new Error('Boom');
-      updateReportMock.mockRejectedValue(boom);
-      await importCLI();
+  test('logs the error and exits with code 1 when updateReport rejects', async () => {
+    const boom = new Error('Boom');
+    updateReportMock.mockRejectedValue(boom);
 
-      expect(errSpy).toHaveBeenCalledWith('Agent run failed:', boom);
-      expect(exitSpy).toHaveBeenCalledWith(1);
-    });
+    try {
+      await importCLI();
+    } catch (err) {
+      expect(err).toEqual(new Error('process.exit: 1'));
+    }
+
+    expect(updateReportMock).toHaveBeenCalled();
+    expect(errorSpy).toHaveBeenCalledWith('Agent run failed:', boom);
+    expect(exitSpy).toHaveBeenCalledWith(1);
   });
 });
