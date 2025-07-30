@@ -14,12 +14,13 @@
     "check": "npm-run-all --sequential format:check lint type-check test",
     "dev": "tsx src/cmd/http.ts",
     "update-report": "curl -X POST http://localhost:3000/report",
-    "db:push": "drizzle-kit push:pg --config drizzle.config.ts",
-    "db:generate": "drizzle-kit generate:pg --config drizzle.config.ts",
-    "db:studio": "drizzle-kit studio --config drizzle.config.ts"
+    "db:push": "drizzle-kit push --config=drizzle.config.mjs",
+    "db:generate": "drizzle-kit generate --config=drizzle.config.mjs",
+    "db:studio": "drizzle-kit studio --config=drizzle.config.mjs"
   },
   "dependencies": {
     "drizzle-orm": "^0.43.1",
+    "express": "^5.1.0",
     "lowdb": "^7.0.1",
     "openai": "^4.95.0",
     "p-limit": "^5.0.0",
@@ -29,8 +30,9 @@
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@types/express": "^5.0.3",
     "@types/node": "^22.15.17",
     "dotenv": "^16.5.0",
-    "drizzle-kit": "^0.31.1"
+    "drizzle-kit": "^0.31.4"
   }
 }
