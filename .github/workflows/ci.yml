@@ -38,5 +38,8 @@ jobs:
       - name: Run Tests
         run: npm run test:coverage
 
+      - name: Run audit-ci
+        run: npm run audit
+
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v5
