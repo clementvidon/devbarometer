@@ -1,0 +1,23 @@
+.report {
+  display: flex;
+  align-items: flex-start;
+  max-width: var(--width-report);
+  width: 100%;
+  gap: 1rem;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.emoji {
+  font-size: 3rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.paragraph {
+  font-size: var(--font-size-paragraph);
+  line-height: var(--line-height-paragraph);
+  margin: 0;
+  text-align: left;
+  flex: 1;
+}
