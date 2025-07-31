@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import type { SentimentReport } from '../types/SentimentReport';
+import type { SentimentReport } from '../../types/SentimentReport';
+import styles from './ReportViewer.module.css';
 
 export function ReportViewer() {
   const [report, setReport] = useState<SentimentReport | null>(null);
@@ -13,9 +14,9 @@ export function ReportViewer() {
   if (!report) return <p>Loading…</p>;
 
   return (
-    <div>
-      <h2>{report.emoji}</h2>
-      <p>{report.text}</p>
+    <div className={styles.report}>
+      <div className={styles.emoji}>{report.emoji}</div>
+      <p className={styles.paragraph}>{report.text}</p>
     </div>
   );
 }
