@@ -1,0 +1,25 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background-color: var(--color-bg);
+  height: var(--app-height);
+  width: 100%;
+  overflow: hidden; /* ← pas de scroll */
+  font-family: var(--font-body);
+  color: var(--color-text);
+  scroll-behavior: smooth;
+}
+
+.footer {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: var(--font-size-footer);
+}
