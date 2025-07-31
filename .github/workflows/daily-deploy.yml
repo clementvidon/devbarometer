@@ -26,6 +26,7 @@ jobs:
         run: npm --workspace backend run generate-static
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Build frontend
         run: npm --workspace frontend run predeploy
