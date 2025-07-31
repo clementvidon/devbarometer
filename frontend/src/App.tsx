@@ -1,12 +1,12 @@
 import './App.css';
-import Report from './components/Report.ts';
+import { ReportViewer } from './components/ReportViewer.tsx';
 
 function App() {
   return (
     <div className="app">
       <header className="app-header">Devbarometer</header>
       <main className="components-container">
-        <Report />
+        <ReportViewer />
       </main>
     </div>
   );
