@@ -33,3 +33,11 @@
   height: var(--app-height);
   padding-inline: 20px;
 }
+
+.footer {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: var(--font-size-footer);
+}
