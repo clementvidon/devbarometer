@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "tsx src/cmd/cli.ts",
+    "cli": "tsx src/cmd/cli.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
@@ -16,7 +16,8 @@
     "update-report": "curl -X POST http://localhost:3000/report",
     "db:push": "drizzle-kit push --config=drizzle.config.mjs",
     "db:generate": "drizzle-kit generate --config=drizzle.config.mjs",
-    "db:studio": "drizzle-kit studio --config=drizzle.config.mjs"
+    "db:studio": "drizzle-kit studio --config=drizzle.config.mjs",
+    "generate-static": "tsx src/cmd/generate-static.ts"
   },
   "dependencies": {
     "drizzle-orm": "^0.43.1",
