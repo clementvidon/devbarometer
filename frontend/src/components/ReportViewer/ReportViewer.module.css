@@ -4,7 +4,6 @@
   max-width: var(--width-report);
   width: 100%;
   gap: 1rem;
-  padding: 0 10px;
   box-sizing: border-box;
 }
 

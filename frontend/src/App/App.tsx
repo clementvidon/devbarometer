@@ -10,7 +10,11 @@ function App() {
         <ReportViewer />
       </div>
 
-      <a href="about.html" className={styles.navButton} aria-label="About page">
+      <a
+        href="https://github.com/clementvidon/devbarometer/"
+        className={styles.navButton}
+        aria-label="About DevBarometer"
+      >
         About
       </a>
       <footer className={styles.footer}>
