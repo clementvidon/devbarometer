@@ -42,7 +42,9 @@ function makeMessages(post: RelevantPost): readonly AgentMessage[] {
 Vous êtes un expert en analyse émotionnelle selon le NRC Emotion Lexicon.
 Analysez la donnée fourni dans son entièreté et répondez STRICTEMENT par un JSON brut contenant uniquement ces clés :
 anger, fear, anticipation, trust, surprise, sadness, joy, disgust, negative, positive.
-Les valeurs doivent être des nombres entre 0.0 et 1.0.
+Les valeurs doivent être des nombres entre 0.0 et 1.0, représentant l’intensité de chaque émotion dans le texte analysé.
+Si le ton est ironique ou sarcastique, interprète les émotions réelles en tenant compte de cette distance.
+Évitez de donner les mêmes scores à toutes les émotions sauf si le texte est effectivement très neutre.
 Aucune autre clé, explication ou mise en forme.
         `.trim(),
     },
