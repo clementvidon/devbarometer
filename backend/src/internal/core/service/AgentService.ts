@@ -79,4 +79,16 @@ export class AgentService {
     const snapshots = await this.persistence.getSnapshots();
     return snapshots[0]?.report ?? null;
   }
+
+  async getLastTopHeadlines(limit = 5): Promise<string[]> {
+    const last: Sentiment[] | null = await this.getLastSentiments();
+
+    if (!last) return [];
+
+    return last
+      .slice()
+      .sort((a, b) => b.upvotes - a.upvotes)
+      .slice(0, limit)
+      .map((post) => post.title);
+  }
 }
