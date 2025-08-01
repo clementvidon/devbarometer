@@ -4,6 +4,7 @@ import { compressSentiments } from '../../usecase/compressSentiments.ts';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
 import { filterRelevantPosts } from '../../usecase/filterRelevantPosts.ts';
 import { generateSentimentReport } from '../../usecase/generateSentimentReport.ts';
+import type { Sentiment } from '../entity/Sentiment.ts';
 import type { SentimentReport } from '../entity/SentimentReport.ts';
 import type { FetchPort } from '../port/FetchPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
@@ -67,6 +68,11 @@ export class AgentService {
       averageSentiment,
       report,
     });
+  }
+
+  async getLastSentiments(): Promise<Sentiment[] | null> {
+    const snapshots = await this.persistence.getSnapshots();
+    return snapshots[0]?.sentimentPerPost ?? null;
   }
 
   async getLastSentimentReport(): Promise<SentimentReport | null> {
