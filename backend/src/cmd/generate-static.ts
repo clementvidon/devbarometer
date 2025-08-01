@@ -16,7 +16,7 @@ const save = (filename: string, data: unknown) => {
 try {
   const agent = makeAgentService();
 
-  const report = await agent.getLastReport();
+  const report = await agent.getLastSentimentReport();
 
   save('report.json', report);
   process.exit(0);
