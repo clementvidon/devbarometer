@@ -69,7 +69,7 @@ export class AgentService {
     });
   }
 
-  async getLastReport(): Promise<SentimentReport | null> {
+  async getLastSentimentReport(): Promise<SentimentReport | null> {
     const snapshots = await this.persistence.getSnapshots();
     return snapshots[0]?.report ?? null;
   }

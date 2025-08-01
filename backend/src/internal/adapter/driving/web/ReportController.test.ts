@@ -16,7 +16,7 @@ import { makeReportController } from './ReportController.ts';
 /* ------------------------------------------------------------------ */
 /* Helpers : signatures EXACTES attendues par AgentService            */
 /* ------------------------------------------------------------------ */
-type GetLastReport = () => Promise<SentimentReport | null>;
+type GetLastSentimentReport = () => Promise<SentimentReport | null>;
 type UpdateReport = (
   subreddit?: string,
   limit?: number,
@@ -25,18 +25,18 @@ type UpdateReport = (
 
 // ------------------------------------------------------------------
 // Mocks
-let getLastReport: MockInstance<GetLastReport>;
+let getLastSentimentReport: MockInstance<GetLastSentimentReport>;
 let updateReport: MockInstance<UpdateReport>;
 let agentStub: AgentService;
 
 beforeEach(() => {
-  getLastReport = vi.fn<GetLastReport>();
+  getLastSentimentReport = vi.fn<GetLastSentimentReport>();
   updateReport = vi.fn<UpdateReport>();
 
   // ⬇️  on ne fournit QUE les méthodes publiques utilisées
   //     puis on caste en deux temps pour satisfaire TS
   agentStub = {
-    getLastReport,
+    getLastSentimentReport,
     updateReport,
   } as unknown as AgentService;
 });
@@ -49,7 +49,7 @@ test('GET /report → 200 avec un SentimentReport', async () => {
     text: 'dark clouds ahead',
     emoji: '🌧️',
   };
-  getLastReport.mockResolvedValue(fakeReport);
+  getLastSentimentReport.mockResolvedValue(fakeReport);
 
   const res = await request(makeReportController(agentStub)).get('/report');
 
@@ -58,7 +58,7 @@ test('GET /report → 200 avec un SentimentReport', async () => {
 });
 
 test('GET /report → 404 quand aucun rapport', async () => {
-  getLastReport.mockResolvedValue(null);
+  getLastSentimentReport.mockResolvedValue(null);
 
   const res = await request(makeReportController(agentStub)).get('/report');
 

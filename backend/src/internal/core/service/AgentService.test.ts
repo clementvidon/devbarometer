@@ -91,7 +91,7 @@ describe('AgentService updateReport', () => {
   });
 });
 
-describe('AgentService getLastReport', () => {
+describe('AgentService getLastSentimentReport', () => {
   let persistence: PersistencePort;
   let agent: AgentService;
 
@@ -133,18 +133,18 @@ describe('AgentService getLastReport', () => {
             positive: 1,
           },
         },
-        report: expected, // ta vraie valeur SentimentReport
+        report: expected,
       },
     ]);
 
-    const result = await agent.getLastReport();
+    const result = await agent.getLastSentimentReport();
     expect(result).toEqual(expected);
   });
 
   test('returns null if no snapshots exist', async () => {
     vi.mocked(persistence.getSnapshots).mockResolvedValue([]);
 
-    const result = await agent.getLastReport();
+    const result = await agent.getLastSentimentReport();
     expect(result).toBeNull();
   });
 });
