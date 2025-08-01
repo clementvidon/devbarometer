@@ -1,12 +1,25 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
-import type { Sentiment } from '../entity/Sentiment.ts';
+import type { EmotionScores, Sentiment } from '../entity/Sentiment.ts';
 import type { SentimentReport } from '../entity/SentimentReport.ts';
 import type { FetchPort } from '../port/FetchPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { PipelineSnapshot } from '../types/PipelineSnapshot.ts';
 import { AgentService } from './AgentService.ts';
+
+const mockEmotions: EmotionScores = {
+  anger: 0,
+  fear: 0,
+  anticipation: 0,
+  trust: 0,
+  surprise: 0,
+  sadness: 0,
+  joy: 0,
+  disgust: 0,
+  negative: 0,
+  positive: 0,
+} as const;
 
 const fetcher: FetchPort = {
   fetch: vi.fn(() => Promise.resolve(new Response())),
@@ -105,18 +118,7 @@ function createMockSnapshot(
     relevantPosts: [],
     sentimentPerPost: [],
     averageSentiment: {
-      emotions: {
-        anger: 0,
-        fear: 0,
-        anticipation: 0,
-        trust: 0,
-        surprise: 0,
-        sadness: 0,
-        joy: 1,
-        disgust: 0,
-        negative: 0,
-        positive: 1,
-      },
+      emotions: mockEmotions,
     },
     report: {
       text: 'Latest sentiment',
@@ -180,36 +182,14 @@ describe('AgentService getLastSentiments', () => {
           'On m’a demandé de construire un agent LLM complet pour un test d’entretien',
         postId: '1m84v47',
         upvotes: 212,
-        emotions: {
-          joy: 0.1,
-          fear: 0.4,
-          anger: 0.7,
-          trust: 0.2,
-          disgust: 0.8,
-          sadness: 0.5,
-          negative: 0.9,
-          positive: 0.2,
-          surprise: 0.3,
-          anticipation: 0.6,
-        },
+        emotions: mockEmotions,
       },
       {
         title:
           'Ils m’ont fait bosser 6 heures sur un test… alors qu’ils avaient déjà choisi quelqu’un',
         postId: '1m78fpc',
         upvotes: 158,
-        emotions: {
-          joy: 0.1,
-          fear: 0.6,
-          anger: 0.8,
-          trust: 0.2,
-          disgust: 0.4,
-          sadness: 0.7,
-          negative: 0.9,
-          positive: 0.2,
-          surprise: 0.5,
-          anticipation: 0.7,
-        },
+        emotions: mockEmotions,
       },
     ];
 
@@ -226,4 +206,38 @@ describe('AgentService getLastSentiments', () => {
     const result = await agent.getLastSentiments();
     expect(result).toBeNull();
   });
+});
+
+test('AgentService getLastTopHeadlines returns titles of N top upvoted posts', async () => {
+  const sentimentPerPost = [
+    { title: 'Post A', upvotes: 10, postId: 'a', emotions: mockEmotions },
+    { title: 'Post B', upvotes: 30, postId: 'b', emotions: mockEmotions },
+    { title: 'Post C', upvotes: 20, postId: 'c', emotions: mockEmotions },
+    { title: 'Post D', upvotes: 5, postId: 'd', emotions: mockEmotions },
+    { title: 'Post E', upvotes: 50, postId: 'e', emotions: mockEmotions },
+    { title: 'Post F', upvotes: 15, postId: 'f', emotions: mockEmotions },
+  ];
+
+  const snapshot = createMockSnapshot({ sentimentPerPost });
+
+  const persistence: PersistencePort = {
+    storeSnapshot: vi.fn(),
+    getSnapshots: vi.fn().mockResolvedValue([snapshot]),
+  };
+
+  const agent = new AgentService(fetcher, llm, persistence);
+
+  const result = await agent.getLastTopHeadlines(3);
+  expect(result).toEqual(['Post E', 'Post B', 'Post C']);
+});
+
+test('getLastTopHeadlines returns empty array if no snapshot', async () => {
+  const persistence: PersistencePort = {
+    storeSnapshot: vi.fn(),
+    getSnapshots: vi.fn().mockResolvedValue([]),
+  };
+
+  const agent = new AgentService(fetcher, llm, persistence);
+  const result = await agent.getLastTopHeadlines();
+  expect(result).toEqual([]);
 });
