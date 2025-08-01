@@ -9,7 +9,7 @@ body {
   background-color: var(--color-bg);
   height: var(--app-height);
   width: 100%;
-  overflow: hidden; /* ← pas de scroll */
+  overflow: hidden;
   font-family: var(--font-body);
   color: var(--color-text);
   scroll-behavior: smooth;
