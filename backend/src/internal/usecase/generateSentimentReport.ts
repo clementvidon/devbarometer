@@ -21,36 +21,27 @@ function makeMessages(emotionsText: string): readonly AgentMessage[] {
     {
       role: 'system' as const,
       content: `
+1. **"text"** : À partir de l'objet émotions donné, écris une **phrase courte (≤ 20 mots)** qui traduit fidèlement l’atmosphère émotionnelle.
 
-      You are an expert in emotional psychology and poetic writing.
+### Instructions :
 
-      You translate emotion data into short weather-style summaries. Output a valid JSON with:
+* Identifie les émotions saillantes (typiquement 2 ou 3) et ignore les autres.
+* Appuie toi sur les valeurs *positive* et *negative* pour renforcer le ton (positivité, négativité, neutralité, polarité)
+* N’énumère jamais les émotions. Utilise le vocabulaire météorologique pour les exprimer.
+* Privilégie une formulation épurée : évite les articles si cela rend la phrase plus fluide ou symbolique.
+* Ne dépasse jamais 20 mots.
+* N’évoque jamais d’émotion absente ou anodine.
 
-      1. "text": Given an object with emotions and polarity scores, write a **short (≤20 words)** sentence that **evokes the emotional atmosphere**.
+2. **"emoji"** : choisis un unique symbole météo parmi : ${WEATHER_EMOJIS.join(' ')} pour illustrer ce texte.
 
-      ### Instructions:
-
-      * Focus on the **top 2–3 emotions** (highest scores among: anger, fear, anticipation, trust, surprise, sadness, joy, disgust).
-      * Use 'positive' and 'negative' as **modifiers of tone**, not content:
-
-        * If 'positive > 0.6', keep the tone bright, hopeful, or peaceful.
-        * If 'negative > 0.6', lean into tension, doubt, sadness or unease.
-        * If they’re both mid-range, allow for **emotional ambiguity** or **mixed feelings**.
-      * Avoid listing emotions. Use metaphor, mood, or imagery to express the emotional mix.
-      * Never exceed 20 words.
-
-      2. "emoji": one emoji from: ${WEATHER_EMOJIS.join(' ')}
-
-      Return a raw JSON with only these two keys. No other content or formatting.
+Retourne un JSON brut avec uniquement ces deux clés.
         `.trim(),
     },
     {
       role: 'user' as const,
       content: `
-      Here is the "emotions" object in JSON:
+Voici l'objet émotion JSON :
         ${emotionsText}
-
-      Generate the requested JSON.
         `.trim(),
     },
   ] as const satisfies readonly AgentMessage[];
