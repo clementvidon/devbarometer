@@ -21,20 +21,39 @@ function makeMessages(emotionsText: string): readonly AgentMessage[] {
     {
       role: 'system' as const,
       content: `
-      Vous êtes un météorologue spécialisé dans l'analyse émotionnelle.
-        Répondez STRICTEMENT un JSON brut avec ces clés :
-        - "text" : une phrase ≤20 mots, style bulletin météo, décrivant le sentiment global de l'objet "emotions".
-        - "emoji" : un seul emoji parmi ${WEATHER_EMOJIS.join(' ')}.
-        Aucune autre clé ou mise en forme.
+      You translate emotion data into short weather-style summaries. Output a valid JSON with:
+
+      1. "text": one sentence, ≤20 words, like a weather bulletin. Use meteorological terms (e.g., unstable front, overcast, pressure rising). Avoid poetic or abstract language.
+
+      Use this structure:
+      "The emotional climate is [the overall state], with [the dominant forces] and [the modulating factors]."
+
+      The sentence must be fluent, clear, and natural. Avoid repetitive or clunky phrasing (e.g., "and and and").
+
+      Interpret emotions in context:
+      - High anticipation → anxious if fear/sadness/negative are high, hopeful if joy/trust/positive dominate
+      - High surprise → positive or negative depending on surrounding emotions
+      - High trust with strong negativity → interpret as fragile or tense
+      - High disgust → use subtle metaphors (e.g., stale air, contaminated pressure)
+
+      - Prioritize prominent emotions. Reflect their weight — don’t treat all emotions equally.
+      - Avoid vague phrases like “significant negativity” — describe the actual emotional signals using concrete or abstract terms.
+      - Emphasize the most intense emotional signals.
+      - If a set of emotions clearly forms a pattern, you may group them into a higher-order abstraction (e.g., fear + sadness = emotional heaviness; fear + anger + disgust = unrest).
+      - After generating the sentence, review it once for style and flow. Revise if needed to improve naturalness, fluency, and variation. Avoid repetitive, mechanical, or flat phrasing.
+
+      2. "emoji": one emoji from: ${WEATHER_EMOJIS.join(' ')}
+
+      Return a raw JSON with only these two keys. No other content or formatting.
         `.trim(),
     },
     {
       role: 'user' as const,
       content: `
-      Voici l'objet "emotions" en JSON:
+      Here is the "emotions" object in JSON:
         ${emotionsText}
 
-      Générez le JSON demandé.
+      Generate the requested JSON.
         `.trim(),
     },
   ] as const satisfies readonly AgentMessage[];
