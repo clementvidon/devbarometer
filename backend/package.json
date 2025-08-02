@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "cli": "tsx src/cmd/cli.ts",
+    "generate-report": "tsx src/cmd/cli.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
