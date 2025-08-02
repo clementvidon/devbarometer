@@ -27,7 +27,13 @@
     "test:coverage:backend": "npm --workspace backend run test:coverage",
     "test:coverage": "npm-run-all --parallel --print-label test:coverage:frontend test:coverage:backend",
     "check": "npm-run-all --sequential lint format:check type-check test",
-    "audit": "audit-ci --config ./audit-ci.jsonc"
+    "audit": "audit-ci --config ./audit-ci.jsonc",
+    "generate-report": "npm --workspace backend run generate-report",
+    "generate-static": "npm --workspace backend run generate-static",
+    "build-frontend": "npm --workspace frontend run predeploy",
+    "deploy-frontend": "npm --workspace frontend run deploy",
+    "publish": "npm-run-all --sequential build-frontend deploy-frontend",
+    "update-site": "npm-run-all --sequential generate-report generate-static build-frontend deploy-frontend"
   },
   "lint-staged": {
     "frontend/src/**/*.{ts,tsx}": [
