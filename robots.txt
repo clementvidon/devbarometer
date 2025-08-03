@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://clementvidon.github.io/devbarometer/sitemap.xml
