@@ -4,7 +4,7 @@ import { compressSentiments } from '../../usecase/compressSentiments.ts';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
 import { filterRelevantPosts } from '../../usecase/filterRelevantPosts.ts';
 import { generateSentimentReport } from '../../usecase/generateSentimentReport.ts';
-import type { Sentiment } from '../entity/Sentiment.ts';
+import type { AverageSentiment, Sentiment } from '../entity/Sentiment.ts';
 import type { SentimentReport } from '../entity/SentimentReport.ts';
 import type { FetchPort } from '../port/FetchPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
@@ -95,5 +95,16 @@ export class AgentService {
         upvotes: post.upvotes,
         url: `https://www.reddit.com/comments/${post.postId}`,
       }));
+  }
+
+  async getAverageSentiments(): Promise<
+    { createdAt: string; emotions: AverageSentiment['emotions'] }[]
+  > {
+    const snapshots = await this.persistence.getSnapshots();
+
+    return snapshots.map((s) => ({
+      createdAt: s.createdAt,
+      emotions: s.averageSentiment.emotions,
+    }));
   }
 }
