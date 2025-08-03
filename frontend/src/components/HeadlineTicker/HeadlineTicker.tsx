@@ -50,7 +50,7 @@ export function HeadlineTicker() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        🠊 <span style={{ color }}>{title}</span>
+        &gt; <span style={{ color }}>{title}</span>
       </a>
     </div>
   );
