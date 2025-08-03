@@ -36,7 +36,7 @@
   --font-size-ticker: clamp(12px, 1vw + 0.25rem, 16px);
   --width-ticker: var(--width-report);
   --font-ticker: monospace;
-  --font-weight-report: 800;
+  --font-weight-ticker: 800;
   --color-text-ticker: #white;
 
   --font-size-footer: 11px;

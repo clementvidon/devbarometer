@@ -1,7 +1,27 @@
 [
-  "Traversée du désert enfin terminé après 11 mois de galère",
-  "Entretien Padoa - leetcode hard",
-  "J'ai enfin trouvé un emploi",
-  "Ceux qui trouvent pas de taff depuis quelques mois/années vous faites quoi ?",
-  "Pensez-vous que le massacre va s'arrêter ou empirer ?"
+  {
+    "title": "Traversée du désert enfin terminé après 11 mois de galère",
+    "upvotes": 84,
+    "url": "https://www.reddit.com/comments/1mdhc83"
+  },
+  {
+    "title": "Entretien Padoa - leetcode hard",
+    "upvotes": 59,
+    "url": "https://www.reddit.com/comments/1mewj67"
+  },
+  {
+    "title": "J'ai enfin trouvé un emploi",
+    "upvotes": 59,
+    "url": "https://www.reddit.com/comments/1mesahr"
+  },
+  {
+    "title": "Ceux qui trouvent pas de taff depuis quelques mois/années vous faites quoi ?",
+    "upvotes": 51,
+    "url": "https://www.reddit.com/comments/1mbzts2"
+  },
+  {
+    "title": "Pensez-vous que le massacre va s'arrêter ou empirer ?",
+    "upvotes": 51,
+    "url": "https://www.reddit.com/comments/1md8kv3"
+  }
 ]
