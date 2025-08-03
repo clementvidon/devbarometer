@@ -17,7 +17,7 @@ export async function generateStatic() {
   const agent = makeAgentService();
 
   const report = await agent.getLastSentimentReport();
-  const headlines = await agent.getLastTopHeadlines(5);
+  const headlines = await agent.getLastTopHeadlines(10);
 
   save('report.json', report);
   save('headlines.json', headlines);
