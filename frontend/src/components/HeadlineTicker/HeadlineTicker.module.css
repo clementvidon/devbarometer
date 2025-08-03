@@ -10,10 +10,12 @@
   text-align: left;
   font-family: var(--font-ticker);
   font-size: var(--font-size-ticker);
-  font-weight: var(--font-weight-report);
+  font-weight: var(--font-weight-ticker);
 }
 
 .item {
   width: 100%;
   text-align: left;
+  text-decoration: none;
+  color: inherit;
 }
