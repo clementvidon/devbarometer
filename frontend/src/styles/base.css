@@ -24,13 +24,13 @@
 @media (min-width: 768px) {
   :root {
     --font-size-ui: 18px;
-    --font-size-footer: 12px;
+    --font-size-footer: 14px;
   }
 }
 
 @media (min-width: 1440px) {
   :root {
     --font-size-ui: 24px;
-    --font-size-footer: 12px;
+    --font-size-footer: 14px;
   }
 }

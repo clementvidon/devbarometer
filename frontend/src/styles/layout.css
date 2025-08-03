@@ -14,16 +14,3 @@ body {
   color: var(--color-fg);
   scroll-behavior: smooth;
 }
-
-.footer {
-  position: fixed;
-  bottom: 20px;
-  width: 100%;
-  text-align: center;
-  font-size: var(--font-size-footer);
-}
-
-.footer a {
-  text-decoration: none;
-  color: inherit;
-}
