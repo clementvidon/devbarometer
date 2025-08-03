@@ -1,3 +1,5 @@
+import './styles/base.css';
+import './styles/layout.css';
 import { setupAppHeightListener } from './utils/setAppHeight.ts';
 setupAppHeightListener();
 
