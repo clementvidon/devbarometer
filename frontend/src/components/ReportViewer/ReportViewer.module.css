@@ -13,9 +13,9 @@
   line-height: 1;
 }
 
-.paragraph {
-  font-size: var(--font-size-paragraph);
-  line-height: var(--line-height-paragraph);
+.text {
+  font-size: var(--font-size-report);
+  line-height: var(--line-height);
   margin: 0;
   text-align: left;
   flex: 1;

@@ -6,9 +6,16 @@ export function ReportViewer() {
   const [report, setReport] = useState<SentimentReport | null>(null);
 
   useEffect(() => {
-    void fetch('report.json')
-      .then((r) => r.json())
-      .then(setReport);
+    const baseUrl: string = import.meta.env.BASE_URL ?? '/';
+    void fetch(baseUrl + 'report.json')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: unknown) => {
+        if (data && typeof data === 'object') {
+          setReport(data as SentimentReport);
+        } else {
+          setReport(null);
+        }
+      });
   }, []);
 
   if (!report) return <p>Loading…</p>;
@@ -16,7 +23,7 @@ export function ReportViewer() {
   return (
     <div className={styles.report}>
       <div className={styles.emoji}>{report.emoji}</div>
-      <p className={styles.paragraph}>{report.text}</p>
+      <p className={styles.text}>{report.text}</p>
     </div>
   );
 }
