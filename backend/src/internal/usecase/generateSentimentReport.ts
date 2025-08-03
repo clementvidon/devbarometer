@@ -1,10 +1,66 @@
 import { z } from 'zod';
 import { stripCodeFences } from '../../utils/stripCodeFences.ts';
-import type { AverageSentiment } from '../core/entity/Sentiment.ts';
+import type {
+  AverageSentiment,
+  EmotionScores,
+} from '../core/entity/Sentiment.ts';
 import type { SentimentReport } from '../core/entity/SentimentReport.ts';
 import { WEATHER_EMOJIS } from '../core/entity/SentimentReport.ts';
 import type { LlmPort } from '../core/port/LlmPort.ts';
 import type { AgentMessage } from '../core/types/AgentMessage.ts';
+
+function summarizeSentiment(emotions: EmotionScores): {
+  majorEmotions: { name: string; strength: string }[];
+  tone: {
+    value: 'neutre' | 'positif' | 'négatif' | 'polarisé';
+    strength?: 'faible' | 'modéré' | 'fort';
+  };
+} {
+  const { positive, negative, ...coreEmotions } = emotions;
+
+  const majorEmotions = Object.entries(coreEmotions)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 4)
+    .map(([name, score]) => ({
+      name,
+      strength:
+        score < 0.2
+          ? 'faible'
+          : score < 0.4
+            ? 'modéré'
+            : score < 0.6
+              ? 'fort'
+              : score < 0.8
+                ? 'très fort'
+                : 'extrême',
+    }));
+
+  const delta = positive - negative;
+  const absDelta = Math.abs(delta);
+
+  let toneValue: 'neutre' | 'positif' | 'négatif' | 'polarisé';
+  let toneStrength: 'faible' | 'modéré' | 'fort' | undefined;
+
+  if (absDelta < 0.15 && positive > 0.4 && negative > 0.4) {
+    toneValue = 'polarisé';
+  } else if (delta >= 0.15) {
+    toneValue = 'positif';
+    toneStrength = delta < 0.3 ? 'faible' : delta < 0.5 ? 'modéré' : 'fort';
+  } else if (delta <= -0.15) {
+    toneValue = 'négatif';
+    toneStrength = -delta < 0.3 ? 'faible' : -delta < 0.5 ? 'modéré' : 'fort';
+  } else {
+    toneValue = 'neutre';
+  }
+
+  return {
+    majorEmotions,
+    tone: {
+      value: toneValue,
+      ...(toneStrength ? { strength: toneStrength } : {}),
+    },
+  };
+}
 
 const LLMOutputSchema = z.object({
   text: z.string().max(200),
@@ -21,28 +77,18 @@ function makeMessages(emotionsText: string): readonly AgentMessage[] {
     {
       role: 'system' as const,
       content: `
-1. **"text"** : À partir de l'objet émotions donné, écris une **phrase courte (≤ 20 mots)** qui traduit fidèlement l’atmosphère émotionnelle.
+        1. **"text"** : À partir de l'objet émotions donné, écris une **phrase courte (≤ 15 mots)** qui traduit fidèlement l’atmosphère émotionnelle en utilisant un language météo.
+        2. **"emoji"** : Parmi : ${WEATHER_EMOJIS.join(' ')} choisi le symbol le plus évocateur de la phrase **"text"**.
 
-### Instructions :
-
-* Identifie les émotions saillantes (typiquement 2 ou 3) et ignore les autres.
-* Appuie toi sur les valeurs *positive* et *negative* pour renforcer le ton (positivité, négativité, neutralité, polarité)
-* N’énumère jamais les émotions. Utilise le vocabulaire météorologique pour les exprimer.
-* Privilégie une formulation épurée : évite les articles si cela rend la phrase plus fluide ou symbolique.
-* Ne dépasse jamais 20 mots.
-* N’évoque jamais d’émotion absente ou anodine.
-
-2. **"emoji"** : choisis un unique symbole météo parmi : ${WEATHER_EMOJIS.join(' ')} pour illustrer ce texte.
-
-Retourne un JSON brut avec uniquement ces deux clés.
+        Retourne un JSON brut avec uniquement ces deux clés.
         `.trim(),
     },
     {
       role: 'user' as const,
       content: `
-Voici l'objet émotion JSON :
+      Voici l'objet émotion JSON :
         ${emotionsText}
-        `.trim(),
+      `.trim(),
     },
   ] as const satisfies readonly AgentMessage[];
 }
@@ -55,7 +101,9 @@ export async function generateSentimentReport(
     const raw = await llm.run(
       'gpt-4o-mini',
       0.1,
-      makeMessages(JSON.stringify(averageSentiment.emotions)),
+      makeMessages(
+        JSON.stringify(summarizeSentiment(averageSentiment.emotions)),
+      ),
     );
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = LLMOutputSchema.safeParse(json);
