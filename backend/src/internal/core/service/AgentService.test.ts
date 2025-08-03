@@ -228,7 +228,23 @@ test('AgentService getLastTopHeadlines returns titles of N top upvoted posts', a
   const agent = new AgentService(fetcher, llm, persistence);
 
   const result = await agent.getLastTopHeadlines(3);
-  expect(result).toEqual(['Post E', 'Post B', 'Post C']);
+  expect(result).toEqual([
+    {
+      title: 'Post E',
+      upvotes: 50,
+      url: 'https://www.reddit.com/comments/e',
+    },
+    {
+      title: 'Post B',
+      upvotes: 30,
+      url: 'https://www.reddit.com/comments/b',
+    },
+    {
+      title: 'Post C',
+      upvotes: 20,
+      url: 'https://www.reddit.com/comments/c',
+    },
+  ]);
 });
 
 test('getLastTopHeadlines returns empty array if no snapshot', async () => {

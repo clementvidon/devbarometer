@@ -9,6 +9,7 @@ import type { SentimentReport } from '../entity/SentimentReport.ts';
 import type { FetchPort } from '../port/FetchPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
+import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
 
 export class AgentService {
   private readonly fetcher: FetchPort;
@@ -80,7 +81,7 @@ export class AgentService {
     return snapshots[0]?.report ?? null;
   }
 
-  async getLastTopHeadlines(limit = 5): Promise<string[]> {
+  async getLastTopHeadlines(limit = 5): Promise<HeadlineInfo[]> {
     const last: Sentiment[] | null = await this.getLastSentiments();
 
     if (!last) return [];
@@ -89,6 +90,10 @@ export class AgentService {
       .slice()
       .sort((a, b) => b.upvotes - a.upvotes)
       .slice(0, limit)
-      .map((post) => post.title);
+      .map((post) => ({
+        title: post.title,
+        upvotes: post.upvotes,
+        url: `https://www.reddit.com/comments/${post.postId}`,
+      }));
   }
 }
