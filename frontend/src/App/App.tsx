@@ -1,24 +1,35 @@
+import { HeadlineTicker } from '../components/HeadlineTicker/HeadlineTicker.tsx';
 import { ReportViewer } from '../components/ReportViewer/ReportViewer.tsx';
 import styles from './App.module.css';
 
 function App() {
   return (
     <>
-      <h1 className={styles.heading}>DevBarometer</h1>
+      <header className={styles.header}>
+        <h1 className={styles.heading}>DevBarometer</h1>
+        <a
+          href="about.html"
+          className={styles.navButton}
+          aria-label="About page"
+        >
+          about
+        </a>
+      </header>
 
-      <div className={styles.reportWrapper}>
+      <main className={styles.mainContent}>
         <ReportViewer />
-      </div>
+        <HeadlineTicker />
+      </main>
 
-      <a
-        href="https://github.com/clementvidon/devbarometer/"
-        className={styles.navButton}
-        aria-label="About DevBarometer"
-      >
-        About
-      </a>
       <footer className={styles.footer}>
-        &copy; DevBarometer 2025. All rights reserved.
+        Made with ❤️ by
+        <a
+          href="https://github.com/clementvidon/"
+          aria-label="Clément Vidon GitHub"
+        >
+          {' Clément Vidon '}
+        </a>
+        · MIT License
       </footer>
     </>
   );
