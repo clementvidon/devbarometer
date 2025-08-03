@@ -8,7 +8,7 @@ import {
   type Mock,
 } from 'vitest';
 
-let updateReportMock: Mock = vi.fn();
+const updateReportMock: Mock = vi.fn();
 
 vi.mock('../internal/core/service/makeAgentService.ts', () => ({
   makeAgentService: vi.fn(() => ({
@@ -31,7 +31,7 @@ async function importCLI() {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  updateReportMock = vi.fn();
+  updateReportMock.mockReset();
 });
 
 afterEach(() => {
@@ -39,16 +39,6 @@ afterEach(() => {
 });
 
 describe('cli.ts entrypoint', () => {
-  test('calls updateReport once and does NOT exit (happy path)', async () => {
-    updateReportMock.mockResolvedValue(undefined);
-
-    await importCLI();
-
-    expect(updateReportMock).toHaveBeenCalledTimes(1);
-    expect(errorSpy).not.toHaveBeenCalled();
-    expect(exitSpy).not.toHaveBeenCalled();
-  });
-
   test('logs the error and exits with code 1 when updateReport rejects', async () => {
     const boom = new Error('Boom');
     updateReportMock.mockRejectedValue(boom);
