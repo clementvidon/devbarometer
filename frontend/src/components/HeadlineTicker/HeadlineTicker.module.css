@@ -4,18 +4,44 @@
   height: 3rem;
   overflow: hidden;
 
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 0 0.5rem;
+
   display: flex;
-  justify-content: flex-start;
+  align-items: center;
 
   font-family: var(--font-ui);
-  font-size: var(--font-size-ticker);
+  font-size: var(--font-size-small);
   font-weight: var(--font-weight-ui);
 }
 
+.ticker:hover .row {
+  animation-play-state: paused;
+}
+
+.track {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.row {
+  display: inline-flex;
+  gap: 1rem;
+  animation: scroll 60s linear infinite;
+}
+
 .item {
-  width: 100%;
-  margin-top: 1rem;
-  text-align: left;
   text-decoration: none;
-  color: white;
+  color: lightgrey;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
