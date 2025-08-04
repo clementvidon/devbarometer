@@ -1,21 +1,22 @@
 .ticker {
   width: 100%;
   max-width: var(--width-ticker);
-  height: 4rem;
+  height: 3rem;
   overflow: hidden;
 
   display: flex;
   justify-content: flex-start;
 
-  text-align: left;
-  font-family: var(--font-ticker);
+  font-family: var(--font-ui);
   font-size: var(--font-size-ticker);
-  font-weight: var(--font-weight-ticker);
+  font-weight: var(--font-weight-ui);
 }
 
 .item {
   width: 100%;
+  margin-top: 1rem;
   text-align: left;
   text-decoration: none;
   color: inherit;
+  color: white;
 }
