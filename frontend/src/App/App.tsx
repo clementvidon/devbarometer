@@ -1,4 +1,5 @@
 import { HeadlineTicker } from '../components/HeadlineTicker/HeadlineTicker.tsx';
+import { HistoryChart } from '../components/HistoryChart/HistoryChart.tsx';
 import { ReportViewer } from '../components/ReportViewer/ReportViewer.tsx';
 import styles from './App.module.css';
 
@@ -19,6 +20,7 @@ function App() {
       <main className={styles.mainContent}>
         <ReportViewer />
         <HeadlineTicker />
+        <HistoryChart />
       </main>
 
       <footer className={styles.footer}>
