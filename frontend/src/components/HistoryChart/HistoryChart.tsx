@@ -31,47 +31,27 @@ export function HistoryChart() {
         const res: Response = await fetch('average-sentiments.json');
         const raw = (await res.json()) as RawEntry[];
 
-        const parsed: Point[] = raw
-          .map((item) => ({
-            date: new Date(item.createdAt).toLocaleDateString('fr-FR', {
-              day: '2-digit',
-              month: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-            createdAt: item.createdAt,
-            positive: +(item.emotions.positive ?? 0).toFixed(3),
-            negative: +(item.emotions.negative ?? 0).toFixed(3),
-            joy: +(item.emotions.joy ?? 0).toFixed(3),
-            fear: +(item.emotions.fear ?? 0).toFixed(3),
-            anger: +(item.emotions.anger ?? 0).toFixed(3),
-            trust: +(item.emotions.trust ?? 0).toFixed(3),
-            disgust: +(item.emotions.disgust ?? 0).toFixed(3),
-            sadness: +(item.emotions.sadness ?? 0).toFixed(3),
-            surprise: +(item.emotions.surprise ?? 0).toFixed(3),
-            anticipation: +(item.emotions.anticipation ?? 0).toFixed(3),
-          }))
-          .reverse();
+        const parsed: Point[] = raw.map((item) => ({
+          date: new Date(item.createdAt).toLocaleDateString('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+          }),
+          createdAt: item.createdAt,
+          positive: +(item.emotions.positive ?? 0).toFixed(3),
+          negative: +(item.emotions.negative ?? 0).toFixed(3),
+          joy: +(item.emotions.joy ?? 0).toFixed(3),
+          fear: +(item.emotions.fear ?? 0).toFixed(3),
+          anger: +(item.emotions.anger ?? 0).toFixed(3),
+          trust: +(item.emotions.trust ?? 0).toFixed(3),
+          disgust: +(item.emotions.disgust ?? 0).toFixed(3),
+          sadness: +(item.emotions.sadness ?? 0).toFixed(3),
+          surprise: +(item.emotions.surprise ?? 0).toFixed(3),
+          anticipation: +(item.emotions.anticipation ?? 0).toFixed(3),
+        }));
 
-        const deltas: Point[] = parsed.slice(1).map((curr, i) => {
-          const prev = parsed[i];
-          return {
-            date: curr.date,
-            createdAt: curr.createdAt,
-            positive: +(curr.positive - prev.positive).toFixed(3),
-            negative: +(curr.negative - prev.negative).toFixed(3),
-            joy: +(curr.joy - prev.joy).toFixed(3),
-            fear: +(curr.fear - prev.fear).toFixed(3),
-            anger: +(curr.anger - prev.anger).toFixed(3),
-            trust: +(curr.trust - prev.trust).toFixed(3),
-            disgust: +(curr.disgust - prev.disgust).toFixed(3),
-            sadness: +(curr.sadness - prev.sadness).toFixed(3),
-            surprise: +(curr.surprise - prev.surprise).toFixed(3),
-            anticipation: +(curr.anticipation - prev.anticipation).toFixed(3),
-          };
-        });
-
-        setData(deltas);
+        setData(parsed);
       } catch (error) {
         console.error('Erreur lors du chargement des données:', error);
       }
@@ -86,7 +66,7 @@ export function HistoryChart() {
   return (
     <div className={styles.chartContainer}>
       <p className={styles.heading}>
-        Émotions du marché dev au cours des {diffDays} derniers jours :
+        Tendance des émotions du marché dev depuis {diffDays} jours :
       </p>
       <div className={styles.chart}>
         <ResponsiveContainer width="100%" height="100%">
