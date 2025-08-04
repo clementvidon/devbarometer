@@ -66,7 +66,7 @@ export function HistoryChart() {
   return (
     <div className={styles.chartContainer}>
       <p className={styles.heading}>
-        Tendance des émotions du marché dev depuis {diffDays} jours :
+        Tendance cumulative des émotions du marché sur {diffDays} jours :
       </p>
       <div className={styles.chart}>
         <ResponsiveContainer width="100%" height="100%">
