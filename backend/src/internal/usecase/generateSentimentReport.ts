@@ -77,7 +77,7 @@ function makeMessages(emotionsText: string): readonly AgentMessage[] {
     {
       role: 'system' as const,
       content: `
-        1. **"text"** : À partir de l'objet émotions donné, écris une **phrase courte (≤ 15 mots)** qui traduit fidèlement l’atmosphère émotionnelle en utilisant un language météo.
+        1. **"text"** : À partir de l'objet émotions donné, écris une **phrase courte (≤ 15 mots)** qui traduit fidèlement l’atmosphère émotionnelle en utilisant un language météo. Assure toi que la phrase ait un sens et soit pertinente..
         2. **"emoji"** : Parmi : ${WEATHER_EMOJIS.join(' ')} choisi le symbol le plus évocateur de la phrase **"text"**.
 
         Retourne un JSON brut avec uniquement ces deux clés.
