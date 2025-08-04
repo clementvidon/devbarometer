@@ -9,7 +9,6 @@ body {
   background-color: var(--color-bg);
   height: var(--app-height);
   width: 100%;
-  overflow: hidden;
   font-family: var(--font-base);
   color: var(--color-fg);
 }
