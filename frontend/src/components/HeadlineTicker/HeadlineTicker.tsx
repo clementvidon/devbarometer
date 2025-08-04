@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { isHeadline, type HeadlineInfo } from '../../types/HeadlineInfo.ts';
-import { amberToFlame } from '../../utils/colors.ts';
 import { shuffleArray } from '../../utils/shuffle.ts';
 import styles from './HeadlineTicker.module.css';
 
@@ -38,10 +37,6 @@ export function HeadlineTicker() {
 
   const { title, upvotes, url } = headlines[index];
 
-  const minUpvotes = Math.min(...headlines.map((h) => h.upvotes));
-  const maxUpvotes = Math.max(...headlines.map((h) => h.upvotes));
-  const color = amberToFlame(upvotes, minUpvotes, maxUpvotes);
-
   return (
     <div className={styles.ticker}>
       <a
@@ -50,7 +45,9 @@ export function HeadlineTicker() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        &gt; <span style={{ color }}>{title}</span>
+        <span>
+          +{upvotes} "{title}"
+        </span>
       </a>
     </div>
   );
