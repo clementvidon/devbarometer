@@ -1,7 +1,7 @@
 .report {
   display: flex;
   align-items: flex-start;
-  max-width: var(--width-report);
+  max-width: var(--width-content);
   width: 100%;
   gap: 1rem;
 }

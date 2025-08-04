@@ -12,5 +12,8 @@ body {
   overflow: hidden;
   font-family: var(--font-base);
   color: var(--color-fg);
+}
+
+html:focus-within {
   scroll-behavior: smooth;
 }
