@@ -5,50 +5,44 @@ import styles from './HeadlineTicker.module.css';
 
 export function HeadlineTicker() {
   const [headlines, setHeadlines] = useState<HeadlineInfo[] | null>(null);
-  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const baseUrl: string = import.meta.env.BASE_URL ?? '/';
+    const baseUrl = import.meta.env.BASE_URL ?? '/';
     void fetch(baseUrl + 'headlines.json')
       .then((r) => (r.ok ? r.json() : []))
-      .then((data: unknown) =>
-        Array.isArray(data) && data.every(isHeadline)
-          ? setHeadlines(shuffleArray(data))
-          : setHeadlines([]),
-      )
-      .catch((e: unknown) => {
+      .then((data: unknown) => {
+        if (Array.isArray(data) && data.every(isHeadline)) {
+          setHeadlines(shuffleArray(data));
+        } else {
+          setHeadlines([]);
+        }
+      })
+      .catch((e) => {
         console.error('Error loading headlines:', e);
         setHeadlines([]);
       });
   }, []);
 
-  useEffect(() => {
-    if (!headlines || headlines.length === 0) return;
-
-    const interval = setInterval(() => {
-      setIndex((i) => (i + 1) % headlines.length);
-    }, 2000);
-
-    return () => clearInterval(interval);
-  }, [headlines]);
-
-  if (headlines === null) return <p>Loading…</p>;
+  if (headlines === null) return <p>Chargement…</p>;
   if (headlines.length === 0) return <p>Aucun titre chargé.</p>;
-
-  const { title, upvotes, url } = headlines[index];
 
   return (
     <div className={styles.ticker}>
-      <a
-        className={styles.item}
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <span>
-          +{upvotes} "{title}"
-        </span>
-      </a>
+      <div className={styles.track}>
+        <div className={styles.row}>
+          {[...headlines, ...headlines].map(({ title, url }, i) => (
+            <a
+              key={i}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.item}
+            >
+              "{title}"
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
