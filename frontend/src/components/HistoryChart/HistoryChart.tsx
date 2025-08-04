@@ -65,9 +65,6 @@ export function HistoryChart() {
 
   return (
     <div className={styles.chartContainer}>
-      <p className={styles.heading}>
-        Tendance cumulative des émotions du marché sur {diffDays} jours :
-      </p>
       <div className={styles.chart}>
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
@@ -145,29 +142,40 @@ export function HistoryChart() {
         </ResponsiveContainer>
       </div>
 
+      <p className={styles.heading}>
+        Cumul émotionnel des {diffDays} derniers jours.
+      </p>
       <div className={styles.legend}>
         <div className={styles.column}>
-          <LegendItem color="#66FF99" label="Positif" />
+          <LegendItem color="#66FF99" label="Positivité" />
           <LegendItem color="#00FFFF" label="Joie" />
           <LegendItem color="#00CFFF" label="Confiance" />
           <LegendItem color="#4781FF" label="Anticipation" />
           <LegendItem color="#99CCFF" label="Surprise" />
         </div>
         <div className={styles.column}>
-          <LegendItem color="#FF0066" label="Négatif" />
-          <LegendItem color="#FF3300" label="Colère" />
-          <LegendItem color="#FF6600" label="Peur" />
-          <LegendItem color="#FF9999" label="Tristesse" />
-          <LegendItem color="#FFCC66" label="Dégoût" />
+          <LegendItem color="#FF0066" label="Négativité" right />
+          <LegendItem color="#FF3300" label="Colère" right />
+          <LegendItem color="#FF6600" label="Peur" right />
+          <LegendItem color="#FF9999" label="Tristesse" right />
+          <LegendItem color="#FFCC66" label="Dégoût" right />
         </div>
       </div>
     </div>
   );
 }
 
-function LegendItem({ color, label }: { color: string; label: string }) {
+function LegendItem({
+  color,
+  label,
+  right = false,
+}: {
+  color: string;
+  label: string;
+  right?: boolean;
+}) {
   return (
-    <div className={styles.legendItem}>
+    <div className={`${styles.legendItem} ${right ? styles.right : ''}`}>
       <span className={styles.colorDot} style={{ backgroundColor: color }} />
       <span>{label}</span>
     </div>

@@ -16,11 +16,12 @@
   margin-left: auto;
   margin-right: auto;
 
-  align-self: flex-start;
+  text-align: center;
 
-  font-size: var(--font-size-chart);
+  font-size: var(--font-size-normal);
   font-weight: var(--font-weight-ui);
   font-family: var(--font-base);
+  padding-bottom: 20px;
 }
 
 .legend {
@@ -29,27 +30,25 @@
   margin-left: auto;
   margin-right: auto;
 
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 2rem;
+  row-gap: 0.4rem;
 
-  font-size: var(--font-size-chart);
+  font-size: var(--font-size-small);
   font-weight: var(--font-weight-ui);
   font-family: var(--font-base);
-}
-
-.column {
-  min-width: 150px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
 }
 
 .legendItem {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.right {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
 }
 
 .colorDot {
