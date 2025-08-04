@@ -1,6 +1,6 @@
 .ticker {
   width: 100%;
-  max-width: var(--width-ticker);
+  max-width: var(--width-content);
   height: 3rem;
   overflow: hidden;
 
@@ -17,6 +17,5 @@
   margin-top: 1rem;
   text-align: left;
   text-decoration: none;
-  color: inherit;
   color: white;
 }
