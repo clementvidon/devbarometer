@@ -13,7 +13,7 @@
 }
 
 .text {
-  font-size: var(--font-size-report);
+  font-size: var(--font-size-normal);
   font-weight: var(--font-weight-ui);
   line-height: var(--line-height);
   margin: 0;
