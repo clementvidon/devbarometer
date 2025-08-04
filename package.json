@@ -33,7 +33,7 @@
     "build-frontend": "npm --workspace frontend run predeploy",
     "deploy-frontend": "npm --workspace frontend run deploy",
     "publish": "npm-run-all --sequential build-frontend deploy-frontend",
-    "update-site": "npm-run-all --sequential generate-report generate-static build-frontend deploy-frontend"
+    "update-site": "npm-run-all --sequential generate-static build-frontend deploy-frontend"
   },
   "lint-staged": {
     "frontend/src/**/*.{ts,tsx}": [
