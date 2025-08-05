@@ -30,6 +30,7 @@ jobs:
         run: npm --workspace backend run generate-report
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Generate static JSON
         run: npm --workspace backend run generate-static
