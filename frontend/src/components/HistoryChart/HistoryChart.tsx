@@ -128,12 +128,7 @@ export function HistoryChart() {
         title="Cliquer sur le graphique pour basculer delta/cumul"
       >
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
-            data={data}
-            onClick={() =>
-              setView((v) => (v === 'delta' ? 'cumulative' : 'delta'))
-            }
-          >
+          <LineChart data={data}>
             {chromeOn && (
               <CartesianGrid
                 stroke={THEME.grid}
@@ -242,19 +237,32 @@ export function HistoryChart() {
       </div>
 
       <p className={styles.heading}>
-        <button
-          type="button"
-          className={styles.toggle}
-          onClick={() => setChromeOn((v) => !v)}
-          title={chromeTitle}
-          aria-pressed={chromeOn}
-          aria-label="Afficher/masquer axes et grille"
+        <span
+          onClick={() =>
+            setView((v) => (v === 'delta' ? 'cumulative' : 'delta'))
+          }
+          className={styles.headingText}
+          role="button"
+          aria-pressed={view === 'cumulative'}
+          title="Basculer entre delta et cumul"
         >
-          ⚙️
-        </button>
-        {view === 'delta'
-          ? `Évolution quotidienne des émotions sur les ${diffDays}\u00A0derniers jours.`
-          : `Cumul émotionnel des ${diffDays}\u00A0derniers jours.`}
+          <button
+            type="button"
+            className={styles.toggle}
+            onClick={(e) => {
+              e.stopPropagation(); // ⚠️ empêche que le clic sur ⚙️ déclenche aussi le span
+              setChromeOn((v) => !v);
+            }}
+            title={chromeTitle}
+            aria-pressed={chromeOn}
+            aria-label="Afficher/masquer axes et grille"
+          >
+            ⚙️
+          </button>
+          {view === 'delta'
+            ? `Évolution quotidienne des émotions sur les ${diffDays}\u00A0derniers jours.`
+            : `Cumul émotionnel des ${diffDays}\u00A0derniers jours.`}
+        </span>
       </p>
 
       <div className={styles.legend}>
