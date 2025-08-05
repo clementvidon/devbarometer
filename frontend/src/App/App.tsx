@@ -9,11 +9,11 @@ function App() {
       <header className={styles.header}>
         <h1 className={styles.heading}>DevBarometer</h1>
         <a
-          href="about.html"
+          href="infos.html"
           className={styles.navButton}
-          aria-label="About page"
+          aria-label="Infos page"
         >
-          about
+          À propos
         </a>
       </header>
 
