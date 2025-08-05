@@ -8,6 +8,11 @@
 .chart {
   width: 100%;
   height: clamp(200px, 50vw, 400px);
+  cursor: pointer;
+}
+
+.chart :global(svg) {
+  background-color: transparent;
 }
 
 .heading {
@@ -15,13 +20,25 @@
   max-width: var(--width-content);
   margin-left: auto;
   margin-right: auto;
-
   text-align: center;
-
   font-size: var(--font-size-normal);
   font-weight: var(--font-weight-ui);
   font-family: var(--font-base);
   padding-bottom: 20px;
+  display: block;
+}
+
+.toggle {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1em;
+  transform: translateY(-1px);
+
+  display: inline;
+  padding: 0;
+  margin-right: 0.8ch;
+  vertical-align: baseline;
 }
 
 .legend {
