@@ -26,10 +26,10 @@ jobs:
         env:
           CI: true
 
-     - name: Generate sentiment report
-       run: npm --workspace backend run generate-report
-       env:
-         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Generate sentiment report
+        run: npm --workspace backend run generate-report
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Generate static JSON
         run: npm --workspace backend run generate-static
