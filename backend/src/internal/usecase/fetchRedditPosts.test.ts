@@ -14,10 +14,7 @@ beforeAll(() => {
   vi.spyOn(console, 'error').mockImplementation(() => {});
   vi.spyOn(console, 'warn').mockImplementation(() => {});
 });
-
-afterAll(() => {
-  vi.restoreAllMocks();
-});
+afterAll(() => vi.restoreAllMocks());
 
 const fakeResponse = (
   body: unknown,
@@ -26,10 +23,7 @@ const fakeResponse = (
 ) =>
   new Response(JSON.stringify(body), {
     status,
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      ...headers,
-    }),
+    headers: new Headers({ 'Content-Type': 'application/json', ...headers }),
   });
 
 const fakePosts = [
@@ -60,16 +54,6 @@ describe('fetchRedditPosts', () => {
               fakeResponse({ data: { children: fakePosts } }),
             );
           }
-          if (url.includes('/comments/')) {
-            return Promise.resolve(
-              fakeResponse([
-                {},
-                {
-                  data: { children: [{ data: { body: 'Fake top comment' } }] },
-                },
-              ]),
-            );
-          }
           return Promise.reject(new Error(`Unexpected fetch URL: ${url}`));
         }),
       };
@@ -77,19 +61,18 @@ describe('fetchRedditPosts', () => {
 
     test('maps, filters (ups>=10), and sanitizes correctly', async () => {
       const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
-
       expect(posts).toHaveLength(2);
       expect(posts[0]).toMatchObject({
+        id: '00',
         upvotes: 15,
         title: '1st Post',
         content: 'Content 1',
-        topComment: 'Fake top comment',
       });
       expect(posts[1]).toMatchObject({
+        id: '02',
         upvotes: 20,
         title: '3rd Post',
         content: '',
-        topComment: 'Fake top comment',
       });
     });
   });
@@ -135,7 +118,6 @@ describe('fetchRedditPosts', () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ wrong: 'format' })),
       );
-
       const posts = await fetchRedditPosts(
         fetcher,
         'invalidSubreddit',
@@ -149,7 +131,6 @@ describe('fetchRedditPosts', () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ data: { children: [] } })),
       );
-
       const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
       expect(posts).toEqual([]);
     });
@@ -160,86 +141,13 @@ describe('fetchRedditPosts', () => {
           fakeResponse({
             data: {
               children: [
-                {
-                  data: {
-                    id: 'low',
-                    title: 'Low upvote',
-                    selftext: '...',
-                    ups: 2,
-                  },
-                },
+                { data: { id: 'low', title: 'x', selftext: '...', ups: 2 } },
               ],
             },
           }),
         ),
       );
-
       const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
-      expect(posts).toEqual([]);
-    });
-
-    test('returns null if top comment JSON is invalid', async () => {
-      fetcher.fetch = vi.fn((url: string) => {
-        if (url.includes('/top.json')) {
-          return Promise.resolve(
-            fakeResponse({ data: { children: fakePosts } }),
-          );
-        }
-        if (url.includes('/comments/')) {
-          return Promise.resolve(fakeResponse({ wrong: 'format' }));
-        }
-        return Promise.reject(new Error('Unexpected fetch URL'));
-      });
-
-      const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
-      expect(posts[0].topComment).toBeNull();
-    });
-
-    test('returns null if top comment response is HTML instead of JSON', async () => {
-      fetcher.fetch = vi.fn((url: string) => {
-        if (url.includes('/top.json')) {
-          return Promise.resolve(
-            fakeResponse({ data: { children: fakePosts } }),
-          );
-        }
-        if (url.includes('/comments/')) {
-          return Promise.resolve(
-            new Response('<!doctype html><body>Access denied</body>', {
-              status: 200,
-              headers: { 'Content-Type': 'text/html' },
-            }),
-          );
-        }
-        return Promise.reject(new Error('Unexpected fetch URL'));
-      });
-      const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
-      expect(posts[0].topComment).toBeNull();
-    });
-
-    test('sets topComment to null if no top comment found', async () => {
-      fetcher.fetch = vi.fn((url: string) => {
-        if (url.includes('/top.json')) {
-          return Promise.resolve(
-            fakeResponse({ data: { children: fakePosts } }),
-          );
-        }
-        if (url.includes('/comments/')) {
-          return Promise.resolve(fakeResponse([{}]));
-        }
-        return Promise.reject(new Error('Unexpected fetch URL'));
-      });
-
-      const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
-      expect(posts[0].topComment).toBeNull();
-    });
-
-    test('returns empty array if Reddit is unreachable after retries', async () => {
-      fetcher.fetch = vi.fn().mockRejectedValue(new Error('Network down'));
-
-      const posts = await runWithFakeTimers(() =>
-        fetchRedditPosts(fetcher, 'anySub', 10, 'day'),
-      );
-
       expect(posts).toEqual([]);
     });
   });

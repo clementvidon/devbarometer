@@ -9,14 +9,12 @@ const fakePosts: Post[] = [
     id: 'idA',
     title: 'Post A',
     content: 'Great job market',
-    topComment: 'I agree',
     upvotes: 15,
   },
   {
     id: 'idB',
     title: 'Post B',
     content: 'Not sure about this',
-    topComment: 'Interesting',
     upvotes: 7,
   },
 ];

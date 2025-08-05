@@ -27,7 +27,6 @@ Vérifiez encore une fois pour vous assurer de la pertinence de ces données pou
 Analysez cette donnée :
 titre        : ${post.title}
 contenu      : ${post.content}
-meilleur com.: ${post.topComment}
       `.trim(),
     },
   ] as const satisfies readonly AgentMessage[];
