@@ -1,4 +1,4 @@
-const BASE_URL = 'https://old.reddit.com';
+const BASE_URL = 'https://www.reddit.com';
 
 /**
  * Get the top posts of a sub – /r/{sub}/top.json
@@ -8,5 +8,5 @@ export function makeRedditTopUrl(
   limit: number,
   period: string,
 ): string {
-  return `${BASE_URL}/r/${subreddit}/top.json?limit=${limit}&t=${period}&raw_json=1`;
+  return `${BASE_URL}/r/${subreddit}/top.json?limit=${limit}&t=${period}`;
 }
