@@ -12,21 +12,3 @@ export const PostChildSchema = z.object({ data: PostSchema });
 export const PostsResponseSchema = z.object({
   data: z.object({ children: z.array(PostChildSchema) }),
 });
-
-export const CommentsResponseSchema = z.array(
-  z.object({
-    data: z
-      .object({
-        children: z
-          .array(
-            z.object({
-              data: z.object({
-                body: z.string().optional(),
-              }),
-            }),
-          )
-          .optional(),
-      })
-      .optional(),
-  }),
-);

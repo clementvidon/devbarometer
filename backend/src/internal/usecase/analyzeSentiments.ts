@@ -54,7 +54,6 @@ Aucune autre clé, explication ou mise en forme.
 Analysez ces données :
 titre        : ${post.title}
 contenu      : ${post.content}
-meilleur com.: ${post.topComment}
       `.trim(),
     },
   ] as const satisfies readonly AgentMessage[];

@@ -1,16 +1,8 @@
 import { z } from 'zod';
-import {
-  makeRedditCommentsUrl,
-  makeRedditTopUrl,
-} from '../../utils/redditUrl.ts';
+import { makeRedditTopUrl } from '../../utils/redditUrl.ts';
 import type { Post } from '../core/entity/Post.ts';
 import type { FetchPort } from '../core/port/FetchPort.ts';
-import {
-  CommentsResponseSchema,
-  PostChildSchema,
-  PostSchema,
-  PostsResponseSchema,
-} from './RedditSchemas.ts';
+import { PostChildSchema, PostsResponseSchema } from './RedditSchemas.ts';
 
 const HEADERS = {
   'User-Agent': 'devbarometer/1.0 (by u/clem9nt contact: cvidon@student.42.fr)',
@@ -20,10 +12,8 @@ const HEADERS = {
 
 const MAX_RETRIES = 3;
 const TIMEOUT_MS = 5000;
-
 const MIN_UPVOTES = 10;
 
-type APIResponsePost = z.infer<typeof PostSchema>;
 type APIResponsePostChild = z.infer<typeof PostChildSchema>;
 
 async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
@@ -89,9 +79,7 @@ async function fetchAllPosts(
   const url = makeRedditTopUrl(subreddit, limit, period);
   const json = await fetchWithRateLimit(fetcher, url, { headers: HEADERS });
 
-  if (json == null) {
-    return [];
-  }
+  if (json == null) return [];
 
   const parsed = PostsResponseSchema.safeParse(json);
   if (!parsed.success) {
@@ -101,45 +89,10 @@ async function fetchAllPosts(
     );
     return [];
   }
-
   return parsed.data.data.children;
 }
 
-async function fetchTopComment(
-  fetcher: FetchPort,
-  subreddit: string,
-  postId: string,
-): Promise<string | null> {
-  const url = makeRedditCommentsUrl(subreddit, postId, 1);
-  const json = await fetchWithRateLimit(fetcher, url, { headers: HEADERS });
-
-  if (json == null) {
-    return null;
-  }
-
-  const parsed = CommentsResponseSchema.safeParse(json);
-  if (!parsed.success) {
-    console.error(
-      `[fetchTopComment] URL: ${url}, Errors:`,
-      parsed.error.flatten(),
-    );
-    return null;
-  }
-
-  return parsed.data[1]?.data?.children?.[0]?.data?.body ?? null;
-}
-
 const sanitize = (s: string) => s.replace(/\s+/g, ' ').trim();
-
-function buildPost(post: APIResponsePost, comment: string | null): Post {
-  return {
-    id: post.id,
-    upvotes: post.ups,
-    title: sanitize(post.title),
-    content: sanitize(post.selftext),
-    topComment: comment != null && comment !== '' ? sanitize(comment) : null,
-  };
-}
 
 export async function fetchRedditPosts(
   fetcher: FetchPort,
@@ -152,18 +105,23 @@ export async function fetchRedditPosts(
     console.error(
       `[fetchRedditPosts] No posts found for subreddit "${subreddit}".`,
     );
+    return [];
   }
+
   const filtered = postChildren.filter((w) => w.data.ups >= MIN_UPVOTES);
   if (filtered.length === 0) {
     console.error(
       `[fetchRedditPosts] No posts with enough upvotes found (min ${MIN_UPVOTES}).`,
     );
+    return [];
   }
-  const posts = await Promise.all(
-    filtered.map(async ({ data }) => {
-      const comment = await fetchTopComment(fetcher, subreddit, data.id);
-      return buildPost(data, comment);
-    }),
-  );
+
+  const posts: Post[] = filtered.map(({ data }) => ({
+    id: data.id,
+    upvotes: data.ups,
+    title: sanitize(data.title),
+    content: sanitize(data.selftext),
+  }));
+
   return posts;
 }
