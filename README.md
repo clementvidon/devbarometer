@@ -22,7 +22,7 @@ The dev job market barometer — powered by Reddit sentiment.
 
 DevBarometer is a daily snapshot of the French dev job market’s mood — powered by Reddit sentiment.
 
-By analyzing fresh posts from r/developpeur, it reveals if the vibe is gold rush or hiring freeze.
+By analyzing fresh posts from r/developpeurs, it reveals if the vibe is gold rush or hiring freeze.
 
 Curious if it’s a good time to apply or complain? Let the devs tell you.
 
