@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { isHeadline, type HeadlineInfo } from '../../types/HeadlineInfo.ts';
 import { shuffleArray } from '../../utils/shuffle.ts';
-import styles from './HeadlineTicker.module.css';
+import styles from './Ticker.module.css';
 
-export function HeadlineTicker() {
+export function Ticker() {
   const [headlines, setHeadlines] = useState<HeadlineInfo[] | null>(null);
 
   useEffect(() => {

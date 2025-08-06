@@ -1,6 +1,6 @@
-import { HeadlineTicker } from '../components/HeadlineTicker/HeadlineTicker.tsx';
-import { HistoryChart } from '../components/HistoryChart/HistoryChart.tsx';
-import { ReportViewer } from '../components/ReportViewer/ReportViewer.tsx';
+import { Chart } from '../components/Chart/Chart.tsx';
+import { Report } from '../components/Report/Report.tsx';
+import { Ticker } from '../components/Ticker/Ticker.tsx';
 import styles from './App.module.css';
 
 function App() {
@@ -18,9 +18,9 @@ function App() {
       </header>
 
       <main className={styles.mainContent}>
-        <ReportViewer />
-        <HeadlineTicker />
-        <HistoryChart />
+        <Report />
+        <Ticker />
+        <Chart />
       </main>
 
       <footer className={styles.footer}>

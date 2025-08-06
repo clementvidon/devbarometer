@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { SentimentReport } from '../../types/SentimentReport';
-import styles from './ReportViewer.module.css';
+import styles from './Report.module.css';
 
-export function ReportViewer() {
+export function Report() {
   const [report, setReport] = useState<SentimentReport | null>(null);
 
   useEffect(() => {
