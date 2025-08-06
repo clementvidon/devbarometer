@@ -20,7 +20,7 @@
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  font-size: var(--font-size-content);
+  font-size: var(--font-size-heading);
   font-weight: var(--font-weight-content);
   font-family: var(--font-base);
   padding-bottom: 20px;
