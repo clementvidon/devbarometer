@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import styles from './HistoryChart.module.css';
+import styles from './Chart.module.css';
 
 const THEME = {
   axisText: '#9ec3ff',
@@ -54,7 +54,7 @@ const KEYS = [
 
 type Key = (typeof KEYS)[number];
 
-export function HistoryChart() {
+export function Chart() {
   const [baseData, setBaseData] = useState<Point[] | null>(null);
   const [view, setView] = useState<'delta' | 'cumulative'>('delta');
   const [chromeOn, setChromeOn] = useState(false);
