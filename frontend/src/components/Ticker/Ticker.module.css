@@ -11,8 +11,8 @@
   align-items: center;
 
   font-family: var(--font-ui);
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-ui);
+  font-size: var(--font-size-content);
+  font-weight: var(--font-weight-content);
 }
 
 .ticker:hover .row {

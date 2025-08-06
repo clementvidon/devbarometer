@@ -13,7 +13,7 @@ function App() {
           className={styles.navButton}
           aria-label="Infos page"
         >
-          À propos
+          à propos
         </a>
       </header>
 

@@ -13,8 +13,8 @@
 }
 
 .text {
-  font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-ui);
+  font-size: var(--font-size-content);
+  font-weight: var(--font-weight-content);
   line-height: var(--line-height);
   margin: 0;
   text-align: left;
