@@ -9,7 +9,7 @@ function App() {
       <header className={styles.header}>
         <h1 className={styles.heading}>DevBarometer</h1>
         <a
-          href="infos.html"
+          href="https://github.com/clementvidon/devbarometer"
           className={styles.navButton}
           aria-label="Infos page"
         >
