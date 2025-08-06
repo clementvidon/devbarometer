@@ -19,6 +19,31 @@ const THEME = {
   tooltipText: '#dbeaff',
 };
 
+const COLOR_MAP = {
+  positive: '#66FF99',
+  joy: '#00FFFF',
+  trust: '#00CFFF',
+  anticipation: '#4781FF',
+  surprise: '#99CCFF',
+  negative: '#FF0066',
+  anger: '#FF3300',
+  fear: '#FF6600',
+  sadness: '#FF9999',
+  disgust: '#FFCC66',
+} as const;
+
+const KEYS = Object.keys(COLOR_MAP) as Array<keyof typeof COLOR_MAP>;
+type Key = (typeof KEYS)[number];
+
+const formatChartDate = (value: string) =>
+  new Date(value).toLocaleDateString('fr-FR', {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+  });
+
+const formatChartValue = (value: number) => value.toFixed(2);
+
 type RawEntry = {
   createdAt: string;
   emotions: Record<string, number>;
@@ -27,37 +52,13 @@ type RawEntry = {
 type Point = {
   date: string;
   createdAt: string;
-  positive: number;
-  negative: number;
-  joy: number;
-  fear: number;
-  anger: number;
-  trust: number;
-  disgust: number;
-  sadness: number;
-  surprise: number;
-  anticipation: number;
-};
-
-const KEYS = [
-  'positive',
-  'negative',
-  'joy',
-  'fear',
-  'anger',
-  'trust',
-  'disgust',
-  'sadness',
-  'surprise',
-  'anticipation',
-] as const;
-
-type Key = (typeof KEYS)[number];
+} & Record<Key, number>;
 
 export function Chart() {
   const [baseData, setBaseData] = useState<Point[] | null>(null);
   const [view, setView] = useState<'delta' | 'cumulative'>('delta');
-  const [chromeOn, setChromeOn] = useState(false);
+  const [hudVisible, setHudVisible] = useState(false);
+  const [tooltipActive, setTooltipActive] = useState(false);
 
   useEffect(() => {
     void (async () => {
@@ -65,7 +66,7 @@ export function Chart() {
         const res = await fetch('average-sentiments.json');
         const raw = (await res.json()) as RawEntry[];
 
-        const parsed: Point[] = raw
+        const parsed = raw
           .slice()
           .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
           .map((item) => ({
@@ -76,17 +77,10 @@ export function Chart() {
               minute: '2-digit',
             }),
             createdAt: item.createdAt,
-            positive: +(item.emotions.positive ?? 0).toFixed(3),
-            negative: +(item.emotions.negative ?? 0).toFixed(3),
-            joy: +(item.emotions.joy ?? 0).toFixed(3),
-            fear: +(item.emotions.fear ?? 0).toFixed(3),
-            anger: +(item.emotions.anger ?? 0).toFixed(3),
-            trust: +(item.emotions.trust ?? 0).toFixed(3),
-            disgust: +(item.emotions.disgust ?? 0).toFixed(3),
-            sadness: +(item.emotions.sadness ?? 0).toFixed(3),
-            surprise: +(item.emotions.surprise ?? 0).toFixed(3),
-            anticipation: +(item.emotions.anticipation ?? 0).toFixed(3),
-          }));
+            ...Object.fromEntries(
+              KEYS.map((k) => [k, +(item.emotions[k] ?? 0).toFixed(3)]),
+            ),
+          })) as Point[];
 
         setBaseData(parsed);
       } catch (e) {
@@ -97,12 +91,12 @@ export function Chart() {
 
   const cumulativeData = useMemo(() => {
     if (!baseData) return null;
-    const totals: Record<Key, number> = Object.fromEntries(
-      KEYS.map((k) => [k, 0]),
-    ) as Record<Key, number>;
-
+    const totals = Object.fromEntries(KEYS.map((k) => [k, 0])) as Record<
+      Key,
+      number
+    >;
     return baseData.map((p) => {
-      const out: Point = { ...p }; // typé correctement
+      const out = { ...p };
       for (const k of KEYS) {
         totals[k] += p[k];
         out[k] = +totals[k].toFixed(3);
@@ -112,40 +106,38 @@ export function Chart() {
   }, [baseData]);
 
   if (!baseData) return <p>Loading chart…</p>;
-  if (baseData.length === 0) return <p>No sentiment history available.</p>;
-
-  const data = view === 'delta' ? baseData : (cumulativeData ?? baseData);
+  const data = view === 'delta' ? baseData : cumulativeData!;
   const diffDays = baseData.length;
-
-  const chromeTitle = chromeOn
-    ? 'Masquer axes et valeurs'
-    : 'Afficher axes et valeurs';
 
   return (
     <div className={styles.chartContainer}>
       <div
         className={styles.chart}
-        title="Cliquer sur le graphique pour basculer delta/cumul"
+        title="Cliquer pour basculer delta/cumul"
+        onMouseDown={() => setTooltipActive(true)}
+        onMouseUp={() => setTooltipActive(false)}
+        onTouchStart={() => setTooltipActive(true)}
+        onTouchEnd={() => setTooltipActive(false)}
       >
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
-            {chromeOn && (
+            {hudVisible && (
               <CartesianGrid
                 stroke={THEME.grid}
                 strokeDasharray="3 3"
                 vertical={false}
               />
             )}
-
             <XAxis
-              dataKey="date"
-              hide={!chromeOn}
+              dataKey="createdAt"
+              hide={!hudVisible}
               tick={{ fill: THEME.axisText }}
               axisLine={{ stroke: THEME.axisLine }}
               tickLine={{ stroke: THEME.axisLine }}
+              tickFormatter={formatChartDate}
             />
             <YAxis
-              hide={!chromeOn}
+              hide={!hudVisible}
               tick={{ fill: THEME.axisText }}
               axisLine={{ stroke: THEME.axisLine }}
               tickLine={{ stroke: THEME.axisLine }}
@@ -160,102 +152,43 @@ export function Chart() {
               labelStyle={{ color: THEME.tooltipText }}
               itemStyle={{ color: THEME.tooltipText }}
               cursor={{ stroke: THEME.axisLine, strokeDasharray: '3 3' }}
+              wrapperStyle={{ display: tooltipActive ? 'block' : 'none' }}
+              labelFormatter={formatChartDate}
+              formatter={(value: number) => formatChartValue(value)}
             />
 
-            <Line
-              type="monotone"
-              dataKey="positive"
-              stroke="#66FF99"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="joy"
-              stroke="#00FFFF"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="trust"
-              stroke="#00CFFF"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="anticipation"
-              stroke="#4781FF"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="surprise"
-              stroke="#99CCFF"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="negative"
-              stroke="#FF0066"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="anger"
-              stroke="#FF3300"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="fear"
-              stroke="#FF6600"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="sadness"
-              stroke="#FF9999"
-              strokeWidth={2}
-              dot={false}
-            />
-            <Line
-              type="monotone"
-              dataKey="disgust"
-              stroke="#FFCC66"
-              strokeWidth={2}
-              dot={false}
-            />
+            {KEYS.map((key) => (
+              <Line
+                key={key}
+                type="monotone"
+                dataKey={key}
+                stroke={COLOR_MAP[key]}
+                strokeWidth={2}
+                dot={false}
+                activeDot={tooltipActive ? { r: 5 } : false}
+              />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </div>
 
       <p className={styles.heading}>
         <span
-          onClick={() =>
-            setView((v) => (v === 'delta' ? 'cumulative' : 'delta'))
-          }
-          className={styles.headingText}
+          onClick={() => setView(view === 'delta' ? 'cumulative' : 'delta')}
           role="button"
-          aria-pressed={view === 'cumulative'}
-          title="Basculer entre delta et cumul"
         >
           <button
             type="button"
             className={styles.toggle}
             onClick={(e) => {
-              e.stopPropagation(); // ⚠️ empêche que le clic sur ⚙️ déclenche aussi le span
-              setChromeOn((v) => !v);
+              e.stopPropagation();
+              setHudVisible((v) => !v);
             }}
-            title={chromeTitle}
-            aria-pressed={chromeOn}
-            aria-label="Afficher/masquer axes et grille"
+            title={
+              hudVisible
+                ? 'Masquer axes et valeurs'
+                : 'Afficher axes et valeurs'
+            }
           >
             ⚙️
           </button>
@@ -267,18 +200,18 @@ export function Chart() {
 
       <div className={styles.legend}>
         <div className={styles.column}>
-          <LegendItem color="#66FF99" label="Positivité" />
-          <LegendItem color="#00FFFF" label="Joie" />
-          <LegendItem color="#00CFFF" label="Confiance" />
-          <LegendItem color="#4781FF" label="Anticipation" />
-          <LegendItem color="#99CCFF" label="Surprise" />
+          <LegendItem color={COLOR_MAP.positive} label="Positivité" />
+          <LegendItem color={COLOR_MAP.joy} label="Joie" />
+          <LegendItem color={COLOR_MAP.trust} label="Confiance" />
+          <LegendItem color={COLOR_MAP.anticipation} label="Anticipation" />
+          <LegendItem color={COLOR_MAP.surprise} label="Surprise" />
         </div>
         <div className={styles.column}>
-          <LegendItem color="#FF0066" label="Négativité" right />
-          <LegendItem color="#FF3300" label="Colère" right />
-          <LegendItem color="#FF6600" label="Peur" right />
-          <LegendItem color="#FF9999" label="Tristesse" right />
-          <LegendItem color="#FFCC66" label="Dégoût" right />
+          <LegendItem color={COLOR_MAP.negative} label="Négativité" right />
+          <LegendItem color={COLOR_MAP.anger} label="Colère" right />
+          <LegendItem color={COLOR_MAP.fear} label="Peur" right />
+          <LegendItem color={COLOR_MAP.sadness} label="Tristesse" right />
+          <LegendItem color={COLOR_MAP.disgust} label="Dégoût" right />
         </div>
       </div>
     </div>
