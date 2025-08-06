@@ -10,6 +10,10 @@ import {
 import type { FetchPort } from '../core/port/FetchPort.ts';
 import { fetchRedditPosts } from './fetchRedditPosts.ts';
 
+vi.mock('../../utils/redditAuth.ts', () => ({
+  getRedditAccessToken: vi.fn().mockResolvedValue('mocked-access-token'),
+}));
+
 beforeAll(() => {
   vi.spyOn(console, 'error').mockImplementation(() => {});
   vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -60,7 +64,7 @@ describe('fetchRedditPosts', () => {
     });
 
     test('maps, filters (ups>=10), and sanitizes correctly', async () => {
-      const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
+      const { posts } = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
       expect(posts).toHaveLength(2);
       expect(posts[0]).toMatchObject({
         id: '00',
@@ -96,7 +100,7 @@ describe('fetchRedditPosts', () => {
         )
         .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
-      const posts = await runWithFakeTimers(() =>
+      const { posts } = await runWithFakeTimers(() =>
         fetchRedditPosts(fetcher, 'anySub', 10, 'day'),
       );
       expect(posts).toHaveLength(2);
@@ -108,7 +112,7 @@ describe('fetchRedditPosts', () => {
         .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
-      const posts = await runWithFakeTimers(() =>
+      const { posts } = await runWithFakeTimers(() =>
         fetchRedditPosts(fetcher, 'anySub', 10, 'day'),
       );
       expect(posts).toHaveLength(2);
@@ -118,7 +122,7 @@ describe('fetchRedditPosts', () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ wrong: 'format' })),
       );
-      const posts = await fetchRedditPosts(
+      const { posts } = await fetchRedditPosts(
         fetcher,
         'invalidSubreddit',
         10,
@@ -131,7 +135,7 @@ describe('fetchRedditPosts', () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ data: { children: [] } })),
       );
-      const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
+      const { posts } = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
       expect(posts).toEqual([]);
     });
 
@@ -147,7 +151,7 @@ describe('fetchRedditPosts', () => {
           }),
         ),
       );
-      const posts = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
+      const { posts } = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
       expect(posts).toEqual([]);
     });
   });
