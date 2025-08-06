@@ -1,5 +1,20 @@
 [
   {
+    "createdAt": "2025-08-06T10:24:12.615Z",
+    "emotions": {
+      "joy": 0,
+      "fear": 0,
+      "anger": 0,
+      "trust": 0,
+      "disgust": 0,
+      "sadness": 0,
+      "negative": 0,
+      "positive": 0,
+      "surprise": 0,
+      "anticipation": 0
+    }
+  },
+  {
     "createdAt": "2025-08-05T17:55:46.430Z",
     "emotions": {
       "joy": 0,
