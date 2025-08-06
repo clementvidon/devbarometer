@@ -30,7 +30,10 @@ const llm: LlmPort = {
 };
 
 vi.mock('../../usecase/fetchRedditPosts', () => ({
-  fetchRedditPosts: vi.fn().mockResolvedValue(['post']),
+  fetchRedditPosts: vi.fn().mockResolvedValue({
+    posts: ['post'],
+    fetchUrl: 'https://reddit.com/r/mock/top.json',
+  }),
 }));
 vi.mock('../../usecase/filterRelevantPosts', () => ({
   filterRelevantPosts: vi.fn().mockResolvedValue(['relevantPost']),
@@ -92,7 +95,10 @@ describe('AgentService updateReport', () => {
   });
 
   test('handles empty posts gracefully', async () => {
-    vi.mocked(fetchRedditPosts).mockResolvedValue([]);
+    vi.mocked(fetchRedditPosts).mockResolvedValue({
+      posts: [],
+      fetchUrl: 'mocked-url',
+    });
     const spy = vi.spyOn(persistence, 'storeSnapshot');
 
     await agent.updateReport('anySub', 10, 'day');
