@@ -1,4 +1,3 @@
-import { makeRedditTopUrl } from '../../../utils/redditUrl.ts';
 import { analyzeSentiments } from '../../usecase/analyzeSentiments.ts';
 import { compressSentiments } from '../../usecase/compressSentiments.ts';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
@@ -27,14 +26,13 @@ export class AgentService {
     limit: number = 100,
     period: string = 'week',
   ): Promise<void> {
-    const fetchUrl = makeRedditTopUrl(subreddit, limit, period);
-
-    const posts = await fetchRedditPosts(
+    const { posts, fetchUrl } = await fetchRedditPosts(
       this.fetcher,
       subreddit,
       limit,
       period,
     );
+
     console.log(
       `[AgentService] Fetched ${posts.length} top posts from "r/${subreddit}" for the past ${period}.`,
     );

@@ -1,12 +1,11 @@
-import { z } from 'zod';
-import { makeRedditTopUrl } from '../../utils/redditUrl.ts';
+import { getRedditAccessToken } from '../../utils/redditAuth.ts';
 import type { Post } from '../core/entity/Post.ts';
 import type { FetchPort } from '../core/port/FetchPort.ts';
-import { PostChildSchema, PostsResponseSchema } from './RedditSchemas.ts';
+import { PostsResponseSchema } from './RedditSchemas.ts';
 
-const HEADERS = {
+const BASE_HEADERS = {
   'User-Agent':
-    'Mozilla/5.0 (iPhone; CPU iPhone OS 16_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.5 Mobile/15E148 Safari/604.1',
+    'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)',
   Accept: 'application/json',
   'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
 };
@@ -15,7 +14,7 @@ const MAX_RETRIES = 3;
 const TIMEOUT_MS = 5000;
 const MIN_UPVOTES = 10;
 
-type APIResponsePostChild = z.infer<typeof PostChildSchema>;
+const sanitize = (s: string) => s.replace(/\s+/g, ' ').trim();
 
 async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   const timeout = new Promise<never>((_, reject) =>
@@ -38,26 +37,55 @@ async function fetchWithRateLimit(
         const reset = parseFloat(res.headers.get('X-Ratelimit-Reset') ?? '1');
         const backoff = Math.pow(2, attempt) * reset * 1000;
         console.warn(
-          `[fetchWithRateLimit] URL: ${url}, Waiting ${backoff}ms before retry...`,
+          `[fetchWithRateLimit] 429 Too Many Requests. Retrying in ${backoff}ms...`,
         );
         await new Promise((r) => setTimeout(r, backoff));
         continue;
+      }
+
+      if (res.status === 401) {
+        console.error(
+          `[fetchWithRateLimit] 401 Unauthorized – check Reddit credentials.`,
+        );
+        return null;
+      }
+
+      if (res.status === 403) {
+        console.error(
+          `[fetchWithRateLimit] 403 Forbidden – access denied for ${url}`,
+        );
+        return null;
+      }
+
+      if (res.status >= 500) {
+        console.warn(
+          `[fetchWithRateLimit] ${res.status} Server error. Retrying...`,
+        );
+        await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
+        continue;
+      }
+
+      if (res.status >= 400) {
+        const msg = await res.text();
+        console.error(
+          `[fetchWithRateLimit] ${res.status} Error:\n${msg.slice(0, 300)}...`,
+        );
+        return null;
       }
 
       const contentType = res.headers.get('content-type') || '';
       if (!contentType.includes('application/json')) {
         const html = await res.text();
         console.warn(
-          `[fetchWithRateLimit] Non-JSON response at ${url} (status ${res.status}):\n${html.slice(0, 200)}...`,
+          `[fetchWithRateLimit] Non-JSON response at ${url}:\n${html.slice(0, 200)}...`,
         );
         return null;
       }
 
-      const json: unknown = await res.json();
-      return json;
+      return await res.json();
     } catch (err) {
       console.error(
-        `[fetchWithRateLimit] URL: ${url}, Attempt ${attempt + 1}:`,
+        `[fetchWithRateLimit] ${url}, attempt ${attempt + 1}:`,
         err,
       );
       const backoff = Math.pow(2, attempt) * 100;
@@ -66,56 +94,39 @@ async function fetchWithRateLimit(
   }
 
   console.error(
-    `[fetchWithRateLimit] URL: ${url}, after ${MAX_RETRIES} attempts.`,
+    `[fetchWithRateLimit] ${url}, failed after ${MAX_RETRIES} attempts.`,
   );
   return null;
 }
-
-async function fetchAllPosts(
-  fetcher: FetchPort,
-  subreddit: string,
-  limit: number,
-  period: string,
-): Promise<APIResponsePostChild[]> {
-  const url = makeRedditTopUrl(subreddit, limit, period);
-  const json = await fetchWithRateLimit(fetcher, url, { headers: HEADERS });
-
-  if (json == null) return [];
-
-  const parsed = PostsResponseSchema.safeParse(json);
-  if (!parsed.success) {
-    console.error(
-      `[fetchAllPosts] URL: ${url}, Errors:`,
-      parsed.error.flatten(),
-    );
-    return [];
-  }
-  return parsed.data.data.children;
-}
-
-const sanitize = (s: string) => s.replace(/\s+/g, ' ').trim();
 
 export async function fetchRedditPosts(
   fetcher: FetchPort,
   subreddit: string,
   limit: number,
   period: string,
-): Promise<Post[]> {
-  const postChildren = await fetchAllPosts(fetcher, subreddit, limit, period);
-  if (postChildren.length === 0) {
+): Promise<{ posts: Post[]; fetchUrl: string }> {
+  const fetchUrl = `https://oauth.reddit.com/r/${encodeURIComponent(subreddit)}/top.json?limit=${limit}&t=${period}&raw_json=1`;
+
+  const token = await getRedditAccessToken(fetcher);
+  const headers = {
+    ...BASE_HEADERS,
+    Authorization: `Bearer ${token}`,
+  };
+
+  const json = await fetchWithRateLimit(fetcher, fetchUrl, { headers });
+  if (json == null) return { posts: [], fetchUrl };
+
+  const parsed = PostsResponseSchema.safeParse(json);
+  if (!parsed.success) {
     console.error(
-      `[fetchRedditPosts] No posts found for subreddit "${subreddit}".`,
+      `[fetchRedditPosts] URL: ${fetchUrl}, Errors:`,
+      parsed.error.flatten(),
     );
-    return [];
+    return { posts: [], fetchUrl };
   }
 
-  const filtered = postChildren.filter((w) => w.data.ups >= MIN_UPVOTES);
-  if (filtered.length === 0) {
-    console.error(
-      `[fetchRedditPosts] No posts with enough upvotes found (min ${MIN_UPVOTES}).`,
-    );
-    return [];
-  }
+  const children = parsed.data.data.children;
+  const filtered = children.filter((w) => w.data.ups >= MIN_UPVOTES);
 
   const posts: Post[] = filtered.map(({ data }) => ({
     id: data.id,
@@ -124,5 +135,5 @@ export async function fetchRedditPosts(
     content: sanitize(data.selftext),
   }));
 
-  return posts;
+  return { posts, fetchUrl };
 }
