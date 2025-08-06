@@ -20,8 +20,8 @@
   margin-left: auto;
   margin-right: auto;
   text-align: center;
-  font-size: var(--font-size-normal);
-  font-weight: var(--font-weight-ui);
+  font-size: var(--font-size-content);
+  font-weight: var(--font-weight-content);
   font-family: var(--font-base);
   padding-bottom: 20px;
   cursor: pointer;
@@ -52,8 +52,8 @@
   column-gap: 2rem;
   row-gap: 0.4rem;
 
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-ui);
+  font-size: var(--font-size-content);
+  font-weight: var(--font-weight-content);
   font-family: var(--font-base);
 }
 
