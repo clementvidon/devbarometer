@@ -8,7 +8,7 @@ export function Ticker() {
 
   useEffect(() => {
     const baseUrl = import.meta.env.BASE_URL ?? '/';
-    void fetch(baseUrl + 'headlines.json')
+    void fetch(baseUrl + 'ticker.json')
       .then((r) => (r.ok ? r.json() : []))
       .then((data: unknown) => {
         if (Array.isArray(data) && data.every(isHeadline)) {
@@ -30,10 +30,10 @@ export function Ticker() {
     <div className={styles.ticker}>
       <div className={styles.track}>
         <div className={styles.row}>
-          {[...headlines, ...headlines].map(({ title, url }, i) => (
+          {[...headlines, ...headlines].map(({ title, source }, i) => (
             <a
               key={i}
-              href={url}
+              href={source}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.item}
