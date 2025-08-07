@@ -1,5 +1,5 @@
+import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles.ts';
 import { analyzeEmotionProfiles } from '../../usecase/analyzeEmotionProfiles.ts';
-import { compressEmotionProfiles } from '../../usecase/compressEmotionProfiles.ts';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
 import { filterRelevantPosts } from '../../usecase/filterRelevantPosts.ts';
 import { generateEmotionProfileReport } from '../../usecase/generateEmotionProfileReport.ts';
@@ -53,7 +53,7 @@ export class AgentService {
       '[AgentService] Completed emotionProfile analysis on selected posts.',
     );
 
-    const aggregatedEmotionProfile = compressEmotionProfiles(
+    const aggregatedEmotionProfile = aggregateEmotionProfiles(
       emotionProfilePerPost,
     );
     console.log('[AgentService] Computed aggregated emotionProfile.');

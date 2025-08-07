@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { EmotionProfile } from '../core/entity/EmotionProfile.ts';
-import { compressEmotionProfiles } from './compressEmotionProfiles.ts';
+import { aggregateEmotionProfiles } from './aggregateEmotionProfiles.ts';
 
 const fakeEmotionProfiles: EmotionProfile[] = [
   {
@@ -47,10 +47,10 @@ const fakeEmotionProfiles: EmotionProfile[] = [
   },
 ];
 
-describe('compressEmotionProfiles', () => {
+describe('aggregateEmotionProfiles', () => {
   describe('Happy path', () => {
     test('calculates weighted averages correctly', () => {
-      const result = compressEmotionProfiles(fakeEmotionProfiles);
+      const result = aggregateEmotionProfiles(fakeEmotionProfiles);
 
       expect(result.emotions.anger).toBeCloseTo(0.6667, 4);
       expect(result.tonalities.positive).toBeCloseTo(0.1333, 4);
@@ -59,7 +59,7 @@ describe('compressEmotionProfiles', () => {
 
   describe('Error handling', () => {
     test('returns empty average if no emotionProfiles are provided', () => {
-      const result = compressEmotionProfiles([]);
+      const result = aggregateEmotionProfiles([]);
 
       expect(Object.values(result.emotions).every((v) => v === 0)).toBe(true);
       expect(Object.values(result.tonalities).every((v) => v === 0)).toBe(true);

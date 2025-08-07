@@ -46,8 +46,8 @@ vi.mock('../../usecase/filterRelevantPosts', () => ({
 vi.mock('../../usecase/analyzeEmotionProfiles', () => ({
   analyzeEmotionProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
 }));
-vi.mock('../../usecase/compressEmotionProfiles', () => ({
-  compressEmotionProfiles: vi.fn().mockReturnValue({
+vi.mock('../../usecase/aggregateEmotionProfiles', () => ({
+  aggregateEmotionProfiles: vi.fn().mockReturnValue({
     emotions: {
       anger: 0,
       fear: 0,
