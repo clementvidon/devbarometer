@@ -1,8 +1,8 @@
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { AverageSentiment } from '../core/entity/Sentiment.ts';
-import type { SentimentReport } from '../core/entity/SentimentReport.ts';
-import { generateSentimentReport } from './generateSentimentReport.ts';
+import type { AverageEmotionProfile } from '../core/entity/EmotionProfile.ts';
+import type { EmotionProfileReport } from '../core/entity/EmotionProfileReport.ts';
+import { generateEmotionProfileReport } from './generateEmotionProfileReport.ts';
 
 const fakeLLMResponse = `
 {
@@ -11,7 +11,7 @@ const fakeLLMResponse = `
 }
 `;
 
-const fakeAverageSentiment: AverageSentiment = {
+const fakeAverageEmotionProfile: AverageEmotionProfile = {
   emotions: {
     anger: 0,
     fear: 0,
@@ -26,12 +26,12 @@ const fakeAverageSentiment: AverageSentiment = {
   },
 };
 
-const fakeSentimentReport: SentimentReport = {
+const fakeEmotionProfileReport: EmotionProfileReport = {
   text: 'Le climat est globalement positif avec quelques nuages.',
   emoji: '🌤️',
 };
 
-describe('generateSentimentReport', () => {
+describe('generateEmotionProfileReport', () => {
   describe('Happy path', () => {
     let llm: { run: Mock };
 
@@ -42,10 +42,13 @@ describe('generateSentimentReport', () => {
       };
     });
 
-    test('returns valid SentimentReport from correct LLM output', async () => {
-      const report = await generateSentimentReport(fakeAverageSentiment, llm);
+    test('returns valid EmotionProfileReport from correct LLM output', async () => {
+      const report = await generateEmotionProfileReport(
+        fakeAverageEmotionProfile,
+        llm,
+      );
 
-      expect(report).toEqual(fakeSentimentReport);
+      expect(report).toEqual(fakeEmotionProfileReport);
     });
   });
 });

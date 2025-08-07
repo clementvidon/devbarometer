@@ -13,13 +13,13 @@ describe('generateStatic', () => {
     vi.clearAllMocks();
 
     const mockAgent = {
-      getLastSentimentReport: vi
+      getLastEmotionProfileReport: vi
         .fn()
         .mockResolvedValue({ text: 'report', emoji: '☀️' }),
       getLastTopHeadlines: vi.fn().mockResolvedValue(['Post A', 'Post B']),
-      getAverageSentiments: vi
+      getAverageEmotionProfiles: vi
         .fn()
-        .mockResolvedValue([{ createdAt: '2025-08-03', average: {} }]), // ✅ ajouté
+        .mockResolvedValue([{ createdAt: '2025-08-03', average: {} }]),
     };
 
     vi.spyOn(agentModule, 'makeAgentService').mockImplementation(

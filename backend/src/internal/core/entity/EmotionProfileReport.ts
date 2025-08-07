@@ -13,7 +13,7 @@ export const WEATHER_EMOJIS = [
 
 export type WeatherEmoji = (typeof WEATHER_EMOJIS)[number];
 
-export interface SentimentReport {
+export interface EmotionProfileReport {
   text: string;
   emoji: WeatherEmoji;
 }

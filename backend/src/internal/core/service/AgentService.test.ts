@@ -1,7 +1,10 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
-import type { EmotionScores, Sentiment } from '../entity/Sentiment.ts';
-import type { SentimentReport } from '../entity/SentimentReport.ts';
+import type {
+  EmotionProfile,
+  EmotionScores,
+} from '../entity/EmotionProfile.ts';
+import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
 import type { FetchPort } from '../port/FetchPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
@@ -38,11 +41,11 @@ vi.mock('../../usecase/fetchRedditPosts', () => ({
 vi.mock('../../usecase/filterRelevantPosts', () => ({
   filterRelevantPosts: vi.fn().mockResolvedValue(['relevantPost']),
 }));
-vi.mock('../../usecase/analyzeSentiments', () => ({
-  analyzeSentiments: vi.fn().mockResolvedValue(['sentiment']),
+vi.mock('../../usecase/analyzeEmotionProfiles', () => ({
+  analyzeEmotionProfiles: vi.fn().mockResolvedValue(['sentiment']),
 }));
-vi.mock('../../usecase/compressSentiments', () => ({
-  compressSentiments: vi.fn().mockReturnValue({
+vi.mock('../../usecase/compressEmotionProfiles', () => ({
+  compressEmotionProfiles: vi.fn().mockReturnValue({
     emotions: {
       anger: 0,
       fear: 0,
@@ -57,11 +60,11 @@ vi.mock('../../usecase/compressSentiments', () => ({
     },
   }),
 }));
-vi.mock('../../usecase/generateSentimentReport', () => ({
-  generateSentimentReport: vi.fn().mockResolvedValue({
+vi.mock('../../usecase/generateEmotionProfileReport', () => ({
+  generateEmotionProfileReport: vi.fn().mockResolvedValue({
     text: 'Everything looks great!',
     emoji: '☀️',
-  } satisfies SentimentReport),
+  } satisfies EmotionProfileReport),
 }));
 
 describe('AgentService updateReport', () => {
@@ -123,7 +126,7 @@ function createMockSnapshot(
     posts: [],
     relevantPosts: [],
     sentimentPerPost: [],
-    averageSentiment: {
+    averageEmotionProfile: {
       emotions: mockEmotions,
     },
     report: {
@@ -134,7 +137,7 @@ function createMockSnapshot(
   };
 }
 
-describe('AgentService getLastSentimentReport', () => {
+describe('AgentService getLastEmotionProfileReport', () => {
   let persistence: PersistencePort;
   let agent: AgentService;
 
@@ -148,7 +151,7 @@ describe('AgentService getLastSentimentReport', () => {
   });
 
   test('returns the latest sentiment report if available', async () => {
-    const expected: SentimentReport = {
+    const expected: EmotionProfileReport = {
       text: 'Latest sentiment',
       emoji: '☀️',
     };
@@ -156,19 +159,19 @@ describe('AgentService getLastSentimentReport', () => {
     const snapshot = createMockSnapshot({ report: expected });
     vi.mocked(persistence.getSnapshots).mockResolvedValue([snapshot]);
 
-    const result = await agent.getLastSentimentReport();
+    const result = await agent.getLastEmotionProfileReport();
     expect(result).toEqual(expected);
   });
 
   test('returns null if no snapshots exist', async () => {
     vi.mocked(persistence.getSnapshots).mockResolvedValue([]);
 
-    const result = await agent.getLastSentimentReport();
+    const result = await agent.getLastEmotionProfileReport();
     expect(result).toBeNull();
   });
 });
 
-describe('AgentService getLastSentiments', () => {
+describe('AgentService getLastEmotionProfiles', () => {
   let persistence: PersistencePort;
   let agent: AgentService;
 
@@ -182,7 +185,7 @@ describe('AgentService getLastSentiments', () => {
   });
 
   test('returns all sentiments from latest snapshot if available', async () => {
-    const expected: Sentiment[] = [
+    const expected: EmotionProfile[] = [
       {
         title:
           'On m’a demandé de construire un agent LLM complet pour un test d’entretien',
@@ -202,14 +205,14 @@ describe('AgentService getLastSentiments', () => {
     const snapshot = createMockSnapshot({ sentimentPerPost: expected });
     vi.mocked(persistence.getSnapshots).mockResolvedValue([snapshot]);
 
-    const result = await agent.getLastSentiments();
+    const result = await agent.getLastEmotionProfiles();
     expect(result).toEqual(expected);
   });
 
   test('returns null if no snapshots exist', async () => {
     vi.mocked(persistence.getSnapshots).mockResolvedValue([]);
 
-    const result = await agent.getLastSentiments();
+    const result = await agent.getLastEmotionProfiles();
     expect(result).toBeNull();
   });
 });

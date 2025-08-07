@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { WeatherEmoji } from '../../../core/entity/SentimentReport.ts';
+import type { WeatherEmoji } from '../../../core/entity/EmotionProfileReport.ts';
 import type { PipelineSnapshot } from '../../../core/types/PipelineSnapshot.ts';
 import { LowdbAdapter } from './LowdbAdapter.ts';
 
@@ -43,7 +43,7 @@ function fakeSnapshot(
     posts: [],
     relevantPosts: [],
     sentimentPerPost: [],
-    averageSentiment: { emotions },
+    averageEmotionProfile: { emotions },
     report: { text: 'Fake report', emoji: '☀️' as WeatherEmoji },
     ...overrides,
   };

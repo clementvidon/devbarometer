@@ -1,4 +1,3 @@
-// backend/src/internal/adapter/driving/web/ReportController.test.ts
 import request from 'supertest';
 import {
   afterEach,
@@ -9,47 +8,39 @@ import {
   type MockInstance,
 } from 'vitest';
 
-import type { SentimentReport } from '../../../core/entity/SentimentReport.ts';
+import type { EmotionProfileReport } from '../../../core/entity/EmotionProfileReport.ts';
 import type { AgentService } from '../../../core/service/AgentService.ts';
 import { makeReportController } from './ReportController.ts';
 
-/* ------------------------------------------------------------------ */
-/* Helpers : signatures EXACTES attendues par AgentService            */
-/* ------------------------------------------------------------------ */
-type GetLastSentimentReport = () => Promise<SentimentReport | null>;
+type GetLastEmotionProfileReport = () => Promise<EmotionProfileReport | null>;
 type UpdateReport = (
   subreddit?: string,
   limit?: number,
   period?: string,
 ) => Promise<void>;
 
-// ------------------------------------------------------------------
-// Mocks
-let getLastSentimentReport: MockInstance<GetLastSentimentReport>;
+let getLastEmotionProfileReport: MockInstance<GetLastEmotionProfileReport>;
 let updateReport: MockInstance<UpdateReport>;
 let agentStub: AgentService;
 
 beforeEach(() => {
-  getLastSentimentReport = vi.fn<GetLastSentimentReport>();
+  getLastEmotionProfileReport = vi.fn<GetLastEmotionProfileReport>();
   updateReport = vi.fn<UpdateReport>();
 
-  // ⬇️  on ne fournit QUE les méthodes publiques utilisées
-  //     puis on caste en deux temps pour satisfaire TS
   agentStub = {
-    getLastSentimentReport,
+    getLastEmotionProfileReport,
     updateReport,
   } as unknown as AgentService;
 });
 
 afterEach(() => vi.clearAllMocks());
 
-/* --------------------------- GET /report ------------------------ */
-test('GET /report → 200 avec un SentimentReport', async () => {
-  const fakeReport: SentimentReport = {
+test('GET /report → 200 avec un EmotionProfileReport', async () => {
+  const fakeReport: EmotionProfileReport = {
     text: 'dark clouds ahead',
     emoji: '🌧️',
   };
-  getLastSentimentReport.mockResolvedValue(fakeReport);
+  getLastEmotionProfileReport.mockResolvedValue(fakeReport);
 
   const res = await request(makeReportController(agentStub)).get('/report');
 
@@ -58,7 +49,7 @@ test('GET /report → 200 avec un SentimentReport', async () => {
 });
 
 test('GET /report → 404 quand aucun rapport', async () => {
-  getLastSentimentReport.mockResolvedValue(null);
+  getLastEmotionProfileReport.mockResolvedValue(null);
 
   const res = await request(makeReportController(agentStub)).get('/report');
 
@@ -66,7 +57,6 @@ test('GET /report → 404 quand aucun rapport', async () => {
   expect(res.body).toEqual({ error: 'No report found' });
 });
 
-/* --------------------------- POST /report ----------------------- */
 test('POST /report → 200 quand updateReport réussit', async () => {
   updateReport.mockResolvedValue();
 
