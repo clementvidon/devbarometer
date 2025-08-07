@@ -1,0 +1,21 @@
+[
+  {
+    "createdAt": "2025-08-07T21:27:35.610Z",
+    "emotions": {
+      "joy": 0.36838541666666663,
+      "fear": 0.21526041666666665,
+      "anger": 0.3582291666666666,
+      "trust": 0.20463541666666668,
+      "disgust": 0.3782291666666666,
+      "sadness": 0.3730208333333333
+    },
+    "tonalities": {
+      "negative": 0.6692187499999999,
+      "positive": 0.2677604166666666,
+      "negative_surprise": 0.583020833333333,
+      "positive_surprise": 0.14572916666666666,
+      "optimistic_anticipation": 0.2960416666666667,
+      "pessimistic_anticipation": 0.5107291666666666
+    }
+  }
+]
