@@ -1,23 +1,32 @@
 export interface EmotionScores {
   anger: number;
   fear: number;
-  anticipation: number;
   trust: number;
-  surprise: number;
   sadness: number;
   joy: number;
   disgust: number;
-  negative: number;
-  positive: number;
 }
 
-export interface AverageEmotionProfile {
+export interface TonalityScores {
+  positive: number;
+  negative: number;
+  optimistic_anticipation: number;
+  pessimistic_anticipation: number;
+  positive_surprise: number;
+  negative_surprise: number;
+}
+
+export interface AggregatedEmotionProfile {
+  date: string;
+  count: number;
   emotions: EmotionScores;
+  tonalities: TonalityScores;
 }
 
 export interface EmotionProfile {
-  postId: string;
   title: string;
-  upvotes: number;
+  source: string;
+  weight: number;
   emotions: EmotionScores;
+  tonalities: TonalityScores;
 }

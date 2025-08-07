@@ -17,9 +17,9 @@ describe('generateStatic', () => {
         .fn()
         .mockResolvedValue({ text: 'report', emoji: '☀️' }),
       getLastTopHeadlines: vi.fn().mockResolvedValue(['Post A', 'Post B']),
-      getAverageEmotionProfiles: vi
+      getAggregatedEmotionProfiles: vi
         .fn()
-        .mockResolvedValue([{ createdAt: '2025-08-03', average: {} }]),
+        .mockResolvedValue([{ createdAt: '2025-08-03', aggregate: {} }]),
     };
 
     vi.spyOn(agentModule, 'makeAgentService').mockImplementation(
@@ -43,8 +43,8 @@ describe('generateStatic', () => {
     );
 
     expect(mockWrite).toHaveBeenCalledWith(
-      expect.stringContaining('average-sentiments.json'),
-      JSON.stringify([{ createdAt: '2025-08-03', average: {} }], null, 2),
+      expect.stringContaining('aggregated-emotionprofiles.json'),
+      JSON.stringify([{ createdAt: '2025-08-03', aggregate: {} }], null, 2),
       'utf-8',
     );
   });

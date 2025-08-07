@@ -4,6 +4,24 @@ import type { EmotionProfile } from '../core/entity/EmotionProfile.ts';
 import type { Post } from '../core/entity/Post.ts';
 import { analyzeEmotionProfiles } from './analyzeEmotionProfiles.ts';
 
+const fakeEmotions = {
+  joy: 0,
+  sadness: 0,
+  anger: 0,
+  fear: 0,
+  trust: 0,
+  disgust: 0,
+} as const;
+
+const fakeTonalities = {
+  positive: 0,
+  negative: 0,
+  optimistic_anticipation: 0,
+  pessimistic_anticipation: 0,
+  positive_surprise: 0,
+  negative_surprise: 0,
+} as const;
+
 const fakePosts: Post[] = [
   {
     id: 'idA',
@@ -20,21 +38,11 @@ const fakePosts: Post[] = [
 ];
 
 const fakeEmotionProfile: EmotionProfile = {
-  postId: 'dummy',
   title: 'dummy',
-  upvotes: 0,
-  emotions: {
-    anger: 0.1,
-    fear: 0.2,
-    anticipation: 0.3,
-    trust: 0.4,
-    surprise: 0.5,
-    sadness: 0.1,
-    joy: 0.6,
-    disgust: 0.05,
-    negative: 0.15,
-    positive: 0.85,
-  },
+  source: 'dummy',
+  weight: 0,
+  emotions: fakeEmotions,
+  tonalities: fakeTonalities,
 };
 
 describe('analyzeEmotionProfiles', () => {
@@ -50,15 +58,16 @@ describe('analyzeEmotionProfiles', () => {
       };
     });
 
-    test('analyzes data points and returns sentiment results', async () => {
-      const sentiments = await analyzeEmotionProfiles(fakePosts, llm);
+    test('analyzes data points and returns emotionProfile results', async () => {
+      const emotionProfiles = await analyzeEmotionProfiles(fakePosts, llm);
 
-      expect(sentiments).toHaveLength(2);
-      sentiments.forEach((res, index) => {
-        expect(res.postId).toBe(fakePosts[index].id);
+      expect(emotionProfiles).toHaveLength(2);
+      emotionProfiles.forEach((res, index) => {
         expect(res.title).toBe(fakePosts[index].title);
-        expect(res.upvotes).toBe(fakePosts[index].upvotes);
+        expect(res.source).toBe(fakePosts[index].id);
+        expect(res.weight).toBe(fakePosts[index].upvotes);
         expect(res.emotions).toEqual(fakeEmotionProfile.emotions);
+        expect(res.tonalities).toEqual(fakeEmotionProfile.tonalities);
       });
     });
 
@@ -74,14 +83,17 @@ describe('analyzeEmotionProfiles', () => {
 
       test('returns fallback emotions if LLM call fails', async () => {
         llm.run.mockRejectedValue(new Error('LLM Failure'));
-        const sentiments = await analyzeEmotionProfiles(fakePosts, llm);
+        const emotionProfiles = await analyzeEmotionProfiles(fakePosts, llm);
 
-        expect(sentiments).toHaveLength(2);
-        sentiments.forEach((res, index) => {
-          expect(res.postId).toBe(fakePosts[index].id);
+        expect(emotionProfiles).toHaveLength(2);
+        emotionProfiles.forEach((res, index) => {
           expect(res.title).toBe(fakePosts[index].title);
-          expect(res.upvotes).toBe(fakePosts[index].upvotes);
+          expect(res.source).toBe(fakePosts[index].id);
+          expect(res.weight).toBe(fakePosts[index].upvotes);
           expect(Object.values(res.emotions)).toSatisfy((values: number[]) =>
+            values.every((v) => v === 0),
+          );
+          expect(Object.values(res.tonalities)).toSatisfy((values: number[]) =>
             values.every((v) => v === 0),
           );
         });

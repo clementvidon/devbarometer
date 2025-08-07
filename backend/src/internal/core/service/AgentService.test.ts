@@ -1,9 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
-import type {
-  EmotionProfile,
-  EmotionScores,
-} from '../entity/EmotionProfile.ts';
+import type { EmotionProfile } from '../entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
 import type { FetchPort } from '../port/FetchPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
@@ -11,17 +8,22 @@ import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { PipelineSnapshot } from '../types/PipelineSnapshot.ts';
 import { AgentService } from './AgentService.ts';
 
-const mockEmotions: EmotionScores = {
+const fakeEmotions = {
+  joy: 0,
+  sadness: 0,
   anger: 0,
   fear: 0,
-  anticipation: 0,
   trust: 0,
-  surprise: 0,
-  sadness: 0,
-  joy: 0,
   disgust: 0,
-  negative: 0,
+} as const;
+
+const fakeTonalities = {
   positive: 0,
+  negative: 0,
+  optimistic_anticipation: 0,
+  pessimistic_anticipation: 0,
+  positive_surprise: 0,
+  negative_surprise: 0,
 } as const;
 
 const fetcher: FetchPort = {
@@ -42,7 +44,7 @@ vi.mock('../../usecase/filterRelevantPosts', () => ({
   filterRelevantPosts: vi.fn().mockResolvedValue(['relevantPost']),
 }));
 vi.mock('../../usecase/analyzeEmotionProfiles', () => ({
-  analyzeEmotionProfiles: vi.fn().mockResolvedValue(['sentiment']),
+  analyzeEmotionProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
 }));
 vi.mock('../../usecase/compressEmotionProfiles', () => ({
   compressEmotionProfiles: vi.fn().mockReturnValue({
@@ -125,12 +127,15 @@ function createMockSnapshot(
     fetchUrl: 'https://reddit.com/mock',
     posts: [],
     relevantPosts: [],
-    sentimentPerPost: [],
-    averageEmotionProfile: {
-      emotions: mockEmotions,
+    emotionProfilePerPost: [],
+    aggregatedEmotionProfile: {
+      date: '2025-08-03',
+      count: 1,
+      emotions: fakeEmotions,
+      tonalities: fakeTonalities,
     },
     report: {
-      text: 'Latest sentiment',
+      text: 'Latest emotionProfile',
       emoji: '☀️',
     },
     ...overrides,
@@ -150,9 +155,9 @@ describe('AgentService getLastEmotionProfileReport', () => {
     vi.clearAllMocks();
   });
 
-  test('returns the latest sentiment report if available', async () => {
+  test('returns the latest emotionProfile report if available', async () => {
     const expected: EmotionProfileReport = {
-      text: 'Latest sentiment',
+      text: 'Latest emotionProfile',
       emoji: '☀️',
     };
 
@@ -184,25 +189,27 @@ describe('AgentService getLastEmotionProfiles', () => {
     vi.clearAllMocks();
   });
 
-  test('returns all sentiments from latest snapshot if available', async () => {
+  test('returns all emotionProfiles from latest snapshot if available', async () => {
     const expected: EmotionProfile[] = [
       {
         title:
           'On m’a demandé de construire un agent LLM complet pour un test d’entretien',
-        postId: '1m84v47',
-        upvotes: 212,
-        emotions: mockEmotions,
+        source: '1m84v47',
+        weight: 212,
+        emotions: fakeEmotions,
+        tonalities: fakeTonalities,
       },
       {
         title:
           'Ils m’ont fait bosser 6 heures sur un test… alors qu’ils avaient déjà choisi quelqu’un',
-        postId: '1m78fpc',
-        upvotes: 158,
-        emotions: mockEmotions,
+        source: '1m78fpc',
+        weight: 158,
+        emotions: fakeEmotions,
+        tonalities: fakeTonalities,
       },
     ];
 
-    const snapshot = createMockSnapshot({ sentimentPerPost: expected });
+    const snapshot = createMockSnapshot({ emotionProfilePerPost: expected });
     vi.mocked(persistence.getSnapshots).mockResolvedValue([snapshot]);
 
     const result = await agent.getLastEmotionProfiles();
@@ -217,17 +224,53 @@ describe('AgentService getLastEmotionProfiles', () => {
   });
 });
 
-test('AgentService getLastTopHeadlines returns titles of N top upvoted posts', async () => {
-  const sentimentPerPost = [
-    { title: 'Post A', upvotes: 10, postId: 'a', emotions: mockEmotions },
-    { title: 'Post B', upvotes: 30, postId: 'b', emotions: mockEmotions },
-    { title: 'Post C', upvotes: 20, postId: 'c', emotions: mockEmotions },
-    { title: 'Post D', upvotes: 5, postId: 'd', emotions: mockEmotions },
-    { title: 'Post E', upvotes: 50, postId: 'e', emotions: mockEmotions },
-    { title: 'Post F', upvotes: 15, postId: 'f', emotions: mockEmotions },
+test('AgentService getLastTopHeadlines returns titles of N top weighted emotionProfile', async () => {
+  const emotionProfilePerPost = [
+    {
+      title: 'Post A',
+      source: 'a',
+      weight: 10,
+      emotions: fakeEmotions,
+      tonalities: fakeTonalities,
+    },
+    {
+      title: 'Post B',
+      source: 'b',
+      weight: 30,
+      emotions: fakeEmotions,
+      tonalities: fakeTonalities,
+    },
+    {
+      title: 'Post C',
+      source: 'c',
+      weight: 20,
+      emotions: fakeEmotions,
+      tonalities: fakeTonalities,
+    },
+    {
+      title: 'Post D',
+      source: 'd',
+      weight: 5,
+      emotions: fakeEmotions,
+      tonalities: fakeTonalities,
+    },
+    {
+      title: 'Post E',
+      source: 'e',
+      weight: 50,
+      emotions: fakeEmotions,
+      tonalities: fakeTonalities,
+    },
+    {
+      title: 'Post F',
+      source: 'f',
+      weight: 15,
+      emotions: fakeEmotions,
+      tonalities: fakeTonalities,
+    },
   ];
 
-  const snapshot = createMockSnapshot({ sentimentPerPost });
+  const snapshot = createMockSnapshot({ emotionProfilePerPost });
 
   const persistence: PersistencePort = {
     storeSnapshot: vi.fn(),
@@ -240,18 +283,18 @@ test('AgentService getLastTopHeadlines returns titles of N top upvoted posts', a
   expect(result).toEqual([
     {
       title: 'Post E',
-      upvotes: 50,
-      url: 'https://www.reddit.com/comments/e',
+      source: 'e',
+      weight: 50,
     },
     {
       title: 'Post B',
-      upvotes: 30,
-      url: 'https://www.reddit.com/comments/b',
+      source: 'b',
+      weight: 30,
     },
     {
       title: 'Post C',
-      upvotes: 20,
-      url: 'https://www.reddit.com/comments/c',
+      source: 'c',
+      weight: 20,
     },
   ]);
 });

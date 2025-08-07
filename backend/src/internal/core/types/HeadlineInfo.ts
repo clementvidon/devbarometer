@@ -1,5 +1,5 @@
 export type HeadlineInfo = {
   title: string;
-  upvotes: number;
-  url: string;
+  weight: number;
+  source: string;
 };

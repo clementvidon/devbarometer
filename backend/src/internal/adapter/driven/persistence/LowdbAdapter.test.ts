@@ -21,17 +21,22 @@ vi.mock('uuid', () => ({
   v4: vi.fn(() => 'mocked-uuid'),
 }));
 
-const emotions = {
-  joy: 1,
+const fakeEmotions = {
+  joy: 0,
   sadness: 0,
   anger: 0,
   fear: 0,
-  anticipation: 0,
   trust: 0,
-  surprise: 0,
   disgust: 0,
+} as const;
+
+const fakeTonalities = {
   positive: 0,
   negative: 0,
+  optimistic_anticipation: 0,
+  pessimistic_anticipation: 0,
+  positive_surprise: 0,
+  negative_surprise: 0,
 } as const;
 
 function fakeSnapshot(
@@ -42,8 +47,13 @@ function fakeSnapshot(
     fetchUrl: 'https://reddit.com/r/anySub/top',
     posts: [],
     relevantPosts: [],
-    sentimentPerPost: [],
-    averageEmotionProfile: { emotions },
+    emotionProfilePerPost: [],
+    aggregatedEmotionProfile: {
+      date: '2025-08-03',
+      count: 1,
+      emotions: fakeEmotions,
+      tonalities: fakeTonalities,
+    },
     report: { text: 'Fake report', emoji: '☀️' as WeatherEmoji },
     ...overrides,
   };
