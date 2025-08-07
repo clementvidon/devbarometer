@@ -9,70 +9,101 @@ import { WEATHER_EMOJIS } from '../core/entity/EmotionProfileReport.ts';
 import type { LlmPort } from '../core/port/LlmPort.ts';
 import type { AgentMessage } from '../core/types/AgentMessage.ts';
 
-type ToneValue = 'neutre' | 'positif' | 'négatif' | 'polarisé';
-type ToneStrength = 'faible' | 'modéré' | 'fort';
+/* pickStandoutsByScore */
+
+type Standout = { name: keyof EmotionScores; score: number };
+
+const MIN_STANDOUT = 0.5;
+const MAX_STANDOUTS = 3;
+const REL_GAP = 0.1;
+
+function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
+  const sorted = (Object.entries(emotions) as [keyof EmotionScores, number][])
+    .sort((a, b) => b[1] - a[1])
+    .map(([name, score]) => ({ name, score }));
+
+  const top = sorted.filter((e) => e.score >= MIN_STANDOUT);
+  if (top.length === 0) return [];
+
+  const first = top[0];
+  const second = top[1];
+
+  if (!second) return [first];
+  if (first.score - second.score > REL_GAP) return [first];
+  return [first, second].slice(0, MAX_STANDOUTS);
+}
+
+/* evaluateTone */
 
 type Tone = {
-  value: ToneValue;
-  strength?: ToneStrength;
+  value: 'neutral' | 'positive' | 'negative' | 'polarized';
+  strength?: 'very weak' | 'weak' | 'moderate' | 'strong' | 'very strong';
 };
 
-type EmotionSummary = {
-  majorEmotions: { name: string; strength: string }[];
+function getStrengthLabel(score: number): Tone['strength'] {
+  return score < 0.2
+    ? 'very weak'
+    : score < 0.4
+      ? 'weak'
+      : score < 0.6
+        ? 'moderate'
+        : score < 0.8
+          ? 'strong'
+          : 'very strong';
+}
+
+const POLARITY_MIN = 0.3;
+const POLARITY_DELTA = 0.1;
+const NEUTRAL_DELTA = 0.1;
+
+function evaluateTone(positive: number, negative: number): Tone {
+  const delta = positive - negative;
+  const absDelta = Math.abs(delta);
+  const max = Math.max(positive, negative);
+  const min = Math.min(positive, negative);
+
+  if (max > POLARITY_MIN && min > POLARITY_MIN && absDelta < POLARITY_DELTA) {
+    return {
+      value: 'polarized',
+      strength: getStrengthLabel(max),
+    };
+  }
+
+  if (absDelta < NEUTRAL_DELTA) {
+    return { value: 'neutral' };
+  }
+
+  return {
+    value: delta > 0 ? 'positive' : 'negative',
+    strength: getStrengthLabel(absDelta),
+  };
+}
+
+/* summarizeEmotionProfile */
+
+type EmotionProfileSummary = {
+  emotions: { name: keyof EmotionScores; strength: Tone['strength'] }[];
+  standoutEmotions: Standout[];
   valence: Tone;
   anticipation: Tone;
   surprise: Tone;
 };
 
-function evaluateTone(positive: number, negative: number): Tone {
-  const delta = positive - negative;
-  const absDelta = Math.abs(delta);
-
-  if (absDelta < 0.15 && positive > 0.4 && negative > 0.4) {
-    return { value: 'polarisé' };
-  }
-
-  if (delta >= 0.15) {
-    const strength: ToneStrength =
-      delta < 0.3 ? 'faible' : delta < 0.5 ? 'modéré' : 'fort';
-    return { value: 'positif', strength };
-  }
-
-  if (delta <= -0.15) {
-    const strength: ToneStrength =
-      -delta < 0.3 ? 'faible' : -delta < 0.5 ? 'modéré' : 'fort';
-    return { value: 'négatif', strength };
-  }
-
-  return { value: 'neutre' };
-}
-
-function strengthLabel(score: number): string {
-  return score < 0.2
-    ? 'faible'
-    : score < 0.4
-      ? 'modéré'
-      : score < 0.6
-        ? 'fort'
-        : score < 0.8
-          ? 'très fort'
-          : 'extrême';
-}
-
 export function summarizeEmotionProfile(
   profile: AggregatedEmotionProfile,
-): EmotionSummary {
+): EmotionProfileSummary {
   const { emotions, tonalities } = profile;
 
-  const majorEmotions = (
+  const summary = (
     Object.entries(emotions) as [keyof EmotionScores, number][]
   ).map(([name, score]) => ({
     name,
-    strength: strengthLabel(score),
+    strength: getStrengthLabel(score),
   }));
 
   return {
-    majorEmotions,
+    emotions: summary,
+    standoutEmotions: pickStandoutsByScore(profile.emotions),
     valence: evaluateTone(tonalities.positive, tonalities.negative),
     anticipation: evaluateTone(
       tonalities.optimistic_anticipation,
@@ -85,6 +116,8 @@ export function summarizeEmotionProfile(
   };
 }
 
+/* generateEmotionProfileReport */
+
 const LLMOutputSchema = z.object({
   text: z.string().max(200),
   emoji: z.enum(WEATHER_EMOJIS),
@@ -95,25 +128,39 @@ const FALLBACK = {
   emoji: '☁️',
 } satisfies EmotionProfileReport;
 
-function makeMessages(emotionsText: string): readonly AgentMessage[] {
+function makeMessages(summary: EmotionProfileSummary): readonly AgentMessage[] {
   return [
     {
       role: 'system' as const,
       content: `
-        1. **"text"** : À partir de l'objet émotions donné, écris une **phrase courte (≤ 15 mots)** qui traduit fidèlement l’atmosphère émotionnelle en utilisant un langage météo. Assure toi que la phrase ait un sens et soit pertinente.
-        2. **"emoji"** : Parmi : ${WEATHER_EMOJIS.join(' ')} choisi le symbol le plus évocateur de la phrase **"text"**.
+      Tu es un expert en analyse émotionnelle qui traduit un profil émotionnel en une **brève description météo**.
 
-        Retourne un JSON brut avec uniquement ces deux clés.
-        `.trim(),
+        Tu recevras un objet JSON contenant :
+        - un champ "emotions" : liste des 6 émotions humaines de base avec leur intensité,
+      - un champ "standoutEmotions" : liste (éventuellement vide) des émotions dont l'intensité ≥ ${MIN_STANDOUT}, triées par intensité décroissante,
+      - trois tonalités globales : "valence", "anticipation" et "surprise" (avec direction et force).
+
+        Ta tâche :
+
+        1. Crée une **phrase courte (max 15 mots)** décrivant l'ambiance émotionnelle, en t’inspirant du style météo.
+        2. Si toutes les émotions et tonalités sont ≤ "moderate" et "standoutEmotions" est vide : décris une atmosphère **neutre, indécise ou calme**.
+        3. Sinon, mentionne uniquement ce qui ressort clairement : tonalités ≥ "moderate" et émotions dans "standoutEmotions".
+        4. Évite les redondances et n’invente rien qui ne soit pas présent dans les données.
+        5. Assure-toi que la phrase ait un sens, soit grammaticalement correcte et pertinente.
+        6. Choisis ensuite l'emoji météo **le plus évocateur** de ta phrase parmi : ${WEATHER_EMOJIS.join(' ')}
+
+      Retourne uniquement un JSON brut :
+        {
+        "text": string,
+        "emoji": string
+      }
+      `.trim(),
     },
     {
       role: 'user' as const,
-      content: `
-      Voici l'objet émotion JSON :
-        ${emotionsText}
-      `.trim(),
+      content: `Voici le profil émotionnel JSON :\n${JSON.stringify(summary)}`,
     },
-  ] as const satisfies readonly AgentMessage[];
+  ];
 }
 
 export async function generateEmotionProfileReport(
@@ -121,17 +168,14 @@ export async function generateEmotionProfileReport(
   llm: LlmPort,
 ): Promise<EmotionProfileReport> {
   try {
-    const raw = await llm.run(
-      'gpt-4o-mini',
-      0.1,
-      makeMessages(
-        JSON.stringify(summarizeEmotionProfile(agregatedEmotionProfile)),
-      ),
-    );
+    const summary = summarizeEmotionProfile(agregatedEmotionProfile);
+    console.log(summary);
+    const raw = await llm.run('gpt-4o-mini', 0.1, makeMessages(summary));
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = LLMOutputSchema.safeParse(json);
     return parsed.success ? parsed.data : FALLBACK;
-  } catch {
+  } catch (err) {
+    console.error('[generateEmotionProfileReport] LLM error:', err);
     return FALLBACK;
   }
 }
