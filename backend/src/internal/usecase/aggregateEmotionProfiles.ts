@@ -5,7 +5,7 @@ import type {
   TonalityScores,
 } from '../core/entity/EmotionProfile.ts';
 
-export function compressEmotionProfiles(
+export function aggregateEmotionProfiles(
   profiles: EmotionProfile[],
 ): AggregatedEmotionProfile {
   const emotionTotals: EmotionScores = {
@@ -27,7 +27,7 @@ export function compressEmotionProfiles(
   };
 
   if (profiles.length === 0) {
-    console.error('[compressEmotionProfiles] No profiles provided.');
+    console.error('[aggregateEmotionProfiles] No profiles provided.');
     return {
       date: new Date().toISOString().slice(0, 10),
       count: 0,
