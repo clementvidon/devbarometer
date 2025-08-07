@@ -37,13 +37,13 @@ describe('generateStatic', () => {
     );
 
     expect(mockWrite).toHaveBeenCalledWith(
-      expect.stringContaining('headlines.json'),
+      expect.stringContaining('ticker.json'),
       JSON.stringify(['Post A', 'Post B'], null, 2),
       'utf-8',
     );
 
     expect(mockWrite).toHaveBeenCalledWith(
-      expect.stringContaining('aggregated-emotionprofiles.json'),
+      expect.stringContaining('chart.json'),
       JSON.stringify([{ createdAt: '2025-08-03', aggregate: {} }], null, 2),
       'utf-8',
     );

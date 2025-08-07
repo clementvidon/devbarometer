@@ -107,13 +107,28 @@ export class AgentService {
   }
 
   async getAggregatedEmotionProfiles(): Promise<
-    { createdAt: string; emotions: AggregatedEmotionProfile['emotions'] }[]
+    {
+      createdAt: string;
+      emotions: AggregatedEmotionProfile['emotions'];
+      tonalities: AggregatedEmotionProfile['tonalities'];
+    }[]
   > {
     const snapshots = await this.persistence.getSnapshots();
 
-    return snapshots.map((s) => ({
-      createdAt: s.createdAt,
-      emotions: s.aggregatedEmotionProfile.emotions,
-    }));
+    return snapshots
+      .filter((s) => {
+        const ok = !!s.aggregatedEmotionProfile;
+        if (!ok) {
+          console.warn(
+            `[getAggregatedEmotionProfiles] Skipping snapshot without aggregate: ${s.createdAt}`,
+          );
+        }
+        return ok;
+      })
+      .map((s) => ({
+        createdAt: s.createdAt,
+        emotions: s.aggregatedEmotionProfile.emotions,
+        tonalities: s.aggregatedEmotionProfile.tonalities,
+      }));
   }
 }

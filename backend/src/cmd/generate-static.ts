@@ -17,12 +17,12 @@ export async function generateStatic() {
   const agent = makeAgentService();
 
   const report = await agent.getLastEmotionProfileReport();
-  const headlines = await agent.getLastTopHeadlines(10);
-  const aggregatedEmotionProfiles = await agent.getAggregatedEmotionProfiles();
+  const ticker = await agent.getLastTopHeadlines(10);
+  const chart = await agent.getAggregatedEmotionProfiles();
 
   save('report.json', report);
-  save('headlines.json', headlines);
-  save('aggregated-emotionprofiles.json', aggregatedEmotionProfiles);
+  save('ticker.json', ticker);
+  save('chart.json', chart);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
