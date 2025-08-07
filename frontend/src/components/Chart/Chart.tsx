@@ -19,17 +19,28 @@ const THEME = {
   tooltipText: '#dbeaff',
 };
 
+const LABELS_FR: Record<string, string> = {
+  joy: 'Joie',
+  trust: 'Confiance',
+  positive: 'Positivité',
+  negative: 'Négativité',
+
+  fear: 'Peur',
+  anger: 'Colère',
+  disgust: 'Dégoût',
+  sadness: 'Tristesse',
+};
+
 const COLOR_MAP = {
-  positive: '#66FF99',
   joy: '#00FFFF',
   trust: '#00CFFF',
-  anticipation: '#4781FF',
-  surprise: '#99CCFF',
+  positive: '#66FF99',
   negative: '#FF0066',
-  anger: '#FF3300',
+
   fear: '#FF6600',
-  sadness: '#FF9999',
+  anger: '#FF3300',
   disgust: '#FFCC66',
+  sadness: '#FF9999',
 } as const;
 
 const KEYS = Object.keys(COLOR_MAP) as Array<keyof typeof COLOR_MAP>;
@@ -63,7 +74,7 @@ export function Chart() {
   useEffect(() => {
     void (async () => {
       try {
-        const res = await fetch('average-sentiments.json');
+        const res = await fetch('chart.json');
         const raw = (await res.json()) as RawEntry[];
 
         const parsed = raw
@@ -154,7 +165,10 @@ export function Chart() {
               cursor={{ stroke: THEME.axisLine, strokeDasharray: '3 3' }}
               wrapperStyle={{ display: tooltipActive ? 'block' : 'none' }}
               labelFormatter={formatChartDate}
-              formatter={(value: number) => formatChartValue(value)}
+              formatter={(value: number, name: string) => [
+                formatChartValue(value),
+                LABELS_FR[name] ?? name,
+              ]}
             />
 
             {KEYS.map((key) => (
@@ -200,18 +214,23 @@ export function Chart() {
 
       <div className={styles.legend}>
         <div className={styles.column}>
-          <LegendItem color={COLOR_MAP.positive} label="Positivité" />
-          <LegendItem color={COLOR_MAP.joy} label="Joie" />
-          <LegendItem color={COLOR_MAP.trust} label="Confiance" />
-          <LegendItem color={COLOR_MAP.anticipation} label="Anticipation" />
-          <LegendItem color={COLOR_MAP.surprise} label="Surprise" />
+          {KEYS.slice(0, Math.ceil(KEYS.length / 2)).map((key) => (
+            <LegendItem
+              key={key}
+              color={COLOR_MAP[key]}
+              label={LABELS_FR[key]}
+            />
+          ))}
         </div>
         <div className={styles.column}>
-          <LegendItem color={COLOR_MAP.negative} label="Négativité" right />
-          <LegendItem color={COLOR_MAP.anger} label="Colère" right />
-          <LegendItem color={COLOR_MAP.fear} label="Peur" right />
-          <LegendItem color={COLOR_MAP.sadness} label="Tristesse" right />
-          <LegendItem color={COLOR_MAP.disgust} label="Dégoût" right />
+          {KEYS.slice(Math.ceil(KEYS.length / 2)).map((key) => (
+            <LegendItem
+              key={key}
+              color={COLOR_MAP[key]}
+              label={LABELS_FR[key]}
+              right
+            />
+          ))}
         </div>
       </div>
     </div>
