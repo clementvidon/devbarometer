@@ -6,7 +6,7 @@ export function makeReportController(agent: AgentService): Express {
   app.use(express.json());
 
   app.get('/report', async (_, res) => {
-    const report = await agent.getLastSentimentReport();
+    const report = await agent.getLastEmotionProfileReport();
     if (!report) return res.status(404).json({ error: 'No report found' });
     res.json(report);
   });

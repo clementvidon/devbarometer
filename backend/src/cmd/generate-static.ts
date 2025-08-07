@@ -16,13 +16,13 @@ export const save = (filename: string, data: unknown) => {
 export async function generateStatic() {
   const agent = makeAgentService();
 
-  const report = await agent.getLastSentimentReport();
+  const report = await agent.getLastEmotionProfileReport();
   const headlines = await agent.getLastTopHeadlines(10);
-  const averageSentiments = await agent.getAverageSentiments();
+  const averageEmotionProfiles = await agent.getAverageEmotionProfiles();
 
   save('report.json', report);
   save('headlines.json', headlines);
-  save('average-sentiments.json', averageSentiments);
+  save('average-sentiments.json', averageEmotionProfiles);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

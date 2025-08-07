@@ -1,8 +1,8 @@
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
+import type { EmotionProfile } from '../core/entity/EmotionProfile.ts';
 import type { Post } from '../core/entity/Post.ts';
-import type { Sentiment } from '../core/entity/Sentiment.ts';
-import { analyzeSentiments } from './analyzeSentiments.ts';
+import { analyzeEmotionProfiles } from './analyzeEmotionProfiles.ts';
 
 const fakePosts: Post[] = [
   {
@@ -19,7 +19,7 @@ const fakePosts: Post[] = [
   },
 ];
 
-const fakeSentiment: Sentiment = {
+const fakeEmotionProfile: EmotionProfile = {
   postId: 'dummy',
   title: 'dummy',
   upvotes: 0,
@@ -37,26 +37,28 @@ const fakeSentiment: Sentiment = {
   },
 };
 
-describe('analyzeSentiments', () => {
+describe('analyzeEmotionProfiles', () => {
   describe('Happy path', () => {
     let llm: { run: Mock };
 
     beforeEach(() => {
       vi.clearAllMocks();
       llm = {
-        run: vi.fn().mockResolvedValue(JSON.stringify(fakeSentiment.emotions)),
+        run: vi
+          .fn()
+          .mockResolvedValue(JSON.stringify(fakeEmotionProfile.emotions)),
       };
     });
 
     test('analyzes data points and returns sentiment results', async () => {
-      const sentiments = await analyzeSentiments(fakePosts, llm);
+      const sentiments = await analyzeEmotionProfiles(fakePosts, llm);
 
       expect(sentiments).toHaveLength(2);
       sentiments.forEach((res, index) => {
         expect(res.postId).toBe(fakePosts[index].id);
         expect(res.title).toBe(fakePosts[index].title);
         expect(res.upvotes).toBe(fakePosts[index].upvotes);
-        expect(res.emotions).toEqual(fakeSentiment.emotions);
+        expect(res.emotions).toEqual(fakeEmotionProfile.emotions);
       });
     });
 
@@ -72,7 +74,7 @@ describe('analyzeSentiments', () => {
 
       test('returns fallback emotions if LLM call fails', async () => {
         llm.run.mockRejectedValue(new Error('LLM Failure'));
-        const sentiments = await analyzeSentiments(fakePosts, llm);
+        const sentiments = await analyzeEmotionProfiles(fakePosts, llm);
 
         expect(sentiments).toHaveLength(2);
         sentiments.forEach((res, index) => {

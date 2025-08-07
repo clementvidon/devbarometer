@@ -1,15 +1,15 @@
 import { z } from 'zod';
 import { stripCodeFences } from '../../utils/stripCodeFences.ts';
 import type {
-  AverageSentiment,
+  AverageEmotionProfile,
   EmotionScores,
-} from '../core/entity/Sentiment.ts';
-import type { SentimentReport } from '../core/entity/SentimentReport.ts';
-import { WEATHER_EMOJIS } from '../core/entity/SentimentReport.ts';
+} from '../core/entity/EmotionProfile.ts';
+import type { EmotionProfileReport } from '../core/entity/EmotionProfileReport.ts';
+import { WEATHER_EMOJIS } from '../core/entity/EmotionProfileReport.ts';
 import type { LlmPort } from '../core/port/LlmPort.ts';
 import type { AgentMessage } from '../core/types/AgentMessage.ts';
 
-function summarizeSentiment(emotions: EmotionScores): {
+function summarizeEmotionProfile(emotions: EmotionScores): {
   majorEmotions: { name: string; strength: string }[];
   tone: {
     value: 'neutre' | 'positif' | 'négatif' | 'polarisé';
@@ -70,7 +70,7 @@ const LLMOutputSchema = z.object({
 const FALLBACK = {
   text: '',
   emoji: '☁️',
-} satisfies SentimentReport;
+} satisfies EmotionProfileReport;
 
 function makeMessages(emotionsText: string): readonly AgentMessage[] {
   return [
@@ -93,16 +93,16 @@ function makeMessages(emotionsText: string): readonly AgentMessage[] {
   ] as const satisfies readonly AgentMessage[];
 }
 
-export async function generateSentimentReport(
-  averageSentiment: AverageSentiment,
+export async function generateEmotionProfileReport(
+  averageEmotionProfile: AverageEmotionProfile,
   llm: LlmPort,
-): Promise<SentimentReport> {
+): Promise<EmotionProfileReport> {
   try {
     const raw = await llm.run(
       'gpt-4o-mini',
       0.1,
       makeMessages(
-        JSON.stringify(summarizeSentiment(averageSentiment.emotions)),
+        JSON.stringify(summarizeEmotionProfile(averageEmotionProfile.emotions)),
       ),
     );
     const json: unknown = JSON.parse(stripCodeFences(raw));

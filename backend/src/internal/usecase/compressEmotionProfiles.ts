@@ -1,10 +1,12 @@
 import type {
-  AverageSentiment,
+  AverageEmotionProfile,
+  EmotionProfile,
   EmotionScores,
-  Sentiment,
-} from '../core/entity/Sentiment.ts';
+} from '../core/entity/EmotionProfile.ts';
 
-export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
+export function compressEmotionProfiles(
+  sentiments: EmotionProfile[],
+): AverageEmotionProfile {
   const totals = {
     anger: 0,
     fear: 0,
@@ -19,7 +21,7 @@ export function compressSentiments(sentiments: Sentiment[]): AverageSentiment {
   } satisfies EmotionScores;
 
   if (sentiments.length === 0) {
-    console.error('[compressSentiments] No sentiments provided.');
+    console.error('[compressEmotionProfiles] No sentiments provided.');
     const noEmotionScores: EmotionScores = { ...totals };
     return { emotions: noEmotionScores };
   }

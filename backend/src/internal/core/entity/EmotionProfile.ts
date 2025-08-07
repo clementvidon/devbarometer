@@ -11,11 +11,11 @@ export interface EmotionScores {
   positive: number;
 }
 
-export interface AverageSentiment {
+export interface AverageEmotionProfile {
   emotions: EmotionScores;
 }
 
-export interface Sentiment {
+export interface EmotionProfile {
   postId: string;
   title: string;
   upvotes: number;

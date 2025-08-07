@@ -1,8 +1,11 @@
 import pLimit from 'p-limit';
 import { z } from 'zod';
 import { stripCodeFences } from '../../utils/stripCodeFences.ts';
+import type {
+  EmotionProfile,
+  EmotionScores,
+} from '../core/entity/EmotionProfile.ts';
 import type { RelevantPost } from '../core/entity/Post.ts';
-import type { EmotionScores, Sentiment } from '../core/entity/Sentiment.ts';
 import type { LlmPort } from '../core/port/LlmPort.ts';
 import type { AgentMessage } from '../core/types/AgentMessage.ts';
 
@@ -81,12 +84,12 @@ async function fetchEmotions(
   }
 }
 
-export async function analyzeSentiments(
+export async function analyzeEmotionProfiles(
   posts: RelevantPost[],
   llm: LlmPort,
-): Promise<Sentiment[]> {
+): Promise<EmotionProfile[]> {
   if (posts.length === 0) {
-    console.error('[analyzeSentiments] Received empty posts array.');
+    console.error('[analyzeEmotionProfiles] Received empty posts array.');
     return [];
   }
   const limit = pLimit(CONCURRENCY);
