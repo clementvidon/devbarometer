@@ -1,5 +1,5 @@
 import type {
-  AverageEmotionProfile,
+  AggregatedEmotionProfile,
   EmotionProfile,
 } from '../../core/entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../../core/entity/EmotionProfileReport.ts';
@@ -12,7 +12,7 @@ export type PipelineSnapshot = {
   fetchUrl: string;
   posts: Post[];
   relevantPosts: RelevantPost[];
-  sentimentPerPost: EmotionProfile[];
-  averageEmotionProfile: AverageEmotionProfile;
+  emotionProfilePerPost: EmotionProfile[];
+  aggregatedEmotionProfile: AggregatedEmotionProfile;
   report: EmotionProfileReport;
 };

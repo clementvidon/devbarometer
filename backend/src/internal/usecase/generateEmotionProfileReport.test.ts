@@ -1,6 +1,6 @@
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { AverageEmotionProfile } from '../core/entity/EmotionProfile.ts';
+import type { AggregatedEmotionProfile } from '../core/entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../core/entity/EmotionProfileReport.ts';
 import { generateEmotionProfileReport } from './generateEmotionProfileReport.ts';
 
@@ -11,18 +11,24 @@ const fakeLLMResponse = `
 }
 `;
 
-const fakeAverageEmotionProfile: AverageEmotionProfile = {
+const fakeAggregatedEmotionProfile: AggregatedEmotionProfile = {
+  date: '2025-08-03',
+  count: 1,
   emotions: {
+    joy: 0,
+    sadness: 0,
     anger: 0,
     fear: 0,
-    anticipation: 0,
     trust: 0,
-    surprise: 0,
-    sadness: 0.1,
-    joy: 0.7,
     disgust: 0,
-    negative: 0,
+  },
+  tonalities: {
     positive: 0,
+    negative: 0,
+    optimistic_anticipation: 0,
+    pessimistic_anticipation: 0,
+    positive_surprise: 0,
+    negative_surprise: 0,
   },
 };
 
@@ -44,7 +50,7 @@ describe('generateEmotionProfileReport', () => {
 
     test('returns valid EmotionProfileReport from correct LLM output', async () => {
       const report = await generateEmotionProfileReport(
-        fakeAverageEmotionProfile,
+        fakeAggregatedEmotionProfile,
         llm,
       );
 

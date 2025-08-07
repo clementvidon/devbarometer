@@ -4,7 +4,7 @@ import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
 import { filterRelevantPosts } from '../../usecase/filterRelevantPosts.ts';
 import { generateEmotionProfileReport } from '../../usecase/generateEmotionProfileReport.ts';
 import type {
-  AverageEmotionProfile,
+  AggregatedEmotionProfile,
   EmotionProfile,
 } from '../entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
@@ -45,26 +45,28 @@ export class AgentService {
       `[AgentService] Selected ${relevantPosts.length}/${posts.length} posts relevant to the tech job market.`,
     );
 
-    const sentimentPerPost = await analyzeEmotionProfiles(
+    const emotionProfilePerPost = await analyzeEmotionProfiles(
       relevantPosts,
       this.llm,
     );
     console.log(
-      '[AgentService] Completed sentiment analysis on selected posts.',
+      '[AgentService] Completed emotionProfile analysis on selected posts.',
     );
 
-    const averageEmotionProfile = compressEmotionProfiles(sentimentPerPost);
-    console.log('[AgentService] Computed average sentiment.');
+    const aggregatedEmotionProfile = compressEmotionProfiles(
+      emotionProfilePerPost,
+    );
+    console.log('[AgentService] Computed aggregated emotionProfile.');
 
     const report = await generateEmotionProfileReport(
-      averageEmotionProfile,
+      aggregatedEmotionProfile,
       this.llm,
     );
     console.log(
       `[AgentService] New report generated at ${new Date().toISOString()}`,
     );
 
-    console.log(averageEmotionProfile);
+    console.log(aggregatedEmotionProfile);
     console.log(report);
 
     await this.persistence.storeSnapshot({
@@ -72,15 +74,15 @@ export class AgentService {
       fetchUrl: fetchUrl,
       posts,
       relevantPosts,
-      sentimentPerPost,
-      averageEmotionProfile,
+      emotionProfilePerPost,
+      aggregatedEmotionProfile,
       report,
     });
   }
 
   async getLastEmotionProfiles(): Promise<EmotionProfile[] | null> {
     const snapshots = await this.persistence.getSnapshots();
-    return snapshots[0]?.sentimentPerPost ?? null;
+    return snapshots[0]?.emotionProfilePerPost ?? null;
   }
 
   async getLastEmotionProfileReport(): Promise<EmotionProfileReport | null> {
@@ -95,23 +97,23 @@ export class AgentService {
 
     return last
       .slice()
-      .sort((a, b) => b.upvotes - a.upvotes)
+      .sort((a, b) => b.weight - a.weight)
       .slice(0, limit)
       .map((post) => ({
         title: post.title,
-        upvotes: post.upvotes,
-        url: `https://www.reddit.com/comments/${post.postId}`,
+        weight: post.weight,
+        source: post.source,
       }));
   }
 
-  async getAverageEmotionProfiles(): Promise<
-    { createdAt: string; emotions: AverageEmotionProfile['emotions'] }[]
+  async getAggregatedEmotionProfiles(): Promise<
+    { createdAt: string; emotions: AggregatedEmotionProfile['emotions'] }[]
   > {
     const snapshots = await this.persistence.getSnapshots();
 
     return snapshots.map((s) => ({
       createdAt: s.createdAt,
-      emotions: s.averageEmotionProfile.emotions,
+      emotions: s.aggregatedEmotionProfile.emotions,
     }));
   }
 }
