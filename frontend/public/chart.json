@@ -1,0 +1,78 @@
+[
+  {
+    "createdAt": "2025-08-07T20:12:04.352Z",
+    "emotions": {
+      "joy": 0.3576735092864125,
+      "fear": 0.22277614858260017,
+      "anger": 0.36608015640273706,
+      "trust": 0.22658846529814272,
+      "disgust": 0.3892961876832844,
+      "sadness": 0.3547409579667644
+    },
+    "tonalities": {
+      "negative": 0.6747311827956988,
+      "positive": 0.3100684261974584,
+      "negative_surprise": 0.5879765395894427,
+      "positive_surprise": 0.1906647116324536,
+      "optimistic_anticipation": 0.3852883675464321,
+      "pessimistic_anticipation": 0.5202346041055718
+    }
+  },
+  {
+    "createdAt": "2025-08-07T20:03:34.632Z",
+    "emotions": {
+      "joy": 0.3559009227780476,
+      "fear": 0.22093249150072855,
+      "anger": 0.3619232637202525,
+      "trust": 0.2258377853326858,
+      "disgust": 0.3927149101505585,
+      "sadness": 0.35507527926177757
+    },
+    "tonalities": {
+      "negative": 0.668091306459446,
+      "positive": 0.313598834385624,
+      "negative_surprise": 0.5702282661486159,
+      "positive_surprise": 0.19475473530840215,
+      "optimistic_anticipation": 0.39091792132102965,
+      "pessimistic_anticipation": 0.5184555609519181
+    }
+  },
+  {
+    "createdAt": "2025-08-07T17:57:20.518Z",
+    "emotions": {
+      "joy": 0.3556874381800198,
+      "fear": 0.21864490603363007,
+      "anger": 0.3680514342235411,
+      "trust": 0.22566765578635015,
+      "disgust": 0.3905044510385756,
+      "sadness": 0.3533135509396637
+    },
+    "tonalities": {
+      "negative": 0.6752720079129574,
+      "positive": 0.308704253214639,
+      "negative_surprise": 0.5858061325420375,
+      "positive_surprise": 0.1898615232443126,
+      "optimistic_anticipation": 0.38575667655786355,
+      "pessimistic_anticipation": 0.6469831849653809
+    }
+  },
+  {
+    "createdAt": "2025-08-07T15:31:55.198Z",
+    "emotions": {
+      "joy": 0.35968953430145223,
+      "fear": 0.22198297446169257,
+      "anger": 0.3617426139208813,
+      "trust": 0.23069604406609914,
+      "disgust": 0.39098647971957945,
+      "sadness": 0.3536304456685027
+    },
+    "tonalities": {
+      "negative": 0.6662994491737607,
+      "positive": 0.3183274912368553,
+      "negative_surprise": 0.5818728092138206,
+      "positive_surprise": 0.19158738107160742,
+      "optimistic_anticipation": 0.3898848272408613,
+      "pessimistic_anticipation": 0.5090635953930897
+    }
+  }
+]
