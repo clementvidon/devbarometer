@@ -13,24 +13,33 @@ import type { AgentMessage } from '../core/types/AgentMessage.ts';
 
 type Standout = { name: keyof EmotionScores; score: number };
 
-const MIN_STANDOUT = 0.5;
-const MAX_STANDOUTS = 3;
-const REL_GAP = 0.1;
+const MIN_STANDOUT = 0.35;
+const MAX_STANDOUTS = 2;
+const REL_GAP = 0.06;
+const EPS = 1e-6;
 
 function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
   const sorted = (Object.entries(emotions) as [keyof EmotionScores, number][])
     .sort((a, b) => b[1] - a[1])
     .map(([name, score]) => ({ name, score }));
 
-  const top = sorted.filter((e) => e.score >= MIN_STANDOUT);
-  if (top.length === 0) return [];
+  const first = sorted[0];
+  const second = sorted[1];
 
-  const first = top[0];
-  const second = top[1];
+  if (!first) return [];
 
-  if (!second) return [first];
-  if (first.score - second.score > REL_GAP) return [first];
-  return [first, second].slice(0, MAX_STANDOUTS);
+  const res: Standout[] = [];
+  if (first.score + EPS >= MIN_STANDOUT) res.push(first);
+
+  if (
+    second &&
+    (second.score + EPS >= MIN_STANDOUT ||
+      first.score - second.score <= REL_GAP)
+  ) {
+    res.push(second);
+  }
+
+  return res.slice(0, MAX_STANDOUTS);
 }
 
 /* evaluateTone */
@@ -53,8 +62,8 @@ function getStrengthLabel(score: number): Tone['strength'] {
 }
 
 const POLARITY_MIN = 0.3;
-const POLARITY_DELTA = 0.1;
-const NEUTRAL_DELTA = 0.1;
+const POLARITY_DELTA = 0.06;
+const NEUTRAL_DELTA = 0.06;
 
 function evaluateTone(positive: number, negative: number): Tone {
   const delta = positive - negative;
@@ -143,11 +152,11 @@ function makeMessages(summary: EmotionProfileSummary): readonly AgentMessage[] {
         Ta tâche :
 
         1. Crée une **phrase courte (max 15 mots)** décrivant l'ambiance émotionnelle, en t’inspirant du style météo.
-        2. Si toutes les émotions et tonalités sont ≤ "moderate" et "standoutEmotions" est vide : décris une atmosphère **neutre, indécise ou calme**.
+        2. Si toutes les émotions et tonalités sont ≤ "weak" et "standoutEmotions" est vide : décris une atmosphère **neutre, indécise ou calme**.
         3. Sinon, mentionne uniquement ce qui ressort clairement : tonalités ≥ "moderate" et émotions dans "standoutEmotions".
         4. Évite les redondances et n’invente rien qui ne soit pas présent dans les données.
         5. Assure-toi que la phrase ait un sens, soit grammaticalement correcte et pertinente.
-        6. Choisis ensuite l'emoji météo **le plus évocateur** de ta phrase parmi : ${WEATHER_EMOJIS.join(' ')}
+        6. Choisi un émoji météo qui doit accentuer l'expression de la tendance (ex. négative vs positive) exprimée dans ta phrase : ${WEATHER_EMOJIS.join(' ')}
 
       Retourne uniquement un JSON brut :
         {
