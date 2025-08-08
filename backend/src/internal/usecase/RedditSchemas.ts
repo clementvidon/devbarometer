@@ -4,7 +4,7 @@ export const RedditChildSchema = z.object({
   data: z.object({
     id: z.string(),
     title: z.string(),
-    selftext: z.string(),
+    selftext: z.string().optional().default(''),
     ups: z.number(),
   }),
 });
