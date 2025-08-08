@@ -1,5 +1,5 @@
 import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles.ts';
-import { analyzeEmotionProfiles } from '../../usecase/analyzeEmotionProfiles.ts';
+import { createEmotionProfiles } from '../../usecase/createEmotionProfiles.ts';
 import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
 import { filterRelevantPosts } from '../../usecase/filterRelevantPosts.ts';
 import { generateEmotionProfileReport } from '../../usecase/generateEmotionProfileReport.ts';
@@ -45,7 +45,7 @@ export class AgentService {
       `[AgentService] Selected ${relevantPosts.length}/${posts.length} posts relevant to the tech job market.`,
     );
 
-    const emotionProfilePerPost = await analyzeEmotionProfiles(
+    const emotionProfilePerPost = await createEmotionProfiles(
       relevantPosts,
       this.llm,
     );

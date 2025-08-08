@@ -138,12 +138,12 @@ async function fetchTonalities(
   }
 }
 
-export async function analyzeEmotionProfiles(
+export async function createEmotionProfiles(
   posts: RelevantPost[],
   llm: LlmPort,
 ): Promise<EmotionProfile[]> {
   if (posts.length === 0) {
-    console.error('[analyzeEmotionProfiles] Received empty posts array.');
+    console.error('[createEmotionProfiles] Received empty posts array.');
     return [];
   }
 

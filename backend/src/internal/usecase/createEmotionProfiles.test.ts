@@ -2,7 +2,7 @@ import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { EmotionProfile } from '../core/entity/EmotionProfile.ts';
 import type { Post } from '../core/entity/Post.ts';
-import { analyzeEmotionProfiles } from './analyzeEmotionProfiles.ts';
+import { createEmotionProfiles } from './createEmotionProfiles.ts';
 
 const fakeEmotions = {
   joy: 0,
@@ -45,7 +45,7 @@ const fakeEmotionProfile: EmotionProfile = {
   tonalities: fakeTonalities,
 };
 
-describe('analyzeEmotionProfiles', () => {
+describe('createEmotionProfiles', () => {
   describe('Happy path', () => {
     let llm: { run: Mock };
 
@@ -59,7 +59,7 @@ describe('analyzeEmotionProfiles', () => {
     });
 
     test('analyzes data points and returns emotionProfile results', async () => {
-      const emotionProfiles = await analyzeEmotionProfiles(fakePosts, llm);
+      const emotionProfiles = await createEmotionProfiles(fakePosts, llm);
 
       expect(emotionProfiles).toHaveLength(2);
       emotionProfiles.forEach((res, index) => {
@@ -83,7 +83,7 @@ describe('analyzeEmotionProfiles', () => {
 
       test('returns fallback emotions if LLM call fails', async () => {
         llm.run.mockRejectedValue(new Error('LLM Failure'));
-        const emotionProfiles = await analyzeEmotionProfiles(fakePosts, llm);
+        const emotionProfiles = await createEmotionProfiles(fakePosts, llm);
 
         expect(emotionProfiles).toHaveLength(2);
         emotionProfiles.forEach((res, index) => {
