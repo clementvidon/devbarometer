@@ -8,7 +8,6 @@ import type { Item, RelevantItem } from '../../core/entity/Item.ts';
 export type PipelineSnapshot = {
   id: string;
   createdAt: string;
-  subreddit: string;
   fetchUrl: string;
   items: Item[];
   relevantItems: RelevantItem[];
