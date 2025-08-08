@@ -43,8 +43,8 @@ vi.mock('../../usecase/fetchRedditPosts', () => ({
 vi.mock('../../usecase/filterRelevantPosts', () => ({
   filterRelevantPosts: vi.fn().mockResolvedValue(['relevantPost']),
 }));
-vi.mock('../../usecase/analyzeEmotionProfiles', () => ({
-  analyzeEmotionProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
+vi.mock('../../usecase/createEmotionProfiles', () => ({
+  createEmotionProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
 }));
 vi.mock('../../usecase/aggregateEmotionProfiles', () => ({
   aggregateEmotionProfiles: vi.fn().mockReturnValue({
