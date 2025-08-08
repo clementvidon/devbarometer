@@ -129,10 +129,10 @@ export async function fetchRedditItems(
   const filtered = children.filter((w) => w.data.ups >= MIN_UPVOTES);
 
   const items: Item[] = filtered.map(({ data }) => ({
-    id: data.id,
-    upvotes: data.ups,
+    source: data.id,
     title: sanitize(data.title),
     content: sanitize(data.selftext),
+    weight: data.ups,
   }));
 
   return { items, fetchUrl };

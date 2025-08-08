@@ -24,16 +24,16 @@ const fakeTonalities = {
 
 const fakeItems: Item[] = [
   {
-    id: 'idA',
+    source: 'source A',
     title: 'Item A',
     content: 'Great job market',
-    upvotes: 15,
+    weight: 15,
   },
   {
-    id: 'idB',
+    source: 'source B',
     title: 'Item B',
     content: 'Not sure about this',
-    upvotes: 7,
+    weight: 7,
   },
 ];
 
@@ -63,9 +63,9 @@ describe('createEmotionProfiles', () => {
 
       expect(emotionProfiles).toHaveLength(2);
       emotionProfiles.forEach((res, index) => {
+        expect(res.source).toBe(fakeItems[index].source);
         expect(res.title).toBe(fakeItems[index].title);
-        expect(res.source).toBe(fakeItems[index].id);
-        expect(res.weight).toBe(fakeItems[index].upvotes);
+        expect(res.weight).toBe(fakeItems[index].weight);
         expect(res.emotions).toEqual(fakeEmotionProfile.emotions);
         expect(res.tonalities).toEqual(fakeEmotionProfile.tonalities);
       });
@@ -87,9 +87,9 @@ describe('createEmotionProfiles', () => {
 
         expect(emotionProfiles).toHaveLength(2);
         emotionProfiles.forEach((res, index) => {
+          expect(res.source).toBe(fakeItems[index].source);
           expect(res.title).toBe(fakeItems[index].title);
-          expect(res.source).toBe(fakeItems[index].id);
-          expect(res.weight).toBe(fakeItems[index].upvotes);
+          expect(res.weight).toBe(fakeItems[index].weight);
           expect(Object.values(res.emotions)).toSatisfy((values: number[]) =>
             values.every((v) => v === 0),
           );

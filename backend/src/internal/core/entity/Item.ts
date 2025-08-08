@@ -1,8 +1,8 @@
 export interface Item {
-  id: string;
+  source: string;
   title: string;
   content: string;
-  upvotes: number;
+  weight: number;
 }
 
 export type RelevantItem = Item;
