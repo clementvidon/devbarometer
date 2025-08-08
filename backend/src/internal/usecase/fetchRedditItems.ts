@@ -101,39 +101,33 @@ async function fetchWithRateLimit(
 
 export async function fetchRedditItems(
   fetcher: FetchPort,
-  subreddit: string,
-  limit: number,
-  period: string,
-): Promise<{ items: Item[]; fetchUrl: string }> {
-  const fetchUrl = `https://oauth.reddit.com/r/${encodeURIComponent(subreddit)}/top.json?limit=${limit}&t=${period}&raw_json=1`;
-
+  url: string,
+): Promise<Item[]> {
   const token = await getRedditAccessToken(fetcher);
   const headers = {
     ...BASE_HEADERS,
     Authorization: `Bearer ${token}`,
   };
 
-  const json = await fetchWithRateLimit(fetcher, fetchUrl, { headers });
-  if (json == null) return { items: [], fetchUrl };
+  const json = await fetchWithRateLimit(fetcher, url, { headers });
+  if (json == null) return [];
 
   const parsed = ItemsResponseSchema.safeParse(json);
   if (!parsed.success) {
     console.error(
-      `[fetchRedditItems] URL: ${fetchUrl}, Errors:`,
+      `[fetchRedditItems] URL: ${url}, Errors:`,
       parsed.error.flatten(),
     );
-    return { items: [], fetchUrl };
+    return [];
   }
 
   const children = parsed.data.data.children;
   const filtered = children.filter((w) => w.data.ups >= MIN_UPVOTES);
 
-  const items: Item[] = filtered.map(({ data }) => ({
-    source: data.id,
+  return filtered.map(({ data }) => ({
+    source: `https://reddit.com/comments/${data.id}`,
     title: sanitize(data.title),
     content: sanitize(data.selftext),
     weight: data.ups,
   }));
-
-  return { items, fetchUrl };
 }
