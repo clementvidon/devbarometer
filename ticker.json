@@ -1,33 +1,33 @@
 [
   {
     "title": "J'ai viré un Freelance en moins de 3 jours parce qu'il comprenait rien",
-    "weight": 924,
+    "weight": 921,
     "source": "https://reddit.com/comments/1mj2vuj"
   },
   {
     "title": "J'ai perdu un contrat à 120k€ parce que j'ai vexé un dev",
-    "weight": 687,
+    "weight": 685,
     "source": "https://reddit.com/comments/1micci6"
   },
   {
     "title": "Quand un freelance propose random.choice() en Java, faut-il l’euthanasier ou lui offrir un mug ?",
-    "weight": 140,
+    "weight": 142,
     "source": "https://reddit.com/comments/1mjhf9e"
   },
   {
     "title": "Parlons franchement : le salaire est souvent absent des retours d’expérience ici",
-    "weight": 95,
+    "weight": 94,
     "source": "https://reddit.com/comments/1mf85ic"
+  },
+  {
+    "title": "un profil blacklisté c'est réalité ou mytho ?",
+    "weight": 27,
+    "source": "https://reddit.com/comments/1mkqrqc"
   },
   {
     "title": "Après 8 ans en poste, je ne sais plus ce que je vaux sur le marché",
     "weight": 27,
     "source": "https://reddit.com/comments/1mgidgg"
-  },
-  {
-    "title": "un profil blacklisté c'est réalité ou mytho ?",
-    "weight": 26,
-    "source": "https://reddit.com/comments/1mkqrqc"
   },
   {
     "title": "Salaire de tech lead/manager a Paris",
@@ -41,7 +41,7 @@
   },
   {
     "title": "C'est quoi les jobs IA (LLM) pour développeur ?",
-    "weight": 13,
+    "weight": 15,
     "source": "https://reddit.com/comments/1mgjr7n"
   },
   {

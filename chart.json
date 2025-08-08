@@ -1,21 +1,21 @@
 [
   {
-    "createdAt": "2025-08-08T18:41:50.716Z",
+    "createdAt": "2025-08-08T18:43:36.400Z",
     "emotions": {
-      "joy": 0.33967229394240317,
-      "fear": 0.2188182720953327,
-      "anger": 0.3642005958291957,
-      "trust": 0.21717974180734856,
-      "disgust": 0.3931479642502482,
-      "sadness": 0.34424031777557096
+      "joy": 0.33945,
+      "fear": 0.21845,
+      "anger": 0.36619999999999997,
+      "trust": 0.2156,
+      "disgust": 0.39544999999999997,
+      "sadness": 0.35040000000000004
     },
     "tonalities": {
-      "negative": 0.7384309831181729,
-      "positive": 0.24414101290963258,
-      "negative_surprise": 0.6415094339622639,
-      "positive_surprise": 0.1188679245283019,
-      "optimistic_anticipation": 0.2729394240317775,
-      "pessimistic_anticipation": 0.6728401191658391
+      "negative": 0.74775,
+      "positive": 0.24185,
+      "negative_surprise": 0.6509999999999999,
+      "positive_surprise": 0.11690000000000002,
+      "optimistic_anticipation": 0.23785000000000003,
+      "pessimistic_anticipation": 0.6470499999999998
     }
   },
   {
