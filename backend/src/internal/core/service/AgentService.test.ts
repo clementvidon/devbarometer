@@ -89,7 +89,7 @@ describe('AgentService updateReport', () => {
   test('executes full pipeline and stores the report', async () => {
     const spy = vi.spyOn(persistence, 'storeSnapshot');
 
-    await agent.updateReport('anySub', 10, 'day');
+    await agent.updateReport();
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -100,13 +100,10 @@ describe('AgentService updateReport', () => {
   });
 
   test('handles empty items gracefully', async () => {
-    vi.mocked(fetchRedditItems).mockResolvedValue({
-      items: [],
-      fetchUrl: 'mocked-url',
-    });
+    vi.mocked(fetchRedditItems).mockResolvedValue([]);
     const spy = vi.spyOn(persistence, 'storeSnapshot');
 
-    await agent.updateReport('anySub', 10, 'day');
+    await agent.updateReport();
 
     expect(spy).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -123,7 +120,6 @@ function createMockSnapshot(
   return {
     id: 'mock-id',
     createdAt: new Date().toISOString(),
-    subreddit: 'r/mockdev',
     fetchUrl: 'https://reddit.com/mock',
     items: [],
     relevantItems: [],

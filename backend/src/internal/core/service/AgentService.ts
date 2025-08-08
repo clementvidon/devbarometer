@@ -24,20 +24,12 @@ export class AgentService {
     this.persistence = persistence;
   }
 
-  async updateReport(
-    subreddit: string = 'developpeurs',
-    limit: number = 100,
-    period: string = 'week',
-  ): Promise<void> {
-    const { items, fetchUrl } = await fetchRedditItems(
-      this.fetcher,
-      subreddit,
-      limit,
-      period,
-    );
-
+  async updateReport(): Promise<void> {
+    const fetchUrl =
+      'https://oauth.reddit.com/r/developpeurs/top.json?limit=100&t=week&raw_json=1';
+    const items = await fetchRedditItems(this.fetcher, fetchUrl);
     console.log(
-      `[AgentService] Fetched ${items.length} top items from "r/${subreddit}" for the past ${period}.`,
+      `[AgentService] Fetched ${items.length} top items from "r/developpeurs" for the past week.`,
     );
 
     const relevantItems = await filterRelevantItems(items, this.llm);
@@ -70,7 +62,6 @@ export class AgentService {
     console.log(report);
 
     await this.persistence.storeSnapshot({
-      subreddit,
       fetchUrl: fetchUrl,
       items,
       relevantItems,

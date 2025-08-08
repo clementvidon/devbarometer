@@ -43,7 +43,6 @@ function fakeSnapshot(
   overrides: Partial<Omit<PipelineSnapshot, 'id' | 'createdAt'>> = {},
 ): Omit<PipelineSnapshot, 'id' | 'createdAt'> {
   return {
-    subreddit: 'anySub',
     fetchUrl: 'https://reddit.com/r/anySub/top',
     items: [],
     relevantItems: [],
