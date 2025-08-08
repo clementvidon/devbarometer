@@ -302,6 +302,6 @@ test('getLastTopHeadlines returns empty array if no snapshot', async () => {
   };
 
   const agent = new AgentService(fetcher, llm, persistence);
-  const result = await agent.getLastTopHeadlines();
+  const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([]);
 });

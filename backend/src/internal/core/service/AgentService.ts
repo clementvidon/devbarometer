@@ -81,7 +81,7 @@ export class AgentService {
     return snapshots[0]?.report ?? null;
   }
 
-  async getLastTopHeadlines(limit = 5): Promise<HeadlineInfo[]> {
+  async getLastTopHeadlines(limit: number): Promise<HeadlineInfo[]> {
     const last: EmotionProfile[] | null = await this.getLastEmotionProfiles();
 
     if (!last) return [];
