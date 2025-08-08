@@ -64,16 +64,20 @@ describe('fetchRedditItems', () => {
     });
 
     test('maps, filters (ups>=10), and sanitizes correctly', async () => {
-      const { items } = await fetchRedditItems(fetcher, 'anySub', 10, 'day');
+      const items = await fetchRedditItems(
+        fetcher,
+        'https://oauth.reddit.com/r/mock/top.json?limit=3&t=week&raw_json=1',
+      );
+
       expect(items).toHaveLength(2);
       expect(items[0]).toMatchObject({
-        source: '00',
+        source: 'https://reddit.com/comments/00',
         title: '1st Item',
         content: 'Content 1',
         weight: 15,
       });
       expect(items[1]).toMatchObject({
-        source: '02',
+        source: 'https://reddit.com/comments/02',
         title: '3rd Item',
         content: '',
         weight: 20,
@@ -100,8 +104,8 @@ describe('fetchRedditItems', () => {
         )
         .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
-      const { items } = await runWithFakeTimers(() =>
-        fetchRedditItems(fetcher, 'anySub', 10, 'day'),
+      const items = await runWithFakeTimers(() =>
+        fetchRedditItems(fetcher, 'url'),
       );
       expect(items).toHaveLength(2);
     });
@@ -112,8 +116,8 @@ describe('fetchRedditItems', () => {
         .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
-      const { items } = await runWithFakeTimers(() =>
-        fetchRedditItems(fetcher, 'anySub', 10, 'day'),
+      const items = await runWithFakeTimers(() =>
+        fetchRedditItems(fetcher, 'url'),
       );
       expect(items).toHaveLength(2);
     });
@@ -122,12 +126,7 @@ describe('fetchRedditItems', () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ wrong: 'format' })),
       );
-      const { items } = await fetchRedditItems(
-        fetcher,
-        'invalidSubreddit',
-        10,
-        'day',
-      );
+      const items = await fetchRedditItems(fetcher, 'invalidUrl');
       expect(items).toEqual([]);
     });
 
@@ -135,7 +134,7 @@ describe('fetchRedditItems', () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ data: { children: [] } })),
       );
-      const { items } = await fetchRedditItems(fetcher, 'anySub', 10, 'day');
+      const items = await fetchRedditItems(fetcher, 'url');
       expect(items).toEqual([]);
     });
 
@@ -151,7 +150,7 @@ describe('fetchRedditItems', () => {
           }),
         ),
       );
-      const { items } = await fetchRedditItems(fetcher, 'anySub', 10, 'day');
+      const items = await fetchRedditItems(fetcher, 'url');
       expect(items).toEqual([]);
     });
   });
