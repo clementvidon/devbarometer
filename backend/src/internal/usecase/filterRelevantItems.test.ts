@@ -1,30 +1,30 @@
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { Post } from '../core/entity/Post.ts';
-import { filterRelevantPosts } from './filterRelevantPosts.ts';
+import type { Item } from '../core/entity/Item.ts';
+import { filterRelevantItems } from './filterRelevantItems.ts';
 
-const fakePosts: Post[] = [
+const fakeItems: Item[] = [
   {
     id: 'a1',
-    title: 'Relevant Post A',
+    title: 'Relevant Item A',
     content: 'Insightful',
     upvotes: 10,
   },
   {
     id: 'b2',
-    title: 'Relevant Post B',
+    title: 'Relevant Item B',
     content: 'Insightful',
     upvotes: 5,
   },
   {
     id: 'c3',
-    title: 'Irrelevant Post',
+    title: 'Irrelevant Item',
     content: 'Off-topic',
     upvotes: 20,
   },
 ];
 
-describe('filterRelevantPosts', () => {
+describe('filterRelevantItems', () => {
   describe('Happy path', () => {
     let llm: { run: Mock };
 
@@ -44,12 +44,12 @@ describe('filterRelevantPosts', () => {
     });
 
     test('filters relevant data points correctly', async () => {
-      const relevantPosts = await filterRelevantPosts(fakePosts, llm);
+      const relevantItems = await filterRelevantItems(fakeItems, llm);
 
-      expect(relevantPosts).toHaveLength(2);
-      expect(relevantPosts.map((p) => p.title)).toEqual([
-        'Relevant Post A',
-        'Relevant Post B',
+      expect(relevantItems).toHaveLength(2);
+      expect(relevantItems.map((p) => p.title)).toEqual([
+        'Relevant Item A',
+        'Relevant Item B',
       ]);
     });
   });
@@ -66,16 +66,16 @@ describe('filterRelevantPosts', () => {
 
     test('returns [] if LLM fails', async () => {
       llm.run.mockRejectedValue(new Error('LLM failure'));
-      const relevantPosts = await filterRelevantPosts(fakePosts, llm);
+      const relevantItems = await filterRelevantItems(fakeItems, llm);
 
-      expect(relevantPosts).toEqual([]);
+      expect(relevantItems).toEqual([]);
     });
 
-    test('skips all posts if LLM returns invalid JSON', async () => {
+    test('skips all items if LLM returns invalid JSON', async () => {
       llm.run.mockResolvedValue('this is not valid JSON');
-      const relevantPosts = await filterRelevantPosts(fakePosts, llm);
+      const relevantItems = await filterRelevantItems(fakeItems, llm);
 
-      expect(relevantPosts).toEqual([]);
+      expect(relevantItems).toEqual([]);
     });
   });
 });

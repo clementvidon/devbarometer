@@ -1,7 +1,7 @@
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { EmotionProfile } from '../core/entity/EmotionProfile.ts';
-import type { Post } from '../core/entity/Post.ts';
+import type { Item } from '../core/entity/Item.ts';
 import { createEmotionProfiles } from './createEmotionProfiles.ts';
 
 const fakeEmotions = {
@@ -22,16 +22,16 @@ const fakeTonalities = {
   negative_surprise: 0,
 } as const;
 
-const fakePosts: Post[] = [
+const fakeItems: Item[] = [
   {
     id: 'idA',
-    title: 'Post A',
+    title: 'Item A',
     content: 'Great job market',
     upvotes: 15,
   },
   {
     id: 'idB',
-    title: 'Post B',
+    title: 'Item B',
     content: 'Not sure about this',
     upvotes: 7,
   },
@@ -59,13 +59,13 @@ describe('createEmotionProfiles', () => {
     });
 
     test('analyzes data points and returns emotionProfile results', async () => {
-      const emotionProfiles = await createEmotionProfiles(fakePosts, llm);
+      const emotionProfiles = await createEmotionProfiles(fakeItems, llm);
 
       expect(emotionProfiles).toHaveLength(2);
       emotionProfiles.forEach((res, index) => {
-        expect(res.title).toBe(fakePosts[index].title);
-        expect(res.source).toBe(fakePosts[index].id);
-        expect(res.weight).toBe(fakePosts[index].upvotes);
+        expect(res.title).toBe(fakeItems[index].title);
+        expect(res.source).toBe(fakeItems[index].id);
+        expect(res.weight).toBe(fakeItems[index].upvotes);
         expect(res.emotions).toEqual(fakeEmotionProfile.emotions);
         expect(res.tonalities).toEqual(fakeEmotionProfile.tonalities);
       });
@@ -83,13 +83,13 @@ describe('createEmotionProfiles', () => {
 
       test('returns fallback emotions if LLM call fails', async () => {
         llm.run.mockRejectedValue(new Error('LLM Failure'));
-        const emotionProfiles = await createEmotionProfiles(fakePosts, llm);
+        const emotionProfiles = await createEmotionProfiles(fakeItems, llm);
 
         expect(emotionProfiles).toHaveLength(2);
         emotionProfiles.forEach((res, index) => {
-          expect(res.title).toBe(fakePosts[index].title);
-          expect(res.source).toBe(fakePosts[index].id);
-          expect(res.weight).toBe(fakePosts[index].upvotes);
+          expect(res.title).toBe(fakeItems[index].title);
+          expect(res.source).toBe(fakeItems[index].id);
+          expect(res.weight).toBe(fakeItems[index].upvotes);
           expect(Object.values(res.emotions)).toSatisfy((values: number[]) =>
             values.every((v) => v === 0),
           );

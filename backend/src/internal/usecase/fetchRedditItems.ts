@@ -1,7 +1,7 @@
 import { getRedditAccessToken } from '../../utils/redditAuth.ts';
-import type { Post } from '../core/entity/Post.ts';
+import type { Item } from '../core/entity/Item.ts';
 import type { FetchPort } from '../core/port/FetchPort.ts';
-import { PostsResponseSchema } from './RedditSchemas.ts';
+import { ItemsResponseSchema } from './RedditSchemas.ts';
 
 const BASE_HEADERS = {
   'User-Agent':
@@ -99,12 +99,12 @@ async function fetchWithRateLimit(
   return null;
 }
 
-export async function fetchRedditPosts(
+export async function fetchRedditItems(
   fetcher: FetchPort,
   subreddit: string,
   limit: number,
   period: string,
-): Promise<{ posts: Post[]; fetchUrl: string }> {
+): Promise<{ items: Item[]; fetchUrl: string }> {
   const fetchUrl = `https://oauth.reddit.com/r/${encodeURIComponent(subreddit)}/top.json?limit=${limit}&t=${period}&raw_json=1`;
 
   const token = await getRedditAccessToken(fetcher);
@@ -114,26 +114,26 @@ export async function fetchRedditPosts(
   };
 
   const json = await fetchWithRateLimit(fetcher, fetchUrl, { headers });
-  if (json == null) return { posts: [], fetchUrl };
+  if (json == null) return { items: [], fetchUrl };
 
-  const parsed = PostsResponseSchema.safeParse(json);
+  const parsed = ItemsResponseSchema.safeParse(json);
   if (!parsed.success) {
     console.error(
-      `[fetchRedditPosts] URL: ${fetchUrl}, Errors:`,
+      `[fetchRedditItems] URL: ${fetchUrl}, Errors:`,
       parsed.error.flatten(),
     );
-    return { posts: [], fetchUrl };
+    return { items: [], fetchUrl };
   }
 
   const children = parsed.data.data.children;
   const filtered = children.filter((w) => w.data.ups >= MIN_UPVOTES);
 
-  const posts: Post[] = filtered.map(({ data }) => ({
+  const items: Item[] = filtered.map(({ data }) => ({
     id: data.id,
     upvotes: data.ups,
     title: sanitize(data.title),
     content: sanitize(data.selftext),
   }));
 
-  return { posts, fetchUrl };
+  return { items, fetchUrl };
 }

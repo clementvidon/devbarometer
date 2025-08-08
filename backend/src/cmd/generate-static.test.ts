@@ -16,7 +16,7 @@ describe('generateStatic', () => {
       getLastEmotionProfileReport: vi
         .fn()
         .mockResolvedValue({ text: 'report', emoji: '☀️' }),
-      getLastTopHeadlines: vi.fn().mockResolvedValue(['Post A', 'Post B']),
+      getLastTopHeadlines: vi.fn().mockResolvedValue(['Item A', 'Item B']),
       getAggregatedEmotionProfiles: vi
         .fn()
         .mockResolvedValue([{ createdAt: '2025-08-03', aggregate: {} }]),
@@ -38,7 +38,7 @@ describe('generateStatic', () => {
 
     expect(mockWrite).toHaveBeenCalledWith(
       expect.stringContaining('ticker.json'),
-      JSON.stringify(['Post A', 'Post B'], null, 2),
+      JSON.stringify(['Item A', 'Item B'], null, 2),
       'utf-8',
     );
 

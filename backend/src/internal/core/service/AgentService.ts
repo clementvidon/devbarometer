@@ -1,7 +1,7 @@
 import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles.ts';
 import { createEmotionProfiles } from '../../usecase/createEmotionProfiles.ts';
-import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
-import { filterRelevantPosts } from '../../usecase/filterRelevantPosts.ts';
+import { fetchRedditItems } from '../../usecase/fetchRedditItems.ts';
+import { filterRelevantItems } from '../../usecase/filterRelevantItems.ts';
 import { generateEmotionProfileReport } from '../../usecase/generateEmotionProfileReport.ts';
 import type {
   AggregatedEmotionProfile,
@@ -29,7 +29,7 @@ export class AgentService {
     limit: number = 100,
     period: string = 'week',
   ): Promise<void> {
-    const { posts, fetchUrl } = await fetchRedditPosts(
+    const { items, fetchUrl } = await fetchRedditItems(
       this.fetcher,
       subreddit,
       limit,
@@ -37,24 +37,24 @@ export class AgentService {
     );
 
     console.log(
-      `[AgentService] Fetched ${posts.length} top posts from "r/${subreddit}" for the past ${period}.`,
+      `[AgentService] Fetched ${items.length} top items from "r/${subreddit}" for the past ${period}.`,
     );
 
-    const relevantPosts = await filterRelevantPosts(posts, this.llm);
+    const relevantItems = await filterRelevantItems(items, this.llm);
     console.log(
-      `[AgentService] Selected ${relevantPosts.length}/${posts.length} posts relevant to the tech job market.`,
+      `[AgentService] Selected ${relevantItems.length}/${items.length} items relevant to the tech job market.`,
     );
 
-    const emotionProfilePerPost = await createEmotionProfiles(
-      relevantPosts,
+    const emotionProfilePerItem = await createEmotionProfiles(
+      relevantItems,
       this.llm,
     );
     console.log(
-      '[AgentService] Completed emotionProfile analysis on selected posts.',
+      '[AgentService] Completed emotionProfile analysis on selected items.',
     );
 
     const aggregatedEmotionProfile = aggregateEmotionProfiles(
-      emotionProfilePerPost,
+      emotionProfilePerItem,
     );
     console.log('[AgentService] Computed aggregated emotionProfile.');
 
@@ -72,9 +72,9 @@ export class AgentService {
     await this.persistence.storeSnapshot({
       subreddit,
       fetchUrl: fetchUrl,
-      posts,
-      relevantPosts,
-      emotionProfilePerPost,
+      items,
+      relevantItems,
+      emotionProfilePerItem,
       aggregatedEmotionProfile,
       report,
     });
@@ -82,7 +82,7 @@ export class AgentService {
 
   async getLastEmotionProfiles(): Promise<EmotionProfile[] | null> {
     const snapshots = await this.persistence.getSnapshots();
-    return snapshots[0]?.emotionProfilePerPost ?? null;
+    return snapshots[0]?.emotionProfilePerItem ?? null;
   }
 
   async getLastEmotionProfileReport(): Promise<EmotionProfileReport | null> {
@@ -99,10 +99,10 @@ export class AgentService {
       .slice()
       .sort((a, b) => b.weight - a.weight)
       .slice(0, limit)
-      .map((post) => ({
-        title: post.title,
-        weight: post.weight,
-        source: post.source,
+      .map((item) => ({
+        title: item.title,
+        weight: item.weight,
+        source: item.source,
       }));
   }
 
