@@ -6,7 +6,7 @@ import type {
   EmotionScores,
   TonalityScores,
 } from '../core/entity/EmotionProfile.ts';
-import type { RelevantPost } from '../core/entity/Post.ts';
+import type { RelevantItem } from '../core/entity/Item.ts';
 import type { LlmPort } from '../core/port/LlmPort.ts';
 import type { AgentMessage } from '../core/types/AgentMessage.ts';
 
@@ -48,7 +48,7 @@ const FALLBACK_TONALITIES: TonalityScores = {
   pessimistic_anticipation: 0,
 };
 
-function emotionMessages(post: RelevantPost): readonly AgentMessage[] {
+function emotionMessages(item: RelevantItem): readonly AgentMessage[] {
   return [
     {
       role: 'system',
@@ -74,17 +74,17 @@ Format JSON strict :
   "disgust": number
 }
 
-Texte : """${post.title}\n\n${post.content}"""`.trim(),
+Texte : """${item.title}\n\n${item.content}"""`.trim(),
     },
   ];
 }
 
-function tonalityMessages(post: RelevantPost): readonly AgentMessage[] {
+function tonalityMessages(item: RelevantItem): readonly AgentMessage[] {
   return [
     {
       role: 'system',
       content: `
-Tu es un assistant chargé d’évaluer le ton général d’un post Reddit.
+Tu es un assistant chargé d’évaluer le ton général d’un item Reddit.
 
 Pour ce faire, donne un score entre 0 et 1 pour :
 
@@ -105,17 +105,17 @@ Format JSON :
   "pessimistic_anticipation": number
 }
 
-Texte : """${post.title}\n\n${post.content}"""`.trim(),
+Texte : """${item.title}\n\n${item.content}"""`.trim(),
     },
   ];
 }
 
 async function fetchEmotions(
-  post: RelevantPost,
+  item: RelevantItem,
   llm: LlmPort,
 ): Promise<EmotionScores> {
   try {
-    const raw = await llm.run('gpt-4o-mini', 0.1, emotionMessages(post));
+    const raw = await llm.run('gpt-4o-mini', 0.1, emotionMessages(item));
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = EmotionSchema.safeParse(json);
     return parsed.success ? parsed.data : FALLBACK_EMOTIONS;
@@ -125,11 +125,11 @@ async function fetchEmotions(
 }
 
 async function fetchTonalities(
-  post: RelevantPost,
+  item: RelevantItem,
   llm: LlmPort,
 ): Promise<TonalityScores> {
   try {
-    const raw = await llm.run('gpt-4o-mini', 0.1, tonalityMessages(post));
+    const raw = await llm.run('gpt-4o-mini', 0.1, tonalityMessages(item));
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = TonalitySchema.safeParse(json);
     return parsed.success ? parsed.data : FALLBACK_TONALITIES;
@@ -139,27 +139,27 @@ async function fetchTonalities(
 }
 
 export async function createEmotionProfiles(
-  posts: RelevantPost[],
+  items: RelevantItem[],
   llm: LlmPort,
 ): Promise<EmotionProfile[]> {
-  if (posts.length === 0) {
-    console.error('[createEmotionProfiles] Received empty posts array.');
+  if (items.length === 0) {
+    console.error('[createEmotionProfiles] Received empty items array.');
     return [];
   }
 
   const limit = pLimit(CONCURRENCY);
 
-  const emotionProfiles = posts.map((post) =>
+  const emotionProfiles = items.map((item) =>
     limit(async () => {
       const [emotions, tonalities] = await Promise.all([
-        fetchEmotions(post, llm),
-        fetchTonalities(post, llm),
+        fetchEmotions(item, llm),
+        fetchTonalities(item, llm),
       ]);
 
       return {
-        title: post.title,
-        source: post.id,
-        weight: post.upvotes,
+        title: item.title,
+        source: item.id,
+        weight: item.upvotes,
         emotions,
         tonalities,
       };

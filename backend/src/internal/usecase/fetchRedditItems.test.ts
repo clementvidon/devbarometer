@@ -8,7 +8,7 @@ import {
   vi,
 } from 'vitest';
 import type { FetchPort } from '../core/port/FetchPort.ts';
-import { fetchRedditPosts } from './fetchRedditPosts.ts';
+import { fetchRedditItems } from './fetchRedditItems.ts';
 
 vi.mock('../../utils/redditAuth.ts', () => ({
   getRedditAccessToken: vi.fn().mockResolvedValue('mocked-access-token'),
@@ -30,10 +30,10 @@ const fakeResponse = (
     headers: new Headers({ 'Content-Type': 'application/json', ...headers }),
   });
 
-const fakePosts = [
-  { data: { id: '00', title: '1st\nPost', selftext: 'Content\n1', ups: 15 } },
-  { data: { id: '01', title: '2nd Post', selftext: 'Content 2', ups: 5 } },
-  { data: { id: '02', title: '3rd Post', selftext: '', ups: 20 } },
+const fakeItems = [
+  { data: { id: '00', title: '1st\nItem', selftext: 'Content\n1', ups: 15 } },
+  { data: { id: '01', title: '2nd Item', selftext: 'Content 2', ups: 5 } },
+  { data: { id: '02', title: '3rd Item', selftext: '', ups: 20 } },
 ];
 
 const runWithFakeTimers = async <T>(fn: () => Promise<T>) => {
@@ -45,7 +45,7 @@ const runWithFakeTimers = async <T>(fn: () => Promise<T>) => {
   return res;
 };
 
-describe('fetchRedditPosts', () => {
+describe('fetchRedditItems', () => {
   describe('Happy path', () => {
     let fetcher: FetchPort;
 
@@ -55,7 +55,7 @@ describe('fetchRedditPosts', () => {
         fetch: vi.fn((url: string) => {
           if (url.includes('/top.json')) {
             return Promise.resolve(
-              fakeResponse({ data: { children: fakePosts } }),
+              fakeResponse({ data: { children: fakeItems } }),
             );
           }
           return Promise.reject(new Error(`Unexpected fetch URL: ${url}`));
@@ -64,18 +64,18 @@ describe('fetchRedditPosts', () => {
     });
 
     test('maps, filters (ups>=10), and sanitizes correctly', async () => {
-      const { posts } = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
-      expect(posts).toHaveLength(2);
-      expect(posts[0]).toMatchObject({
+      const { items } = await fetchRedditItems(fetcher, 'anySub', 10, 'day');
+      expect(items).toHaveLength(2);
+      expect(items[0]).toMatchObject({
         id: '00',
         upvotes: 15,
-        title: '1st Post',
+        title: '1st Item',
         content: 'Content 1',
       });
-      expect(posts[1]).toMatchObject({
+      expect(items[1]).toMatchObject({
         id: '02',
         upvotes: 20,
-        title: '3rd Post',
+        title: '3rd Item',
         content: '',
       });
     });
@@ -98,48 +98,48 @@ describe('fetchRedditPosts', () => {
             headers: new Headers({ 'X-Ratelimit-Reset': '1' }),
           }),
         )
-        .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
+        .mockResolvedValueOnce(fakeResponse({ data: { children: fakeItems } }));
 
-      const { posts } = await runWithFakeTimers(() =>
-        fetchRedditPosts(fetcher, 'anySub', 10, 'day'),
+      const { items } = await runWithFakeTimers(() =>
+        fetchRedditItems(fetcher, 'anySub', 10, 'day'),
       );
-      expect(posts).toHaveLength(2);
+      expect(items).toHaveLength(2);
     });
 
     test('retries if fetch rejects', async () => {
       fetcher.fetch = vi
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))
-        .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
+        .mockResolvedValueOnce(fakeResponse({ data: { children: fakeItems } }));
 
-      const { posts } = await runWithFakeTimers(() =>
-        fetchRedditPosts(fetcher, 'anySub', 10, 'day'),
+      const { items } = await runWithFakeTimers(() =>
+        fetchRedditItems(fetcher, 'anySub', 10, 'day'),
       );
-      expect(posts).toHaveLength(2);
+      expect(items).toHaveLength(2);
     });
 
-    test('returns empty array if Reddit post JSON is invalid', async () => {
+    test('returns empty array if Reddit item JSON is invalid', async () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ wrong: 'format' })),
       );
-      const { posts } = await fetchRedditPosts(
+      const { items } = await fetchRedditItems(
         fetcher,
         'invalidSubreddit',
         10,
         'day',
       );
-      expect(posts).toEqual([]);
+      expect(items).toEqual([]);
     });
 
-    test('returns empty array if no posts found', async () => {
+    test('returns empty array if no items found', async () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ data: { children: [] } })),
       );
-      const { posts } = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
-      expect(posts).toEqual([]);
+      const { items } = await fetchRedditItems(fetcher, 'anySub', 10, 'day');
+      expect(items).toEqual([]);
     });
 
-    test('returns empty array if no posts meet the minimum upvotes', async () => {
+    test('returns empty array if no items meet the minimum upvotes', async () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(
           fakeResponse({
@@ -151,8 +151,8 @@ describe('fetchRedditPosts', () => {
           }),
         ),
       );
-      const { posts } = await fetchRedditPosts(fetcher, 'anySub', 10, 'day');
-      expect(posts).toEqual([]);
+      const { items } = await fetchRedditItems(fetcher, 'anySub', 10, 'day');
+      expect(items).toEqual([]);
     });
   });
 });

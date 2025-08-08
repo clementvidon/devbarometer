@@ -45,9 +45,9 @@ function fakeSnapshot(
   return {
     subreddit: 'anySub',
     fetchUrl: 'https://reddit.com/r/anySub/top',
-    posts: [],
-    relevantPosts: [],
-    emotionProfilePerPost: [],
+    items: [],
+    relevantItems: [],
+    emotionProfilePerItem: [],
     aggregatedEmotionProfile: {
       date: '2025-08-03',
       count: 1,

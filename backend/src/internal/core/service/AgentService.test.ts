@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { fetchRedditPosts } from '../../usecase/fetchRedditPosts.ts';
+import { fetchRedditItems } from '../../usecase/fetchRedditItems.ts';
 import type { EmotionProfile } from '../entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
 import type { FetchPort } from '../port/FetchPort.ts';
@@ -34,14 +34,14 @@ const llm: LlmPort = {
   run: vi.fn(() => Promise.resolve('')),
 };
 
-vi.mock('../../usecase/fetchRedditPosts', () => ({
-  fetchRedditPosts: vi.fn().mockResolvedValue({
-    posts: ['post'],
+vi.mock('../../usecase/fetchRedditItems', () => ({
+  fetchRedditItems: vi.fn().mockResolvedValue({
+    items: ['item'],
     fetchUrl: 'https://reddit.com/r/mock/top.json',
   }),
 }));
-vi.mock('../../usecase/filterRelevantPosts', () => ({
-  filterRelevantPosts: vi.fn().mockResolvedValue(['relevantPost']),
+vi.mock('../../usecase/filterRelevantItems', () => ({
+  filterRelevantItems: vi.fn().mockResolvedValue(['relevantItem']),
 }));
 vi.mock('../../usecase/createEmotionProfiles', () => ({
   createEmotionProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
@@ -99,9 +99,9 @@ describe('AgentService updateReport', () => {
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
-  test('handles empty posts gracefully', async () => {
-    vi.mocked(fetchRedditPosts).mockResolvedValue({
-      posts: [],
+  test('handles empty items gracefully', async () => {
+    vi.mocked(fetchRedditItems).mockResolvedValue({
+      items: [],
       fetchUrl: 'mocked-url',
     });
     const spy = vi.spyOn(persistence, 'storeSnapshot');
@@ -125,9 +125,9 @@ function createMockSnapshot(
     createdAt: new Date().toISOString(),
     subreddit: 'r/mockdev',
     fetchUrl: 'https://reddit.com/mock',
-    posts: [],
-    relevantPosts: [],
-    emotionProfilePerPost: [],
+    items: [],
+    relevantItems: [],
+    emotionProfilePerItem: [],
     aggregatedEmotionProfile: {
       date: '2025-08-03',
       count: 1,
@@ -209,7 +209,7 @@ describe('AgentService getLastEmotionProfiles', () => {
       },
     ];
 
-    const snapshot = createMockSnapshot({ emotionProfilePerPost: expected });
+    const snapshot = createMockSnapshot({ emotionProfilePerItem: expected });
     vi.mocked(persistence.getSnapshots).mockResolvedValue([snapshot]);
 
     const result = await agent.getLastEmotionProfiles();
@@ -225,44 +225,44 @@ describe('AgentService getLastEmotionProfiles', () => {
 });
 
 test('AgentService getLastTopHeadlines returns titles of N top weighted emotionProfile', async () => {
-  const emotionProfilePerPost = [
+  const emotionProfilePerItem = [
     {
-      title: 'Post A',
+      title: 'Item A',
       source: 'a',
       weight: 10,
       emotions: fakeEmotions,
       tonalities: fakeTonalities,
     },
     {
-      title: 'Post B',
+      title: 'Item B',
       source: 'b',
       weight: 30,
       emotions: fakeEmotions,
       tonalities: fakeTonalities,
     },
     {
-      title: 'Post C',
+      title: 'Item C',
       source: 'c',
       weight: 20,
       emotions: fakeEmotions,
       tonalities: fakeTonalities,
     },
     {
-      title: 'Post D',
+      title: 'Item D',
       source: 'd',
       weight: 5,
       emotions: fakeEmotions,
       tonalities: fakeTonalities,
     },
     {
-      title: 'Post E',
+      title: 'Item E',
       source: 'e',
       weight: 50,
       emotions: fakeEmotions,
       tonalities: fakeTonalities,
     },
     {
-      title: 'Post F',
+      title: 'Item F',
       source: 'f',
       weight: 15,
       emotions: fakeEmotions,
@@ -270,7 +270,7 @@ test('AgentService getLastTopHeadlines returns titles of N top weighted emotionP
     },
   ];
 
-  const snapshot = createMockSnapshot({ emotionProfilePerPost });
+  const snapshot = createMockSnapshot({ emotionProfilePerItem });
 
   const persistence: PersistencePort = {
     storeSnapshot: vi.fn(),
@@ -282,17 +282,17 @@ test('AgentService getLastTopHeadlines returns titles of N top weighted emotionP
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([
     {
-      title: 'Post E',
+      title: 'Item E',
       source: 'e',
       weight: 50,
     },
     {
-      title: 'Post B',
+      title: 'Item B',
       source: 'b',
       weight: 30,
     },
     {
-      title: 'Post C',
+      title: 'Item C',
       source: 'c',
       weight: 20,
     },

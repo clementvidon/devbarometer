@@ -4,7 +4,7 @@ import { aggregateEmotionProfiles } from './aggregateEmotionProfiles.ts';
 
 const fakeEmotionProfiles: EmotionProfile[] = [
   {
-    title: 'Post 1',
+    title: 'Item 1',
     source: '1',
     weight: 10,
     emotions: {
@@ -25,7 +25,7 @@ const fakeEmotionProfiles: EmotionProfile[] = [
     },
   },
   {
-    title: 'Post 2',
+    title: 'Item 2',
     source: '2',
     weight: 20,
     emotions: {
