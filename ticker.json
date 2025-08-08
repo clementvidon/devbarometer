@@ -1,13 +1,18 @@
 [
   {
     "title": "J'ai viré un Freelance en moins de 3 jours parce qu'il comprenait rien",
-    "weight": 887,
+    "weight": 899,
     "source": "1mj2vuj"
   },
   {
     "title": "J'ai perdu un contrat à 120k€ parce que j'ai vexé un dev",
-    "weight": 643,
+    "weight": 666,
     "source": "1micci6"
+  },
+  {
+    "title": "Quand un freelance propose random.choice() en Java, faut-il l’euthanasier ou lui offrir un mug ?",
+    "weight": 139,
+    "source": "1mjhf9e"
   },
   {
     "title": "Parlons franchement : le salaire est souvent absent des retours d’expérience ici",
@@ -20,19 +25,19 @@
     "source": "1mewj67"
   },
   {
-    "title": "J'ai enfin trouvé un emploi",
-    "weight": 74,
-    "source": "1mesahr"
-  },
-  {
     "title": "Trouver un travail rapidement",
-    "weight": 46,
+    "weight": 48,
     "source": "1met54f"
   },
   {
     "title": "Après 8 ans en poste, je ne sais plus ce que je vaux sur le marché",
-    "weight": 26,
+    "weight": 25,
     "source": "1mgidgg"
+  },
+  {
+    "title": "Salaire de tech lead/manager a Paris",
+    "weight": 23,
+    "source": "1mjvszh"
   },
   {
     "title": "Est-ce que le salaire de ma première boîte va me pénaliser pour la suite?",
@@ -43,10 +48,5 @@
     "title": "C'est quoi les jobs IA (LLM) pour développeur ?",
     "weight": 14,
     "source": "1mgjr7n"
-  },
-  {
-    "title": "Je n'arrive pas à comprendre ce qui coince, aucun entretien, complètement perdu...",
-    "weight": 14,
-    "source": "1mf390g"
   }
 ]
