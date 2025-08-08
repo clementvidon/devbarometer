@@ -158,8 +158,8 @@ export async function createEmotionProfiles(
 
       return {
         title: item.title,
-        source: item.id,
-        weight: item.upvotes,
+        source: item.source,
+        weight: item.weight,
         emotions,
         tonalities,
       };

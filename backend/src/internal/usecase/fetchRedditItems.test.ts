@@ -30,7 +30,7 @@ const fakeResponse = (
     headers: new Headers({ 'Content-Type': 'application/json', ...headers }),
   });
 
-const fakeItems = [
+const fakePosts = [
   { data: { id: '00', title: '1st\nItem', selftext: 'Content\n1', ups: 15 } },
   { data: { id: '01', title: '2nd Item', selftext: 'Content 2', ups: 5 } },
   { data: { id: '02', title: '3rd Item', selftext: '', ups: 20 } },
@@ -55,7 +55,7 @@ describe('fetchRedditItems', () => {
         fetch: vi.fn((url: string) => {
           if (url.includes('/top.json')) {
             return Promise.resolve(
-              fakeResponse({ data: { children: fakeItems } }),
+              fakeResponse({ data: { children: fakePosts } }),
             );
           }
           return Promise.reject(new Error(`Unexpected fetch URL: ${url}`));
@@ -67,16 +67,16 @@ describe('fetchRedditItems', () => {
       const { items } = await fetchRedditItems(fetcher, 'anySub', 10, 'day');
       expect(items).toHaveLength(2);
       expect(items[0]).toMatchObject({
-        id: '00',
-        upvotes: 15,
+        source: '00',
         title: '1st Item',
         content: 'Content 1',
+        weight: 15,
       });
       expect(items[1]).toMatchObject({
-        id: '02',
-        upvotes: 20,
+        source: '02',
         title: '3rd Item',
         content: '',
+        weight: 20,
       });
     });
   });
@@ -98,7 +98,7 @@ describe('fetchRedditItems', () => {
             headers: new Headers({ 'X-Ratelimit-Reset': '1' }),
           }),
         )
-        .mockResolvedValueOnce(fakeResponse({ data: { children: fakeItems } }));
+        .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
       const { items } = await runWithFakeTimers(() =>
         fetchRedditItems(fetcher, 'anySub', 10, 'day'),
@@ -110,7 +110,7 @@ describe('fetchRedditItems', () => {
       fetcher.fetch = vi
         .fn()
         .mockRejectedValueOnce(new Error('Network error'))
-        .mockResolvedValueOnce(fakeResponse({ data: { children: fakeItems } }));
+        .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
       const { items } = await runWithFakeTimers(() =>
         fetchRedditItems(fetcher, 'anySub', 10, 'day'),
@@ -139,7 +139,7 @@ describe('fetchRedditItems', () => {
       expect(items).toEqual([]);
     });
 
-    test('returns empty array if no items meet the minimum upvotes', async () => {
+    test('returns empty array if no items meet the minimum weight', async () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(
           fakeResponse({

@@ -5,22 +5,22 @@ import { filterRelevantItems } from './filterRelevantItems.ts';
 
 const fakeItems: Item[] = [
   {
-    id: 'a1',
+    source: 'a1',
     title: 'Relevant Item A',
     content: 'Insightful',
-    upvotes: 10,
+    weight: 10,
   },
   {
-    id: 'b2',
+    source: 'b2',
     title: 'Relevant Item B',
     content: 'Insightful',
-    upvotes: 5,
+    weight: 5,
   },
   {
-    id: 'c3',
+    source: 'c3',
     title: 'Irrelevant Item',
     content: 'Off-topic',
-    upvotes: 20,
+    weight: 20,
   },
 ];
 

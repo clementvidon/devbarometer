@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const RedditItemSchema = z.object({
+export const RedditChildSchema = z.object({
   data: z.object({
     id: z.string(),
     title: z.string(),
@@ -11,6 +11,6 @@ export const RedditItemSchema = z.object({
 
 export const ItemsResponseSchema = z.object({
   data: z.object({
-    children: z.array(RedditItemSchema),
+    children: z.array(RedditChildSchema),
   }),
 });
