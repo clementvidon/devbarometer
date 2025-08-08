@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   CartesianGrid,
   Line,
@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { type RawEntry, assertRawEntries } from '../../types/Chart.ts';
 import styles from './Chart.module.css';
 
 const THEME = {
@@ -17,14 +18,11 @@ const THEME = {
   tooltipBg: 'rgba(18, 34, 52, 0.96)',
   tooltipBorder: '#3a5f8f',
   tooltipText: '#dbeaff',
-};
+} as const;
 
 const LABELS_FR: Record<string, string> = {
   joy: 'Joie',
   trust: 'Confiance',
-  positive: 'Positivité',
-  negative: 'Négativité',
-
   fear: 'Peur',
   anger: 'Colère',
   disgust: 'Dégoût',
@@ -34,36 +32,85 @@ const LABELS_FR: Record<string, string> = {
 const COLOR_MAP = {
   joy: '#00FFFF',
   trust: '#00CFFF',
-  positive: '#66FF99',
-  negative: '#FF0066',
-
   fear: '#FF6600',
   anger: '#FF3300',
   disgust: '#FFCC66',
   sadness: '#FF9999',
 } as const;
 
-const KEYS = Object.keys(COLOR_MAP) as Array<keyof typeof COLOR_MAP>;
-type Key = (typeof KEYS)[number];
-
-const formatChartDate = (value: string) =>
-  new Date(value).toLocaleDateString('fr-FR', {
-    year: '2-digit',
-    month: '2-digit',
-    day: '2-digit',
-  });
-
-const formatChartValue = (value: number) => value.toFixed(2);
-
-type RawEntry = {
-  createdAt: string;
-  emotions: Record<string, number>;
-};
+type Key = keyof typeof COLOR_MAP;
 
 type Point = {
-  date: string;
+  dateLabel: string;
   createdAt: string;
 } & Record<Key, number>;
+
+const dateFmtAxis = new Intl.DateTimeFormat('fr-FR', {
+  year: '2-digit',
+  month: '2-digit',
+  day: '2-digit',
+});
+
+const dateFmtTooltip = new Intl.DateTimeFormat('fr-FR', {
+  day: '2-digit',
+  month: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+});
+
+const numFmt = new Intl.NumberFormat('fr-FR', {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+
+function parseRaw(raw: RawEntry[]): Point[] {
+  return raw
+    .slice()
+    .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
+    .map((item) => {
+      const base = {} as Record<Key, number>;
+      for (const k of Object.keys(COLOR_MAP) as Key[]) {
+        base[k] = +(item.emotions[k] ?? 0);
+      }
+      return {
+        dateLabel: dateFmtTooltip.format(new Date(item.createdAt)),
+        createdAt: item.createdAt,
+        ...base,
+      };
+    });
+}
+
+function toCumulative(data: Point[]): Point[] {
+  const totals = Object.fromEntries(
+    (Object.keys(COLOR_MAP) as Key[]).map((k) => [k, 0]),
+  ) as Record<Key, number>;
+
+  return data.map((p) => {
+    const out = { ...p };
+    (Object.keys(COLOR_MAP) as Key[]).forEach((k) => {
+      totals[k] += p[k];
+      out[k] = +totals[k].toFixed(3);
+    });
+    return out;
+  });
+}
+
+function LegendItem({
+  color,
+  label,
+  right = false,
+}: {
+  color: string;
+  label: string;
+  right?: boolean;
+}) {
+  return (
+    <div className={`${styles.legendItem} ${right ? styles.right : ''}`}>
+      <span className={styles.colorDot} style={{ backgroundColor: color }} />
+      <span>{label}</span>
+    </div>
+  );
+}
 
 export function Chart() {
   const [baseData, setBaseData] = useState<Point[] | null>(null);
@@ -75,60 +122,44 @@ export function Chart() {
     void (async () => {
       try {
         const res = await fetch('chart.json');
-        const raw = (await res.json()) as RawEntry[];
-
-        const parsed = raw
-          .slice()
-          .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
-          .map((item) => ({
-            date: new Date(item.createdAt).toLocaleDateString('fr-FR', {
-              day: '2-digit',
-              month: '2-digit',
-              hour: '2-digit',
-              minute: '2-digit',
-            }),
-            createdAt: item.createdAt,
-            ...Object.fromEntries(
-              KEYS.map((k) => [k, +(item.emotions[k] ?? 0).toFixed(3)]),
-            ),
-          })) as Point[];
-
-        setBaseData(parsed);
+        const rawJson: unknown = await res.json();
+        assertRawEntries(rawJson); // ← narrowing runtime + pour ESLint
+        setBaseData(parseRaw(rawJson));
       } catch (e) {
         console.error('Erreur lors du chargement des données:', e);
       }
     })();
   }, []);
 
-  const cumulativeData = useMemo(() => {
-    if (!baseData) return null;
-    const totals = Object.fromEntries(KEYS.map((k) => [k, 0])) as Record<
-      Key,
-      number
-    >;
-    return baseData.map((p) => {
-      const out = { ...p };
-      for (const k of KEYS) {
-        totals[k] += p[k];
-        out[k] = +totals[k].toFixed(3);
-      }
-      return out;
-    });
-  }, [baseData]);
+  const cumulativeData = useMemo(
+    () => (baseData ? toCumulative(baseData) : null),
+    [baseData],
+  );
 
-  if (!baseData) return <p>Loading chart…</p>;
-  const data = view === 'delta' ? baseData : cumulativeData!;
-  const diffDays = baseData.length;
+  const data = baseData
+    ? view === 'delta'
+      ? baseData
+      : cumulativeData!
+    : null;
+
+  const diffDays = baseData?.length ?? 0;
+
+  const handlePointerDown = useCallback(() => setTooltipActive(true), []);
+  const handlePointerUp = useCallback(() => setTooltipActive(false), []);
+
+  if (!data) return <p>Loading chart…</p>;
+
+  const KEYS = Object.keys(COLOR_MAP) as Key[];
 
   return (
     <div className={styles.chartContainer}>
       <div
         className={styles.chart}
         title="Cliquer pour basculer delta/cumul"
-        onMouseDown={() => setTooltipActive(true)}
-        onMouseUp={() => setTooltipActive(false)}
-        onTouchStart={() => setTooltipActive(true)}
-        onTouchEnd={() => setTooltipActive(false)}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onPointerLeave={handlePointerUp}
       >
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
@@ -139,14 +170,16 @@ export function Chart() {
                 vertical={false}
               />
             )}
+
             <XAxis
               dataKey="createdAt"
               hide={!hudVisible}
               tick={{ fill: THEME.axisText }}
               axisLine={{ stroke: THEME.axisLine }}
               tickLine={{ stroke: THEME.axisLine }}
-              tickFormatter={formatChartDate}
+              tickFormatter={(v: string) => dateFmtAxis.format(new Date(v))}
             />
+
             <YAxis
               hide={!hudVisible}
               tick={{ fill: THEME.axisText }}
@@ -164,9 +197,12 @@ export function Chart() {
               itemStyle={{ color: THEME.tooltipText }}
               cursor={{ stroke: THEME.axisLine, strokeDasharray: '3 3' }}
               wrapperStyle={{ display: tooltipActive ? 'block' : 'none' }}
-              labelFormatter={formatChartDate}
+              // Ne lit plus payload[0]; juste le label (= createdAt)
+              labelFormatter={(label: string | number) =>
+                dateFmtTooltip.format(new Date(String(label)))
+              }
               formatter={(value: number, name: string) => [
-                formatChartValue(value),
+                numFmt.format(value),
                 LABELS_FR[name] ?? name,
               ]}
             />
@@ -188,7 +224,9 @@ export function Chart() {
 
       <p className={styles.heading}>
         <span
-          onClick={() => setView(view === 'delta' ? 'cumulative' : 'delta')}
+          onClick={() =>
+            setView((v) => (v === 'delta' ? 'cumulative' : 'delta'))
+          }
           role="button"
         >
           <button
@@ -203,6 +241,7 @@ export function Chart() {
                 ? 'Masquer axes et valeurs'
                 : 'Afficher axes et valeurs'
             }
+            aria-pressed={hudVisible}
           >
             ⚙️
           </button>
@@ -233,23 +272,6 @@ export function Chart() {
           ))}
         </div>
       </div>
-    </div>
-  );
-}
-
-function LegendItem({
-  color,
-  label,
-  right = false,
-}: {
-  color: string;
-  label: string;
-  right?: boolean;
-}) {
-  return (
-    <div className={`${styles.legendItem} ${right ? styles.right : ''}`}>
-      <span className={styles.colorDot} style={{ backgroundColor: color }} />
-      <span>{label}</span>
     </div>
   );
 }
