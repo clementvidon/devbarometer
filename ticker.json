@@ -1,12 +1,12 @@
 [
   {
     "title": "J'ai viré un Freelance en moins de 3 jours parce qu'il comprenait rien",
-    "weight": 921,
+    "weight": 935,
     "source": "https://reddit.com/comments/1mj2vuj"
   },
   {
     "title": "J'ai perdu un contrat à 120k€ parce que j'ai vexé un dev",
-    "weight": 685,
+    "weight": 705,
     "source": "https://reddit.com/comments/1micci6"
   },
   {
@@ -15,13 +15,38 @@
     "source": "https://reddit.com/comments/1mjhf9e"
   },
   {
-    "title": "Parlons franchement : le salaire est souvent absent des retours d’expérience ici",
-    "weight": 94,
-    "source": "https://reddit.com/comments/1mf85ic"
+    "title": "un profil blacklisté c'est réalité ou mytho ?",
+    "weight": 35,
+    "source": "https://reddit.com/comments/1mkqrqc"
   },
   {
-    "title": "un profil blacklisté c'est réalité ou mytho ?",
-    "weight": 27,
-    "source": "https://reddit.com/comments/1mkqrqc"
+    "title": "Après 8 ans en poste, je ne sais plus ce que je vaux sur le marché",
+    "weight": 26,
+    "source": "https://reddit.com/comments/1mgidgg"
+  },
+  {
+    "title": "Salaire de tech lead/manager a Paris",
+    "weight": 25,
+    "source": "https://reddit.com/comments/1mjvszh"
+  },
+  {
+    "title": "Avis Dassault Aviation",
+    "weight": 20,
+    "source": "https://reddit.com/comments/1mkyrm0"
+  },
+  {
+    "title": "Est-ce que le salaire de ma première boîte va me pénaliser pour la suite?",
+    "weight": 19,
+    "source": "https://reddit.com/comments/1mgefs4"
+  },
+  {
+    "title": "Avis CV Data Ingénieur",
+    "weight": 16,
+    "source": "https://reddit.com/comments/1mkvudh"
+  },
+  {
+    "title": "C'est quoi les jobs IA (LLM) pour développeur ?",
+    "weight": 15,
+    "source": "https://reddit.com/comments/1mgjr7n"
   }
 ]
