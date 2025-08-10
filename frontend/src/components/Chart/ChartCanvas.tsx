@@ -8,27 +8,34 @@ import {
   YAxis,
 } from 'recharts';
 import styles from './Chart.module.css';
-import { COLOR_MAP, EMOTION_KEYS, LABELS_FR, THEME } from './config.ts';
+import { THEME } from './config.ts';
 import { dateFmtAxis, dateFmtTooltip, numFmt } from './formatters.ts';
-import type { Point } from './transform.ts';
 
-type Props = {
-  data: Point[];
+type SeriesSpec = {
+  key: string;
+  color: string;
+  label?: string;
+};
+
+type Props<T extends { createdAt: string }> = {
+  data: T[];
   hudVisible: boolean;
   tooltipActive: boolean;
   setTooltipActive: (v: boolean) => void;
+  series: SeriesSpec[];
 };
 
-export function ChartCanvas({
+export function ChartCanvas<T extends { createdAt: string }>({
   data,
   hudVisible,
   tooltipActive,
   setTooltipActive,
-}: Props) {
+  series,
+}: Props<T>) {
   return (
     <div
       className={styles.chart}
-      title="Cliquer pour basculer delta/cumul"
+      title="Cliquer pour basculer de vue"
       onPointerDown={() => setTooltipActive(true)}
       onPointerUp={() => setTooltipActive(false)}
       onPointerCancel={() => setTooltipActive(false)}
@@ -75,18 +82,19 @@ export function ChartCanvas({
             }
             formatter={(value: number, name: string) => [
               numFmt.format(value),
-              LABELS_FR[name] ?? name,
+              name,
             ]}
           />
 
-          {EMOTION_KEYS.map((key) => (
+          {series.map((s) => (
             <Line
-              key={key}
+              key={s.key}
               type="monotone"
-              dataKey={key}
-              stroke={COLOR_MAP[key]}
+              dataKey={s.key}
+              stroke={s.color}
               strokeWidth={2}
               dot={false}
+              name={s.label ?? s.key}
               activeDot={tooltipActive ? { r: 5 } : false}
             />
           ))}

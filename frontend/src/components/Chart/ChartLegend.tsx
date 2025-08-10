@@ -1,38 +1,43 @@
 import styles from './Chart.module.css';
-import { COLOR_MAP, EMOTION_KEYS, LABELS_FR } from './config.ts';
+import {
+  EMOTION_COLORS,
+  EMOTION_KEYS,
+  EMOTION_LABELS,
+  TONALITY_COLORS,
+  TONALITY_KEYS,
+  TONALITY_LABELS,
+} from './config.ts';
 
-function LegendItem({
-  color,
-  label,
-  right = false,
-}: {
-  color: string;
-  label: string;
-  right?: boolean;
-}) {
+type Mode = 'emotions' | 'tonalities';
+
+function LegendItem({ color, label }: { color: string; label: string }) {
   return (
-    <div className={`${styles.legendItem} ${right ? styles.right : ''}`}>
+    <div className={styles.legendItem}>
       <span className={styles.colorDot} style={{ backgroundColor: color }} />
       <span>{label}</span>
     </div>
   );
 }
 
-export function ChartLegend() {
-  const half = Math.ceil(EMOTION_KEYS.length / 2);
-  const left = EMOTION_KEYS.slice(0, half);
-  const right = EMOTION_KEYS.slice(half);
+export function ChartLegend({ mode = 'emotions' }: { mode?: Mode }) {
+  const items =
+    mode === 'emotions'
+      ? EMOTION_KEYS.map((k) => ({
+          key: String(k),
+          color: EMOTION_COLORS[k],
+          label: EMOTION_LABELS[k],
+        }))
+      : TONALITY_KEYS.map((k) => ({
+          key: String(k),
+          color: TONALITY_COLORS[k],
+          label: TONALITY_LABELS[k],
+        }));
 
   return (
-    <div className={styles.legend}>
-      <div>
-        {left.map((k) => (
-          <LegendItem key={k} color={COLOR_MAP[k]} label={LABELS_FR[k]} />
-        ))}
-      </div>
-      <div>
-        {right.map((k) => (
-          <LegendItem key={k} color={COLOR_MAP[k]} label={LABELS_FR[k]} right />
+    <div className={`${styles.legend} ${styles.gridOne}`}>
+      <div className={styles.column}>
+        {items.map((it) => (
+          <LegendItem key={it.key} color={it.color} label={it.label} />
         ))}
       </div>
     </div>
