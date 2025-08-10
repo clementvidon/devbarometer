@@ -53,15 +53,25 @@ export function ChartCanvas<T extends { createdAt: string }>({
           <XAxis
             dataKey="createdAt"
             hide={!hudVisible}
-            tick={{ fill: THEME.axisText }}
+            tick={{
+              fill: THEME.axisText,
+              fontSize: 'var(--font-size-content)',
+            }}
             axisLine={{ stroke: THEME.axisLine }}
             tickLine={{ stroke: THEME.axisLine }}
             tickFormatter={(v: string) => dateFmtAxis.format(new Date(v))}
+            tickMargin={10}
           />
 
           <YAxis
+            tickFormatter={(v: number) => numFmt.format(v)}
+            tickMargin={5}
+            width={50}
             hide={!hudVisible}
-            tick={{ fill: THEME.axisText }}
+            tick={{
+              fill: THEME.axisText,
+              fontSize: 'var(--font-size-content)',
+            }}
             axisLine={{ stroke: THEME.axisLine }}
             tickLine={{ stroke: THEME.axisLine }}
             domain={['dataMin', 'dataMax']}
@@ -84,6 +94,9 @@ export function ChartCanvas<T extends { createdAt: string }>({
               numFmt.format(value),
               name,
             ]}
+            itemSorter={(item) =>
+              typeof item.value === 'number' ? -item.value : 0
+            }
           />
 
           {series.map((s) => (
@@ -92,7 +105,7 @@ export function ChartCanvas<T extends { createdAt: string }>({
               type="monotone"
               dataKey={s.key}
               stroke={s.color}
-              strokeWidth={2}
+              strokeWidth={3}
               dot={false}
               name={s.label ?? s.key}
               activeDot={tooltipActive ? { r: 5 } : false}

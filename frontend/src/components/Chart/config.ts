@@ -8,12 +8,12 @@ export const THEME = {
 } as const;
 
 export const EMOTION_COLORS = {
-  joy: '#00FFFF',
-  trust: '#00CFFF',
-  fear: '#FF6600',
-  anger: '#FF3300',
-  disgust: '#FFCC66',
-  sadness: '#FF9999',
+  joy: '#B7C8FF',
+  trust: '#B39EFF',
+  fear: '#D00000',
+  anger: '#D20054',
+  disgust: '#7E0000',
+  sadness: '#8B1F4D',
 } as const;
 
 export type EmotionKey = keyof typeof EMOTION_COLORS;
@@ -29,9 +29,9 @@ export const EMOTION_LABELS: Record<EmotionKey, string> = {
 };
 
 export const TONALITY_COLORS = {
-  polarity: '#66FF66',
-  surprise: '#FFD166',
-  anticipation: '#7C83FF',
+  polarity: '#FF3385',
+  surprise: '#EA80FF',
+  anticipation: '#7728FF',
 } as const;
 
 export type TonalityKey = keyof typeof TONALITY_COLORS;
