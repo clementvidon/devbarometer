@@ -8,7 +8,7 @@
 
 @media (min-width: 768px) {
   .chartContainer {
-    --heading-h: 7rem;
+    --heading-h: 3rem;
     --chart-h: clamp(260px, 40vw, 420px);
     --legend-h: 10rem;
   }
