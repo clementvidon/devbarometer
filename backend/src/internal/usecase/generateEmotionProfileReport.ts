@@ -93,7 +93,7 @@ function evaluateTone(positive: number, negative: number): Tone {
 type EmotionProfileSummary = {
   emotions: { name: keyof EmotionScores; strength: Tone['strength'] }[];
   standoutEmotions: Standout[];
-  valence: Tone;
+  polarity: Tone;
   anticipation: Tone;
   surprise: Tone;
 };
@@ -113,7 +113,7 @@ export function summarizeEmotionProfile(
   return {
     emotions: summary,
     standoutEmotions: pickStandoutsByScore(profile.emotions),
-    valence: evaluateTone(tonalities.positive, tonalities.negative),
+    polarity: evaluateTone(tonalities.positive, tonalities.negative),
     anticipation: evaluateTone(
       tonalities.optimistic_anticipation,
       tonalities.pessimistic_anticipation,
@@ -147,7 +147,7 @@ Tu es un expert en analyse émotionnelle qui traduit un profil émotionnel en un
 Tu recevras un objet JSON contenant :
 - un champ "emotions" : liste des 6 émotions humaines de base avec leur intensité,
 - un champ "standoutEmotions" : liste (éventuellement vide) des émotions dont l'intensité ≥ ${MIN_STANDOUT}, triées par intensité décroissante,
-- trois tonalités globales : "valence", "anticipation" et "surprise" (avec direction et force).
+- trois tonalités globales : "polarité", "anticipation" et "surprise" (avec direction et force).
 
 Ta tâche :
 

@@ -86,23 +86,23 @@ function tonalityMessages(item: RelevantItem): readonly AgentMessage[] {
       content: `
 Tu es un assistant chargé d’évaluer le ton général d’un item Reddit.
 
-Pour ce faire, donne un score entre 0 et 1 pour :
+Pour ce faire, donne un score entre 0 et 1 (indépendants, ils ne doivent pas nécessairement totaliser 1) pour :
 
-- valence positive
-- valence négative
-- surprise (degré d’inattendu)
-- anticipation (degré de projection future)
+- polarité positive
+- polarité négative
+- surprise positive (degré d’inattendu)
+- surprise négative (degré d’inattendu)
+- anticipation optimiste (degré de projection future)
+- anticipation pessimiste (degré de projection future)
 
-Donne aussi une indication qualitative sur le type d’anticipation et de surprise (positive ou négative).
-
-Format JSON :
+Format JSON strict :
 {
-  "positive": number,
-  "negative": number,
-  "positive_surprise": number,
-  "negative_surprise": number,
-  "optimistic_anticipation": number,
-  "pessimistic_anticipation": number
+  "positive": number,                // 0 à 1
+  "negative": number,                // 0 à 1
+  "positive_surprise": number,       // 0 à 1
+  "negative_surprise": number,       // 0 à 1
+  "optimistic_anticipation": number, // 0 à 1
+  "pessimistic_anticipation": number // 0 à 1
 }
 
 Texte : """${item.title}\n\n${item.content}"""`.trim(),
