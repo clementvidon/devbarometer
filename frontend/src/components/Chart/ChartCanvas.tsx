@@ -35,7 +35,6 @@ export function ChartCanvas<T extends { createdAt: string }>({
   return (
     <div
       className={styles.chart}
-      title="Cliquer pour basculer de vue"
       onPointerDown={() => setTooltipActive(true)}
       onPointerUp={() => setTooltipActive(false)}
       onPointerCancel={() => setTooltipActive(false)}
@@ -65,6 +64,7 @@ export function ChartCanvas<T extends { createdAt: string }>({
             tick={{ fill: THEME.axisText }}
             axisLine={{ stroke: THEME.axisLine }}
             tickLine={{ stroke: THEME.axisLine }}
+            domain={['dataMin', 'dataMax']}
           />
 
           <Tooltip

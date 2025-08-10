@@ -10,15 +10,6 @@ import {
 
 type Mode = 'emotions' | 'tonalities';
 
-function LegendItem({ color, label }: { color: string; label: string }) {
-  return (
-    <div className={styles.legendItem}>
-      <span className={styles.colorDot} style={{ backgroundColor: color }} />
-      <span>{label}</span>
-    </div>
-  );
-}
-
 export function ChartLegend({ mode = 'emotions' }: { mode?: Mode }) {
   const items =
     mode === 'emotions'
@@ -34,12 +25,16 @@ export function ChartLegend({ mode = 'emotions' }: { mode?: Mode }) {
         }));
 
   return (
-    <div className={`${styles.legend} ${styles.gridOne}`}>
-      <div className={styles.column}>
-        {items.map((it) => (
-          <LegendItem key={it.key} color={it.color} label={it.label} />
-        ))}
-      </div>
+    <div className={styles.legendCol}>
+      {items.map((it) => (
+        <div key={it.key} className={styles.legendItem}>
+          <span
+            className={styles.colorDot}
+            style={{ backgroundColor: it.color }}
+          />
+          <span>{it.label}</span>
+        </div>
+      ))}
     </div>
   );
 }

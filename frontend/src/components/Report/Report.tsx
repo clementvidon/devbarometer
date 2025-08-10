@@ -18,7 +18,12 @@ export function Report() {
       });
   }, []);
 
-  if (!report) return <p>Loading…</p>;
+  if (!report)
+    return (
+      <p role="status" aria-live="polite">
+        Chargement du rapport…
+      </p>
+    );
 
   return (
     <div className={styles.report}>
