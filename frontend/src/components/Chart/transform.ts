@@ -56,9 +56,9 @@ export function parseTonalities(raw: RawEntry[]): TonalityPoint[] {
 
       return {
         createdAt: item.createdAt,
-        polarity: +(pos - neg).toFixed(3),
-        surprise: +(posSurp - negSurp).toFixed(3),
-        anticipation: +(optAnt - pessAnt).toFixed(3),
+        polarity: +(pos - neg),
+        surprise: +(posSurp - negSurp),
+        anticipation: +(optAnt - pessAnt),
       };
     });
 }

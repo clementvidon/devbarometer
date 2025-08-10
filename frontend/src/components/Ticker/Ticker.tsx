@@ -23,8 +23,18 @@ export function Ticker() {
       });
   }, []);
 
-  if (headlines === null) return <p>Chargement…</p>;
-  if (headlines.length === 0) return <p>Aucun titre chargé.</p>;
+  if (headlines === null)
+    return (
+      <p role="status" aria-live="polite">
+        Chargement des titres…
+      </p>
+    );
+  if (headlines.length === 0)
+    return (
+      <p role="status" aria-live="polite">
+        Aucun titre chargé.
+      </p>
+    );
 
   return (
     <div className={styles.ticker}>
