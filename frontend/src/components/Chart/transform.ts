@@ -1,20 +1,19 @@
 import type { RawEntry } from '../../types/Chart.ts';
-import { COLOR_MAP } from './config.ts';
+import { EMOTION_COLORS } from './config.ts';
 import { dateFmtTooltip } from './formatters.ts';
 
-export type Point = {
+export type EmotionPoint = {
   dateLabel: string;
   createdAt: string;
-} & Record<keyof typeof COLOR_MAP, number>;
+} & Record<keyof typeof EMOTION_COLORS, number>;
 
-export function parseRaw(raw: RawEntry[]): Point[] {
-  const keys = Object.keys(COLOR_MAP) as (keyof typeof COLOR_MAP)[];
-
+export function parseEmotions(raw: RawEntry[]): EmotionPoint[] {
+  const keys = Object.keys(EMOTION_COLORS) as (keyof typeof EMOTION_COLORS)[];
   return raw
     .slice()
     .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
     .map((item) => {
-      const base = {} as Record<keyof typeof COLOR_MAP, number>;
+      const base = {} as Record<keyof typeof EMOTION_COLORS, number>;
       for (const k of keys) base[k] = +(item.emotions[k] ?? 0);
       return {
         dateLabel: dateFmtTooltip.format(new Date(item.createdAt)),
@@ -24,19 +23,42 @@ export function parseRaw(raw: RawEntry[]): Point[] {
     });
 }
 
-export function toCumulative(data: Point[]): Point[] {
-  const keys = Object.keys(COLOR_MAP) as (keyof typeof COLOR_MAP)[];
-  const totals = Object.fromEntries(keys.map((k) => [k, 0])) as Record<
-    keyof typeof COLOR_MAP,
-    number
-  >;
+type RawEntryWithTonalities = RawEntry & {
+  tonalities?: {
+    positive?: number;
+    negative?: number;
+    positive_surprise?: number;
+    negative_surprise?: number;
+    optimistic_anticipation?: number;
+    pessimistic_anticipation?: number;
+  };
+};
 
-  return data.map((p) => {
-    const out = { ...p };
-    keys.forEach((k) => {
-      totals[k] += p[k];
-      out[k] = +totals[k].toFixed(3);
+export type TonalityPoint = {
+  createdAt: string;
+  polarity: number;
+  surprise: number;
+  anticipation: number;
+};
+
+export function parseTonalities(raw: RawEntry[]): TonalityPoint[] {
+  return raw
+    .slice()
+    .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
+    .map((item) => {
+      const t = (item as RawEntryWithTonalities).tonalities;
+      const pos = t?.positive ?? 0;
+      const neg = t?.negative ?? 0;
+      const posSurp = t?.positive_surprise ?? 0;
+      const negSurp = t?.negative_surprise ?? 0;
+      const optAnt = t?.optimistic_anticipation ?? 0;
+      const pessAnt = t?.pessimistic_anticipation ?? 0;
+
+      return {
+        createdAt: item.createdAt,
+        polarity: +(pos - neg).toFixed(3),
+        surprise: +(posSurp - negSurp).toFixed(3),
+        anticipation: +(optAnt - pessAnt).toFixed(3),
+      };
     });
-    return out;
-  });
 }

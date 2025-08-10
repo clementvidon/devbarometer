@@ -7,16 +7,7 @@ export const THEME = {
   tooltipText: '#dbeaff',
 } as const;
 
-export const LABELS_FR: Record<string, string> = {
-  joy: 'Joie',
-  trust: 'Confiance',
-  fear: 'Peur',
-  anger: 'Colère',
-  disgust: 'Dégoût',
-  sadness: 'Tristesse',
-};
-
-export const COLOR_MAP = {
+export const EMOTION_COLORS = {
   joy: '#00FFFF',
   trust: '#00CFFF',
   fear: '#FF6600',
@@ -25,5 +16,29 @@ export const COLOR_MAP = {
   sadness: '#FF9999',
 } as const;
 
-export type Key = keyof typeof COLOR_MAP;
-export const EMOTION_KEYS = Object.keys(COLOR_MAP) as Key[];
+export type EmotionKey = keyof typeof EMOTION_COLORS;
+export const EMOTION_KEYS = Object.keys(EMOTION_COLORS) as EmotionKey[];
+
+export const EMOTION_LABELS: Record<EmotionKey, string> = {
+  joy: 'Joie',
+  trust: 'Confiance',
+  fear: 'Peur',
+  anger: 'Colère',
+  disgust: 'Dégoût',
+  sadness: 'Tristesse',
+};
+
+export const TONALITY_COLORS = {
+  polarity: '#66FF66',
+  surprise: '#FFD166',
+  anticipation: '#7C83FF',
+} as const;
+
+export type TonalityKey = keyof typeof TONALITY_COLORS;
+export const TONALITY_KEYS = Object.keys(TONALITY_COLORS) as TonalityKey[];
+
+export const TONALITY_LABELS: Record<TonalityKey, string> = {
+  polarity: 'Polarité',
+  surprise: 'Surprise',
+  anticipation: 'Anticipation',
+};
