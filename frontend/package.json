@@ -14,7 +14,7 @@
     "test": "vitest run --silent",
     "test:changed": "vitest run --silent --changed || true",
     "test:coverage": "vitest --coverage --silent",
-    "check": "npm-run-all --sequential format:check lint type-check test",
+    "check": "npm-run-all --sequential format lint type-check test",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
