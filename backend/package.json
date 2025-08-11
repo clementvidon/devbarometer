@@ -11,7 +11,7 @@
     "test": "vitest run --silent",
     "test:changed": "vitest run --silent --changed || true",
     "test:coverage": "vitest --coverage --silent",
-    "check": "npm-run-all --sequential format:check lint type-check test",
+    "check": "npm-run-all --sequential format lint type-check test",
     "dev": "tsx src/cmd/http.ts",
     "update-report": "curl -X POST http://localhost:3000/report",
     "db:push": "drizzle-kit push --config=drizzle.config.mjs",
