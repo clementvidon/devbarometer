@@ -38,7 +38,7 @@ export type TonalityKey = keyof typeof TONALITY_COLORS;
 export const TONALITY_KEYS = Object.keys(TONALITY_COLORS) as TonalityKey[];
 
 export const TONALITY_LABELS: Record<TonalityKey, string> = {
-  polarity: 'Polarité',
+  polarity: 'Valence',
   surprise: 'Surprise',
   anticipation: 'Anticipation',
 };
