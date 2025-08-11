@@ -3,25 +3,41 @@
   max-width: var(--width-content);
   height: 3rem;
   overflow: hidden;
-
   background-color: rgba(0, 0, 0, 0.2);
   padding: 0 0.5rem;
-
   display: flex;
   align-items: center;
-
   font-family: var(--font-ui);
   font-size: var(--font-size-content);
   font-weight: var(--font-weight-content);
 }
 
-.ticker:hover .row {
+.track {
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-x;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.dragging .row {
   animation-play-state: paused;
 }
 
-.track {
-  white-space: nowrap;
-  overflow: hidden;
+@media (prefers-reduced-motion: reduce) {
+  .row {
+    animation: none;
+  }
+}
+
+.dragging {
+  cursor: grabbing;
 }
 
 .row {
@@ -35,6 +51,7 @@
   color: lightgrey;
   flex-shrink: 0;
   white-space: nowrap;
+  -webkit-user-drag: none;
 }
 
 @keyframes scroll {
