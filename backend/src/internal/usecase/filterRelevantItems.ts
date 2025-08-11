@@ -34,7 +34,15 @@ contenu      : ${item.content}
 
 async function isRelevant(item: Item, llm: LlmPort): Promise<boolean> {
   try {
-    const raw = await llm.run('gpt-4o-mini', 0.1, makeMessages(item));
+    const raw = await llm.run('gpt-5-chat-latest', makeMessages(item), {
+      temperature: 0.1,
+      maxOutputTokens: 300,
+      topP: 0.1,
+      presencePenalty: 0,
+      frequencyPenalty: 0.2,
+      responseFormat: { type: 'json_object' },
+    });
+
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = RelevanceSchema.safeParse(json);
     return parsed.success ? parsed.data.relevant : false;
