@@ -55,8 +55,8 @@ export function Chart() {
     <div className={styles.chartContainer}>
       <p className={styles.heading}>
         {view === 'emotions'
-          ? `Émotions des ${diffDays}\u00A0 derniers jours.`
-          : `Tonalités des ${diffDays}\u00A0 derniers jours.`}
+          ? `Intensité des émotions — ${diffDays}\u00A0jours.`
+          : `Polarité des tonalités — ${diffDays}\u00A0jours.`}
       </p>
 
       {view === 'emotions' ? (
