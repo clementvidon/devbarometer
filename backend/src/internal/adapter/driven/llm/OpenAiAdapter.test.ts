@@ -24,7 +24,7 @@ describe('OpenAiAdapter', () => {
       { role: 'user', content: 'Say hello' },
     ] as const satisfies AgentMessage[];
 
-    const response = await adapter.run('gpt-3.5-turbo', 0.1, messages);
+    const response = await adapter.run('gpt-3.5-turbo', messages);
 
     expect(response).toBe('Hello world!');
   });
@@ -37,7 +37,7 @@ describe('OpenAiAdapter', () => {
       { role: 'user', content: 'Say hello' },
     ] as const satisfies AgentMessage[];
 
-    const result = await adapter.run('gpt-3.5-turbo', 0.1, messages);
+    const result = await adapter.run('gpt-3.5-turbo', messages);
 
     expect(result).toBe('');
   });

@@ -188,7 +188,13 @@ export async function generateEmotionProfileReport(
   try {
     const summary = summarizeEmotionProfile(agregatedEmotionProfile);
     console.log(summary);
-    const raw = await llm.run('gpt-4o-mini', 0.5, makeMessages(summary));
+    const raw = await llm.run('gpt-5-chat-latest', makeMessages(summary), {
+      temperature: 0.4,
+      maxOutputTokens: 100,
+      topP: 0.9,
+      frequencyPenalty: 0.2,
+    });
+
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = LLMOutputSchema.safeParse(json);
     return parsed.success ? parsed.data : FALLBACK;

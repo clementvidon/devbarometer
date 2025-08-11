@@ -115,7 +115,13 @@ async function fetchEmotions(
   llm: LlmPort,
 ): Promise<EmotionScores> {
   try {
-    const raw = await llm.run('gpt-4o-mini', 0.1, emotionMessages(item));
+    const raw = await llm.run('gpt-5-chat-latest', emotionMessages(item), {
+      temperature: 0.1,
+      maxOutputTokens: 300,
+      topP: 0.1,
+      frequencyPenalty: 0.1,
+      responseFormat: { type: 'json_object' },
+    });
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = EmotionSchema.safeParse(json);
     return parsed.success ? parsed.data : FALLBACK_EMOTIONS;
@@ -129,7 +135,13 @@ async function fetchTonalities(
   llm: LlmPort,
 ): Promise<TonalityScores> {
   try {
-    const raw = await llm.run('gpt-4o-mini', 0.1, tonalityMessages(item));
+    const raw = await llm.run('gpt-5-chat-latest', tonalityMessages(item), {
+      temperature: 0.1,
+      maxOutputTokens: 300,
+      topP: 0.1,
+      frequencyPenalty: 0.1,
+      responseFormat: { type: 'json_object' },
+    });
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = TonalitySchema.safeParse(json);
     return parsed.success ? parsed.data : FALLBACK_TONALITIES;
