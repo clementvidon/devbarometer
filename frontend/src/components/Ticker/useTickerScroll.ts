@@ -3,12 +3,15 @@ import styles from './Ticker.module.css';
 
 type UseTickerScrollOptions = {
   copies: number;
+  onPause: () => void;
+  onResume: () => void;
+  pauseDelay?: number;
 };
 
 export function useTickerScroll(
   trackRef: React.RefObject<HTMLDivElement | null>,
   rowRef: React.RefObject<HTMLDivElement | null>,
-  { copies }: UseTickerScrollOptions,
+  { copies, onPause, onResume, pauseDelay = 120 }: UseTickerScrollOptions,
 ) {
   const DRAG_THRESHOLD = 10;
   const EDGE_PADDING = 24;
@@ -17,9 +20,9 @@ export function useTickerScroll(
   const isDown = useRef(false);
   const hasDragged = useRef(false);
   const dragJustHappened = useRef(false);
-  const hasDraggedOnce = useRef(false);
   const startX = useRef(0);
   const startScrollLeft = useRef(0);
+  const pauseTimer = useRef<number | null>(null);
 
   const recenterIfNeeded = () => {
     const track = trackRef.current;
@@ -53,9 +56,15 @@ export function useTickerScroll(
     return () => cancelAnimationFrame(id);
   }, [copies]);
 
+  const clearPauseTimer = () => {
+    if (pauseTimer.current !== null) {
+      window.clearTimeout(pauseTimer.current);
+      pauseTimer.current = null;
+    }
+  };
+
   const onPointerDown = useCallback<React.PointerEventHandler<HTMLDivElement>>(
     (e) => {
-      e.preventDefault();
       const track = trackRef.current;
       if (!track) return;
 
@@ -67,19 +76,26 @@ export function useTickerScroll(
       startScrollLeft.current = track.scrollLeft;
       track.classList.add(styles.dragging);
 
+      clearPauseTimer();
+      pauseTimer.current = window.setTimeout(() => {
+        if (isDown.current && !hasDragged.current) onPause();
+      }, pauseDelay);
+
       const onUp = () => {
         isDown.current = false;
-        hasDragged.current = false;
         track.classList.remove(styles.dragging);
+
+        clearPauseTimer();
         recenterIfNeeded();
         cancelScrollInertia(track);
-        hasDraggedOnce.current = false;
+        onResume();
+
         window.removeEventListener('pointerup', onUp);
       };
 
       window.addEventListener('pointerup', onUp);
     },
-    [trackRef, rowRef],
+    [trackRef, onPause, onResume, pauseDelay],
   );
 
   const onPointerMove = useCallback<React.PointerEventHandler<HTMLDivElement>>(
@@ -88,10 +104,12 @@ export function useTickerScroll(
       if (!track || !isDown.current) return;
 
       const dx = e.clientX - startX.current;
+
       if (!hasDragged.current && Math.abs(dx) > DRAG_THRESHOLD) {
         hasDragged.current = true;
         dragJustHappened.current = true;
-        hasDraggedOnce.current = true;
+        clearPauseTimer();
+        onPause(); // pause immédiate dès qu’on entre en drag
       }
 
       if (hasDragged.current) {
@@ -100,7 +118,7 @@ export function useTickerScroll(
         e.preventDefault();
       }
     },
-    [trackRef, rowRef],
+    [trackRef, onPause],
   );
 
   const onClickCapture = useCallback<React.MouseEventHandler<HTMLDivElement>>(
@@ -117,7 +135,6 @@ export function useTickerScroll(
     onPointerDown,
     onPointerMove,
     onClickCapture,
-    hasDraggedOnce,
     placeInitialScroll,
   };
 }

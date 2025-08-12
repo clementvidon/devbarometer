@@ -41,9 +41,8 @@
   will-change: transform;
 }
 
-.noAnim {
-  animation: none !important;
-  transform: none !important;
+.paused {
+  animation-play-state: paused;
 }
 
 .item {

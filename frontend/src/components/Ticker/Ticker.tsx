@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Ticker.module.css';
 import { useTickerData } from './useTickerData.ts';
 import { useTickerScroll } from './useTickerScroll.ts';
@@ -16,13 +16,17 @@ export function Ticker() {
     [data],
   );
 
-  const {
-    onPointerDown,
-    onPointerMove,
-    onClickCapture,
-    hasDraggedOnce,
-    placeInitialScroll,
-  } = useTickerScroll(trackRef, rowRef, { copies: COPIES });
+  const [paused, setPaused] = useState(false);
+  const onPause = useCallback(() => setPaused(true), []);
+  const onResume = useCallback(() => setPaused(false), []);
+
+  const { onPointerDown, onPointerMove, onClickCapture, placeInitialScroll } =
+    useTickerScroll(trackRef, rowRef, {
+      copies: COPIES,
+      onPause,
+      onResume,
+      pauseDelay: 120,
+    });
 
   useEffect(() => {
     const track = trackRef.current;
@@ -35,25 +39,21 @@ export function Ticker() {
     }
   }, [looped.length]);
 
-  useEffect(() => {
-    placeInitialScroll();
-  }, [looped.length, placeInitialScroll]);
+  useEffect(() => placeInitialScroll(), [looped.length, placeInitialScroll]);
 
-  if (isLoading) {
+  if (isLoading)
     return (
       <p role="status" aria-live="polite">
         Chargement des titres…
       </p>
     );
-  }
-
-  if (error || !looped.length) {
+  if (error)
     return (
       <p role="alert" aria-live="assertive">
-        Erreur de chargement des titres.
+        Erreur de chargement.
       </p>
     );
-  }
+  if (!looped.length) return <p role="status">Aucun titre disponible.</p>;
 
   return (
     <div
@@ -65,7 +65,7 @@ export function Ticker() {
       <div ref={trackRef} className={styles.track}>
         <div
           ref={rowRef}
-          className={`${styles.row} ${hasDraggedOnce.current ? styles.noAnim : ''}`}
+          className={`${styles.row} ${paused ? styles.paused : ''}`}
         >
           {looped.map(({ title, source, weight }, i) => (
             <a
@@ -74,7 +74,7 @@ export function Ticker() {
               target="_blank"
               rel="noopener noreferrer"
               className={styles.item}
-              aria-label={`Source: ${title}`}
+              aria-label={`Ouvrir: ${title} (nouvelle fenêtre)`}
               title={title}
               draggable={false}
             >
