@@ -6,7 +6,7 @@ import { useTickerScroll } from './useTickerScroll.ts';
 const COPIES = 3;
 
 export function Ticker() {
-  const { headlines, isLoading } = useTickerData();
+  const { headlines, isLoading, error } = useTickerData();
   const trackRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
 
@@ -47,10 +47,10 @@ export function Ticker() {
     );
   }
 
-  if (!looped.length) {
+  if (error || !looped.length) {
     return (
-      <p role="status" aria-live="polite">
-        Aucun titre chargé.
+      <p role="alert" aria-live="assertive">
+        Erreur de chargement des titres.
       </p>
     );
   }
