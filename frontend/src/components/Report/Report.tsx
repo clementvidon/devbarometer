@@ -1,29 +1,25 @@
-import { useEffect, useState } from 'react';
-import type { SentimentReport } from '../../types/SentimentReport';
+// src/components/Report/Report.tsx
 import styles from './Report.module.css';
+import { useReport } from './useReport.ts';
 
 export function Report() {
-  const [report, setReport] = useState<SentimentReport | null>(null);
+  const { report, isLoading, error } = useReport();
 
-  useEffect(() => {
-    const baseUrl: string = import.meta.env.BASE_URL ?? '/';
-    void fetch(baseUrl + 'report.json')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data: unknown) => {
-        if (data && typeof data === 'object') {
-          setReport(data as SentimentReport);
-        } else {
-          setReport(null);
-        }
-      });
-  }, []);
-
-  if (!report)
+  if (isLoading) {
     return (
       <p role="status" aria-live="polite">
         Chargement du rapport…
       </p>
     );
+  }
+
+  if (error || !report) {
+    return (
+      <p role="alert" aria-live="assertive">
+        Erreur de chargement du rapport.
+      </p>
+    );
+  }
 
   return (
     <div className={styles.report}>

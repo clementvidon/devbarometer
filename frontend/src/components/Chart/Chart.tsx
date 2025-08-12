@@ -1,52 +1,45 @@
-import { useEffect, useState } from 'react';
-import { assertRawEntries } from '../../types/Chart.ts';
+import { useState } from 'react';
 import styles from './Chart.module.css';
 import { ChartControls } from './ChartControls.tsx';
 import { ChartEmotions } from './ChartEmotions.tsx';
 import { ChartLegend } from './ChartLegend.tsx';
 import { ChartTonalities } from './ChartTonalities.tsx';
-import {
-  parseEmotions,
-  parseTonalities,
-  type EmotionPoint,
-  type TonalityPoint,
-} from './parsers.ts';
+import { useChartData } from './useChartData.ts';
 
 type View = 'emotions' | 'tonalities';
 
 export function Chart() {
-  const [emotionData, setEmotionData] = useState<EmotionPoint[] | null>(null);
-  const [tonalityData, setTonalityData] = useState<TonalityPoint[] | null>(
-    null,
-  );
+  const { emotionData, tonalityData, isLoading, error } = useChartData();
+
   const [view, setView] = useState<View>('emotions');
   const [hudVisible, setHudVisible] = useState(false);
   const [tooltipActive, setTooltipActive] = useState(false);
 
-  useEffect(() => {
-    void (async () => {
-      try {
-        const res = await fetch('chart.json');
-        const rawJson: unknown = await res.json();
-        assertRawEntries(rawJson);
-        const raw = rawJson;
-        setEmotionData(parseEmotions(raw));
-        setTonalityData(parseTonalities(raw));
-      } catch (e) {
-        console.error('Erreur lors du chargement des données:', e);
-        setEmotionData([]);
-        setTonalityData([]);
-      }
-    })();
-  }, []);
-
-  const diffDays = emotionData?.length ?? 0;
-  if (!emotionData || !tonalityData)
+  if (isLoading) {
     return (
       <p role="status" aria-live="polite">
         Chargement du graphique…
       </p>
     );
+  }
+
+  if (!emotionData || !tonalityData) {
+    return (
+      <p role="alert" aria-live="assertive">
+        Données manquantes ou invalides.
+      </p>
+    );
+  }
+
+  if (error) {
+    return (
+      <p role="alert" aria-live="assertive">
+        Erreur de chargement du graphique.
+      </p>
+    );
+  }
+
+  const diffDays = emotionData?.length ?? 0;
 
   const toggle = () =>
     setView((v) => (v === 'emotions' ? 'tonalities' : 'emotions'));
@@ -55,8 +48,8 @@ export function Chart() {
     <div className={styles.chartContainer}>
       <p className={styles.heading}>
         {view === 'emotions'
-          ? `Intensité des émotions – ${diffDays}\u00A0jours.`
-          : `Polarité des tonalités – ${diffDays}\u00A0jours.`}
+          ? `Intensité des émotions – ${diffDays}\u00A0jours`
+          : `Polarité des tonalités – ${diffDays}\u00A0jours`}
       </p>
 
       {view === 'emotions' ? (

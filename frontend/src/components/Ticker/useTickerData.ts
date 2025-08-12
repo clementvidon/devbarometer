@@ -4,6 +4,7 @@ import { shuffleArray } from '../../utils/shuffle.ts';
 
 export function useTickerData() {
   const [headlines, setHeadlines] = useState<HeadlineInfo[] | null>(null);
+  const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     const baseUrl = import.meta.env.BASE_URL ?? '/';
@@ -13,14 +14,18 @@ export function useTickerData() {
         if (Array.isArray(data) && data.every(isHeadline)) {
           setHeadlines(shuffleArray(data));
         } else {
-          setHeadlines([]);
+          throw new Error('Format de données invalide');
         }
       })
-      .catch(() => setHeadlines([]));
+      .catch((e) => {
+        setError(e instanceof Error ? e : new Error('Erreur inconnue'));
+        setHeadlines([]);
+      });
   }, []);
 
   return {
     headlines,
-    isLoading: headlines === null,
+    isLoading: headlines === null && error === null,
+    error,
   };
 }
