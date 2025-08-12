@@ -10,7 +10,6 @@
   font-family: var(--font-ui);
   font-size: var(--font-size-content);
   font-weight: var(--font-weight-content);
-  /* élargit la zone de drag à toute la box */
   cursor: grab;
   touch-action: pan-x;
 }
@@ -27,24 +26,28 @@
   display: none;
 }
 
-.dragging .row {
-  animation-play-state: paused;
-}
 .dragging {
   cursor: grabbing;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .row {
-    animation: none;
-  }
-}
-
-/* 3 copies → l’animation reste validée si tu veux l’auto défilement */
 .row {
   display: inline-flex;
   gap: 1rem;
-  animation: scroll 60s linear infinite;
+  animation: scroll-left 60s linear infinite;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-33.3333%);
+  }
+}
+
+.noAnim {
+  animation: none !important;
+  transform: none !important;
 }
 
 .item {
@@ -53,13 +56,4 @@
   flex-shrink: 0;
   white-space: nowrap;
   -webkit-user-drag: none;
-}
-
-@keyframes scroll {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-33.3333%);
-  } /* 1/copies */
 }

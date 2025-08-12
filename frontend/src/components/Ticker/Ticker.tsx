@@ -5,6 +5,7 @@ import styles from './Ticker.module.css';
 
 const COPIES = 3;
 const DRAG_THRESHOLD = 10;
+const ANIM_RESUME_DELAY = 5000;
 
 export function Ticker() {
   const [headlines, setHeadlines] = useState<HeadlineInfo[] | null>(null);
@@ -12,25 +13,25 @@ export function Ticker() {
   const trackRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
 
-  // Drag state
   const isDown = useRef(false);
   const hasDragged = useRef(false);
   const dragJustHappened = useRef(false);
+  const hasDraggedOnce = useRef(false);
   const startX = useRef(0);
   const startScrollLeft = useRef(0);
+  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Duplicated data for infinite scroll
   const data = useMemo(
     () => (headlines ? shuffleArray(headlines) : []),
     [headlines],
   );
+
   const looped = useMemo(
     () =>
       data.length ? Array.from({ length: COPIES }, () => data).flat() : [],
     [data],
   );
 
-  // Load headlines from JSON
   useEffect(() => {
     const baseUrl = import.meta.env.BASE_URL ?? '/';
     void fetch(baseUrl + 'ticker.json')
@@ -45,7 +46,6 @@ export function Ticker() {
       .catch(() => setHeadlines([]));
   }, []);
 
-  // Place scroll at center of loop (on second copy)
   useEffect(() => {
     const track = trackRef.current;
     const row = rowRef.current;
@@ -59,7 +59,6 @@ export function Ticker() {
     return () => cancelAnimationFrame(id);
   }, [looped.length]);
 
-  // Recenter if scroll is near either edge
   const recenterIfNeeded = () => {
     const track = trackRef.current;
     const row = rowRef.current;
@@ -76,7 +75,12 @@ export function Ticker() {
     }
   };
 
-  // ----- Drag handlers -----
+  const resetAnimTimeout = () => {
+    if (resumeTimer.current) clearTimeout(resumeTimer.current);
+    resumeTimer.current = setTimeout(() => {
+      hasDraggedOnce.current = false;
+    }, ANIM_RESUME_DELAY);
+  };
 
   const onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
     const track = trackRef.current;
@@ -96,6 +100,8 @@ export function Ticker() {
       track.classList.remove(styles.dragging);
       recenterIfNeeded();
       window.removeEventListener('pointerup', onUp);
+
+      resetAnimTimeout();
     };
 
     window.addEventListener('pointerup', onUp);
@@ -110,6 +116,7 @@ export function Ticker() {
     if (!hasDragged.current && Math.abs(dx) > DRAG_THRESHOLD) {
       hasDragged.current = true;
       dragJustHappened.current = true;
+      hasDraggedOnce.current = true;
     }
 
     if (hasDragged.current) {
@@ -125,8 +132,6 @@ export function Ticker() {
       e.stopPropagation();
     }
   };
-
-  // ----- UI -----
 
   if (headlines === null) {
     return (
@@ -152,7 +157,10 @@ export function Ticker() {
       onClickCapture={onClickCapture}
     >
       <div ref={trackRef} className={styles.track}>
-        <div ref={rowRef} className={styles.row}>
+        <div
+          ref={rowRef}
+          className={`${styles.row} ${hasDraggedOnce.current ? styles.noAnim : ''}`}
+        >
           {looped.map(({ title, source, weight }, i) => (
             <a
               key={i}
@@ -164,7 +172,7 @@ export function Ticker() {
               title={title}
               draggable={false}
             >
-              «{title}»&nbsp;⇧{weight}&nbsp;
+              «{title}» ⇧{weight}
             </a>
           ))}
         </div>
