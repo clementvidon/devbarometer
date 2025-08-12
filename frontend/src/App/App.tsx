@@ -9,9 +9,11 @@ function App() {
       <header className={styles.header}>
         <h1 className={styles.heading}>DevBarometer</h1>
         <a
-          href="https://github.com/clementvidon/devbarometer"
           className={styles.navButton}
+          href="https://github.com/clementvidon/devbarometer"
           aria-label="Infos page"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           à propos
         </a>
@@ -27,7 +29,9 @@ function App() {
         Made with ❤️ by
         <a
           href="https://github.com/clementvidon/"
-          aria-label="Clément Vidon GitHub"
+          aria-label="Author's GitHub"
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {' Clément Vidon '}
         </a>

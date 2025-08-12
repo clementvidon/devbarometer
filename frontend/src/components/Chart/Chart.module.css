@@ -88,11 +88,6 @@
   cursor: pointer;
 }
 
-.controlItem:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
-}
-
 .controlItem:disabled {
   opacity: 0.5;
   cursor: not-allowed;
