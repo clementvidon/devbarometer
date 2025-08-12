@@ -2,14 +2,17 @@
   width: 100%;
   max-width: var(--width-content);
   height: 3rem;
-  overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.2);
   padding: 0 0.5rem;
   display: flex;
   align-items: center;
+
+  background-color: rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+
   font-family: var(--font-ui);
   font-size: var(--font-size-content);
   font-weight: var(--font-weight-content);
+
   cursor: grab;
   touch-action: none;
 }
@@ -22,6 +25,7 @@
   scrollbar-width: none;
   user-select: none;
 }
+
 .track::-webkit-scrollbar {
   display: none;
 }
@@ -34,15 +38,7 @@
   display: inline-flex;
   gap: 1rem;
   animation: scroll-left 60s linear infinite;
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-33.3333%);
-  }
+  will-change: transform;
 }
 
 .noAnim {
@@ -51,9 +47,18 @@
 }
 
 .item {
-  text-decoration: none;
   color: lightgrey;
+  text-decoration: none;
   flex-shrink: 0;
   white-space: nowrap;
   -webkit-user-drag: none;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-33.3333%);
+  } /* 1 / COPIES */
 }
