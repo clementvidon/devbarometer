@@ -1,52 +1,52 @@
 [
   {
     "title": "J'ai viré un Freelance en moins de 3 jours parce qu'il comprenait rien",
-    "weight": 964,
+    "weight": 965,
     "source": "https://reddit.com/comments/1mj2vuj"
   },
   {
     "title": "J'ai perdu un contrat à 120k€ parce que j'ai vexé un dev",
-    "weight": 743,
+    "weight": 744,
     "source": "https://reddit.com/comments/1micci6"
   },
   {
     "title": "Quand tu bosses dans une ESN à 40k€/an et que le boss encaisse 1,8 million de bénéf net via sa holding...\"",
-    "weight": 373,
+    "weight": 403,
     "source": "https://reddit.com/comments/1mlo0q4"
   },
   {
-    "title": "Quand un freelance propose random.choice() en Java, faut-il l’euthanasier ou lui offrir un mug ?",
-    "weight": 159,
-    "source": "https://reddit.com/comments/1mjhf9e"
-  },
-  {
     "title": "un profil blacklisté c'est réalité ou mytho ?",
-    "weight": 40,
+    "weight": 39,
     "source": "https://reddit.com/comments/1mkqrqc"
   },
   {
     "title": "Salaire de tech lead/manager a Paris",
-    "weight": 30,
+    "weight": 36,
     "source": "https://reddit.com/comments/1mjvszh"
   },
   {
-    "title": "Le développement Android est-il en train de mourir en île-de-France? Que devrais-je faire ?",
-    "weight": 28,
-    "source": "https://reddit.com/comments/1mlcbdh"
-  },
-  {
     "title": "Voit-on enfin le bout du tunnel ?? 🫧",
-    "weight": 26,
+    "weight": 34,
     "source": "https://reddit.com/comments/1mmpf87"
   },
   {
-    "title": "Mon poste d’\"expert technique\" touche à tout… et je ne sais pas comment l’expliquer aux RH / Recruteurs",
-    "weight": 24,
-    "source": "https://reddit.com/comments/1mm11fr"
+    "title": "Le développement Android est-il en train de mourir en île-de-France? Que devrais-je faire ?",
+    "weight": 29,
+    "source": "https://reddit.com/comments/1mlcbdh"
   },
   {
     "title": "Avis Dassault Aviation",
-    "weight": 24,
+    "weight": 26,
     "source": "https://reddit.com/comments/1mkyrm0"
+  },
+  {
+    "title": "Question aux devs et aux freelances IT",
+    "weight": 18,
+    "source": "https://reddit.com/comments/1mlqvs9"
+  },
+  {
+    "title": "Est-ce que les développeurs nomades existent encore ?",
+    "weight": 15,
+    "source": "https://reddit.com/comments/1mk203s"
   }
 ]
