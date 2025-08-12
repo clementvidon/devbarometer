@@ -10,7 +10,7 @@ import {
   parseTonalities,
   type EmotionPoint,
   type TonalityPoint,
-} from './transform.ts';
+} from './parsers.ts';
 
 type View = 'emotions' | 'tonalities';
 
