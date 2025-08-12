@@ -11,12 +11,12 @@
   font-size: var(--font-size-content);
   font-weight: var(--font-weight-content);
   cursor: grab;
-  touch-action: pan-x;
+  touch-action: none;
 }
 
 .track {
   white-space: nowrap;
-  overflow-x: auto;
+  overflow-x: hidden;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;

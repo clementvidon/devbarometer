@@ -5,7 +5,6 @@ import styles from './Ticker.module.css';
 
 const COPIES = 3;
 const DRAG_THRESHOLD = 10;
-const ANIM_RESUME_DELAY = 5000;
 
 export function Ticker() {
   const [headlines, setHeadlines] = useState<HeadlineInfo[] | null>(null);
@@ -19,7 +18,6 @@ export function Ticker() {
   const hasDraggedOnce = useRef(false);
   const startX = useRef(0);
   const startScrollLeft = useRef(0);
-  const resumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const data = useMemo(
     () => (headlines ? shuffleArray(headlines) : []),
@@ -75,13 +73,6 @@ export function Ticker() {
     }
   };
 
-  const resetAnimTimeout = () => {
-    if (resumeTimer.current) clearTimeout(resumeTimer.current);
-    resumeTimer.current = setTimeout(() => {
-      hasDraggedOnce.current = false;
-    }, ANIM_RESUME_DELAY);
-  };
-
   const onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
     const track = trackRef.current;
     if (!track) return;
@@ -101,7 +92,13 @@ export function Ticker() {
       recenterIfNeeded();
       window.removeEventListener('pointerup', onUp);
 
-      resetAnimTimeout();
+      function cancelScrollInertia(el: HTMLElement) {
+        el.scrollLeft += 0.01;
+        el.scrollLeft -= 0.01;
+      }
+      cancelScrollInertia(track);
+
+      hasDraggedOnce.current = false;
     };
 
     window.addEventListener('pointerup', onUp);
