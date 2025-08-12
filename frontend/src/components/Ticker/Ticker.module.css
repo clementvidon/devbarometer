@@ -10,6 +10,9 @@
   font-family: var(--font-ui);
   font-size: var(--font-size-content);
   font-weight: var(--font-weight-content);
+  /* élargit la zone de drag à toute la box */
+  cursor: grab;
+  touch-action: pan-x;
 }
 
 .track {
@@ -18,9 +21,7 @@
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
-  cursor: grab;
   user-select: none;
-  touch-action: pan-x;
 }
 .track::-webkit-scrollbar {
   display: none;
@@ -29,6 +30,9 @@
 .dragging .row {
   animation-play-state: paused;
 }
+.dragging {
+  cursor: grabbing;
+}
 
 @media (prefers-reduced-motion: reduce) {
   .row {
@@ -36,10 +40,7 @@
   }
 }
 
-.dragging {
-  cursor: grabbing;
-}
-
+/* 3 copies → l’animation reste validée si tu veux l’auto défilement */
 .row {
   display: inline-flex;
   gap: 1rem;
@@ -59,6 +60,6 @@
     transform: translateX(0%);
   }
   100% {
-    transform: translateX(-50%);
-  }
+    transform: translateX(-33.3333%);
+  } /* 1/copies */
 }
