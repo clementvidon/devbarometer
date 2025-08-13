@@ -43,6 +43,15 @@ export function ChartControls({
       >
         S'abonner au rapport 📦
       </button>
+
+      <button
+        type="button"
+        className={styles.controlItem}
+        disabled
+        title="Analyste interactif — bientôt disponible"
+      >
+        Interroger l'analyste 💬
+      </button>
     </div>
   );
 }
