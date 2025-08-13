@@ -35,7 +35,7 @@ function App() {
         >
           {' Clément Vidon '}
         </a>
-        · MIT License
+        — CC BY-NC 4.0
       </footer>
     </>
   );
