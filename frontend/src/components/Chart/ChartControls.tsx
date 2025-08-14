@@ -50,7 +50,7 @@ export function ChartControls({
         disabled
         title="Analyste interactif — bientôt disponible"
       >
-        Interroger l'analyste 💬
+        Parler à l'analyste 💬
       </button>
     </div>
   );
