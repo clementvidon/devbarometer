@@ -35,7 +35,6 @@ function App() {
         >
           {' Clément Vidon '}
         </a>
-        — CC BY-NC 4.0
       </footer>
     </>
   );
