@@ -33,6 +33,7 @@ export function aggregateEmotionProfiles(
       count: 0,
       emotions: { ...emotionTotals },
       tonalities: { ...tonalityTotals },
+      totalWeight: 0,
     };
   }
 
@@ -75,5 +76,6 @@ export function aggregateEmotionProfiles(
     count: profiles.length,
     emotions: averagedEmotions,
     tonalities: averagedTonalities,
+    totalWeight: weightSum,
   };
 }

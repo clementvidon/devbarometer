@@ -123,12 +123,14 @@ function createMockSnapshot(
     fetchUrl: 'https://reddit.com/mock',
     items: [],
     relevantItems: [],
+    weightedItems: [],
     emotionProfilePerItem: [],
     aggregatedEmotionProfile: {
       date: '2025-08-03',
       count: 1,
       emotions: fakeEmotions,
       tonalities: fakeTonalities,
+      totalWeight: 1,
     },
     report: {
       text: 'Latest emotionProfile',

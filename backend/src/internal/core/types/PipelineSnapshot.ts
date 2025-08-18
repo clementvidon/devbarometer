@@ -11,6 +11,7 @@ export type PipelineSnapshot = {
   fetchUrl: string;
   items: Item[];
   relevantItems: RelevantItem[];
+  weightedItems: RelevantItem[];
   emotionProfilePerItem: EmotionProfile[];
   aggregatedEmotionProfile: AggregatedEmotionProfile;
   report: EmotionProfileReport;

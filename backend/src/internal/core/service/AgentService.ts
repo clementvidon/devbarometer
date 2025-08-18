@@ -1,4 +1,6 @@
 import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles.ts';
+import { computeMomentumWeights } from '../../usecase/computeMomentumWeights.ts';
+import { computeWeightsCap } from '../../usecase/computeWeightsCap.ts';
 import { createEmotionProfiles } from '../../usecase/createEmotionProfiles.ts';
 import { fetchRedditItems } from '../../usecase/fetchRedditItems.ts';
 import { filterRelevantItems } from '../../usecase/filterRelevantItems.ts';
@@ -8,10 +10,22 @@ import type {
   EmotionProfile,
 } from '../entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
+import type { RelevantItem } from '../entity/Item.ts';
 import type { FetchPort } from '../port/FetchPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
+
+type SnapshotLike = { createdAt: string };
+
+function sortSnapshotsDesc<T extends SnapshotLike>(arr: T[]): T[] {
+  return arr.slice().sort((a, b) => {
+    const tb = Date.parse(b.createdAt);
+    const ta = Date.parse(a.createdAt);
+    if (!Number.isNaN(tb) && !Number.isNaN(ta)) return tb - ta;
+    return b.createdAt.localeCompare(a.createdAt);
+  });
+}
 
 export class AgentService {
   private readonly fetcher: FetchPort;
@@ -36,9 +50,29 @@ export class AgentService {
     console.log(
       `[AgentService] Selected ${relevantItems.length}/${items.length} items relevant to the tech job market.`,
     );
+    console.log(relevantItems);
+
+    const prevItems = await this.getPrevRelevantItems();
+    const momentumItems = computeMomentumWeights(relevantItems, prevItems);
+    console.log(
+      `[AgentService] Computed momentum (log1p Δ) for ${momentumItems.length} items${prevItems ? ` using ${prevItems.length} baseline items` : ''}.`,
+    );
+
+    const { cappedItems, capped, reason, capValue, topShare, N } =
+      computeWeightsCap(momentumItems, {
+        minN: 20,
+        topShareThreshold: 0.5,
+        percentile: 0.95,
+      });
+    console.log(
+      `[AgentService] cap p95 ${capped ? 'APPLIED' : 'SKIPPED'} reason=${reason} cap=${capValue?.toFixed(3)} N=${N} topShare=${topShare.toFixed(2)}`,
+    );
+
+    const weightedItems = cappedItems;
+    console.log(`[AgentService] Computed weight of each item.`);
 
     const emotionProfilePerItem = await createEmotionProfiles(
-      relevantItems,
+      weightedItems,
       this.llm,
     );
     console.log(
@@ -65,6 +99,7 @@ export class AgentService {
       fetchUrl: fetchUrl,
       items,
       relevantItems,
+      weightedItems,
       emotionProfilePerItem,
       aggregatedEmotionProfile,
       report,
@@ -102,9 +137,10 @@ export class AgentService {
       createdAt: string;
       emotions: AggregatedEmotionProfile['emotions'];
       tonalities: AggregatedEmotionProfile['tonalities'];
+      totalWeight: number;
     }[]
   > {
-    const snapshots = await this.persistence.getSnapshots();
+    const snapshots = sortSnapshotsDesc(await this.persistence.getSnapshots());
 
     return snapshots
       .filter((s) => {
@@ -120,6 +156,12 @@ export class AgentService {
         createdAt: s.createdAt,
         emotions: s.aggregatedEmotionProfile.emotions,
         tonalities: s.aggregatedEmotionProfile.tonalities,
+        totalWeight: s.aggregatedEmotionProfile.totalWeight,
       }));
+  }
+
+  async getPrevRelevantItems(): Promise<RelevantItem[] | null> {
+    const snapshots = sortSnapshotsDesc(await this.persistence.getSnapshots());
+    return snapshots[1]?.relevantItems ?? null;
   }
 }
