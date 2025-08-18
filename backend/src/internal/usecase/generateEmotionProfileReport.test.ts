@@ -30,6 +30,7 @@ const fakeAggregatedEmotionProfile: AggregatedEmotionProfile = {
     positive_surprise: 0,
     negative_surprise: 0,
   },
+  totalWeight: 1,
 };
 
 const fakeEmotionProfileReport: EmotionProfileReport = {
