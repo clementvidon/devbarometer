@@ -1,32 +1,32 @@
 [
   {
-    "title": "Les diplômés en informatique se retrouvent à faire de la plonge",
-    "weight": 47,
-    "source": "https://reddit.com/comments/1mo3ahi"
-  },
-  {
-    "title": "Voit-on enfin le bout du tunnel ?? 🫧",
-    "weight": 39,
-    "source": "https://reddit.com/comments/1mmpf87"
-  },
-  {
-    "title": "VIE après alternance, bonne idée?",
-    "weight": 19,
-    "source": "https://reddit.com/comments/1mpw2iy"
-  },
-  {
     "title": "Que faire ?",
-    "weight": 15,
+    "weight": 0.6931471805599453,
     "source": "https://reddit.com/comments/1mo3vac"
   },
   {
     "title": "Independants qui êtes revenus au CDI, comment s'est passée la transition ? Etes vous satisfaits de votre décision ?",
-    "weight": 15,
+    "weight": 0.6931471805599453,
     "source": "https://reddit.com/comments/1mnk0vn"
   },
   {
     "title": "Rachat d'entreprise",
-    "weight": 11,
+    "weight": 0.6931471805599453,
     "source": "https://reddit.com/comments/1mobxjg"
+  },
+  {
+    "title": "Les diplômés en informatique se retrouvent à faire de la plonge",
+    "weight": 0,
+    "source": "https://reddit.com/comments/1mo3ahi"
+  },
+  {
+    "title": "VIE après alternance, bonne idée?",
+    "weight": 0,
+    "source": "https://reddit.com/comments/1mpw2iy"
+  },
+  {
+    "title": "Besoin d’avis de devs expérimentés en Java",
+    "weight": 0,
+    "source": "https://reddit.com/comments/1mt0rqg"
   }
 ]

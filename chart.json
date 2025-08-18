@@ -1,5 +1,45 @@
 [
   {
+    "createdAt": "2025-08-18T10:23:57.725Z",
+    "emotions": {
+      "joy": 0.3,
+      "fear": 0.43333333333333335,
+      "anger": 0.16666666666666669,
+      "trust": 0.36666666666666664,
+      "disgust": 0.13333333333333333,
+      "sadness": 0.33333333333333337
+    },
+    "tonalities": {
+      "negative": 0.4333333333333333,
+      "positive": 0.3,
+      "negative_surprise": 0.3,
+      "positive_surprise": 0.16666666666666669,
+      "optimistic_anticipation": 0.3,
+      "pessimistic_anticipation": 0.4333333333333333
+    },
+    "totalWeight": 2.0794415416798357
+  },
+  {
+    "createdAt": "2025-08-17T22:26:25.995Z",
+    "emotions": {
+      "joy": 0.15242558871048498,
+      "fear": 0.5008207887128253,
+      "anger": 0.30082078871282536,
+      "trust": 0.274384408465381,
+      "disgust": 0.24757441128951502,
+      "sadness": 0.48535472380454997
+    },
+    "tonalities": {
+      "negative": 0.651231183069238,
+      "positive": 0.18005637459917628,
+      "negative_surprise": 0.469533231044411,
+      "positive_surprise": 0.10567196613379529,
+      "optimistic_anticipation": 0.23613873508938427,
+      "pessimistic_anticipation": 0.6008207887128253
+    },
+    "totalWeight": 4.430816798843313
+  },
+  {
     "createdAt": "2025-08-17T10:20:12.992Z",
     "emotions": {
       "joy": 0.2243150684931507,
