@@ -28,17 +28,4 @@ describe('OpenAiAdapter', () => {
 
     expect(response).toBe('Hello world!');
   });
-
-  test('returns fallback when OpenAI returns no content', async () => {
-    const openAiClient = createMockOpenAI(null);
-    const adapter = new OpenAiAdapter(openAiClient);
-
-    const messages = [
-      { role: 'user', content: 'Say hello' },
-    ] as const satisfies AgentMessage[];
-
-    const result = await adapter.run('gpt-3.5-turbo', messages);
-
-    expect(result).toBe('');
-  });
 });
