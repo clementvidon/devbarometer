@@ -1,8 +1,13 @@
 [
   {
-    "title": "Le salaire d'un alternant en data ?",
+    "title": "Saturé du dev : changer de poste ou évoluer ?",
     "weight": 0,
-    "source": "https://reddit.com/comments/1mqog2h"
+    "source": "https://reddit.com/comments/1munyj6"
+  },
+  {
+    "title": "Perte de motivation a cause de l'IA?",
+    "weight": 0,
+    "source": "https://reddit.com/comments/1mudckf"
   },
   {
     "title": "Besoin d’avis de devs expérimentés en Java",
@@ -18,10 +23,5 @@
     "title": "Problème de motivation",
     "weight": 0,
     "source": "https://reddit.com/comments/1mtkv7v"
-  },
-  {
-    "title": "Rachat d'entreprise",
-    "weight": 0,
-    "source": "https://reddit.com/comments/1mobxjg"
   }
 ]
