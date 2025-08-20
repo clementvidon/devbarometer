@@ -1,8 +1,8 @@
 import * as fs from 'fs';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { AgentService } from '../internal/core/service/AgentService.ts';
-import * as agentModule from '../internal/core/service/makeAgentService.ts';
-import { generateStatic, save } from './generate-static.ts';
+import * as agentModule from '../internal/core/service/makeCoreAgentService.ts';
+import { generateStatic } from './generate-static.ts';
 
 vi.mock('fs');
 
@@ -22,7 +22,7 @@ describe('generateStatic', () => {
         .mockResolvedValue([{ createdAt: '2025-08-03', aggregate: {} }]),
     };
 
-    vi.spyOn(agentModule, 'makeAgentService').mockImplementation(
+    vi.spyOn(agentModule, 'makeCoreAgentService').mockImplementation(
       () => mockAgent as unknown as AgentService,
     );
   });
@@ -45,25 +45,6 @@ describe('generateStatic', () => {
     expect(mockWrite).toHaveBeenCalledWith(
       expect.stringContaining('chart.json'),
       JSON.stringify([{ createdAt: '2025-08-03', aggregate: {} }], null, 2),
-      'utf-8',
-    );
-  });
-});
-
-describe('save', () => {
-  const mockWrite = vi.mocked(fs.writeFileSync);
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  test('writes JSON to disk', () => {
-    const data = { foo: 'bar' };
-    save('test.json', data);
-
-    expect(mockWrite).toHaveBeenCalledWith(
-      expect.stringContaining('test.json'),
-      JSON.stringify(data, null, 2),
       'utf-8',
     );
   });
