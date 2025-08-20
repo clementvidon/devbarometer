@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "prepare": "husky",
+
     "format:frontend": "npm --workspace frontend run format",
     "format:backend": "npm --workspace backend run format",
     "format": "npm-run-all --parallel --print-label format:frontend format:backend",
@@ -28,12 +29,16 @@
     "test:coverage": "npm-run-all --parallel --print-label test:coverage:frontend test:coverage:backend",
     "check": "npm-run-all --sequential lint format:check type-check test",
     "audit": "audit-ci --config ./audit-ci.jsonc",
-    "generate-report": "npm --workspace backend run generate-report",
+
+    "agent": "npm --workspace backend run agent",
+    "export": "npm --workspace backend run export",
+    "restore": "npm --workspace backend run restore",
+
     "generate-static": "npm --workspace backend run generate-static",
     "build-frontend": "npm --workspace frontend run predeploy",
     "deploy-frontend": "npm --workspace frontend run deploy",
     "publish": "npm-run-all --sequential build-frontend deploy-frontend",
-    "update-site": "npm-run-all --sequential generate-static build-frontend deploy-frontend"
+    "update-site": "npm-run-all --sequential generate-static publish"
   },
   "lint-staged": {
     "frontend/src/**/*.{ts,tsx}": [
