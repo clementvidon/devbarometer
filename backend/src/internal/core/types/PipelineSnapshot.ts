@@ -8,7 +8,7 @@ import type { Item, RelevantItem } from '../../core/entity/Item.ts';
 export type PipelineSnapshot = {
   id: string;
   createdAt: string;
-  fetchUrl: string;
+  fetchLabel: string;
   items: Item[];
   relevantItems: RelevantItem[];
   weightedItems: RelevantItem[];
@@ -16,3 +16,5 @@ export type PipelineSnapshot = {
   aggregatedEmotionProfile: AggregatedEmotionProfile;
   report: EmotionProfileReport;
 };
+
+export type SnapshotData = Omit<PipelineSnapshot, 'id' | 'createdAt'>;

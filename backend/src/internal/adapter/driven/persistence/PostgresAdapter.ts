@@ -1,32 +1,32 @@
 import { desc } from 'drizzle-orm';
-import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import { drizzle } from 'drizzle-orm/postgres-js';
 import type { Sql } from 'postgres';
 import postgres from 'postgres';
 import { v4 as uuidv4 } from 'uuid';
 import type { PersistencePort } from '../../../core/port/PersistencePort.ts';
-import type { PipelineSnapshot } from '../../../core/types/PipelineSnapshot.ts';
+import type {
+  PipelineSnapshot,
+  SnapshotData,
+} from '../../../core/types/PipelineSnapshot.ts';
 import { snapshotsTable } from './schema.ts';
 
 const pg = postgres as unknown as (...args: Parameters<typeof postgres>) => Sql;
 const client: Sql = pg(process.env.DATABASE_URL!, { ssl: 'require' });
-const db: PostgresJsDatabase = drizzle(client);
-
-type PersistedSnapshot = PipelineSnapshot & {
-  id: string;
-  createdAt: string;
-};
+const db = drizzle(client);
 
 export class PostgresAdapter implements PersistencePort {
-  async storeSnapshot(
-    snapshot: Omit<PipelineSnapshot, 'id' | 'createdAt'>,
+  async storeSnapshotAt(
+    createdAtISO: string,
+    snapshot: SnapshotData,
   ): Promise<void> {
     await db.insert(snapshotsTable).values({
       id: uuidv4(),
       data: snapshot,
+      date_created: new Date(createdAtISO),
     });
   }
 
-  async getSnapshots(): Promise<PersistedSnapshot[]> {
+  async getSnapshots(): Promise<PipelineSnapshot[]> {
     const rows = await db
       .select({
         id: snapshotsTable.id,
@@ -37,11 +37,11 @@ export class PostgresAdapter implements PersistencePort {
       .orderBy(desc(snapshotsTable.date_created));
 
     return rows.map((row) => ({
-      ...(row.data as PipelineSnapshot),
       id: row.id,
       createdAt: row.createdAt
         ? row.createdAt.toISOString()
         : new Date().toISOString(),
+      ...(row.data as SnapshotData),
     }));
   }
 }

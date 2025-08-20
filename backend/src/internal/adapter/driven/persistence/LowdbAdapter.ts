@@ -1,6 +1,10 @@
 import { JSONFilePreset } from 'lowdb/node';
 import { v4 as uuidv4 } from 'uuid';
-import type { PipelineSnapshot } from '../../../core/types/PipelineSnapshot.ts';
+import type { PersistencePort } from '../../../../internal/core/port/PersistencePort.ts';
+import type {
+  PipelineSnapshot,
+  SnapshotData,
+} from '../../../core/types/PipelineSnapshot.ts';
 
 type Data = {
   snapshots: PipelineSnapshot[];
@@ -14,7 +18,7 @@ const defaultData: Data = {
   snapshots: [],
 } as const;
 
-export class LowdbAdapter {
+export class LowdbAdapter implements PersistencePort {
   private dbPromise: Promise<Awaited<DbType>>;
 
   constructor() {
@@ -25,24 +29,23 @@ export class LowdbAdapter {
     return this.dbPromise;
   }
 
-  async storeSnapshot(
-    snapshot: Omit<PipelineSnapshot, 'id' | 'createdAt'>,
+  async storeSnapshotAt(
+    createdAtISO: string,
+    snapshot: SnapshotData,
   ): Promise<void> {
-    try {
-      const db = await this.getDb();
-      db.data.snapshots.push({
-        id: uuidv4(),
-        createdAt: new Date().toISOString(),
-        ...snapshot,
-      });
-      await db.write();
-    } catch (err) {
-      console.error('[LowdbAdapter] Failed to store snapshot:', err);
-    }
+    const db = await this.getDb();
+    db.data.snapshots.push({
+      id: uuidv4(),
+      createdAt: new Date(createdAtISO).toISOString(),
+      ...snapshot,
+    });
+    await db.write();
   }
 
   async getSnapshots(): Promise<PipelineSnapshot[]> {
     const db = await this.getDb();
-    return db.data.snapshots;
+    return db.data.snapshots
+      .slice()
+      .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt));
   }
 }

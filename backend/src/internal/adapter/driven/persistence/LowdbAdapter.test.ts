@@ -1,82 +1,95 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { WeatherEmoji } from '../../../core/entity/EmotionProfileReport.ts';
-import type { PipelineSnapshot } from '../../../core/types/PipelineSnapshot.ts';
-import { LowdbAdapter } from './LowdbAdapter.ts';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { SnapshotData } from '../../../core/types/PipelineSnapshot';
 
-interface MockedLowdb {
-  data: { snapshots: PipelineSnapshot[] };
-  write: () => void;
-}
-
-const mockLowdb: MockedLowdb = {
-  data: { snapshots: [] },
-  write: vi.fn(),
+type DrizzleSpies = {
+  insert: ReturnType<typeof vi.fn>;
+  values: ReturnType<typeof vi.fn>;
+  orderBy: ReturnType<typeof vi.fn>;
 };
 
-vi.mock('lowdb/node', () => ({
-  JSONFilePreset: vi.fn(() => mockLowdb),
-}));
+type GlobalWithSpies = typeof globalThis & {
+  __drizzleSpies: DrizzleSpies;
+};
 
-vi.mock('uuid', () => ({
-  v4: vi.fn(() => 'mocked-uuid'),
-}));
-
-const fakeEmotions = {
-  joy: 0,
-  sadness: 0,
-  anger: 0,
-  fear: 0,
-  trust: 0,
-  disgust: 0,
-} as const;
-
-const fakeTonalities = {
-  positive: 0,
-  negative: 0,
-  optimistic_anticipation: 0,
-  pessimistic_anticipation: 0,
-  positive_surprise: 0,
-  negative_surprise: 0,
-} as const;
-
-function fakeSnapshot(
-  overrides: Partial<Omit<PipelineSnapshot, 'id' | 'createdAt'>> = {},
-): Omit<PipelineSnapshot, 'id' | 'createdAt'> {
-  return {
-    fetchUrl: 'https://reddit.com/r/anySub/top',
-    items: [],
-    relevantItems: [],
-    weightedItems: [],
-    emotionProfilePerItem: [],
-    aggregatedEmotionProfile: {
-      date: '2025-08-03',
-      count: 1,
-      emotions: fakeEmotions,
-      tonalities: fakeTonalities,
-      totalWeight: 1,
-    },
-    report: { text: 'Fake report', emoji: '☀️' as WeatherEmoji },
-    ...overrides,
-  };
+declare global {
+  var __drizzleSpies: DrizzleSpies;
 }
 
-describe('LowdbAdapter', () => {
-  let adapter: LowdbAdapter;
+vi.mock('postgres', () => ({ default: vi.fn(() => ({})) }));
+
+vi.mock('drizzle-orm', () => ({
+  desc: vi.fn((col: unknown): unknown => col),
+}));
+
+vi.mock('drizzle-orm/postgres-js', () => {
+  const values = vi.fn().mockResolvedValue(undefined);
+  const insert = vi.fn(() => ({ values }));
+
+  const orderBy = vi.fn().mockResolvedValue([
+    {
+      id: 'generated-id',
+      data: { foo: 'bar' },
+      createdAt: new Date('2025-01-01T00:00:00Z'),
+    },
+  ]);
+  const from = vi.fn(() => ({ orderBy }));
+  const select = vi.fn(() => ({ from }));
+
+  (globalThis as GlobalWithSpies).__drizzleSpies = {
+    insert,
+    values,
+    orderBy,
+  };
+
+  return {
+    drizzle: vi.fn(() => ({
+      insert,
+      select,
+    })),
+
+    desc: vi.fn(),
+  };
+});
+
+vi.mock('uuid', () => ({ v4: () => 'generated-id' }));
+
+import { PostgresAdapter } from './PostgresAdapter.ts';
+
+const getSpies = (): DrizzleSpies =>
+  (globalThis as GlobalWithSpies).__drizzleSpies;
+
+describe('PostgresAdapter', () => {
+  let adapter: PostgresAdapter;
 
   beforeEach(() => {
-    vi.restoreAllMocks();
-    mockLowdb.data.snapshots = [];
-    adapter = new LowdbAdapter();
+    vi.clearAllMocks();
+    adapter = new PostgresAdapter();
   });
 
-  describe('Happy path', () => {
-    test('stores and retrieves a snapshot', async () => {
-      await adapter.storeSnapshot(fakeSnapshot());
-      const snapshots = await adapter.getSnapshots();
+  it('storeSnapshotAt() insert a snapshot with id and date', async () => {
+    const dummy = { foo: 'bar' } as unknown as SnapshotData;
+    const createdAtISO = '2025-02-02T12:34:56.000Z';
 
-      expect(snapshots).toHaveLength(1);
-      expect(snapshots[0].id).toBe('mocked-uuid');
-      expect(typeof snapshots[0].createdAt).toBe('string');
+    await adapter.storeSnapshotAt(createdAtISO, dummy);
+
+    const { insert, values } = getSpies();
+    expect(insert).toHaveBeenCalled();
+
+    expect(values).toHaveBeenCalledWith({
+      id: 'generated-id',
+      data: dummy,
+      date_created: new Date(createdAtISO),
     });
+  });
+
+  it('getSnapshots() returns snapshots newest-first', async () => {
+    const snapshots = await adapter.getSnapshots();
+
+    const { orderBy } = getSpies();
+    expect(orderBy).toHaveBeenCalled();
+
+    expect(snapshots).toEqual([
+      { foo: 'bar', id: 'generated-id', createdAt: '2025-01-01T00:00:00.000Z' },
+    ]);
   });
 });
