@@ -5,7 +5,7 @@ import type { Item, RelevantItem } from '../core/entity/Item.ts';
 import type { LlmPort } from '../core/port/LlmPort.ts';
 import type { AgentMessage } from '../core/types/AgentMessage.ts';
 
-const CONCURRENCY = 10;
+const CONCURRENCY = 1;
 const RelevanceSchema = z.object({ relevant: z.boolean() });
 
 function makeMessages(item: Item): readonly AgentMessage[] {

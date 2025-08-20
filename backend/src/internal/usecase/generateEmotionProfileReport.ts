@@ -193,6 +193,7 @@ export async function generateEmotionProfileReport(
       maxOutputTokens: 100,
       topP: 0.9,
       frequencyPenalty: 0.2,
+      responseFormat: { type: 'json_object' },
     });
 
     const json: unknown = JSON.parse(stripCodeFences(raw));

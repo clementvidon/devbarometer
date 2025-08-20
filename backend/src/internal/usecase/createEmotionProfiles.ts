@@ -10,7 +10,7 @@ import type { RelevantItem } from '../core/entity/Item.ts';
 import type { LlmPort } from '../core/port/LlmPort.ts';
 import type { AgentMessage } from '../core/types/AgentMessage.ts';
 
-const CONCURRENCY = 10;
+const CONCURRENCY = 1;
 
 const EmotionSchema = z.object({
   joy: z.number().min(0).max(1),
@@ -162,16 +162,22 @@ export async function createEmotionProfiles(
   const limit = pLimit(CONCURRENCY);
 
   const emotionProfiles = items.map((item) =>
-    limit(async () => {
+    limit(async (): Promise<EmotionProfile> => {
       const [emotions, tonalities] = await Promise.all([
         fetchEmotions(item, llm),
         fetchTonalities(item, llm),
       ]);
-
+      const hasFailed =
+        emotions === FALLBACK_EMOTIONS || tonalities === FALLBACK_TONALITIES;
+      if (hasFailed) {
+        console.error(
+          `[createEmotionProfiles] LLM fallback for ${item.source}`,
+        );
+      }
       return {
         title: item.title,
         source: item.source,
-        weight: item.weight,
+        weight: hasFailed ? 0 : (item.weight ?? 0),
         emotions,
         tonalities,
       };
