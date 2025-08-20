@@ -2,7 +2,6 @@ import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles
 import { computeMomentumWeights } from '../../usecase/computeMomentumWeights.ts';
 import { computeWeightsCap } from '../../usecase/computeWeightsCap.ts';
 import { createEmotionProfiles } from '../../usecase/createEmotionProfiles.ts';
-import { fetchRedditItems } from '../../usecase/fetchRedditItems.ts';
 import { filterRelevantItems } from '../../usecase/filterRelevantItems.ts';
 import { generateEmotionProfileReport } from '../../usecase/generateEmotionProfileReport.ts';
 import type {
@@ -11,7 +10,7 @@ import type {
 } from '../entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
 import type { RelevantItem } from '../entity/Item.ts';
-import type { FetchPort } from '../port/FetchPort.ts';
+import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
@@ -28,22 +27,28 @@ function sortSnapshotsDesc<T extends SnapshotLike>(arr: T[]): T[] {
 }
 
 export class AgentService {
-  private readonly fetcher: FetchPort;
+  private readonly itemsProvider: ItemsProviderPort;
   private readonly llm: LlmPort;
   private readonly persistence: PersistencePort;
 
-  constructor(fetcher: FetchPort, llm: LlmPort, persistence: PersistencePort) {
-    this.fetcher = fetcher;
+  constructor(
+    itemsProvider: ItemsProviderPort,
+    llm: LlmPort,
+    persistence: PersistencePort,
+  ) {
+    this.itemsProvider = itemsProvider;
     this.llm = llm;
     this.persistence = persistence;
   }
 
   async updateReport(): Promise<void> {
-    const fetchUrl =
-      'https://oauth.reddit.com/r/developpeurs/top.json?limit=100&t=week&raw_json=1';
-    const items = await fetchRedditItems(this.fetcher, fetchUrl);
+    const items = await this.itemsProvider.getItems();
+    const fetchLabel = this.itemsProvider.getLabel();
+    const createdAt =
+      this.itemsProvider.getCreatedAt() ?? new Date().toISOString();
+
     console.log(
-      `[AgentService] Fetched ${items.length} top items from "r/developpeurs" for the past week.`,
+      `[AgentService] Got ${items.length} items from provider: ${fetchLabel}`,
     );
 
     const relevantItems = await filterRelevantItems(items, this.llm);
@@ -89,14 +94,14 @@ export class AgentService {
       this.llm,
     );
     console.log(
-      `[AgentService] New report generated at ${new Date().toISOString()}`,
+      `[AgentService] New report generated at ${this.itemsProvider.getCreatedAt() ?? new Date().toISOString()}`,
     );
 
     console.log(aggregatedEmotionProfile);
     console.log(report);
 
-    await this.persistence.storeSnapshot({
-      fetchUrl: fetchUrl,
+    await this.persistence.storeSnapshotAt(createdAt, {
+      fetchLabel,
       items,
       relevantItems,
       weightedItems,
