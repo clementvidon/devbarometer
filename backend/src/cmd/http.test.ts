@@ -13,11 +13,11 @@ const listenMockImpl = (_port: number | string, cb?: () => void): void => {
 };
 const listenMock: Mock = vi.fn(listenMockImpl);
 const makeReportControllerMock: Mock = vi.fn(() => ({ listen: listenMock }));
-const makeAgentServiceMock: Mock = vi.fn(() => ({ fake: 'agent' }));
+const makeCoreAgentServiceMock: Mock = vi.fn(() => ({ fake: 'agent' }));
 const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
-vi.mock('../internal/core/service/makeAgentService.ts', () => ({
-  makeAgentService: makeAgentServiceMock,
+vi.mock('../internal/core/service/makeCoreAgentService.ts', () => ({
+  makeCoreAgentService: makeCoreAgentServiceMock,
 }));
 vi.mock('../internal/adapter/driving/web/ReportController.ts', () => ({
   makeReportController: makeReportControllerMock,
@@ -41,7 +41,7 @@ describe('http.ts entrypoint', () => {
   test('starts the server on the provided port and logs the URL', async () => {
     await importHTTP();
 
-    expect(makeAgentServiceMock).toHaveBeenCalled();
+    expect(makeCoreAgentServiceMock).toHaveBeenCalled();
     expect(makeReportControllerMock).toHaveBeenCalledWith({ fake: 'agent' });
     expect(listenMock).toHaveBeenCalledWith('1234', expect.any(Function));
     expect(consoleLogSpy).toHaveBeenCalledWith('→ http://localhost:1234');
