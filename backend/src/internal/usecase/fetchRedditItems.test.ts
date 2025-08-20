@@ -32,7 +32,7 @@ const fakeResponse = (
 
 const fakePosts = [
   { data: { id: '00', title: '1st\nItem', selftext: 'Content\n1', ups: 15 } },
-  { data: { id: '01', title: '2nd Item', selftext: 'Content 2', ups: 5 } },
+  { data: { id: '01', title: '2nd Item', selftext: 'Content 2', ups: 1 } },
   { data: { id: '02', title: '3rd Item', selftext: '', ups: 20 } },
 ];
 
