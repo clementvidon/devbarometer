@@ -35,7 +35,8 @@ export async function getRedditAccessToken(
       headers: {
         Authorization: `Basic ${auth}`,
         'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent': 'devbarometer/1.0 by u/devbarometer',
+        'User-Agent':
+          'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)',
       },
       body,
     },

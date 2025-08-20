@@ -12,7 +12,8 @@ const BASE_HEADERS = {
 
 const MAX_RETRIES = 3;
 const TIMEOUT_MS = 5000;
-const MIN_UPVOTES = 10;
+
+const MIN_UPVOTES = 5;
 
 const sanitize = (s: string) => s.replace(/\s+/g, ' ').trim();
 
