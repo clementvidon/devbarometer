@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { fetchRedditItems } from '../../usecase/fetchRedditItems.ts';
-import type { EmotionProfile } from '../entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
-import type { FetchPort } from '../port/FetchPort.ts';
+import type { Item } from '../entity/Item.ts';
+import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { PipelineSnapshot } from '../types/PipelineSnapshot.ts';
@@ -26,8 +26,14 @@ const fakeTonalities = {
   negative_surprise: 0,
 } as const;
 
-const fetcher: FetchPort = {
-  fetch: vi.fn(() => Promise.resolve(new Response())),
+const mockItems: Item[] = [
+  { source: 'reddit.com', title: 'Item 1', content: '', weight: 1 },
+];
+
+const itemsProvider: ItemsProviderPort = {
+  getItems: vi.fn(() => Promise.resolve(mockItems)),
+  getLabel: vi.fn(() => 'provider://test'),
+  getCreatedAt: vi.fn(() => '2025-08-01T00:00:00Z'),
 };
 
 const llm: LlmPort = {
@@ -41,7 +47,11 @@ vi.mock('../../usecase/fetchRedditItems', () => ({
   }),
 }));
 vi.mock('../../usecase/filterRelevantItems', () => ({
-  filterRelevantItems: vi.fn().mockResolvedValue(['relevantItem']),
+  filterRelevantItems: vi
+    .fn()
+    .mockResolvedValue([
+      { source: 'x', title: 'title', content: '', weight: 1 },
+    ]),
 }));
 vi.mock('../../usecase/createEmotionProfiles', () => ({
   createEmotionProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
@@ -79,151 +89,46 @@ describe('AgentService updateReport', () => {
 
   beforeEach(() => {
     persistence = {
-      storeSnapshot: vi.fn(() => Promise.resolve()),
+      storeSnapshotAt: vi.fn(() => Promise.resolve()),
       getSnapshots: vi.fn(() => Promise.resolve([])),
     };
-    agent = new AgentService(fetcher, llm, persistence);
+    agent = new AgentService(itemsProvider, llm, persistence);
     vi.clearAllMocks();
   });
 
   test('executes full pipeline and stores the report', async () => {
-    const spy = vi.spyOn(persistence, 'storeSnapshot');
-
+    const spy = vi.spyOn(persistence, 'storeSnapshotAt');
     await agent.updateReport();
 
     expect(spy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        report,
-      }),
+      expect.any(String),
+      expect.objectContaining({ report }),
     );
     expect(spy).toHaveBeenCalledTimes(1);
   });
 
   test('handles empty items gracefully', async () => {
     vi.mocked(fetchRedditItems).mockResolvedValue([]);
-    const spy = vi.spyOn(persistence, 'storeSnapshot');
 
+    const spy = vi.spyOn(persistence, 'storeSnapshotAt');
     await agent.updateReport();
 
     expect(spy).toHaveBeenCalledWith(
-      expect.objectContaining({
-        report,
-      }),
+      expect.any(String),
+      expect.objectContaining({ report }),
     );
     expect(spy).toHaveBeenCalledTimes(1);
   });
 });
 
-function createMockSnapshot(
-  overrides: Partial<PipelineSnapshot> = {},
-): PipelineSnapshot {
-  return {
-    id: 'mock-id',
-    createdAt: new Date().toISOString(),
-    fetchUrl: 'https://reddit.com/mock',
-    items: [],
-    relevantItems: [],
-    weightedItems: [],
-    emotionProfilePerItem: [],
-    aggregatedEmotionProfile: {
-      date: '2025-08-03',
-      count: 1,
-      emotions: fakeEmotions,
-      tonalities: fakeTonalities,
-      totalWeight: 1,
-    },
-    report: {
-      text: 'Latest emotionProfile',
-      emoji: '☀️',
-    },
-    ...overrides,
-  };
-}
-
-describe('AgentService getLastEmotionProfileReport', () => {
-  let persistence: PersistencePort;
-  let agent: AgentService;
-
-  beforeEach(() => {
-    persistence = {
-      storeSnapshot: vi.fn(),
-      getSnapshots: vi.fn(),
-    };
-    agent = new AgentService(fetcher, llm, persistence);
-    vi.clearAllMocks();
-  });
-
-  test('returns the latest emotionProfile report if available', async () => {
-    const expected: EmotionProfileReport = {
-      text: 'Latest emotionProfile',
-      emoji: '☀️',
-    };
-
-    const snapshot = createMockSnapshot({ report: expected });
-    vi.mocked(persistence.getSnapshots).mockResolvedValue([snapshot]);
-
-    const result = await agent.getLastEmotionProfileReport();
-    expect(result).toEqual(expected);
-  });
-
-  test('returns null if no snapshots exist', async () => {
-    vi.mocked(persistence.getSnapshots).mockResolvedValue([]);
-
-    const result = await agent.getLastEmotionProfileReport();
-    expect(result).toBeNull();
-  });
-});
-
-describe('AgentService getLastEmotionProfiles', () => {
-  let persistence: PersistencePort;
-  let agent: AgentService;
-
-  beforeEach(() => {
-    persistence = {
-      storeSnapshot: vi.fn(),
-      getSnapshots: vi.fn(),
-    };
-    agent = new AgentService(fetcher, llm, persistence);
-    vi.clearAllMocks();
-  });
-
-  test('returns all emotionProfiles from latest snapshot if available', async () => {
-    const expected: EmotionProfile[] = [
-      {
-        title:
-          'On m’a demandé de construire un agent LLM complet pour un test d’entretien',
-        source: '1m84v47',
-        weight: 212,
-        emotions: fakeEmotions,
-        tonalities: fakeTonalities,
-      },
-      {
-        title:
-          'Ils m’ont fait bosser 6 heures sur un test… alors qu’ils avaient déjà choisi quelqu’un',
-        source: '1m78fpc',
-        weight: 158,
-        emotions: fakeEmotions,
-        tonalities: fakeTonalities,
-      },
-    ];
-
-    const snapshot = createMockSnapshot({ emotionProfilePerItem: expected });
-    vi.mocked(persistence.getSnapshots).mockResolvedValue([snapshot]);
-
-    const result = await agent.getLastEmotionProfiles();
-    expect(result).toEqual(expected);
-  });
-
-  test('returns null if no snapshots exist', async () => {
-    vi.mocked(persistence.getSnapshots).mockResolvedValue([]);
-
-    const result = await agent.getLastEmotionProfiles();
-    expect(result).toBeNull();
-  });
-});
-
-test('AgentService getLastTopHeadlines returns titles of N top weighted emotionProfile', async () => {
-  const emotionProfilePerItem = [
+const snapshot: PipelineSnapshot = {
+  createdAt: '2025-08-01T00:00:00Z',
+  id: 'mock-id',
+  fetchLabel: 'test',
+  items: [],
+  relevantItems: [],
+  weightedItems: [],
+  emotionProfilePerItem: [
     {
       title: 'Item A',
       source: 'a',
@@ -266,44 +171,43 @@ test('AgentService getLastTopHeadlines returns titles of N top weighted emotionP
       emotions: fakeEmotions,
       tonalities: fakeTonalities,
     },
-  ];
+  ],
+  aggregatedEmotionProfile: {
+    date: '2025-08-01',
+    count: 6,
+    emotions: fakeEmotions,
+    tonalities: fakeTonalities,
+    totalWeight: 130,
+  },
+  report: {
+    text: 'mock',
+    emoji: '☀️',
+  },
+};
 
-  const snapshot = createMockSnapshot({ emotionProfilePerItem });
-
+test('AgentService getLastTopHeadlines returns titles of N top weighted emotionProfile', async () => {
   const persistence: PersistencePort = {
-    storeSnapshot: vi.fn(),
+    storeSnapshotAt: vi.fn(),
     getSnapshots: vi.fn().mockResolvedValue([snapshot]),
   };
 
-  const agent = new AgentService(fetcher, llm, persistence);
+  const agent = new AgentService(itemsProvider, llm, persistence);
 
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([
-    {
-      title: 'Item E',
-      source: 'e',
-      weight: 50,
-    },
-    {
-      title: 'Item B',
-      source: 'b',
-      weight: 30,
-    },
-    {
-      title: 'Item C',
-      source: 'c',
-      weight: 20,
-    },
+    { title: 'Item E', source: 'e', weight: 50 },
+    { title: 'Item B', source: 'b', weight: 30 },
+    { title: 'Item C', source: 'c', weight: 20 },
   ]);
 });
 
-test('getLastTopHeadlines returns empty array if no snapshot', async () => {
+test('AgentService getLastTopHeadlines returns empty array if no snapshot', async () => {
   const persistence: PersistencePort = {
-    storeSnapshot: vi.fn(),
+    storeSnapshotAt: vi.fn(),
     getSnapshots: vi.fn().mockResolvedValue([]),
   };
 
-  const agent = new AgentService(fetcher, llm, persistence);
+  const agent = new AgentService(itemsProvider, llm, persistence);
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([]);
 });
