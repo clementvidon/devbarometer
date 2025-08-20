@@ -1,3 +1,4 @@
+import { logItemsOnePerLine } from '../../../utils/logItems.ts';
 import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles.ts';
 import { computeMomentumWeights } from '../../usecase/computeMomentumWeights.ts';
 import { computeWeightsCap } from '../../usecase/computeWeightsCap.ts';
@@ -15,16 +16,12 @@ import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
 
-type SnapshotLike = { createdAt: string };
-
-function sortSnapshotsDesc<T extends SnapshotLike>(arr: T[]): T[] {
-  return arr.slice().sort((a, b) => {
-    const tb = Date.parse(b.createdAt);
-    const ta = Date.parse(a.createdAt);
-    if (!Number.isNaN(tb) && !Number.isNaN(ta)) return tb - ta;
-    return b.createdAt.localeCompare(a.createdAt);
-  });
-}
+const CAP_OPTS = {
+  minN: 10,
+  percentile: 0.95,
+  percentileSmallN: 0.9,
+  baseWeight: 1,
+} as const;
 
 export class AgentService {
   private readonly itemsProvider: ItemsProviderPort;
@@ -51,29 +48,47 @@ export class AgentService {
       `[AgentService] Got ${items.length} items from provider: ${fetchLabel}`,
     );
 
+    const prevItems = await this.getPrevRelevantItemsAt(createdAt);
+    logItemsOnePerLine('prevItems', prevItems ?? []);
+
     const relevantItems = await filterRelevantItems(items, this.llm);
     console.log(
       `[AgentService] Selected ${relevantItems.length}/${items.length} items relevant to the tech job market.`,
     );
-    console.log(relevantItems);
+    logItemsOnePerLine('relevantItems', relevantItems);
 
-    const prevItems = await this.getPrevRelevantItems();
     const momentumItems = computeMomentumWeights(relevantItems, prevItems);
+    logItemsOnePerLine('momentumItems', momentumItems);
+
     console.log(
-      `[AgentService] Computed momentum (log1p Δ) for ${momentumItems.length} items${prevItems ? ` using ${prevItems.length} baseline items` : ''}.`,
+      `[AgentService] Computed momentum (1+log1p Δ, floor=1) for ${momentumItems.length} items${prevItems ? ` using ${prevItems.length} baseline items` : ''}.`,
     );
 
-    const { cappedItems, capped, reason, capValue, topShare, N } =
-      computeWeightsCap(momentumItems, {
-        minN: 20,
-        topShareThreshold: 0.5,
-        percentile: 0.95,
-      });
+    const {
+      cappedItems,
+      capped,
+      reason,
+      capValue,
+      usedPercentile,
+      topShare,
+      N,
+    } = computeWeightsCap(momentumItems, CAP_OPTS);
+    const mode = N < CAP_OPTS.minN ? 'smallN' : 'always';
     console.log(
-      `[AgentService] cap p95 ${capped ? 'APPLIED' : 'SKIPPED'} reason=${reason} cap=${capValue?.toFixed(3)} N=${N} topShare=${topShare.toFixed(2)}`,
+      `[AgentService] cap mode=${mode} ${capped ? 'APPLIED' : 'SKIPPED'} reason=${reason} ` +
+        `cap=${capValue?.toFixed(3)} N=${N} topShare=${topShare.toFixed(2)} p=${usedPercentile?.toFixed(2)}`,
     );
 
-    const weightedItems = cappedItems;
+    const sum = cappedItems.reduce((s, i) => s + i.weight, 0);
+    const mean = sum / Math.max(1, cappedItems.length);
+    const weightedItems =
+      mean > 0
+        ? cappedItems.map((i) => ({ ...i, weight: i.weight / mean }))
+        : cappedItems;
+    console.log(
+      `[AgentService] Renorm: mean=${mean.toFixed(3)} (target=1.000)`,
+    );
+
     console.log(`[AgentService] Computed weight of each item.`);
 
     const emotionProfilePerItem = await createEmotionProfiles(
@@ -145,7 +160,7 @@ export class AgentService {
       totalWeight: number;
     }[]
   > {
-    const snapshots = sortSnapshotsDesc(await this.persistence.getSnapshots());
+    const snapshots = await this.persistence.getSnapshots();
 
     return snapshots
       .filter((s) => {
@@ -165,8 +180,18 @@ export class AgentService {
       }));
   }
 
-  async getPrevRelevantItems(): Promise<RelevantItem[] | null> {
-    const snapshots = sortSnapshotsDesc(await this.persistence.getSnapshots());
-    return snapshots[1]?.relevantItems ?? null;
+  async getPrevRelevantItemsAt(
+    createdAtISO: string,
+  ): Promise<RelevantItem[] | null> {
+    const snapshots = await this.persistence.getSnapshots();
+    const target = Date.parse(createdAtISO);
+
+    const prev =
+      snapshots
+        .filter((s) => Date.parse(s.createdAt) < target)
+        .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))[0] ??
+      null;
+
+    return prev?.relevantItems ?? null;
   }
 }
