@@ -1,9 +1,15 @@
+import { useEffect } from 'react';
 import { Chart } from '../components/Chart/Chart.tsx';
 import { Report } from '../components/Report/Report.tsx';
 import { Ticker } from '../components/Ticker/Ticker.tsx';
+import { setupAppHeightListener } from '../utils/setAppHeight.ts';
 import styles from './App.module.css';
 
 function App() {
+  useEffect(() => {
+    setupAppHeightListener();
+  }, []);
+
   return (
     <>
       <header className={styles.header}>
