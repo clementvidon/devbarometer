@@ -195,9 +195,9 @@ test('AgentService getLastTopHeadlines returns titles of N top weighted emotionP
 
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([
-    { title: 'Item E', source: 'e', weight: 50 },
-    { title: 'Item B', source: 'b', weight: 30 },
-    { title: 'Item C', source: 'c', weight: 20 },
+    { title: 'Item E', source: 'e', weight: '50' },
+    { title: 'Item B', source: 'b', weight: '30' },
+    { title: 'Item C', source: 'c', weight: '20' },
   ]);
 });
 
