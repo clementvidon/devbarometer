@@ -1,54 +1,83 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  test,
-  vi,
-  type Mock,
-} from 'vitest';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-const updateReportMock: Mock = vi.fn();
-
-vi.mock('../internal/core/service/makeCoreAgentService.ts', () => ({
-  makeCoreAgentService: vi.fn(() => ({
-    updateReport: updateReportMock,
-  })),
-}));
-
-const exitSpy = vi.spyOn(process, 'exit').mockImplementation(((
-  code?: number,
-) => {
-  throw new Error(`process.exit: ${code}`);
-}) as never);
-
+const updateReportMock = vi.fn();
 const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
+const exitSpy = vi
+  .spyOn(process, 'exit')
+  .mockImplementation((() => undefined) as unknown as never);
+
+vi.mock('../internal/adapter/driven/persistence/PostgresAdapter.ts', () => ({
+  PostgresAdapter: vi.fn(() => ({})),
+}));
+vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter.ts', () => ({
+  NodeFetchAdapter: vi.fn(() => ({})),
+}));
+vi.mock('../internal/adapter/driven/llm/OpenAiAdapter.ts', () => ({
+  OpenAiAdapter: vi.fn(() => ({})),
+}));
+vi.mock(
+  '../internal/adapter/driven/items/RedditItemsProviderAdapter.ts',
+  () => ({
+    RedditItemsProviderAdapter: vi.fn(() => ({})),
+  }),
+);
+vi.mock('../internal/core/service/makeCoreAgentService.ts', () => ({
+  makeCoreAgentService: vi.fn(() => ({ updateReport: updateReportMock })),
+}));
+vi.mock('openai', () => ({ default: vi.fn(() => ({})) }));
+
+type Env = Record<string, string | undefined>;
+let envBak: Env;
+
+function modulePath() {
+  return new URL('./agent.ts', import.meta.url).pathname;
+}
 async function importAgent() {
   vi.resetModules();
   return import('./agent.ts');
 }
 
 beforeEach(() => {
-  vi.clearAllMocks();
+  envBak = { ...process.env };
   updateReportMock.mockReset();
+  errorSpy.mockClear();
+  exitSpy.mockClear();
+
+  if (typeof globalThis.fetch !== 'function') {
+    globalThis.fetch = vi.fn(() =>
+      Promise.resolve(new Response('{}', { status: 200 })),
+    ) as typeof fetch;
+  }
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
+  process.env = envBak;
 });
 
 describe('agent.ts entrypoint', () => {
-  test('logs the error and exits with code 1 when updateReport rejects', async () => {
-    const boom = new Error('Boom');
+  test('exits with 0 when updateReport succeeds', async () => {
+    process.env.OPENAI_API_KEY = 'sk-test';
+    process.env.REDDIT_URL = 'https://example.test/r/foo.json';
+    process.argv[1] = modulePath();
+
+    updateReportMock.mockResolvedValue(undefined);
+
+    await importAgent();
+    expect(updateReportMock).toHaveBeenCalled();
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(exitSpy).toHaveBeenCalledWith(0);
+  });
+
+  test('logs error and exits with 1 when updateReport rejects', async () => {
+    process.env.OPENAI_API_KEY = 'sk-test';
+    process.env.REDDIT_URL = 'https://example.test/r/foo.json';
+    process.argv[1] = modulePath();
+
+    const boom = new Error('boom');
     updateReportMock.mockRejectedValue(boom);
 
-    try {
-      await importAgent();
-    } catch (err) {
-      expect(err).toEqual(new Error('process.exit: 1'));
-    }
-
+    await importAgent();
     expect(updateReportMock).toHaveBeenCalled();
     expect(errorSpy).toHaveBeenCalledWith('Agent run failed:', boom);
     expect(exitSpy).toHaveBeenCalledWith(1);
