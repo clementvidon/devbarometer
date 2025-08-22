@@ -1,8 +1,6 @@
 import './styles/base.css';
 import './styles/fonts.css';
 import './styles/layout.css';
-import { setupAppHeightListener } from './utils/setAppHeight.ts';
-setupAppHeightListener();
 
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
