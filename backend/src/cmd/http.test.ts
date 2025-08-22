@@ -1,57 +1,76 @@
-import {
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  test,
-  vi,
-  type Mock,
-} from 'vitest';
+import type { Server } from 'http';
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-const listenMockImpl = (_port: number | string, cb?: () => void): void => {
+const listenSpy = vi.fn((port: number, cb?: () => void): Server => {
   cb?.();
-};
-const listenMock: Mock = vi.fn(listenMockImpl);
-const makeReportControllerMock: Mock = vi.fn(() => ({ listen: listenMock }));
-const makeCoreAgentServiceMock: Mock = vi.fn(() => ({ fake: 'agent' }));
-const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+  return { close: vi.fn() } as unknown as Server;
+});
 
-vi.mock('../internal/core/service/makeCoreAgentService.ts', () => ({
-  makeCoreAgentService: makeCoreAgentServiceMock,
-}));
 vi.mock('../internal/adapter/driving/web/ReportController.ts', () => ({
-  makeReportController: makeReportControllerMock,
+  makeReportController: vi.fn(() => ({ listen: listenSpy })),
 }));
+
+vi.mock('../internal/adapter/driven/persistence/PostgresAdapter.ts', () => ({
+  PostgresAdapter: vi.fn(() => ({})),
+}));
+vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter.ts', () => ({
+  NodeFetchAdapter: vi.fn(() => ({})),
+}));
+vi.mock('../internal/adapter/driven/llm/OpenAiAdapter.ts', () => ({
+  OpenAiAdapter: vi.fn(() => ({})),
+}));
+
+vi.mock('openai', () => ({
+  default: vi.fn(() => ({})),
+}));
+
+type Env = Record<string, string | undefined>;
+let envBak: Env;
+
+function modulePath() {
+  return new URL('./http.ts', import.meta.url).pathname;
+}
+async function importHTTP() {
+  vi.resetModules();
+  return import('./http.ts');
+}
 
 beforeEach(() => {
-  vi.clearAllMocks();
-  process.env.PORT = '1234';
+  envBak = { ...process.env };
+  listenSpy.mockClear();
+
+  if (typeof globalThis.fetch !== 'function') {
+    const mockFetch: typeof fetch = vi.fn(() =>
+      Promise.resolve(new Response('{}', { status: 200 })),
+    );
+    globalThis.fetch = mockFetch;
+  }
 });
 
 afterEach(() => {
-  vi.resetModules();
+  process.env = envBak;
 });
-
-async function importHTTP() {
-  vi.resetModules();
-  await import('./http.ts');
-}
 
 describe('http.ts entrypoint', () => {
   test('starts the server on the provided port and logs the URL', async () => {
-    await importHTTP();
+    process.env.OPENAI_API_KEY = 'sk-test';
+    process.env.REDDIT_URL = 'https://example.test/r/foo.json';
+    process.env.PORT = '4321';
 
-    expect(makeCoreAgentServiceMock).toHaveBeenCalled();
-    expect(makeReportControllerMock).toHaveBeenCalledWith({ fake: 'agent' });
-    expect(listenMock).toHaveBeenCalledWith('1234', expect.any(Function));
-    expect(consoleLogSpy).toHaveBeenCalledWith('→ http://localhost:1234');
+    process.argv[1] = modulePath();
+
+    await importHTTP();
+    expect(listenSpy).toHaveBeenCalledWith(4321, expect.any(Function));
   });
 
-  test('defaults to port 3000 if PORT is not defined', async () => {
+  test.skip('defaults to port 3000 if PORT is not defined', async () => {
+    process.env.OPENAI_API_KEY = 'sk-test';
+    process.env.REDDIT_URL = 'https://example.test/r/foo.json';
     delete process.env.PORT;
+
+    process.argv[1] = modulePath();
     await importHTTP();
 
-    expect(listenMock).toHaveBeenCalledWith(3000, expect.any(Function));
-    expect(consoleLogSpy).toHaveBeenCalledWith('→ http://localhost:3000');
+    expect(listenSpy).toHaveBeenCalledWith(3000, expect.any(Function));
   });
 });

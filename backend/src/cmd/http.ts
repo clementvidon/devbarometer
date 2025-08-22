@@ -7,19 +7,47 @@ import { PostgresAdapter } from '../internal/adapter/driven/persistence/Postgres
 import { makeReportController } from '../internal/adapter/driving/web/ReportController.ts';
 import { makeCoreAgentService } from '../internal/core/service/makeCoreAgentService.ts';
 
-const llm = new OpenAiAdapter(
-  new OpenAI({ apiKey: process.env.OPENAI_API_KEY! }),
-);
-const persistence = new PostgresAdapter();
-const fetcher = new NodeFetchAdapter(globalThis.fetch);
+import type { FetchPort } from '../internal/core/port/FetchPort.ts';
+import type { LlmPort } from '../internal/core/port/LlmPort.ts';
+import type { PersistencePort } from '../internal/core/port/PersistencePort.ts';
 
-const url =
-  process.env.REDDIT_URL ??
-  'https://oauth.reddit.com/r/developpeurs/top.json?limit=100&t=week&raw_json=1';
+type Deps = {
+  redditUrl: string;
+  port: number;
+  fetcher: FetchPort;
+  persistence: PersistencePort;
+  llm: LlmPort;
+};
 
-const provider = new RedditItemsProviderAdapter(fetcher, url);
-const agent = makeCoreAgentService(provider, llm, persistence);
+export function buildServer(deps: Deps) {
+  const agent = makeCoreAgentService(
+    new RedditItemsProviderAdapter(deps.fetcher, deps.redditUrl),
+    deps.llm,
+    deps.persistence,
+  );
+  const app = makeReportController(agent);
+  return { app, port: deps.port };
+}
 
-const app = makeReportController(agent);
-const port = process.env.PORT ?? 3000;
-app.listen(port, () => console.log(`→ http://localhost:${port}`));
+export function depsFromEnv(): Deps {
+  const apiKey = process.env.OPENAI_API_KEY;
+  const redditUrl = process.env.REDDIT_URL;
+  const port = Number(process.env.PORT);
+
+  if (!apiKey) throw new Error('Missing llm');
+  if (!redditUrl) throw new Error('Missing redditUrl');
+  if (!port) throw new Error('Missing/invalid port');
+
+  return {
+    redditUrl,
+    port,
+    fetcher: new NodeFetchAdapter(globalThis.fetch),
+    persistence: new PostgresAdapter(),
+    llm: new OpenAiAdapter(new OpenAI({ apiKey })),
+  };
+}
+
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const { app, port } = buildServer(depsFromEnv());
+  app.listen(port, () => console.log(`→ http://localhost:${port}`));
+}
