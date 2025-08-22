@@ -35,11 +35,11 @@ jobs:
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           REDDIT_USERNAME: ${{ secrets.REDDIT_USERNAME }}
           REDDIT_PASSWORD: ${{ secrets.REDDIT_PASSWORD }}
+          REDDIT_URL: ${{ secrets.REDDIT_URL }}
 
       - name: Generate static JSON
         run: npm --workspace backend run generate-static
         env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: Build frontend
