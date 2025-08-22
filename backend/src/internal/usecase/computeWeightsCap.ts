@@ -5,13 +5,14 @@ export type WeightsCapOptions = {
   percentile?: number;
   percentileSmallN?: number;
   baseWeight?: number;
+  concentrationGate?: number;
 };
 
 export type WeightsCapReason =
   | 'no_excess'
+  | 'low_concentration'
   | 'p90_cap_smallN'
-  | 'p95_cap'
-  | null;
+  | 'p95_cap';
 
 export type WeightsCapResult = {
   cappedItems: RelevantItem[];
@@ -23,9 +24,7 @@ export type WeightsCapResult = {
   N: number;
 };
 
-function sortAsc<T extends number>(arr: T[]): T[] {
-  return [...arr].sort((a, b) => a - b);
-}
+const sortAsc = (arr: number[]) => [...arr].sort((a, b) => a - b);
 
 function percentileInterpolated(values: number[], p: number): number {
   if (!values.length) return NaN;
@@ -34,43 +33,18 @@ function percentileInterpolated(values: number[], p: number): number {
   const h = (s.length - 1) * p;
   const i = Math.floor(h);
   const frac = h - i;
-  const lo = s[i];
-  const hi = s[Math.min(i + 1, s.length - 1)];
-  return lo + frac * (hi - lo);
+  return s[i] + frac * (s[i + 1] - s[i]);
 }
 
 function computeExcess(items: RelevantItem[], base: number) {
   const weights = items.map((i) => i.weight ?? 0);
   const excess = weights.map((w) => Math.max(0, w - base));
   const sumExcess = excess.reduce((a, b) => a + b, 0);
-  return { weights, excess, sumExcess };
+  return { excess, sumExcess };
 }
 
 function computeTopShare(excess: number[], sumExcess: number) {
-  if (sumExcess <= 0) return 0;
-  const maxExcess = Math.max(...excess);
-  return maxExcess / sumExcess;
-}
-
-function choosePercentile(N: number, minN: number, p: number, pSmall: number) {
-  const isSmallN = N < minN;
-  return {
-    usedPercentile: isSmallN ? pSmall : p,
-    reason: isSmallN
-      ? ('p90_cap_smallN' as WeightsCapReason)
-      : ('p95_cap' as WeightsCapReason),
-  };
-}
-
-function computeCapValue(excess: number[], usedPercentile: number) {
-  const nonZero = excess.filter((x) => x > 0);
-  if (nonZero.length === 0) return { cap: NaN, nonZero };
-
-  let cap = percentileInterpolated(nonZero, usedPercentile);
-  if (!Number.isFinite(cap)) {
-    cap = nonZero[nonZero.length - 1];
-  }
-  return { cap, nonZero };
+  return sumExcess > 0 ? Math.max(...excess) / sumExcess : 0;
 }
 
 function applyCap(
@@ -91,37 +65,17 @@ export function computeWeightsCap(
 ): WeightsCapResult {
   const {
     minN = 10,
-    percentile: p = 0.95,
+    percentile = 0.95,
     percentileSmallN = 0.9,
     baseWeight = 1,
+    concentrationGate = 0.35,
   } = opts;
 
   const N = items.length;
-
   const { excess, sumExcess } = computeExcess(items, baseWeight);
-
-  if (sumExcess === 0) {
-    return {
-      cappedItems: [...items],
-      capped: false,
-      reason: 'no_excess',
-      topShare: 0,
-      N,
-    };
-  }
-
   const topShare = computeTopShare(excess, sumExcess);
 
-  const { usedPercentile, reason } = choosePercentile(
-    N,
-    minN,
-    p,
-    percentileSmallN,
-  );
-
-  const { cap } = computeCapValue(excess, usedPercentile);
-
-  if (!Number.isFinite(cap)) {
+  if (sumExcess === 0) {
     return {
       cappedItems: [...items],
       capped: false,
@@ -130,6 +84,24 @@ export function computeWeightsCap(
       N,
     };
   }
+
+  if (topShare < concentrationGate) {
+    return {
+      cappedItems: [...items],
+      capped: false,
+      reason: 'low_concentration',
+      topShare,
+      N,
+    };
+  }
+
+  const isSmallN = N < minN;
+  const usedPercentile = isSmallN ? percentileSmallN : percentile;
+  const reason = isSmallN ? 'p90_cap_smallN' : 'p95_cap';
+
+  const nonZero = excess.filter((x) => x > 0);
+  let cap = percentileInterpolated(nonZero, usedPercentile);
+  if (!Number.isFinite(cap)) cap = nonZero[nonZero.length - 1];
 
   const cappedItems = applyCap(items, excess, cap, baseWeight);
 

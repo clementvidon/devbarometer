@@ -22,6 +22,7 @@ const CAP_OPTS = {
   percentile: 0.95,
   percentileSmallN: 0.9,
   baseWeight: 1,
+  concentrationGate: 0.35,
 } as const;
 
 export class AgentService {
