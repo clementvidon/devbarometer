@@ -1,3 +1,4 @@
+import { formatFloat } from '../../../utils/format.ts';
 import { logItemsOnePerLine } from '../../../utils/logItems.ts';
 import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles.ts';
 import { computeMomentumWeights } from '../../usecase/computeMomentumWeights.ts';
@@ -147,7 +148,7 @@ export class AgentService {
       .slice(0, limit)
       .map((item) => ({
         title: item.title,
-        weight: item.weight,
+        weight: formatFloat(item.weight, 0),
         source: item.source,
       }));
   }

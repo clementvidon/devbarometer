@@ -1,5 +1,5 @@
 export type HeadlineInfo = {
   title: string;
-  weight: number;
+  weight: string;
   source: string;
 };
