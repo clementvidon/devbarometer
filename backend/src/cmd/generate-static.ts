@@ -45,7 +45,7 @@ export async function generateStatic() {
   );
 
   const report = await agent.getLastEmotionProfileReport();
-  const ticker = await agent.getLastTopHeadlines(10);
+  const ticker = await agent.getLastTopHeadlines(5);
   const chart = await agent.getAggregatedEmotionProfiles();
 
   save('report.json', report);
