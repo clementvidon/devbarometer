@@ -1,8 +1,13 @@
 [
   {
-    "title": "Perte de motivation a cause de l'IA?",
+    "title": "(La suite) Un dev va être viré à la fin de la semaine mais il ne le sait pas encore",
     "weight": "2",
-    "source": "https://reddit.com/comments/1mudckf"
+    "source": "https://reddit.com/comments/1mwyovp"
+  },
+  {
+    "title": "Besoin d’avis de devs expérimentés en Java",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1mt0rqg"
   },
   {
     "title": "Saturé du dev : changer de poste ou évoluer ?",
@@ -10,18 +15,13 @@
     "source": "https://reddit.com/comments/1munyj6"
   },
   {
-    "title": "Dev, Data scientist, DevOps, IA, Chef de projet, que choisir pour un métier d'avenir ?",
+    "title": "Perte de motivation a cause de l'IA?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1mul33k"
+    "source": "https://reddit.com/comments/1mudckf"
   },
   {
-    "title": "Problème de motivation",
+    "title": "Les LLM/IA vont-ils remplacer une partie du travail DevOps (génération de pipelines, infra-as-code) ?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1mtkv7v"
-  },
-  {
-    "title": "Reconvertion vers Data Engineering depuis le développement web – avis sur le marché ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1mvb08m"
+    "source": "https://reddit.com/comments/1mw6kjb"
   }
 ]
