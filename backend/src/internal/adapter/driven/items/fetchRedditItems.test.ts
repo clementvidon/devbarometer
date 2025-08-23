@@ -7,10 +7,10 @@ import {
   test,
   vi,
 } from 'vitest';
-import type { FetchPort } from '../core/port/FetchPort.ts';
+import type { FetchPort } from '../../../core/port/FetchPort.ts';
 import { fetchRedditItems } from './fetchRedditItems.ts';
 
-vi.mock('../../utils/redditAuth.ts', () => ({
+vi.mock('../../../../utils/redditAuth.ts', () => ({
   getRedditAccessToken: vi.fn().mockResolvedValue('mocked-access-token'),
 }));
 

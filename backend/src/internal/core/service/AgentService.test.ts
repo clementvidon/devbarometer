@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { fetchRedditItems } from '../../usecase/fetchRedditItems.ts';
 import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
 import type { Item } from '../entity/Item.ts';
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
@@ -40,12 +39,6 @@ const llm: LlmPort = {
   run: vi.fn(() => Promise.resolve('')),
 };
 
-vi.mock('../../usecase/fetchRedditItems', () => ({
-  fetchRedditItems: vi.fn().mockResolvedValue({
-    items: ['item'],
-    fetchUrl: 'https://reddit.com/r/mock/top.json',
-  }),
-}));
 vi.mock('../../usecase/filterRelevantItems', () => ({
   filterRelevantItems: vi
     .fn()
@@ -108,8 +101,6 @@ describe('AgentService updateReport', () => {
   });
 
   test('handles empty items gracefully', async () => {
-    vi.mocked(fetchRedditItems).mockResolvedValue([]);
-
     const spy = vi.spyOn(persistence, 'storeSnapshotAt');
     await agent.updateReport();
 

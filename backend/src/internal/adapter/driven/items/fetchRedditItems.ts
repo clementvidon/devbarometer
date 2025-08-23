@@ -1,6 +1,6 @@
-import { getRedditAccessToken } from '../../utils/redditAuth.ts';
-import type { Item } from '../core/entity/Item.ts';
-import type { FetchPort } from '../core/port/FetchPort.ts';
+import { getRedditAccessToken } from '../../../../utils/redditAuth.ts';
+import type { Item } from '../../../core/entity/Item.ts';
+import type { FetchPort } from '../../../core/port/FetchPort.ts';
 import { ItemsResponseSchema } from './RedditSchemas.ts';
 
 const BASE_HEADERS = {
