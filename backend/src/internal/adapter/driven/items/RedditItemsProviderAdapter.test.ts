@@ -8,7 +8,10 @@ import {
   vi,
 } from 'vitest';
 import type { FetchPort } from '../../../core/port/FetchPort.ts';
-import { fetchRedditItems } from './fetchRedditItems.ts';
+import {
+  RedditItemsProviderAdapter,
+  fetchRedditItems, // 👈 vient maintenant du même fichier
+} from './RedditItemsProviderAdapter.ts';
 
 vi.mock('../../../../utils/redditAuth.ts', () => ({
   getRedditAccessToken: vi.fn().mockResolvedValue('mocked-access-token'),
@@ -63,7 +66,7 @@ describe('fetchRedditItems', () => {
       };
     });
 
-    test('maps, filters (ups>=10), and sanitizes correctly', async () => {
+    test('maps, filters (ups>=5), and sanitizes correctly', async () => {
       const items = await fetchRedditItems(
         fetcher,
         'https://oauth.reddit.com/r/mock/top.json?limit=3&t=week&raw_json=1',
@@ -153,5 +156,23 @@ describe('fetchRedditItems', () => {
       const items = await fetchRedditItems(fetcher, 'url');
       expect(items).toEqual([]);
     });
+  });
+});
+
+describe('RedditItemsProviderAdapter', () => {
+  test('delegates getItems to fetchRedditItems', async () => {
+    const fetcher: FetchPort = {
+      fetch: vi
+        .fn()
+        .mockResolvedValue(fakeResponse({ data: { children: fakePosts } })),
+    };
+    const adapter = new RedditItemsProviderAdapter(
+      fetcher,
+      'https://oauth.reddit.com/r/mock/top.json?limit=3&t=week&raw_json=1',
+    );
+    const items = await adapter.getItems();
+
+    expect(items).toHaveLength(2);
+    expect(items[0].title).toBe('1st Item');
   });
 });
