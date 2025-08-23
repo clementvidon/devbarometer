@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { assertRawEntries } from '../../types/Chart.ts';
+import { EMOTION_KEYS, TONALITY_KEYS } from './config.ts';
 import {
   parseEmotions,
   parseTonalities,
   type EmotionPoint,
   type TonalityPoint,
 } from './parsers.ts';
+import { smoothUX } from './smoothing.ts';
 
 export function useChartData() {
   const [emotionData, setEmotionData] = useState<EmotionPoint[] | null>(null);
@@ -20,8 +22,10 @@ export function useChartData() {
         const res = await fetch('chart.json');
         const raw: unknown = await res.json();
         assertRawEntries(raw);
-        setEmotionData(parseEmotions(raw));
-        setTonalityData(parseTonalities(raw));
+        const emotions = parseEmotions(raw);
+        const tonalities = parseTonalities(raw);
+        setEmotionData(smoothUX(emotions, EMOTION_KEYS, 'custom'));
+        setTonalityData(smoothUX(tonalities, TONALITY_KEYS, 'custom'));
       } catch (e) {
         setError(e instanceof Error ? e : new Error('Erreur inconnue'));
         setEmotionData([]);
