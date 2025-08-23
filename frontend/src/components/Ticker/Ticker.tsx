@@ -67,7 +67,7 @@ export function Ticker() {
           ref={rowRef}
           className={`${styles.row} ${paused ? styles.paused : ''}`}
         >
-          {looped.map(({ title, source, weight }, i) => (
+          {looped.map(({ title, source }, i) => (
             <a
               key={i}
               href={source}
@@ -78,7 +78,7 @@ export function Ticker() {
               title={title}
               draggable={false}
             >
-              «{title}» ⇧{weight}
+              «{title}»
             </a>
           ))}
         </div>
