@@ -5,23 +5,23 @@
     "source": "https://reddit.com/comments/1mwyovp"
   },
   {
-    "title": "Besoin d’avis de devs expérimentés en Java",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1mt0rqg"
-  },
-  {
     "title": "Saturé du dev : changer de poste ou évoluer ?",
-    "weight": "1",
+    "weight": "2",
     "source": "https://reddit.com/comments/1munyj6"
   },
   {
-    "title": "Perte de motivation a cause de l'IA?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1mudckf"
+    "title": "Les LLM/IA vont-ils remplacer une partie du travail DevOps (génération de pipelines, infra-as-code) ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1mw6kjb"
   },
   {
-    "title": "Les LLM/IA vont-ils remplacer une partie du travail DevOps (génération de pipelines, infra-as-code) ?",
+    "title": "Dev, Data scientist, DevOps, IA, Chef de projet, que choisir pour un métier d'avenir ?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1mw6kjb"
+    "source": "https://reddit.com/comments/1mul33k"
+  },
+  {
+    "title": "est ce toujours intéressant de se lancer dans le développement web a l'heure actuelle ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1mujy8c"
   }
 ]
