@@ -1,27 +1,27 @@
 [
   {
-    "title": "De dev à devops",
+    "title": "Comment confronter un RH malhonnête ? (En tant que candidat après rejet)",
+    "weight": "3",
+    "source": "https://reddit.com/comments/1n03qeb"
+  },
+  {
+    "title": "Stack Overflow se penche sur les salaires des développeurs français",
     "weight": "2",
+    "source": "https://reddit.com/comments/1mzouwp"
+  },
+  {
+    "title": "Reconversion développeur -> Administrateur système",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1n0e25f"
+  },
+  {
+    "title": "De dev à devops",
+    "weight": "1",
     "source": "https://reddit.com/comments/1mz2eq8"
   },
   {
     "title": "(La suite) Un dev va être viré à la fin de la semaine mais il ne le sait pas encore",
     "weight": "1",
     "source": "https://reddit.com/comments/1mwyovp"
-  },
-  {
-    "title": "Saturé du dev : changer de poste ou évoluer ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1munyj6"
-  },
-  {
-    "title": "Stack Overflow se penche sur les salaires des développeurs français",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1mzouwp"
-  },
-  {
-    "title": "Les influenceurs linkedin vendeur de formation",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1myac5s"
   }
 ]
