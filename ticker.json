@@ -1,27 +1,27 @@
 [
   {
-    "title": "Vibe coding et évolution du métier (rant?)",
+    "title": "Marre du dev..",
     "weight": "2",
+    "source": "https://reddit.com/comments/1n35d8h"
+  },
+  {
+    "title": "Développeur confirmé => qui cherche une alternance (React, VueJS, nodeJS)",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1n24ens"
+  },
+  {
+    "title": "Avis sur Datadog ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1n03n6f"
+  },
+  {
+    "title": "Vibe coding et évolution du métier (rant?)",
+    "weight": "1",
     "source": "https://reddit.com/comments/1n2bzbc"
   },
   {
-    "title": "Développer sans bosser pour l'industrie ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1n32q9g"
-  },
-  {
-    "title": "Comment confronter un RH malhonnête ? (En tant que candidat après rejet)",
+    "title": "MIAGE: solide pour la carrière et le prestige, ou choix risqué ?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1n03qeb"
-  },
-  {
-    "title": "Stack Overflow se penche sur les salaires des développeurs français",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1mzouwp"
-  },
-  {
-    "title": "De dev à devops",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1mz2eq8"
+    "source": "https://reddit.com/comments/1n1pa0n"
   }
 ]
