@@ -12,6 +12,11 @@
     "verbatimModuleSyntax": true,
     "allowImportingTsExtensions": true,
 
+    /* Type Checking */
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+
     /* Output / Linting */
     "noEmit": true,
     "skipLibCheck": true,

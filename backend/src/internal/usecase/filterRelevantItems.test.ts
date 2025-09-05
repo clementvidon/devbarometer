@@ -32,7 +32,7 @@ describe('filterRelevantItems', () => {
       vi.clearAllMocks();
       type LocalMsg = { role: 'system' | 'user'; content: string };
       llm = {
-        run: vi.fn((model: string, messages: LocalMsg[]) => {
+        run: vi.fn((_model: string, messages: LocalMsg[]) => {
           const content = messages[1].content;
           return content.includes('Relevant')
             ? '{ "relevant": true }'
