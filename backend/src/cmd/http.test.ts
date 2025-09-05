@@ -1,7 +1,7 @@
 import type { Server } from 'http';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-const listenSpy = vi.fn((port: number, cb?: () => void): Server => {
+const listenSpy = vi.fn((_port: number, cb?: () => void): Server => {
   cb?.();
   return { close: vi.fn() } as unknown as Server;
 });
