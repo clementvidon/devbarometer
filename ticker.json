@@ -1,7 +1,12 @@
 [
   {
+    "title": "Mouton à 5 pattes",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1n95n4v"
+  },
+  {
     "title": "Je suis un meilleur dev avec l'IA",
-    "weight": "3",
+    "weight": "2",
     "source": "https://reddit.com/comments/1n8q393"
   },
   {
@@ -10,18 +15,13 @@
     "source": "https://reddit.com/comments/1n7kytg"
   },
   {
-    "title": "Parlons sérieux, parlons oseille !",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1n8isqm"
-  },
-  {
-    "title": "Nous devrions être solidaires entre nous",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1n3y6ze"
-  },
-  {
-    "title": "Dois je abandonner mon poste ?",
+    "title": "Alternance dans le Nord",
     "weight": "1",
-    "source": "https://reddit.com/comments/1n8gr2b"
+    "source": "https://reddit.com/comments/1n7an66"
+  },
+  {
+    "title": "Des milliers de candidats pour un poste !",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1n7ayto"
   }
 ]
