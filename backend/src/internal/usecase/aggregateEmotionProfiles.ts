@@ -54,21 +54,18 @@ export function aggregateEmotionProfiles(
     }
   }
 
-  const averagedEmotions: EmotionScores = { ...emotionTotals };
-  const averagedTonalities: TonalityScores = { ...tonalityTotals };
-
-  for (const key in averagedEmotions) {
-    averagedEmotions[key as keyof EmotionScores] =
-      weightSum > 0
-        ? averagedEmotions[key as keyof EmotionScores] / weightSum
-        : 0;
+  const averagedEmotions = {} as EmotionScores;
+  const emotionKeys = Object.keys(emotionTotals) as (keyof EmotionScores)[];
+  for (const k of emotionKeys) {
+    const total = emotionTotals[k] ?? 0;
+    averagedEmotions[k] = weightSum > 0 ? total / weightSum : 0;
   }
 
-  for (const key in averagedTonalities) {
-    averagedTonalities[key as keyof TonalityScores] =
-      weightSum > 0
-        ? averagedTonalities[key as keyof TonalityScores] / weightSum
-        : 0;
+  const averagedTonalities = {} as TonalityScores;
+  const tonalityKeys = Object.keys(tonalityTotals) as (keyof TonalityScores)[];
+  for (const k of tonalityKeys) {
+    const total = tonalityTotals[k] ?? 0;
+    averagedTonalities[k] = weightSum > 0 ? total / weightSum : 0;
   }
 
   return {
