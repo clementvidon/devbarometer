@@ -3,7 +3,7 @@ export type SmoothLevel = 'detail' | 'custom' | 'clean' | 'narrative';
 type Preset = { K: number; passes: number; anchors: number };
 const PRESETS: Record<SmoothLevel, Preset> = {
   detail: { K: 8, passes: 1, anchors: 8 },
-  custom: { K: 8, passes: 1, anchors: 5 },
+  custom: { K: 8, passes: 2, anchors: 10 },
   clean: { K: 5, passes: 2, anchors: 7 },
   narrative: { K: 3, passes: 2, anchors: 6 },
 };
