@@ -1,135 +1,642 @@
 [
   {
-    "createdAt": "2025-08-13T10:23:01.391Z",
+    "createdAt": "2025-09-08T10:20:46.285Z",
     "emotions": {
-      "joy": 0.21973365617433413,
-      "fear": 0.2527845036319613,
-      "anger": 0.5739709443099273,
-      "trust": 0.21007869249394678,
-      "disgust": 0.4783595641646489,
-      "sadness": 0.3583535108958837
+      "joy": 0.27133172979468856,
+      "fear": 0.44639131755453587,
+      "anger": 0.21233687263399437,
+      "trust": 0.364102211439306,
+      "disgust": 0.20842081281925665,
+      "sadness": 0.3784209048768055
     },
     "tonalities": {
-      "negative": 0.7559322033898306,
-      "positive": 0.08819612590799032,
-      "negative_surprise": 0.656053268765133,
-      "positive_surprise": 0.07469733656174335,
-      "optimistic_anticipation": 0.12972154963680388,
-      "pessimistic_anticipation": 0.5575060532687651
-    }
+      "negative": 0.5411530406806153,
+      "positive": 0.2768551267225908,
+      "negative_surprise": 0.42995204936613785,
+      "positive_surprise": 0.16992770366719082,
+      "optimistic_anticipation": 0.2998397258090999,
+      "pessimistic_anticipation": 0.5464082928005366
+    },
+    "totalWeight": 18.999999999999996
   },
   {
-    "createdAt": "2025-08-12T10:22:38.973Z",
+    "createdAt": "2025-09-07T10:17:17.476Z",
     "emotions": {
-      "joy": 0.2179948029449978,
-      "fear": 0.2633607622347336,
-      "anger": 0.5296448679081852,
-      "trust": 0.23880467734950195,
-      "disgust": 0.4658943265482892,
-      "sadness": 0.39980511043741884
+      "joy": 0.2963815785706319,
+      "fear": 0.40843045941445216,
+      "anger": 0.15113385130224125,
+      "trust": 0.38152764741569567,
+      "disgust": 0.17719958442496447,
+      "sadness": 0.3429594089657583
     },
     "tonalities": {
-      "negative": 0.7404504114335211,
-      "positive": 0.14244261585101778,
-      "negative_surprise": 0.6413165872672153,
-      "positive_surprise": 0.10090948462537896,
-      "optimistic_anticipation": 0.13579471632741444,
-      "pessimistic_anticipation": 0.5214811606756173
-    }
+      "negative": 0.49110949793798714,
+      "positive": 0.30517541913759155,
+      "negative_surprise": 0.40023686533981573,
+      "positive_surprise": 0.18206673386956151,
+      "optimistic_anticipation": 0.2874973232371519,
+      "pessimistic_anticipation": 0.5192225219509784
+    },
+    "totalWeight": 17.999999999999993
   },
   {
-    "createdAt": "2025-08-11T10:24:18.019Z",
+    "createdAt": "2025-09-06T10:17:12.184Z",
     "emotions": {
-      "joy": 0.20618640618640618,
-      "fear": 0.2264957264957265,
-      "anger": 0.4525844525844525,
-      "trust": 0.20024420024420025,
-      "disgust": 0.45107855107855105,
-      "sadness": 0.4100529100529101
+      "joy": 0.29215158459428875,
+      "fear": 0.4328461529433209,
+      "anger": 0.24527505182174722,
+      "trust": 0.38773268485744783,
+      "disgust": 0.20858670610764737,
+      "sadness": 0.38007985867853583
     },
     "tonalities": {
-      "negative": 0.7635734635734636,
-      "positive": 0.22262922262922263,
-      "negative_surprise": 0.6627594627594628,
-      "positive_surprise": 0.11571021571021571,
-      "optimistic_anticipation": 0.2442816442816443,
-      "pessimistic_anticipation": 0.6646316646316647
-    }
+      "negative": 0.5086715181494603,
+      "positive": 0.31336410119998215,
+      "negative_surprise": 0.41432287337410023,
+      "positive_surprise": 0.20320794650045088,
+      "optimistic_anticipation": 0.3225356166544594,
+      "pessimistic_anticipation": 0.5227103655643917
+    },
+    "totalWeight": 22.000000000000004
   },
   {
-    "createdAt": "2025-08-10T10:21:06.205Z",
+    "createdAt": "2025-09-05T10:20:08.149Z",
     "emotions": {
-      "joy": 0.319958071278826,
-      "fear": 0.19446540880503146,
-      "anger": 0.4005031446540881,
-      "trust": 0.23006289308176098,
-      "disgust": 0.3795387840670859,
-      "sadness": 0.35740041928721167
+      "joy": 0.22143346416434906,
+      "fear": 0.4579299131438957,
+      "anger": 0.21398622218780153,
+      "trust": 0.37575084356212424,
+      "disgust": 0.20455744270395873,
+      "sadness": 0.4176644797958213
     },
     "tonalities": {
-      "negative": 0.75937106918239,
-      "positive": 0.23102725366876306,
-      "negative_surprise": 0.6615513626834383,
-      "positive_surprise": 0.11865828092243187,
-      "optimistic_anticipation": 0.2794549266247379,
-      "pessimistic_anticipation": 0.6953878406708593
-    }
+      "negative": 0.5517400129470366,
+      "positive": 0.25388833062947974,
+      "negative_surprise": 0.428296888190504,
+      "positive_surprise": 0.15205614092191297,
+      "optimistic_anticipation": 0.2840825455040988,
+      "pessimistic_anticipation": 0.5540006645375477
+    },
+    "totalWeight": 23.000000000000007
   },
   {
-    "createdAt": "2025-08-09T10:20:35.226Z",
+    "createdAt": "2025-09-04T10:19:45.930Z",
     "emotions": {
-      "joy": 0.337814702920443,
-      "fear": 0.28942598187311175,
-      "anger": 0.3734138972809668,
-      "trust": 0.28192346424974823,
-      "disgust": 0.4042296072507553,
-      "sadness": 0.3879657603222558
+      "joy": 0.26084882546751725,
+      "fear": 0.4759186670411118,
+      "anger": 0.2836226754189979,
+      "trust": 0.4053814250418216,
+      "disgust": 0.25489097313669623,
+      "sadness": 0.45788012896300884
     },
     "tonalities": {
-      "negative": 0.7050855991943605,
-      "positive": 0.23600201409869084,
-      "negative_surprise": 0.608207452165156,
-      "positive_surprise": 0.11903323262839877,
-      "optimistic_anticipation": 0.3218026183282981,
-      "pessimistic_anticipation": 0.7554380664652568
-    }
+      "negative": 0.5595705911411831,
+      "positive": 0.30400776731919243,
+      "negative_surprise": 0.3961369581785049,
+      "positive_surprise": 0.17309560587288148,
+      "optimistic_anticipation": 0.32341736179428227,
+      "pessimistic_anticipation": 0.5299614161557142
+    },
+    "totalWeight": 22.000000000000007
   },
   {
-    "createdAt": "2025-08-08T18:43:36.400Z",
+    "createdAt": "2025-09-03T10:19:20.692Z",
     "emotions": {
-      "joy": 0.33945,
-      "fear": 0.21845,
-      "anger": 0.36619999999999997,
-      "trust": 0.2156,
-      "disgust": 0.39544999999999997,
-      "sadness": 0.35040000000000004
+      "joy": 0.27782800266027513,
+      "fear": 0.46291305727411186,
+      "anger": 0.24515255081206155,
+      "trust": 0.39751089171514087,
+      "disgust": 0.2223554876048369,
+      "sadness": 0.3998678535581281
     },
     "tonalities": {
-      "negative": 0.74775,
-      "positive": 0.24185,
-      "negative_surprise": 0.6509999999999999,
-      "positive_surprise": 0.11690000000000002,
-      "optimistic_anticipation": 0.23785000000000003,
-      "pessimistic_anticipation": 0.6470499999999998
-    }
+      "negative": 0.48033258039875387,
+      "positive": 0.3428320407540213,
+      "negative_surprise": 0.36239401458860276,
+      "positive_surprise": 0.18636176095697876,
+      "optimistic_anticipation": 0.3898525028279094,
+      "pessimistic_anticipation": 0.49262149951719697
+    },
+    "totalWeight": 24.000000000000004
   },
   {
-    "createdAt": "2025-08-07T21:27:35.610Z",
+    "createdAt": "2025-09-02T10:20:41.937Z",
     "emotions": {
-      "joy": 0.36838541666666663,
-      "fear": 0.21526041666666665,
-      "anger": 0.3582291666666666,
-      "trust": 0.20463541666666668,
-      "disgust": 0.3782291666666666,
-      "sadness": 0.3730208333333333
+      "joy": 0.27398734796888363,
+      "fear": 0.4626281804691838,
+      "anger": 0.2702713702714899,
+      "trust": 0.3787619805420482,
+      "disgust": 0.2416712105613879,
+      "sadness": 0.45514962931873243
     },
     "tonalities": {
-      "negative": 0.6692187499999999,
-      "positive": 0.2677604166666666,
-      "negative_surprise": 0.583020833333333,
-      "positive_surprise": 0.14572916666666666,
-      "optimistic_anticipation": 0.2960416666666667,
-      "pessimistic_anticipation": 0.5107291666666666
-    }
+      "negative": 0.5329447125279926,
+      "positive": 0.3215159447977578,
+      "negative_surprise": 0.3736590834271116,
+      "positive_surprise": 0.17766414591481836,
+      "optimistic_anticipation": 0.3687288612213742,
+      "pessimistic_anticipation": 0.4966515512399116
+    },
+    "totalWeight": 22.00000000000001
+  },
+  {
+    "createdAt": "2025-09-01T10:21:33.204Z",
+    "emotions": {
+      "joy": 0.2802608555923874,
+      "fear": 0.40576078398549487,
+      "anger": 0.28369429393213824,
+      "trust": 0.3805020345094419,
+      "disgust": 0.24263832302354368,
+      "sadness": 0.42776949330501446
+    },
+    "tonalities": {
+      "negative": 0.5167904933562593,
+      "positive": 0.34382634226595093,
+      "negative_surprise": 0.37471170942418347,
+      "positive_surprise": 0.19292434220391644,
+      "optimistic_anticipation": 0.3777197717888434,
+      "pessimistic_anticipation": 0.4766842605786272
+    },
+    "totalWeight": 23.999999999999996
+  },
+  {
+    "createdAt": "2025-08-31T10:17:46.016Z",
+    "emotions": {
+      "joy": 0.225690840374332,
+      "fear": 0.3559601706812888,
+      "anger": 0.2549897820677049,
+      "trust": 0.3360676425470991,
+      "disgust": 0.24425124955264535,
+      "sadness": 0.40281753226623074
+    },
+    "tonalities": {
+      "negative": 0.5196708893331805,
+      "positive": 0.25852395524175387,
+      "negative_surprise": 0.39406827421928625,
+      "positive_surprise": 0.13532391625482929,
+      "optimistic_anticipation": 0.3051982180555195,
+      "pessimistic_anticipation": 0.49109975208663537
+    },
+    "totalWeight": 18.999999999999996
+  },
+  {
+    "createdAt": "2025-08-30T10:17:31.629Z",
+    "emotions": {
+      "joy": 0.21673108626982568,
+      "fear": 0.3431573956296007,
+      "anger": 0.21541308535750306,
+      "trust": 0.3548476115449746,
+      "disgust": 0.21541308535750311,
+      "sadness": 0.3466510233483713
+    },
+    "tonalities": {
+      "negative": 0.43968175936777076,
+      "positive": 0.27708530981593626,
+      "negative_surprise": 0.3396637679108301,
+      "positive_surprise": 0.1338793064440003,
+      "optimistic_anticipation": 0.32774431027209755,
+      "pessimistic_anticipation": 0.4339818885571576
+    },
+    "totalWeight": 17.000000000000004
+  },
+  {
+    "createdAt": "2025-08-29T10:19:48.540Z",
+    "emotions": {
+      "joy": 0.21477243472820756,
+      "fear": 0.293382270779131,
+      "anger": 0.23676516123449307,
+      "trust": 0.3453490672449443,
+      "disgust": 0.20827579542373348,
+      "sadness": 0.3245480239130447
+    },
+    "tonalities": {
+      "negative": 0.4517788134539019,
+      "positive": 0.2739521823258517,
+      "negative_surprise": 0.37714914949836287,
+      "positive_surprise": 0.11875192149287682,
+      "optimistic_anticipation": 0.32402812939440284,
+      "pessimistic_anticipation": 0.44357930776407717
+    },
+    "totalWeight": 14.999999999999993
+  },
+  {
+    "createdAt": "2025-08-28T10:20:38.031Z",
+    "emotions": {
+      "joy": 0.2037453910405563,
+      "fear": 0.2624762185567566,
+      "anger": 0.21328174753887608,
+      "trust": 0.3249111840487103,
+      "disgust": 0.19542054166629078,
+      "sadness": 0.3055150787015859
+    },
+    "tonalities": {
+      "negative": 0.433602385241006,
+      "positive": 0.26693520127179726,
+      "negative_surprise": 0.3711261666842493,
+      "positive_surprise": 0.12407711675555726,
+      "optimistic_anticipation": 0.34463408972323234,
+      "pessimistic_anticipation": 0.4179278234284688
+    },
+    "totalWeight": 13.999999999999995
+  },
+  {
+    "createdAt": "2025-08-27T10:19:43.912Z",
+    "emotions": {
+      "joy": 0.22492577828906593,
+      "fear": 0.26792632944942557,
+      "anger": 0.17230828511659704,
+      "trust": 0.35196576025870274,
+      "disgust": 0.1583799723795468,
+      "sadness": 0.28230233355398643
+    },
+    "tonalities": {
+      "negative": 0.33296758767751683,
+      "positive": 0.2892036163018799,
+      "negative_surprise": 0.26696023957902043,
+      "positive_surprise": 0.14084340901529482,
+      "optimistic_anticipation": 0.4158416367405353,
+      "pessimistic_anticipation": 0.3395198838796343
+    },
+    "totalWeight": 14.999999999999993
+  },
+  {
+    "createdAt": "2025-08-26T10:21:14.203Z",
+    "emotions": {
+      "joy": 0.2360774531961543,
+      "fear": 0.32710388949508,
+      "anger": 0.1462419374158833,
+      "trust": 0.3778721659363692,
+      "disgust": 0.13554862244037358,
+      "sadness": 0.2743785187301429
+    },
+    "tonalities": {
+      "negative": 0.35937123808605786,
+      "positive": 0.2932500486367599,
+      "negative_surprise": 0.26702062226138445,
+      "positive_surprise": 0.13644805525246,
+      "optimistic_anticipation": 0.4190047889137102,
+      "pessimistic_anticipation": 0.3703018961107801
+    },
+    "totalWeight": 16
+  },
+  {
+    "createdAt": "2025-08-25T10:22:11.208Z",
+    "emotions": {
+      "joy": 0.21520549122908714,
+      "fear": 0.35682884511759366,
+      "anger": 0.16656700882551417,
+      "trust": 0.35589571411352267,
+      "disgust": 0.19814269081129804,
+      "sadness": 0.363264916835947
+    },
+    "tonalities": {
+      "negative": 0.42724774866260656,
+      "positive": 0.2778512480505453,
+      "negative_surprise": 0.31890274525510937,
+      "positive_surprise": 0.14933146249739926,
+      "optimistic_anticipation": 0.3887126530242441,
+      "pessimistic_anticipation": 0.4225585410193005
+    },
+    "totalWeight": 15.000000000000004
+  },
+  {
+    "createdAt": "2025-08-24T10:19:04.367Z",
+    "emotions": {
+      "joy": 0.1847911369738225,
+      "fear": 0.38518848574711534,
+      "anger": 0.19037723411784324,
+      "trust": 0.33009780089044366,
+      "disgust": 0.18603571243560688,
+      "sadness": 0.3619088423717264
+    },
+    "tonalities": {
+      "negative": 0.44560486837644964,
+      "positive": 0.257953312610992,
+      "negative_surprise": 0.32901209762666805,
+      "positive_surprise": 0.13939648350153655,
+      "optimistic_anticipation": 0.3698111021684647,
+      "pessimistic_anticipation": 0.42559911550752483
+    },
+    "totalWeight": 12.999999999999996
+  },
+  {
+    "createdAt": "2025-08-23T10:18:42.996Z",
+    "emotions": {
+      "joy": 0.17028998657737748,
+      "fear": 0.4233619693502911,
+      "anger": 0.19310034165207526,
+      "trust": 0.3113623989198866,
+      "disgust": 0.2030022751172379,
+      "sadness": 0.4147034468481785
+    },
+    "tonalities": {
+      "negative": 0.5178593883421165,
+      "positive": 0.22730504370398005,
+      "negative_surprise": 0.38335207456361287,
+      "positive_surprise": 0.1233305292926378,
+      "optimistic_anticipation": 0.33274423659718094,
+      "pessimistic_anticipation": 0.4771576968679818
+    },
+    "totalWeight": 11
+  },
+  {
+    "createdAt": "2025-08-22T10:20:41.647Z",
+    "emotions": {
+      "joy": 0.2125944743802873,
+      "fear": 0.4268003750481398,
+      "anger": 0.18615580453311364,
+      "trust": 0.3527622896285975,
+      "disgust": 0.20404475803909594,
+      "sadness": 0.42727713031485554
+    },
+    "tonalities": {
+      "negative": 0.45971713468593994,
+      "positive": 0.27010837744619626,
+      "negative_surprise": 0.32020723519176325,
+      "positive_surprise": 0.13048342788626957,
+      "optimistic_anticipation": 0.3534691450268131,
+      "pessimistic_anticipation": 0.45496552124862844
+    },
+    "totalWeight": 11
+  },
+  {
+    "createdAt": "2025-08-21T10:20:50.633Z",
+    "emotions": {
+      "joy": 0.21111111111111114,
+      "fear": 0.4555555555555556,
+      "anger": 0.15555555555555556,
+      "trust": 0.3555555555555555,
+      "disgust": 0.17777777777777778,
+      "sadness": 0.4111111111111112
+    },
+    "tonalities": {
+      "negative": 0.4555555555555555,
+      "positive": 0.27777777777777773,
+      "negative_surprise": 0.3333333333333334,
+      "positive_surprise": 0.14444444444444446,
+      "optimistic_anticipation": 0.3888888888888889,
+      "pessimistic_anticipation": 0.47777777777777786
+    },
+    "totalWeight": 9
+  },
+  {
+    "createdAt": "2025-08-20T18:36:21.815Z",
+    "emotions": {
+      "joy": 0.22000000000000003,
+      "fear": 0.4600000000000001,
+      "anger": 0.16,
+      "trust": 0.36,
+      "disgust": 0.18,
+      "sadness": 0.4600000000000001
+    },
+    "tonalities": {
+      "negative": 0.5000000000000001,
+      "positive": 0.32,
+      "negative_surprise": 0.36,
+      "positive_surprise": 0.16,
+      "optimistic_anticipation": 0.44000000000000006,
+      "pessimistic_anticipation": 0.48
+    },
+    "totalWeight": 5
+  },
+  {
+    "createdAt": "2025-08-19T16:10:28.654Z",
+    "emotions": {
+      "joy": 0.17408676679578097,
+      "fear": 0.5147830830105478,
+      "anger": 0.21234779446596352,
+      "trust": 0.3123477944659635,
+      "disgust": 0.26295661660210956,
+      "sadness": 0.5382610276701826
+    },
+    "tonalities": {
+      "negative": 0.6135654387382556,
+      "positive": 0.23582573912559843,
+      "negative_surprise": 0.4123477944659635,
+      "positive_surprise": 0.1370433833978905,
+      "optimistic_anticipation": 0.31113015019367146,
+      "pessimistic_anticipation": 0.5629566166021096
+    },
+    "totalWeight": 6.999999999999999
+  },
+  {
+    "createdAt": "2025-08-18T06:23:57.725Z",
+    "emotions": {
+      "joy": 0.2504916276779158,
+      "fear": 0.4580875194943755,
+      "anger": 0.17904375974718778,
+      "trust": 0.3542895735861456,
+      "disgust": 0.14571042641385443,
+      "sadness": 0.35808751949437545
+    },
+    "tonalities": {
+      "negative": 0.4704646125748966,
+      "positive": 0.28382496101124904,
+      "negative_surprise": 0.35808751949437556,
+      "positive_surprise": 0.16286872075843684,
+      "optimistic_anticipation": 0.33333333333333337,
+      "pessimistic_anticipation": 0.49142085282770887
+    },
+    "totalWeight": 5.999999999999999
+  },
+  {
+    "createdAt": "2025-08-17T06:20:12.992Z",
+    "emotions": {
+      "joy": 0.24664118760063433,
+      "fear": 0.4206011069701938,
+      "anger": 0.20125387844494633,
+      "trust": 0.33696757333801053,
+      "disgust": 0.15335881239936566,
+      "sadness": 0.34742206077804244
+    },
+    "tonalities": {
+      "negative": 0.49704401053610764,
+      "positive": 0.2776720093173216,
+      "negative_surprise": 0.37816978727839823,
+      "positive_surprise": 0.1697252787671824,
+      "optimistic_anticipation": 0.35832478079207414,
+      "pessimistic_anticipation": 0.5012538784449463
+    },
+    "totalWeight": 6.000000000000001
+  },
+  {
+    "createdAt": "2025-08-16T06:19:07.122Z",
+    "emotions": {
+      "joy": 0.19001828101646587,
+      "fear": 0.3739097996827906,
+      "anger": 0.2950051975748168,
+      "trust": 0.30597034648658017,
+      "disgust": 0.24098786158191082,
+      "sadness": 0.33800957962385175
+    },
+    "tonalities": {
+      "negative": 0.4886901824459822,
+      "positive": 0.24333249715440086,
+      "negative_surprise": 0.38548138460997533,
+      "positive_surprise": 0.15599286351942063,
+      "optimistic_anticipation": 0.309937955076498,
+      "pessimistic_anticipation": 0.4458997627380064
+    },
+    "totalWeight": 7.999999999999999
+  },
+  {
+    "createdAt": "2025-08-15T06:21:28.476Z",
+    "emotions": {
+      "joy": 0.21276237086379737,
+      "fear": 0.34453403630507345,
+      "anger": 0.2588583272063801,
+      "trust": 0.3296868696164048,
+      "disgust": 0.2169319625135396,
+      "sadness": 0.329163993829043
+    },
+    "tonalities": {
+      "negative": 0.460935659270319,
+      "positive": 0.2708360061709568,
+      "negative_surprise": 0.34792639981652695,
+      "positive_surprise": 0.14114913655455194,
+      "optimistic_anticipation": 0.35052660766782784,
+      "pessimistic_anticipation": 0.41823206643918986
+    },
+    "totalWeight": 13.000000000000004
+  },
+  {
+    "createdAt": "2025-08-14T06:22:56.969Z",
+    "emotions": {
+      "joy": 0.1757380654868235,
+      "fear": 0.3710786679387923,
+      "anger": 0.31599804092117245,
+      "trust": 0.2860948505470556,
+      "disgust": 0.24919005458659857,
+      "sadness": 0.38747205373295585
+    },
+    "tonalities": {
+      "negative": 0.535485815591853,
+      "positive": 0.21741616599960106,
+      "negative_surprise": 0.38923828106127606,
+      "positive_surprise": 0.116018074222349,
+      "optimistic_anticipation": 0.31690520354197,
+      "pessimistic_anticipation": 0.4759293869395217
+    },
+    "totalWeight": 13.999999999999998
+  },
+  {
+    "createdAt": "2025-08-13T06:23:01.391Z",
+    "emotions": {
+      "joy": 0.18835191507503807,
+      "fear": 0.3291334357896118,
+      "anger": 0.30838789340762207,
+      "trust": 0.29165237911964004,
+      "disgust": 0.2542140829674421,
+      "sadness": 0.32926253432938307
+    },
+    "tonalities": {
+      "negative": 0.5000213802588868,
+      "positive": 0.2291066710564764,
+      "negative_surprise": 0.38334751875705386,
+      "positive_surprise": 0.13469956548946996,
+      "optimistic_anticipation": 0.30137611922842744,
+      "pessimistic_anticipation": 0.42821422814591076
+    },
+    "totalWeight": 15
+  },
+  {
+    "createdAt": "2025-08-12T06:22:38.973Z",
+    "emotions": {
+      "joy": 0.2237140215326788,
+      "fear": 0.2877940819712203,
+      "anger": 0.2924789540811457,
+      "trust": 0.31911034938742816,
+      "disgust": 0.25466835616231037,
+      "sadness": 0.3237579283123752
+    },
+    "tonalities": {
+      "negative": 0.4833436964179783,
+      "positive": 0.2520463694877518,
+      "negative_surprise": 0.4021386231982391,
+      "positive_surprise": 0.15152355796884584,
+      "optimistic_anticipation": 0.33459537811326706,
+      "pessimistic_anticipation": 0.42539462962358887
+    },
+    "totalWeight": 12
+  },
+  {
+    "createdAt": "2025-08-11T06:24:18.019Z",
+    "emotions": {
+      "joy": 0.21037591418249563,
+      "fear": 0.3349689242811441,
+      "anger": 0.3669999025639659,
+      "trust": 0.289110001064971,
+      "disgust": 0.3214749209445914,
+      "sadness": 0.37004349846375045
+    },
+    "tonalities": {
+      "negative": 0.534250871477764,
+      "positive": 0.23598921043065427,
+      "negative_surprise": 0.4701013763761667,
+      "positive_surprise": 0.13825121493914025,
+      "optimistic_anticipation": 0.2933866839246872,
+      "pessimistic_anticipation": 0.44911732787964626
+    },
+    "totalWeight": 11.999999999999998
+  },
+  {
+    "createdAt": "2025-08-10T06:21:06.205Z",
+    "emotions": {
+      "joy": 0.2589345247618146,
+      "fear": 0.33746024921100815,
+      "anger": 0.2616949250287573,
+      "trust": 0.3510859556640628,
+      "disgust": 0.2381330593502109,
+      "sadness": 0.3529841869460151
+    },
+    "tonalities": {
+      "negative": 0.49696281671520076,
+      "positive": 0.27585516355990974,
+      "negative_surprise": 0.42627009646786546,
+      "positive_surprise": 0.14408851997779173,
+      "optimistic_anticipation": 0.3228392903432489,
+      "pessimistic_anticipation": 0.4456500990954139
+    },
+    "totalWeight": 14.999999999999995
+  },
+  {
+    "createdAt": "2025-08-09T06:20:35.226Z",
+    "emotions": {
+      "joy": 0.2675487153415022,
+      "fear": 0.29891784605550603,
+      "anger": 0.2281759705012801,
+      "trust": 0.3398547419059627,
+      "disgust": 0.20242292364151906,
+      "sadness": 0.28962708353999334
+    },
+    "tonalities": {
+      "negative": 0.441819239176791,
+      "positive": 0.3102975709763097,
+      "negative_surprise": 0.3719513111507081,
+      "positive_surprise": 0.16420292914893322,
+      "optimistic_anticipation": 0.36327626095002463,
+      "pessimistic_anticipation": 0.4160180617965972
+    },
+    "totalWeight": 12.999999999999996
+  },
+  {
+    "createdAt": "2025-08-08T14:43:36.400Z",
+    "emotions": {
+      "joy": 0.26666666666666666,
+      "fear": 0.2833333333333334,
+      "anger": 0.17500000000000004,
+      "trust": 0.3833333333333333,
+      "disgust": 0.1416666666666667,
+      "sadness": 0.26666666666666666
+    },
+    "tonalities": {
+      "negative": 0.3499999999999999,
+      "positive": 0.31666666666666665,
+      "negative_surprise": 0.2833333333333334,
+      "positive_surprise": 0.16666666666666666,
+      "optimistic_anticipation": 0.425,
+      "pessimistic_anticipation": 0.35833333333333334
+    },
+    "totalWeight": 12
   }
 ]
