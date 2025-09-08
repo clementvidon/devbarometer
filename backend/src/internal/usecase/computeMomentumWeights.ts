@@ -1,5 +1,7 @@
 import type { RelevantItem } from '../core/entity/Item.ts';
 
+const BASE_MOMENTUM_WEIGHT = 1;
+
 function isNew(prevRaw: number | undefined): boolean {
   return prevRaw === undefined;
 }
@@ -21,15 +23,15 @@ export function computeMomentumWeights(
     const prevRaw = prevMap.get(it.source);
 
     if (isNew(prevRaw)) {
-      return { ...it, weight: 1 };
+      return { ...it, weight: BASE_MOMENTUM_WEIGHT };
     }
 
     if (noPositiveDelta(todayRaw, prevRaw as number)) {
-      return { ...it, weight: 1 };
+      return { ...it, weight: BASE_MOMENTUM_WEIGHT };
     }
 
-    const delta = todayRaw - (prevRaw as number); // Δ > 0 garanti ici
-    const momentum = 1 + Math.log1p(delta);
+    const delta = todayRaw - (prevRaw as number);
+    const momentum = BASE_MOMENTUM_WEIGHT + Math.log1p(delta);
     return { ...it, weight: momentum };
   });
 }
