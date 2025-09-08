@@ -14,7 +14,6 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
-          // Exemple : séparer React du reste
           if (id.includes('node_modules')) {
             return 'vendor';
           }

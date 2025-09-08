@@ -4,7 +4,6 @@ import type { Item } from '../../../core/entity/Item.ts';
 import type { FetchPort } from '../../../core/port/FetchPort.ts';
 import type { ItemsProviderPort } from '../../../core/port/ItemsProviderPort.ts';
 
-// === Schemas (fusion de RedditSchemas.ts) ===
 export const RedditChildSchema = z.object({
   data: z.object({
     id: z.string(),
@@ -20,7 +19,6 @@ export const ItemsResponseSchema = z.object({
   }),
 });
 
-// === Implémentation (fusion de fetchRedditItems.ts) ===
 const BASE_HEADERS = {
   'User-Agent':
     'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)',
@@ -153,7 +151,6 @@ export async function fetchRedditItems(
   }));
 }
 
-// === Adapter (fusion de RedditItemsProviderAdapter.ts) ===
 export class RedditItemsProviderAdapter implements ItemsProviderPort {
   constructor(
     private readonly fetcher: FetchPort,

@@ -1,4 +1,3 @@
-// src/components/Report/Report.tsx
 import styles from './Report.module.css';
 import { useReport } from './useReport.ts';
 

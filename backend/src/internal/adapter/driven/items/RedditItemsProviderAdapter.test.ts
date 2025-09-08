@@ -10,7 +10,7 @@ import {
 import type { FetchPort } from '../../../core/port/FetchPort.ts';
 import {
   RedditItemsProviderAdapter,
-  fetchRedditItems, // 👈 vient maintenant du même fichier
+  fetchRedditItems,
 } from './RedditItemsProviderAdapter.ts';
 
 vi.mock('../../../../utils/redditAuth.ts', () => ({
