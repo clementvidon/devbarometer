@@ -29,6 +29,7 @@
     "test:coverage": "npm-run-all --parallel --print-label test:coverage:frontend test:coverage:backend",
     "check": "npm-run-all --sequential lint format:check type-check test",
     "audit": "audit-ci --config ./audit-ci.jsonc",
+    "audit:prod": "npm audit --omit=dev",
 
     "agent": "npm --workspace backend run agent",
     "export": "npm --workspace backend run export",
