@@ -26,19 +26,11 @@ const CAP_OPTS = {
 } as const;
 
 export class AgentService {
-  private readonly itemsProvider: ItemsProviderPort;
-  private readonly llm: LlmPort;
-  private readonly persistence: PersistencePort;
-
   constructor(
-    itemsProvider: ItemsProviderPort,
-    llm: LlmPort,
-    persistence: PersistencePort,
-  ) {
-    this.itemsProvider = itemsProvider;
-    this.llm = llm;
-    this.persistence = persistence;
-  }
+    private readonly itemsProvider: ItemsProviderPort,
+    private readonly llm: LlmPort,
+    private readonly persistence: PersistencePort,
+  ) {}
 
   async updateReport(): Promise<void> {
     const items = await this.itemsProvider.getItems();
