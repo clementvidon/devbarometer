@@ -109,7 +109,7 @@ export function useTickerScroll(
         hasDragged.current = true;
         dragJustHappened.current = true;
         clearPauseTimer();
-        onPause(); // pause immédiate dès qu’on entre en drag
+        onPause();
       }
 
       if (hasDragged.current) {

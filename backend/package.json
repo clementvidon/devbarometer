@@ -15,11 +15,11 @@
     "test:changed": "vitest run --silent --changed || true",
     "test:coverage": "vitest --coverage --silent",
     "check": "npm-run-all --sequential format lint type-check test",
+    "dev": "tsx src/cmd/http.ts",
+    "update-report": "curl -X POST http://localhost:3000/report",
     "db:push": "drizzle-kit push --config=drizzle.config.mjs",
     "db:generate": "drizzle-kit generate --config=drizzle.config.mjs",
-    "db:studio": "drizzle-kit studio --config=drizzle.config.mjs",
-    "dev": "tsx src/cmd/http.ts",
-    "update-report": "curl -X POST http://localhost:3000/report"
+    "db:studio": "drizzle-kit studio --config=drizzle.config.mjs"
   },
   "dependencies": {
     "drizzle-orm": "^0.43.1",
