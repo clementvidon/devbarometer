@@ -4,6 +4,11 @@ import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import sharedConfig from '../eslint.config.mjs';
 
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 export default defineConfig([
   {
     ignores: ['vite.config.ts'],
@@ -15,7 +20,7 @@ export default defineConfig([
       parser: tsparser,
       parserOptions: {
         project: './tsconfig.json',
-        tsconfigRootDir: new URL('.', import.meta.url),
+        tsconfigRootDir: __dirname,
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
         ecmaVersion: 2020,
