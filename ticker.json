@@ -1,27 +1,27 @@
 [
   {
+    "title": "Côté recruteur, le sujet des entretiens et du niveau très bas.",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1ndej7v"
+  },
+  {
     "title": "Mouton à 5 pattes",
     "weight": "2",
     "source": "https://reddit.com/comments/1n95n4v"
   },
   {
-    "title": "Les tests de code sont morts avec les LLMs ?",
+    "title": "Des gens ciblent une faang ?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1naorg5"
-  },
-  {
-    "title": "Se lancer en tant que dev en 2025-2026 c'est FOUTU?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1nbhbzu"
-  },
-  {
-    "title": "Il est comment le marché pour les développeurs dans les villes moins grandes en France?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1nb7g3t"
+    "source": "https://reddit.com/comments/1ndf632"
   },
   {
     "title": "Qui ici ne fait pas un bullshit job ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1nbf31c"
+  },
+  {
+    "title": "Les tests de code sont morts avec les LLMs ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1naorg5"
   }
 ]
