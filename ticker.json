@@ -1,12 +1,17 @@
 [
   {
+    "title": "full remote en France",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1ngwxp8"
+  },
+  {
     "title": "J’aime dev mais pas en entreprise …",
-    "weight": "2",
+    "weight": "1",
     "source": "https://reddit.com/comments/1nfaef5"
   },
   {
     "title": "Côté recruteur, le sujet des entretiens et du niveau très bas.",
-    "weight": "2",
+    "weight": "1",
     "source": "https://reddit.com/comments/1ndej7v"
   },
   {
@@ -15,13 +20,8 @@
     "source": "https://reddit.com/comments/1nfr841"
   },
   {
-    "title": "Des gens ciblent une faang ?",
+    "title": "Comment trouvez-vous vos clients ? (Artisans, PME...)",
     "weight": "1",
-    "source": "https://reddit.com/comments/1ndf632"
-  },
-  {
-    "title": "full remote en France",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1ngwxp8"
+    "source": "https://reddit.com/comments/1ne4dk3"
   }
 ]
