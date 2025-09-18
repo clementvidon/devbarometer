@@ -4,6 +4,7 @@ import type { Item } from '../entity/Item.ts';
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
+import type { RelevanceFilterPort } from '../port/RelevanceFilterPort.ts';
 import type { PipelineSnapshot } from '../types/PipelineSnapshot.ts';
 import { AgentService } from './AgentService.ts';
 
@@ -39,13 +40,10 @@ const llm: LlmPort = {
   run: vi.fn(() => Promise.resolve('')),
 };
 
-vi.mock('../../usecase/filterRelevantItems', () => ({
-  filterRelevantItems: vi
-    .fn()
-    .mockResolvedValue([
-      { source: 'x', title: 'title', content: '', weight: 1 },
-    ]),
-}));
+const relevanceFilter: RelevanceFilterPort = {
+  filterItems: vi.fn(() => Promise.resolve(mockItems)),
+};
+
 vi.mock('../../usecase/createEmotionProfiles', () => ({
   createEmotionProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
 }));
@@ -85,7 +83,7 @@ describe('AgentService updateReport', () => {
       storeSnapshotAt: vi.fn(() => Promise.resolve()),
       getSnapshots: vi.fn(() => Promise.resolve([])),
     };
-    agent = new AgentService(itemsProvider, llm, persistence);
+    agent = new AgentService(itemsProvider, llm, persistence, relevanceFilter);
     vi.clearAllMocks();
   });
 
@@ -182,7 +180,12 @@ test('AgentService getLastTopHeadlines returns titles of N top weighted emotionP
     getSnapshots: vi.fn().mockResolvedValue([snapshot]),
   };
 
-  const agent = new AgentService(itemsProvider, llm, persistence);
+  const agent = new AgentService(
+    itemsProvider,
+    llm,
+    persistence,
+    relevanceFilter,
+  );
 
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([
@@ -198,7 +201,12 @@ test('AgentService getLastTopHeadlines returns empty array if no snapshot', asyn
     getSnapshots: vi.fn().mockResolvedValue([]),
   };
 
-  const agent = new AgentService(itemsProvider, llm, persistence);
+  const agent = new AgentService(
+    itemsProvider,
+    llm,
+    persistence,
+    relevanceFilter,
+  );
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([]);
 });
