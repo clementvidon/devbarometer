@@ -79,9 +79,12 @@ export async function filterRelevantItems(
 }
 
 export class PromptRelevanceFilterAdapter implements RelevanceFilterPort {
-  constructor(private readonly prompt: string) {}
+  constructor(
+    private readonly llm: LlmPort,
+    private readonly prompt: string,
+  ) {}
 
-  async filter(items: Item[], llm: LlmPort): Promise<RelevantItem[]> {
-    return filterRelevantItems(items, llm, this.prompt);
+  async filterItems(items: Item[]): Promise<RelevantItem[]> {
+    return filterRelevantItems(items, this.llm, this.prompt);
   }
 }

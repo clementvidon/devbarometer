@@ -4,7 +4,6 @@ import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles
 import { computeMomentumWeights } from '../../usecase/computeMomentumWeights.ts';
 import { computeWeightsCap } from '../../usecase/computeWeightsCap.ts';
 import { createEmotionProfiles } from '../../usecase/createEmotionProfiles.ts';
-import { filterRelevantItems } from '../../usecase/filterRelevantItems.ts';
 import { generateEmotionProfileReport } from '../../usecase/generateEmotionProfileReport.ts';
 import type {
   AggregatedEmotionProfile,
@@ -15,6 +14,7 @@ import type { RelevantItem } from '../entity/Item.ts';
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
+import type { RelevanceFilterPort } from '../port/RelevanceFilterPort.ts';
 import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
 
 const CAP_OPTS = {
@@ -30,6 +30,7 @@ export class AgentService {
     private readonly itemsProvider: ItemsProviderPort,
     private readonly llm: LlmPort,
     private readonly persistence: PersistencePort,
+    private readonly relevance: RelevanceFilterPort,
   ) {}
 
   async updateReport(): Promise<void> {
@@ -45,7 +46,7 @@ export class AgentService {
     const prevItems = await this.getPrevRelevantItemsAt(createdAt);
     logItemsOnePerLine('prevItems', prevItems ?? []);
 
-    const relevantItems = await filterRelevantItems(items, this.llm);
+    const relevantItems = await this.relevance.filterItems(items);
     console.log(
       `[AgentService] Selected ${relevantItems.length}/${items.length} items relevant to the tech job market.`,
     );
