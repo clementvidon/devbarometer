@@ -6,7 +6,7 @@ import type {
   EmotionScores,
   TonalityScores,
 } from '../core/entity/EmotionProfile.ts';
-import type { RelevantItem } from '../core/entity/Item.ts';
+import type { WeightedItem } from '../core/entity/Item.ts';
 import type { LlmPort } from '../core/port/LlmPort.ts';
 import type { AgentMessage } from '../core/types/AgentMessage.ts';
 
@@ -48,7 +48,7 @@ const FALLBACK_TONALITIES: TonalityScores = {
   pessimistic_anticipation: 0,
 };
 
-function emotionMessages(item: RelevantItem): readonly AgentMessage[] {
+function emotionMessages(item: WeightedItem): readonly AgentMessage[] {
   return [
     {
       role: 'system',
@@ -79,7 +79,7 @@ Texte : """${item.title}\n\n${item.content}"""`.trim(),
   ];
 }
 
-function tonalityMessages(item: RelevantItem): readonly AgentMessage[] {
+function tonalityMessages(item: WeightedItem): readonly AgentMessage[] {
   return [
     {
       role: 'system',
@@ -111,7 +111,7 @@ Texte : """${item.title}\n\n${item.content}"""`.trim(),
 }
 
 async function fetchEmotions(
-  item: RelevantItem,
+  item: WeightedItem,
   llm: LlmPort,
 ): Promise<EmotionScores> {
   try {
@@ -131,7 +131,7 @@ async function fetchEmotions(
 }
 
 async function fetchTonalities(
-  item: RelevantItem,
+  item: WeightedItem,
   llm: LlmPort,
 ): Promise<TonalityScores> {
   try {
@@ -151,7 +151,7 @@ async function fetchTonalities(
 }
 
 export async function createEmotionProfiles(
-  items: RelevantItem[],
+  items: WeightedItem[],
   llm: LlmPort,
 ): Promise<EmotionProfile[]> {
   if (items.length === 0) {

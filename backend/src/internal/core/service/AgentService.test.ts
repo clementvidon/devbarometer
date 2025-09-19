@@ -27,7 +27,7 @@ const fakeTonalities = {
 } as const;
 
 const mockItems: Item[] = [
-  { source: 'reddit.com', title: 'Item 1', content: '', weight: 1 },
+  { source: 'reddit.com', title: 'Item 1', content: '', score: 1 },
 ];
 
 const itemsProvider: ItemsProviderPort = {

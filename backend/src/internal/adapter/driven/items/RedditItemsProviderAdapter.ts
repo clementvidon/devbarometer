@@ -147,7 +147,7 @@ export async function fetchRedditItems(
     source: `https://reddit.com/comments/${data.id}`,
     title: sanitize(data.title),
     content: sanitize(data.selftext),
-    weight: data.ups,
+    score: data.ups,
   }));
 }
 

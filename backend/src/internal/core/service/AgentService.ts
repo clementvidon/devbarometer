@@ -1,5 +1,4 @@
 import { formatFloat } from '../../../utils/format.ts';
-import { logItemsOnePerLine } from '../../../utils/logItems.ts';
 import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles.ts';
 import { computeMomentumWeights } from '../../usecase/computeMomentumWeights.ts';
 import { computeWeightsCap } from '../../usecase/computeWeightsCap.ts';
@@ -44,16 +43,27 @@ export class AgentService {
     );
 
     const prevItems = await this.getPrevRelevantItemsAt(createdAt);
-    logItemsOnePerLine('prevItems', prevItems ?? []);
+    console.log(`<prevItems>`);
+    for (const it of prevItems ?? []) {
+      console.log(`score: ${formatFloat(it.score)}, title: ${it.title}, `);
+    }
 
     const relevantItems = await this.relevance.filterItems(items);
     console.log(
       `[AgentService] Selected ${relevantItems.length}/${items.length} items relevant to the tech job market.`,
     );
-    logItemsOnePerLine('relevantItems', relevantItems);
+    console.log(`<relevantItems>`);
+    for (const it of relevantItems ?? []) {
+      console.log(`score: ${formatFloat(it.score)}, title: ${it.title}, `);
+    }
 
     const momentumItems = computeMomentumWeights(relevantItems, prevItems);
-    logItemsOnePerLine('momentumItems', momentumItems);
+    console.log('<momentumItems>');
+    for (const it of (momentumItems ?? [])
+      .slice()
+      .sort((a, b) => b.weight - a.weight)) {
+      console.log(`weight: ${formatFloat(it.weight)}, title: ${it.title}`);
+    }
 
     console.log(
       `[AgentService] Computed momentum (1+log1p Δ, floor=1) for ${momentumItems.length} items${prevItems ? ` using ${prevItems.length} baseline items` : ''}.`,

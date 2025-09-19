@@ -77,13 +77,13 @@ describe('fetchRedditItems', () => {
         source: 'https://reddit.com/comments/00',
         title: '1st Item',
         content: 'Content 1',
-        weight: 15,
+        score: 15,
       });
       expect(items[1]).toMatchObject({
         source: 'https://reddit.com/comments/02',
         title: '3rd Item',
         content: '',
-        weight: 20,
+        score: 20,
       });
     });
   });
@@ -141,7 +141,7 @@ describe('fetchRedditItems', () => {
       expect(items).toEqual([]);
     });
 
-    test('returns empty array if no items meet the minimum weight', async () => {
+    test('returns empty array if no items meet the minimum score', async () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(
           fakeResponse({
