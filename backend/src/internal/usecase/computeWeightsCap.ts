@@ -1,4 +1,4 @@
-import type { RelevantItem } from '../core/entity/Item.ts';
+import type { WeightedItem } from '../core/entity/Item.ts';
 
 export type WeightsCapOptions = {
   minN?: number;
@@ -15,7 +15,7 @@ export type WeightsCapReason =
   | 'p95_cap';
 
 export type WeightsCapResult = {
-  cappedItems: RelevantItem[];
+  cappedItems: WeightedItem[];
   capped: boolean;
   reason: WeightsCapReason;
   capValue?: number;
@@ -36,7 +36,7 @@ function percentileInterpolated(values: number[], p: number): number {
   return s[i] + frac * (s[i + 1] - s[i]);
 }
 
-function computeExcess(items: RelevantItem[], base: number) {
+function computeExcess(items: WeightedItem[], base: number) {
   const weights = items.map((i) => i.weight ?? 0);
   const excess = weights.map((w) => Math.max(0, w - base));
   const sumExcess = excess.reduce((a, b) => a + b, 0);
@@ -48,11 +48,11 @@ function computeTopShare(excess: number[], sumExcess: number) {
 }
 
 function applyCap(
-  items: RelevantItem[],
+  items: WeightedItem[],
   excess: number[],
   cap: number,
   base: number,
-): RelevantItem[] {
+): WeightedItem[] {
   return items.map((it, k) => ({
     ...it,
     weight: base + Math.min(excess[k], cap),
@@ -60,7 +60,7 @@ function applyCap(
 }
 
 export function computeWeightsCap(
-  items: RelevantItem[],
+  items: WeightedItem[],
   opts: WeightsCapOptions = {},
 ): WeightsCapResult {
   const {

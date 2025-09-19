@@ -1,4 +1,4 @@
-import type { RelevantItem } from '../core/entity/Item.ts';
+import type { RelevantItem, WeightedItem } from '../core/entity/Item.ts';
 
 const BASE_MOMENTUM_WEIGHT = 1;
 
@@ -13,13 +13,13 @@ function noPositiveDelta(todayRaw: number, prevRaw: number): boolean {
 export function computeMomentumWeights(
   today: RelevantItem[],
   prev: RelevantItem[] | null,
-): RelevantItem[] {
+): WeightedItem[] {
   const prevMap = new Map<string, number>(
-    (prev ?? []).map((i) => [i.source, i.weight ?? 0]),
+    (prev ?? []).map((i) => [i.source, i.score ?? 0]),
   );
 
   return today.map((it) => {
-    const todayRaw = it.weight ?? 0;
+    const todayRaw = it.score ?? 0;
     const prevRaw = prevMap.get(it.source);
 
     if (isNew(prevRaw)) {
