@@ -1,4 +1,8 @@
 import { PromptRelevanceFilterAdapter } from '../../adapter/driven/relevance/PromptRelevanceFilterAdapter.ts';
+import {
+  DEFAULT_WEIGHTS_OPTIONS,
+  MomentumWeightsAdapter,
+} from '../../adapter/driven/weights/MomentumWeightsAdapter.ts';
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
@@ -18,9 +22,10 @@ export function makeCoreAgentService(
   llm: LlmPort,
   persistence: PersistencePort,
 ): AgentService {
-  const relevanceFilter = new PromptRelevanceFilterAdapter(
+  const relevance = new PromptRelevanceFilterAdapter(
     llm,
     relevanceFilterPrompt,
   );
-  return new AgentService(itemsProvider, llm, persistence, relevanceFilter);
+  const weights = new MomentumWeightsAdapter(DEFAULT_WEIGHTS_OPTIONS);
+  return new AgentService(itemsProvider, llm, persistence, relevance, weights);
 }

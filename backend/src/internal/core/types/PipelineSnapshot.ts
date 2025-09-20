@@ -3,7 +3,11 @@ import type {
   EmotionProfile,
 } from '../../core/entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../../core/entity/EmotionProfileReport.ts';
-import type { Item, RelevantItem } from '../../core/entity/Item.ts';
+import type {
+  Item,
+  RelevantItem,
+  WeightedItem,
+} from '../../core/entity/Item.ts';
 
 export type PipelineSnapshot = {
   id: string;
@@ -11,7 +15,7 @@ export type PipelineSnapshot = {
   fetchLabel: string;
   items: Item[];
   relevantItems: RelevantItem[];
-  weightedItems: RelevantItem[];
+  weightedItems: WeightedItem[];
   emotionProfilePerItem: EmotionProfile[];
   aggregatedEmotionProfile: AggregatedEmotionProfile;
   report: EmotionProfileReport;

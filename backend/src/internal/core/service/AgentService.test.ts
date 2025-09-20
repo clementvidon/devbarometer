@@ -1,10 +1,11 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
-import type { Item } from '../entity/Item.ts';
+import type { Item, WeightedItem } from '../entity/Item.ts';
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { RelevanceFilterPort } from '../port/RelevanceFilterPort.ts';
+import type { WeightsPort } from '../port/WeightsPort.ts';
 import type { PipelineSnapshot } from '../types/PipelineSnapshot.ts';
 import { AgentService } from './AgentService.ts';
 
@@ -30,6 +31,10 @@ const mockItems: Item[] = [
   { source: 'reddit.com', title: 'Item 1', content: '', score: 1 },
 ];
 
+const mockWeightedItems: WeightedItem[] = [
+  { source: 'reddit.com', title: 'Item 1', content: '', score: 1, weight: 0.5 },
+];
+
 const itemsProvider: ItemsProviderPort = {
   getItems: vi.fn(() => Promise.resolve(mockItems)),
   getLabel: vi.fn(() => 'provider://test'),
@@ -40,7 +45,11 @@ const llm: LlmPort = {
   run: vi.fn(() => Promise.resolve('')),
 };
 
-const relevanceFilter: RelevanceFilterPort = {
+const weights: WeightsPort = {
+  computeWeights: vi.fn(() => Promise.resolve(mockWeightedItems)),
+};
+
+const relevance: RelevanceFilterPort = {
   filterItems: vi.fn(() => Promise.resolve(mockItems)),
 };
 
@@ -83,7 +92,13 @@ describe('AgentService updateReport', () => {
       storeSnapshotAt: vi.fn(() => Promise.resolve()),
       getSnapshots: vi.fn(() => Promise.resolve([])),
     };
-    agent = new AgentService(itemsProvider, llm, persistence, relevanceFilter);
+    agent = new AgentService(
+      itemsProvider,
+      llm,
+      persistence,
+      relevance,
+      weights,
+    );
     vi.clearAllMocks();
   });
 
@@ -184,7 +199,8 @@ test('AgentService getLastTopHeadlines returns titles of N top weighted emotionP
     itemsProvider,
     llm,
     persistence,
-    relevanceFilter,
+    relevance,
+    weights,
   );
 
   const result = await agent.getLastTopHeadlines(3);
@@ -205,7 +221,8 @@ test('AgentService getLastTopHeadlines returns empty array if no snapshot', asyn
     itemsProvider,
     llm,
     persistence,
-    relevanceFilter,
+    relevance,
+    weights,
   );
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([]);

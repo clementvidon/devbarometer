@@ -1,7 +1,5 @@
 import { formatFloat } from '../../../utils/format.ts';
 import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles.ts';
-import { computeMomentumWeights } from '../../usecase/computeMomentumWeights.ts';
-import { computeWeightsCap } from '../../usecase/computeWeightsCap.ts';
 import { createEmotionProfiles } from '../../usecase/createEmotionProfiles.ts';
 import { generateEmotionProfileReport } from '../../usecase/generateEmotionProfileReport.ts';
 import type {
@@ -14,15 +12,8 @@ import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { RelevanceFilterPort } from '../port/RelevanceFilterPort.ts';
+import type { WeightsPort } from '../port/WeightsPort.ts';
 import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
-
-const CAP_OPTS = {
-  minN: 10,
-  percentile: 0.95,
-  percentileSmallN: 0.9,
-  baseWeight: 1,
-  concentrationGate: 0.35,
-} as const;
 
 export class AgentService {
   constructor(
@@ -30,6 +21,7 @@ export class AgentService {
     private readonly llm: LlmPort,
     private readonly persistence: PersistencePort,
     private readonly relevance: RelevanceFilterPort,
+    private readonly weights: WeightsPort,
   ) {}
 
   async updateReport(): Promise<void> {
@@ -37,63 +29,38 @@ export class AgentService {
     const fetchLabel = this.itemsProvider.getLabel();
     const createdAt =
       this.itemsProvider.getCreatedAt() ?? new Date().toISOString();
-
     console.log(
       `[AgentService] Got ${items.length} items from provider: ${fetchLabel}`,
     );
 
     const prevItems = await this.getPrevRelevantItemsAt(createdAt);
-    console.log(`<prevItems>`);
-    for (const it of prevItems ?? []) {
-      console.log(`score: ${formatFloat(it.score)}, title: ${it.title}, `);
+    for (const it of prevItems) {
+      console.log(
+        `<prevItems> score: ${formatFloat(it.score)}, title: ${it.title}`,
+      );
     }
 
     const relevantItems = await this.relevance.filterItems(items);
     console.log(
       `[AgentService] Selected ${relevantItems.length}/${items.length} items relevant to the tech job market.`,
     );
-    console.log(`<relevantItems>`);
     for (const it of relevantItems ?? []) {
-      console.log(`score: ${formatFloat(it.score)}, title: ${it.title}, `);
+      console.log(
+        `<relevantItems> score: ${formatFloat(it.score)}, title: ${it.title}`,
+      );
     }
 
-    const momentumItems = computeMomentumWeights(relevantItems, prevItems);
-    console.log('<momentumItems>');
-    for (const it of (momentumItems ?? [])
+    const weightedItems = await this.weights.computeWeights(
+      relevantItems,
+      prevItems,
+    );
+    for (const it of (weightedItems ?? [])
       .slice()
       .sort((a, b) => b.weight - a.weight)) {
-      console.log(`weight: ${formatFloat(it.weight)}, title: ${it.title}`);
+      console.log(
+        `<weightedItems> weight: ${formatFloat(it.weight)}, title: ${it.title}`,
+      );
     }
-
-    console.log(
-      `[AgentService] Computed momentum (1+log1p Δ, floor=1) for ${momentumItems.length} items${prevItems ? ` using ${prevItems.length} baseline items` : ''}.`,
-    );
-
-    const {
-      cappedItems,
-      capped,
-      reason,
-      capValue,
-      usedPercentile,
-      topShare,
-      N,
-    } = computeWeightsCap(momentumItems, CAP_OPTS);
-    const mode = N < CAP_OPTS.minN ? 'smallN' : 'always';
-    console.log(
-      `[AgentService] cap mode=${mode} ${capped ? 'APPLIED' : 'SKIPPED'} reason=${reason} ` +
-        `cap=${capValue?.toFixed(3)} N=${N} topShare=${topShare.toFixed(2)} p=${usedPercentile?.toFixed(2)}`,
-    );
-
-    const sum = cappedItems.reduce((s, i) => s + i.weight, 0);
-    const mean = sum / Math.max(1, cappedItems.length);
-    const weightedItems =
-      mean > 0
-        ? cappedItems.map((i) => ({ ...i, weight: i.weight / mean }))
-        : cappedItems;
-    console.log(
-      `[AgentService] Renorm: mean=${mean.toFixed(3)} (target=1.000)`,
-    );
-
     console.log(`[AgentService] Computed weight of each item.`);
 
     const emotionProfilePerItem = await createEmotionProfiles(
@@ -185,9 +152,7 @@ export class AgentService {
       }));
   }
 
-  async getPrevRelevantItemsAt(
-    createdAtISO: string,
-  ): Promise<RelevantItem[] | null> {
+  async getPrevRelevantItemsAt(createdAtISO: string): Promise<RelevantItem[]> {
     const snapshots = await this.persistence.getSnapshots();
     const target = Date.parse(createdAtISO);
 
@@ -197,6 +162,6 @@ export class AgentService {
         .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))[0] ??
       null;
 
-    return prev?.relevantItems ?? null;
+    return prev?.relevantItems ?? [];
   }
 }
