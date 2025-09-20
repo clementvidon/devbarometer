@@ -1,5 +1,65 @@
 [
   {
+    "createdAt": "2025-09-20T10:17:35.204Z",
+    "emotions": {
+      "joy": 0.17828345305516355,
+      "fear": 0.43658615203864143,
+      "anger": 0.3820736068977272,
+      "trust": 0.32063884511953117,
+      "disgust": 0.3106252428710126,
+      "sadness": 0.4153559315668954
+    },
+    "tonalities": {
+      "negative": 0.5531824249587857,
+      "positive": 0.2302669410402446,
+      "negative_surprise": 0.4159259117895919,
+      "positive_surprise": 0.13627399956301472,
+      "optimistic_anticipation": 0.29553956933699754,
+      "pessimistic_anticipation": 0.5041558341375189
+    },
+    "totalWeight": 16.999999999999996
+  },
+  {
+    "createdAt": "2025-09-19T15:36:09.466Z",
+    "emotions": {
+      "joy": 0.22221780604334448,
+      "fear": 0.44564925484563633,
+      "anger": 0.3799763070612136,
+      "trust": 0.2972623442684331,
+      "disgust": 0.33394388206367626,
+      "sadness": 0.4436694576007496
+    },
+    "tonalities": {
+      "negative": 0.6132759795995948,
+      "positive": 0.2230140920444883,
+      "negative_surprise": 0.4482857985236386,
+      "positive_surprise": 0.1358604934650294,
+      "optimistic_anticipation": 0.28651331447615425,
+      "pessimistic_anticipation": 0.5438969413413818
+    },
+    "totalWeight": 19
+  },
+  {
+    "createdAt": "2025-09-19T15:20:57.302Z",
+    "emotions": {
+      "joy": 0.1888010907496648,
+      "fear": 0.4630934884635917,
+      "anger": 0.31169430212611643,
+      "trust": 0.2961467686348039,
+      "disgust": 0.2824455581063099,
+      "sadness": 0.4367991619344673
+    },
+    "tonalities": {
+      "negative": 0.584565875170939,
+      "positive": 0.21769446847475057,
+      "negative_surprise": 0.4207728943118224,
+      "positive_surprise": 0.12434607251489739,
+      "optimistic_anticipation": 0.2941985146205769,
+      "pessimistic_anticipation": 0.5540309145125564
+    },
+    "totalWeight": 18.000000000000004
+  },
+  {
     "createdAt": "2025-09-19T10:20:29.245Z",
     "emotions": {
       "joy": 0.1713668376490624,
