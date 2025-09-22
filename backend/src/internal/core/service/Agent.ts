@@ -2,6 +2,7 @@ import { formatFloat } from '../../../utils/format.ts';
 import { aggregateProfiles } from '../../usecase/aggregateProfiles.ts';
 import { createProfiles } from '../../usecase/createProfiles.ts';
 import { createReport } from '../../usecase/createReport.ts';
+import { filterRelevantItems } from '../../usecase/relevance/filterRelevantItems.ts';
 import type {
   AggregatedEmotionProfile,
   EmotionProfile,
@@ -11,7 +12,6 @@ import type { RelevantItem } from '../entity/Item.ts';
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
-import type { RelevanceFilterPort } from '../port/RelevanceFilterPort.ts';
 import type { WeightsPort } from '../port/WeightsPort.ts';
 import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
 
@@ -20,7 +20,6 @@ export class Agent {
     private readonly itemsProvider: ItemsProviderPort,
     private readonly llm: LlmPort,
     private readonly persistence: PersistencePort,
-    private readonly relevance: RelevanceFilterPort,
     private readonly weights: WeightsPort,
   ) {}
 
@@ -40,7 +39,7 @@ export class Agent {
       );
     }
 
-    const relevantItems = await this.relevance.filterItems(items);
+    const relevantItems = await filterRelevantItems(items, this.llm);
     console.log(
       `[Agent] Selected ${relevantItems.length}/${items.length} items relevant to the tech job market.`,
     );

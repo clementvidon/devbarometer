@@ -4,7 +4,6 @@ import type { Item, WeightedItem } from '../entity/Item.ts';
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
-import type { RelevanceFilterPort } from '../port/RelevanceFilterPort.ts';
 import type { WeightsPort } from '../port/WeightsPort.ts';
 import type { PipelineSnapshot } from '../types/PipelineSnapshot.ts';
 import { Agent } from './Agent.ts';
@@ -49,10 +48,6 @@ const weights: WeightsPort = {
   computeWeights: vi.fn(() => Promise.resolve(mockWeightedItems)),
 };
 
-const relevance: RelevanceFilterPort = {
-  filterItems: vi.fn(() => Promise.resolve(mockItems)),
-};
-
 vi.mock('../../usecase/createProfiles', () => ({
   createProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
 }));
@@ -92,7 +87,7 @@ describe('Agent updateReport', () => {
       storeSnapshotAt: vi.fn(() => Promise.resolve()),
       getSnapshots: vi.fn(() => Promise.resolve([])),
     };
-    agent = new Agent(itemsProvider, llm, persistence, relevance, weights);
+    agent = new Agent(itemsProvider, llm, persistence, weights);
     vi.clearAllMocks();
   });
 
@@ -189,7 +184,7 @@ test('Agent getLastTopHeadlines returns titles of N top weighted emotionProfile'
     getSnapshots: vi.fn().mockResolvedValue([snapshot]),
   };
 
-  const agent = new Agent(itemsProvider, llm, persistence, relevance, weights);
+  const agent = new Agent(itemsProvider, llm, persistence, weights);
 
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([
@@ -205,7 +200,7 @@ test('Agent getLastTopHeadlines returns empty array if no snapshot', async () =>
     getSnapshots: vi.fn().mockResolvedValue([]),
   };
 
-  const agent = new Agent(itemsProvider, llm, persistence, relevance, weights);
+  const agent = new Agent(itemsProvider, llm, persistence, weights);
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([]);
 });
