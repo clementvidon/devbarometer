@@ -9,28 +9,28 @@ import {
 } from 'vitest';
 
 import type { EmotionProfileReport } from '../../../core/entity/EmotionProfileReport.ts';
-import type { AgentService } from '../../../core/service/AgentService.ts';
+import type { Agent } from '../../../core/service/Agent.ts';
 import { makeReportController } from './ReportController.ts';
 
-type GetLastEmotionProfileReport = () => Promise<EmotionProfileReport | null>;
+type GetLastReport = () => Promise<EmotionProfileReport | null>;
 type UpdateReport = (
   subreddit?: string,
   limit?: number,
   period?: string,
 ) => Promise<void>;
 
-let getLastEmotionProfileReport: MockInstance<GetLastEmotionProfileReport>;
+let getLastReport: MockInstance<GetLastReport>;
 let updateReport: MockInstance<UpdateReport>;
-let agentStub: AgentService;
+let agentStub: Agent;
 
 beforeEach(() => {
-  getLastEmotionProfileReport = vi.fn<GetLastEmotionProfileReport>();
+  getLastReport = vi.fn<GetLastReport>();
   updateReport = vi.fn<UpdateReport>();
 
   agentStub = {
-    getLastEmotionProfileReport,
+    getLastReport,
     updateReport,
-  } as unknown as AgentService;
+  } as unknown as Agent;
 });
 
 afterEach(() => vi.clearAllMocks());
@@ -40,7 +40,7 @@ test('GET /report → 200 avec un EmotionProfileReport', async () => {
     text: 'dark clouds ahead',
     emoji: '🌧️',
   };
-  getLastEmotionProfileReport.mockResolvedValue(fakeReport);
+  getLastReport.mockResolvedValue(fakeReport);
 
   const res = await request(makeReportController(agentStub)).get('/report');
 
@@ -49,7 +49,7 @@ test('GET /report → 200 avec un EmotionProfileReport', async () => {
 });
 
 test('GET /report → 404 quand aucun rapport', async () => {
-  getLastEmotionProfileReport.mockResolvedValue(null);
+  getLastReport.mockResolvedValue(null);
 
   const res = await request(makeReportController(agentStub)).get('/report');
 

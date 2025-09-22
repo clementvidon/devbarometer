@@ -6,7 +6,7 @@ import {
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
-import { AgentService } from './AgentService.ts';
+import { Agent } from './Agent.ts';
 
 const relevanceFilterPrompt = `
 Vous êtes un expert du marché de l'emploi des développeurs en France.
@@ -17,15 +17,15 @@ Analysez cette donnée dans son entièreté et répondez STRICTEMENT en JSON bru
 Vérifiez encore une fois pour vous assurer de la pertinence de ces données pour la mesure du climat général actuel du marché de l'emploi tech. En cas de doute, répondez { "relevant": false }.
 `;
 
-export function makeCoreAgentService(
+export function makeCoreAgent(
   itemsProvider: ItemsProviderPort,
   llm: LlmPort,
   persistence: PersistencePort,
-): AgentService {
+): Agent {
   const relevance = new PromptRelevanceFilterAdapter(
     llm,
     relevanceFilterPrompt,
   );
   const weights = new MomentumWeightsAdapter(DEFAULT_WEIGHTS_OPTIONS);
-  return new AgentService(itemsProvider, llm, persistence, relevance, weights);
+  return new Agent(itemsProvider, llm, persistence, relevance, weights);
 }

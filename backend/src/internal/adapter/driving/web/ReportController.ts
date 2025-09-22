@@ -1,12 +1,12 @@
 import express, { type Express } from 'express';
-import type { AgentService } from '../../../core/service/AgentService';
+import type { Agent } from '../../../core/service/Agent';
 
-export function makeReportController(agent: AgentService): Express {
+export function makeReportController(agent: Agent): Express {
   const app = express();
   app.use(express.json());
 
   app.get('/report', async (_, res) => {
-    const report = await agent.getLastEmotionProfileReport();
+    const report = await agent.getLastReport();
     if (!report) return res.status(404).json({ error: 'No report found' });
     res.json(report);
   });

@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { EmotionProfile } from '../core/entity/EmotionProfile.ts';
 import type { WeightedItem } from '../core/entity/Item.ts';
-import type { AgentMessage } from '../core/types/AgentMessage.ts';
-import { createEmotionProfiles } from './createEmotionProfiles.ts';
+import type { LlmMessage } from '../core/port/LlmPort.ts';
+import { createProfiles } from './createProfiles.ts';
 
 type RunFn = (
   model: string,
-  messages: readonly AgentMessage[],
+  messages: readonly LlmMessage[],
   options?: unknown,
 ) => Promise<string>;
 
@@ -53,7 +53,7 @@ const fakeEmotionProfile: EmotionProfile = {
   tonalities: fakeTonalities,
 };
 
-describe('createEmotionProfiles', () => {
+describe('createProfiles', () => {
   describe('Happy path', () => {
     let llm: { run: RunFn };
 
@@ -85,10 +85,7 @@ describe('createEmotionProfiles', () => {
     });
 
     test('analyzes data points and returns emotionProfile results', async () => {
-      const emotionProfiles = await createEmotionProfiles(
-        fakeWeightedItems,
-        llm,
-      );
+      const emotionProfiles = await createProfiles(fakeWeightedItems, llm);
 
       expect(emotionProfiles).toHaveLength(2);
       emotionProfiles.forEach((res, index) => {
@@ -113,10 +110,7 @@ describe('createEmotionProfiles', () => {
     });
 
     test('returns fallback emotions/tonalities and sets weight to 0 when LLM fails', async () => {
-      const emotionProfiles = await createEmotionProfiles(
-        fakeWeightedItems,
-        llm,
-      );
+      const emotionProfiles = await createProfiles(fakeWeightedItems, llm);
 
       expect(emotionProfiles).toHaveLength(2);
       emotionProfiles.forEach((res, index) => {

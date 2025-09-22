@@ -5,7 +5,7 @@ import { RedditItemsProviderAdapter } from '../internal/adapter/driven/items/Red
 import { OpenAiAdapter } from '../internal/adapter/driven/llm/OpenAiAdapter.ts';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
 import { makeReportController } from '../internal/adapter/driving/web/ReportController.ts';
-import { makeCoreAgentService } from '../internal/core/service/makeCoreAgentService.ts';
+import { makeCoreAgent } from '../internal/core/service/makeCoreAgent.ts';
 
 import type { FetchPort } from '../internal/core/port/FetchPort.ts';
 import type { LlmPort } from '../internal/core/port/LlmPort.ts';
@@ -20,7 +20,7 @@ type Deps = {
 };
 
 export function buildServer(deps: Deps) {
-  const agent = makeCoreAgentService(
+  const agent = makeCoreAgent(
     new RedditItemsProviderAdapter(deps.fetcher, deps.redditUrl),
     deps.llm,
     deps.persistence,

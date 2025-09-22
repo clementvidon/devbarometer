@@ -1,6 +1,6 @@
 import type OpenAI from 'openai';
 import { describe, expect, test, vi } from 'vitest';
-import type { AgentMessage } from '../../../core/types/AgentMessage.ts';
+import type { LlmMessage } from '../../../core/port/LlmPort.ts';
 import { OpenAiAdapter } from './OpenAiAdapter.ts';
 
 function createMockOpenAI(content: string | null): OpenAI {
@@ -22,7 +22,7 @@ describe('OpenAiAdapter', () => {
 
     const messages = [
       { role: 'user', content: 'Say hello' },
-    ] as const satisfies AgentMessage[];
+    ] as const satisfies LlmMessage[];
 
     const response = await adapter.run('gpt-3.5-turbo', messages);
 

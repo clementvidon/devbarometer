@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { AgentService } from '../internal/core/service/AgentService.ts';
-import * as agentModule from '../internal/core/service/makeCoreAgentService.ts';
+import type { Agent } from '../internal/core/service/Agent.ts';
+import * as agentModule from '../internal/core/service/makeCoreAgent.ts';
 import { generateStatic } from './generate-static.ts';
 
 vi.mock('fs');
@@ -13,17 +13,15 @@ describe('generateStatic', () => {
     vi.clearAllMocks();
 
     const mockAgent = {
-      getLastEmotionProfileReport: vi
-        .fn()
-        .mockResolvedValue({ text: 'report', emoji: '☀️' }),
+      getLastReport: vi.fn().mockResolvedValue({ text: 'report', emoji: '☀️' }),
       getLastTopHeadlines: vi.fn().mockResolvedValue(['Item A', 'Item B']),
-      getAggregatedEmotionProfiles: vi
+      getAggregatedProfiles: vi
         .fn()
         .mockResolvedValue([{ createdAt: '2025-08-03', aggregate: {} }]),
     };
 
-    vi.spyOn(agentModule, 'makeCoreAgentService').mockImplementation(
-      () => mockAgent as unknown as AgentService,
+    vi.spyOn(agentModule, 'makeCoreAgent').mockImplementation(
+      () => mockAgent as unknown as Agent,
     );
   });
 

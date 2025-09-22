@@ -2,10 +2,10 @@ export interface Item {
   source: string;
   title: string;
   content: string;
-  score: number; // delete
+  score: number;
 }
 
 export type RelevantItem = Item;
 export interface WeightedItem extends Item {
-  weight: number; // poids recalculé par le pipeline
+  weight: number;
 }

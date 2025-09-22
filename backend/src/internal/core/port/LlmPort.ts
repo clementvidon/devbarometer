@@ -1,4 +1,9 @@
-import type { AgentMessage } from '../types/AgentMessage.ts';
+import type { Chat } from 'openai/resources';
+
+export type LlmMessage =
+  | Chat.Completions.ChatCompletionSystemMessageParam
+  | Chat.Completions.ChatCompletionUserMessageParam
+  | Chat.Completions.ChatCompletionAssistantMessageParam;
 
 export type LlmRunOptions = {
   temperature?: number;
@@ -26,7 +31,7 @@ export type LlmRunOptions = {
 export interface LlmPort {
   run(
     model: string,
-    messages: readonly AgentMessage[],
+    messages: readonly LlmMessage[],
     options?: LlmRunOptions,
   ): Promise<string>;
 }

@@ -2,7 +2,7 @@ import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { AggregatedEmotionProfile } from '../core/entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../core/entity/EmotionProfileReport.ts';
-import { generateEmotionProfileReport } from './generateEmotionProfileReport.ts';
+import { createReport } from './createReport.ts';
 
 const fakeLLMResponse = `
 {
@@ -38,7 +38,7 @@ const fakeEmotionProfileReport: EmotionProfileReport = {
   emoji: '🌤️',
 };
 
-describe('generateEmotionProfileReport', () => {
+describe('createProfileReport', () => {
   describe('Happy path', () => {
     let llm: { run: Mock };
 
@@ -50,10 +50,7 @@ describe('generateEmotionProfileReport', () => {
     });
 
     test('returns valid EmotionProfileReport from correct LLM output', async () => {
-      const report = await generateEmotionProfileReport(
-        fakeAggregatedEmotionProfile,
-        llm,
-      );
+      const report = await createReport(fakeAggregatedEmotionProfile, llm);
 
       expect(report).toEqual(fakeEmotionProfileReport);
     });

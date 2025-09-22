@@ -6,8 +6,7 @@ import type {
 } from '../core/entity/EmotionProfile.ts';
 import type { EmotionProfileReport } from '../core/entity/EmotionProfileReport.ts';
 import { WEATHER_EMOJIS } from '../core/entity/EmotionProfileReport.ts';
-import type { LlmPort } from '../core/port/LlmPort.ts';
-import type { AgentMessage } from '../core/types/AgentMessage.ts';
+import type { LlmMessage, LlmPort } from '../core/port/LlmPort.ts';
 
 /* pickStandoutsByScore */
 
@@ -98,7 +97,7 @@ type EmotionProfileSummary = {
   surprise: Tone;
 };
 
-export function summarizeEmotionProfile(
+export function summarizeProfile(
   profile: AggregatedEmotionProfile,
 ): EmotionProfileSummary {
   const { emotions, tonalities } = profile;
@@ -125,7 +124,7 @@ export function summarizeEmotionProfile(
   };
 }
 
-/* generateEmotionProfileReport */
+/* createReport */
 
 const LLMOutputSchema = z.object({
   text: z.string().max(200),
@@ -137,7 +136,7 @@ const FALLBACK = {
   emoji: '☁️',
 } satisfies EmotionProfileReport;
 
-function makeMessages(summary: EmotionProfileSummary): readonly AgentMessage[] {
+function makeMessages(summary: EmotionProfileSummary): readonly LlmMessage[] {
   return [
     {
       role: 'system' as const,
@@ -181,12 +180,12 @@ Retourne uniquement un JSON brut :
   ];
 }
 
-export async function generateEmotionProfileReport(
+export async function createReport(
   agregatedEmotionProfile: AggregatedEmotionProfile,
   llm: LlmPort,
 ): Promise<EmotionProfileReport> {
   try {
-    const summary = summarizeEmotionProfile(agregatedEmotionProfile);
+    const summary = summarizeProfile(agregatedEmotionProfile);
     console.log(summary);
     const raw = await llm.run('gpt-5-chat-latest', makeMessages(summary), {
       temperature: 0.4,
@@ -200,7 +199,7 @@ export async function generateEmotionProfileReport(
     const parsed = LLMOutputSchema.safeParse(json);
     return parsed.success ? parsed.data : FALLBACK;
   } catch (err) {
-    console.error('[generateEmotionProfileReport] LLM error:', err);
+    console.error('[createReport] LLM error:', err);
     return FALLBACK;
   }
 }

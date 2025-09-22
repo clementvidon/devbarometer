@@ -7,7 +7,7 @@ import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { RelevanceFilterPort } from '../port/RelevanceFilterPort.ts';
 import type { WeightsPort } from '../port/WeightsPort.ts';
 import type { PipelineSnapshot } from '../types/PipelineSnapshot.ts';
-import { AgentService } from './AgentService.ts';
+import { Agent } from './Agent.ts';
 
 const fakeEmotions = {
   joy: 0,
@@ -53,11 +53,11 @@ const relevance: RelevanceFilterPort = {
   filterItems: vi.fn(() => Promise.resolve(mockItems)),
 };
 
-vi.mock('../../usecase/createEmotionProfiles', () => ({
-  createEmotionProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
+vi.mock('../../usecase/createProfiles', () => ({
+  createProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
 }));
-vi.mock('../../usecase/aggregateEmotionProfiles', () => ({
-  aggregateEmotionProfiles: vi.fn().mockReturnValue({
+vi.mock('../../usecase/aggregateProfiles', () => ({
+  aggregateProfiles: vi.fn().mockReturnValue({
     emotions: {
       anger: 0,
       fear: 0,
@@ -72,16 +72,16 @@ vi.mock('../../usecase/aggregateEmotionProfiles', () => ({
     },
   }),
 }));
-vi.mock('../../usecase/generateEmotionProfileReport', () => ({
-  generateEmotionProfileReport: vi.fn().mockResolvedValue({
+vi.mock('../../usecase/createReport', () => ({
+  createReport: vi.fn().mockResolvedValue({
     text: 'Everything looks great!',
     emoji: '☀️',
   } satisfies EmotionProfileReport),
 }));
 
-describe('AgentService updateReport', () => {
+describe('Agent updateReport', () => {
   let persistence: PersistencePort;
-  let agent: AgentService;
+  let agent: Agent;
   const report = {
     text: 'Everything looks great!',
     emoji: '☀️',
@@ -92,13 +92,7 @@ describe('AgentService updateReport', () => {
       storeSnapshotAt: vi.fn(() => Promise.resolve()),
       getSnapshots: vi.fn(() => Promise.resolve([])),
     };
-    agent = new AgentService(
-      itemsProvider,
-      llm,
-      persistence,
-      relevance,
-      weights,
-    );
+    agent = new Agent(itemsProvider, llm, persistence, relevance, weights);
     vi.clearAllMocks();
   });
 
@@ -189,19 +183,13 @@ const snapshot: PipelineSnapshot = {
   },
 };
 
-test('AgentService getLastTopHeadlines returns titles of N top weighted emotionProfile', async () => {
+test('Agent getLastTopHeadlines returns titles of N top weighted emotionProfile', async () => {
   const persistence: PersistencePort = {
     storeSnapshotAt: vi.fn(),
     getSnapshots: vi.fn().mockResolvedValue([snapshot]),
   };
 
-  const agent = new AgentService(
-    itemsProvider,
-    llm,
-    persistence,
-    relevance,
-    weights,
-  );
+  const agent = new Agent(itemsProvider, llm, persistence, relevance, weights);
 
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([
@@ -211,19 +199,13 @@ test('AgentService getLastTopHeadlines returns titles of N top weighted emotionP
   ]);
 });
 
-test('AgentService getLastTopHeadlines returns empty array if no snapshot', async () => {
+test('Agent getLastTopHeadlines returns empty array if no snapshot', async () => {
   const persistence: PersistencePort = {
     storeSnapshotAt: vi.fn(),
     getSnapshots: vi.fn().mockResolvedValue([]),
   };
 
-  const agent = new AgentService(
-    itemsProvider,
-    llm,
-    persistence,
-    relevance,
-    weights,
-  );
+  const agent = new Agent(itemsProvider, llm, persistence, relevance, weights);
   const result = await agent.getLastTopHeadlines(3);
   expect(result).toEqual([]);
 });

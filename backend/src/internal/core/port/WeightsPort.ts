@@ -1,4 +1,4 @@
-import type { RelevantItem, WeightedItem } from '../entity/Item';
+import type { RelevantItem, WeightedItem } from '../entity/Item.ts';
 
 /**
  * Compute weights for the given items.

@@ -1,7 +1,7 @@
 import { formatFloat } from '../../../utils/format.ts';
-import { aggregateEmotionProfiles } from '../../usecase/aggregateEmotionProfiles.ts';
-import { createEmotionProfiles } from '../../usecase/createEmotionProfiles.ts';
-import { generateEmotionProfileReport } from '../../usecase/generateEmotionProfileReport.ts';
+import { aggregateProfiles } from '../../usecase/aggregateProfiles.ts';
+import { createProfiles } from '../../usecase/createProfiles.ts';
+import { createReport } from '../../usecase/createReport.ts';
 import type {
   AggregatedEmotionProfile,
   EmotionProfile,
@@ -15,7 +15,7 @@ import type { RelevanceFilterPort } from '../port/RelevanceFilterPort.ts';
 import type { WeightsPort } from '../port/WeightsPort.ts';
 import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
 
-export class AgentService {
+export class Agent {
   constructor(
     private readonly itemsProvider: ItemsProviderPort,
     private readonly llm: LlmPort,
@@ -30,10 +30,10 @@ export class AgentService {
     const createdAt =
       this.itemsProvider.getCreatedAt() ?? new Date().toISOString();
     console.log(
-      `[AgentService] Got ${items.length} items from provider: ${fetchLabel}`,
+      `[Agent] Got ${items.length} items from provider: ${fetchLabel}`,
     );
 
-    const prevItems = await this.getPrevRelevantItemsAt(createdAt);
+    const prevItems = await this.getRelevantItemsBefore(createdAt);
     for (const it of prevItems) {
       console.log(
         `<prevItems> score: ${formatFloat(it.score)}, title: ${it.title}`,
@@ -42,7 +42,7 @@ export class AgentService {
 
     const relevantItems = await this.relevance.filterItems(items);
     console.log(
-      `[AgentService] Selected ${relevantItems.length}/${items.length} items relevant to the tech job market.`,
+      `[Agent] Selected ${relevantItems.length}/${items.length} items relevant to the tech job market.`,
     );
     for (const it of relevantItems ?? []) {
       console.log(
@@ -61,27 +61,17 @@ export class AgentService {
         `<weightedItems> weight: ${formatFloat(it.weight)}, title: ${it.title}`,
       );
     }
-    console.log(`[AgentService] Computed weight of each item.`);
+    console.log(`[Agent] Computed weight of each item.`);
 
-    const emotionProfilePerItem = await createEmotionProfiles(
-      weightedItems,
-      this.llm,
-    );
+    const emotionProfilePerItem = await createProfiles(weightedItems, this.llm);
+    console.log('[Agent] Completed emotionProfile analysis on selected items.');
+
+    const aggregatedEmotionProfile = aggregateProfiles(emotionProfilePerItem);
+    console.log('[Agent] Computed aggregated emotionProfile.');
+
+    const report = await createReport(aggregatedEmotionProfile, this.llm);
     console.log(
-      '[AgentService] Completed emotionProfile analysis on selected items.',
-    );
-
-    const aggregatedEmotionProfile = aggregateEmotionProfiles(
-      emotionProfilePerItem,
-    );
-    console.log('[AgentService] Computed aggregated emotionProfile.');
-
-    const report = await generateEmotionProfileReport(
-      aggregatedEmotionProfile,
-      this.llm,
-    );
-    console.log(
-      `[AgentService] New report generated at ${this.itemsProvider.getCreatedAt() ?? new Date().toISOString()}`,
+      `[Agent] New report generated at ${this.itemsProvider.getCreatedAt() ?? new Date().toISOString()}`,
     );
 
     console.log(aggregatedEmotionProfile);
@@ -98,18 +88,18 @@ export class AgentService {
     });
   }
 
-  async getLastEmotionProfiles(): Promise<EmotionProfile[] | null> {
+  async getLastProfiles(): Promise<EmotionProfile[] | null> {
     const snapshots = await this.persistence.getSnapshots();
     return snapshots[0]?.emotionProfilePerItem ?? null;
   }
 
-  async getLastEmotionProfileReport(): Promise<EmotionProfileReport | null> {
+  async getLastReport(): Promise<EmotionProfileReport | null> {
     const snapshots = await this.persistence.getSnapshots();
     return snapshots[0]?.report ?? null;
   }
 
   async getLastTopHeadlines(limit: number): Promise<HeadlineInfo[]> {
-    const last: EmotionProfile[] | null = await this.getLastEmotionProfiles();
+    const last: EmotionProfile[] | null = await this.getLastProfiles();
 
     if (!last) return [];
 
@@ -124,7 +114,7 @@ export class AgentService {
       }));
   }
 
-  async getAggregatedEmotionProfiles(): Promise<
+  async getAggregatedProfiles(): Promise<
     {
       createdAt: string;
       emotions: AggregatedEmotionProfile['emotions'];
@@ -152,7 +142,7 @@ export class AgentService {
       }));
   }
 
-  async getPrevRelevantItemsAt(createdAtISO: string): Promise<RelevantItem[]> {
+  async getRelevantItemsBefore(createdAtISO: string): Promise<RelevantItem[]> {
     const snapshots = await this.persistence.getSnapshots();
     const target = Date.parse(createdAtISO);
 

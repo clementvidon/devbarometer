@@ -1,6 +1,9 @@
 import type OpenAI from 'openai';
-import type { LlmPort, LlmRunOptions } from '../../../core/port/LlmPort';
-import type { AgentMessage } from '../../../core/types/AgentMessage';
+import type {
+  LlmMessage,
+  LlmPort,
+  LlmRunOptions,
+} from '../../../core/port/LlmPort';
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -29,7 +32,7 @@ export class OpenAiAdapter implements LlmPort {
 
   async run(
     model: string,
-    messages: readonly AgentMessage[],
+    messages: readonly LlmMessage[],
     options?: LlmRunOptions,
   ): Promise<string> {
     const maxRetries = 3;

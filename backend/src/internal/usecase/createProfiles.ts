@@ -7,8 +7,7 @@ import type {
   TonalityScores,
 } from '../core/entity/EmotionProfile.ts';
 import type { WeightedItem } from '../core/entity/Item.ts';
-import type { LlmPort } from '../core/port/LlmPort.ts';
-import type { AgentMessage } from '../core/types/AgentMessage.ts';
+import type { LlmMessage, LlmPort } from '../core/port/LlmPort.ts';
 
 const CONCURRENCY = 1;
 
@@ -48,7 +47,7 @@ const FALLBACK_TONALITIES: TonalityScores = {
   pessimistic_anticipation: 0,
 };
 
-function emotionMessages(item: WeightedItem): readonly AgentMessage[] {
+function emotionMessages(item: WeightedItem): readonly LlmMessage[] {
   return [
     {
       role: 'system',
@@ -79,7 +78,7 @@ Texte : """${item.title}\n\n${item.content}"""`.trim(),
   ];
 }
 
-function tonalityMessages(item: WeightedItem): readonly AgentMessage[] {
+function tonalityMessages(item: WeightedItem): readonly LlmMessage[] {
   return [
     {
       role: 'system',
@@ -150,12 +149,12 @@ async function fetchTonalities(
   }
 }
 
-export async function createEmotionProfiles(
+export async function createProfiles(
   items: WeightedItem[],
   llm: LlmPort,
 ): Promise<EmotionProfile[]> {
   if (items.length === 0) {
-    console.error('[createEmotionProfiles] Received empty items array.');
+    console.error('[createProfiles] Received empty items array.');
     return [];
   }
 
@@ -170,9 +169,7 @@ export async function createEmotionProfiles(
       const hasFailed =
         emotions === FALLBACK_EMOTIONS || tonalities === FALLBACK_TONALITIES;
       if (hasFailed) {
-        console.error(
-          `[createEmotionProfiles] LLM fallback for ${item.source}`,
-        );
+        console.error(`[createProfiles] LLM fallback for ${item.source}`);
       }
       return {
         title: item.title,

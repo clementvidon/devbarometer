@@ -6,7 +6,7 @@ import { JsonSnapshotProviderAdapter } from '../internal/adapter/driven/items/Js
 import { OpenAiAdapter } from '../internal/adapter/driven/llm/OpenAiAdapter.ts';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
 import type { Item } from '../internal/core/entity/Item.ts';
-import { makeCoreAgentService } from '../internal/core/service/makeCoreAgentService.ts';
+import { makeCoreAgent } from '../internal/core/service/makeCoreAgent.ts';
 
 // - Dump Neon UI: { id?, date_created: "YYYY-MM-DD HH:mm:ss.SSS", data: { items: Item[] } }
 // - Export Script: { id?, createdAt: "YYYY-MM-DDTHH:mm:ss.SSSZ", items: Item[] }
@@ -64,7 +64,7 @@ try {
       getLabel(r, createdAtISO),
       createdAtISO,
     );
-    const agent = makeCoreAgentService(provider, llm, persistence);
+    const agent = makeCoreAgent(provider, llm, persistence);
 
     await agent.updateReport();
     ok++;

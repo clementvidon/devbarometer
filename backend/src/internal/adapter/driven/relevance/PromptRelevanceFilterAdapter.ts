@@ -1,16 +1,15 @@
 import type { Item, RelevantItem } from '../../../core/entity/Item.ts';
-import type { LlmPort } from '../../../core/port/LlmPort.ts';
+import type { LlmMessage, LlmPort } from '../../../core/port/LlmPort.ts';
 import type { RelevanceFilterPort } from '../../../core/port/RelevanceFilterPort.ts';
 
 import pLimit from 'p-limit';
 import { z } from 'zod';
 import { stripCodeFences } from '../../../../utils/stripCodeFences.ts';
-import type { AgentMessage } from '../../../core/types/AgentMessage.ts';
 
 const CONCURRENCY = 1;
 const RelevanceSchema = z.object({ relevant: z.boolean() });
 
-function makeMessages(item: Item, prompt: string): readonly AgentMessage[] {
+function makeMessages(item: Item, prompt: string): readonly LlmMessage[] {
   return [
     {
       role: 'system' as const,
@@ -24,7 +23,7 @@ Item title: ${item.title}
 Item content: ${item.content}
       `.trim(),
     },
-  ] as const satisfies readonly AgentMessage[];
+  ] as const satisfies readonly LlmMessage[];
 }
 
 async function isRelevant(

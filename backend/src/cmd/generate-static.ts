@@ -7,7 +7,7 @@ import { PostgresAdapter } from '../internal/adapter/driven/persistence/Postgres
 import type { Item } from '../internal/core/entity/Item.ts';
 import type { ItemsProviderPort } from '../internal/core/port/ItemsProviderPort.ts';
 import type { LlmPort } from '../internal/core/port/LlmPort.ts';
-import { makeCoreAgentService } from '../internal/core/service/makeCoreAgentService.ts';
+import { makeCoreAgent } from '../internal/core/service/makeCoreAgent.ts';
 
 class NoopItemsProvider implements ItemsProviderPort {
   getItems(): Promise<Item[]> {
@@ -38,15 +38,15 @@ function save(filename: string, data: unknown) {
 
 export async function generateStatic() {
   const persistence = new PostgresAdapter();
-  const agent = makeCoreAgentService(
+  const agent = makeCoreAgent(
     new NoopItemsProvider(),
     new NoopLlm(),
     persistence,
   );
 
-  const report = await agent.getLastEmotionProfileReport();
+  const report = await agent.getLastReport();
   const ticker = await agent.getLastTopHeadlines(5);
-  const chart = await agent.getAggregatedEmotionProfiles();
+  const chart = await agent.getAggregatedProfiles();
 
   save('report.json', report);
   save('ticker.json', ticker);
