@@ -6,16 +6,40 @@ import { parseRelevanceResult } from './parseResult.ts';
 import { CONCURRENCY, DEFAULT_LLM_OPTIONS } from './policy.ts';
 import { relevanceFilterPrompt } from './prompts.ts';
 
+export interface FilterRelevantItemsOptions {
+  /** Prompt système utilisé pour la pertinence */
+  prompt: string;
+  /** Concurrence p-limit pour les appels LLM */
+  concurrency: number;
+  /** Options LLM finales (incluant le modèle) */
+  llmOptions: typeof DEFAULT_LLM_OPTIONS;
+}
+
+export const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS: FilterRelevantItemsOptions =
+  {
+    prompt: relevanceFilterPrompt,
+    concurrency: CONCURRENCY,
+    llmOptions: DEFAULT_LLM_OPTIONS,
+  };
+
+function mergeFilterRelevantItemsOptions(
+  opts: Partial<FilterRelevantItemsOptions> = {},
+): FilterRelevantItemsOptions {
+  return { ...DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS, ...opts };
+}
+
 async function isRelevant(
   item: Item,
   llm: LlmPort,
   prompt: string,
+  model: string,
+  runOpts: Omit<typeof DEFAULT_LLM_OPTIONS, 'model'>,
 ): Promise<boolean> {
   try {
     const raw = await llm.run(
-      DEFAULT_LLM_OPTIONS.model,
+      model,
       makeRelevanceMessages(item, prompt),
-      DEFAULT_LLM_OPTIONS,
+      runOpts,
     );
     return parseRelevanceResult(raw);
   } catch (err) {
@@ -30,20 +54,30 @@ async function isRelevant(
 export async function filterRelevantItems(
   items: Item[],
   llm: LlmPort,
-  prompt: string = relevanceFilterPrompt,
+  opts: Partial<FilterRelevantItemsOptions> = {},
 ): Promise<RelevantItem[]> {
   if (items.length === 0) {
     console.error('[filterRelevantItems] Received empty items array.');
     return [];
   }
-  const limit = pLimit(CONCURRENCY);
+
+  const { prompt, concurrency, llmOptions } =
+    mergeFilterRelevantItemsOptions(opts);
+
+  const limit = pLimit(concurrency);
+  const { model, ...runOpts } = llmOptions;
+
   const labeledItems = await Promise.all(
     items.map((item) =>
-      limit(async () => ({ item, ok: await isRelevant(item, llm, prompt) })),
+      limit(async () => ({
+        item,
+        ok: await isRelevant(item, llm, prompt, model, runOpts),
+      })),
     ),
   );
 
   const relevantItems = labeledItems.filter((r) => r.ok).map((r) => r.item);
+
   if (relevantItems.length === 0) {
     console.error('[filterRelevantItems] No relevant items identified.');
   }

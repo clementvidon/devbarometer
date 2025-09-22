@@ -1,4 +1,3 @@
-// internal/usecase/relevance/prompts.ts
 export const relevanceFilterPrompt = `
 Vous êtes un expert du marché de l'emploi des développeurs en France.
 Vous aidez à filtrer des données de Reddit pour ne garder que celles qui apportent un éclairage pertinent sur le sentiment du marché de l'emploi tech.

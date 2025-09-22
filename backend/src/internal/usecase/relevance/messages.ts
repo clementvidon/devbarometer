@@ -1,4 +1,3 @@
-// internal/usecase/relevance/messages.ts
 import type { Item } from '../../core/entity/Item.ts';
 import type { LlmMessage } from '../../core/port/LlmPort.ts';
 
@@ -9,7 +8,7 @@ export function makeRelevanceMessages(
   return [
     {
       role: 'system' as const,
-      content: prompt.trim(),
+      content: prompt,
     },
     {
       role: 'user' as const,
