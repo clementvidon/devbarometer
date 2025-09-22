@@ -1,7 +1,7 @@
 import { formatFloat } from '../../../utils/format.ts';
 import { aggregateProfiles } from '../../usecase/aggregateProfiles.ts';
-import { createProfiles } from '../../usecase/createProfiles.ts';
 import { createReport } from '../../usecase/createReport.ts';
+import { createProfiles } from '../../usecase/profiles/createProfiles.ts';
 import { filterRelevantItems } from '../../usecase/relevance/filterRelevantItems.ts';
 import type {
   AggregatedEmotionProfile,

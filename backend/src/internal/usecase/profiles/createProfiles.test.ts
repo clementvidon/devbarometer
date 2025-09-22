@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { EmotionProfile } from '../core/entity/EmotionProfile.ts';
-import type { WeightedItem } from '../core/entity/Item.ts';
-import type { LlmMessage } from '../core/port/LlmPort.ts';
+import type { EmotionProfile } from '../../core/entity/EmotionProfile.ts';
+import type { WeightedItem } from '../../core/entity/Item.ts';
+import type { LlmMessage } from '../../core/port/LlmPort.ts';
 import { createProfiles } from './createProfiles.ts';
 
 type RunFn = (
