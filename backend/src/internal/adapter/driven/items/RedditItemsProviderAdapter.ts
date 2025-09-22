@@ -3,6 +3,8 @@ import { getRedditAccessToken } from '../../../../utils/redditAuth.ts';
 import type { Item } from '../../../core/entity/Item.ts';
 import type { FetchPort } from '../../../core/port/FetchPort.ts';
 import type { ItemsProviderPort } from '../../../core/port/ItemsProviderPort.ts';
+import { filterByScore } from '../../../usecase/items/filterByScore.ts';
+import { normalizeWhitespace } from '../../../usecase/items/normalizeWhitespace.ts';
 
 export const RedditChildSchema = z.object({
   data: z.object({
@@ -28,9 +30,7 @@ const BASE_HEADERS = {
 
 const MAX_RETRIES = 3;
 const TIMEOUT_MS = 5000;
-const MIN_UPVOTES = 5;
-
-const sanitize = (s: string) => s.replace(/\s+/g, ' ').trim();
+const MIN_SCORE = 5;
 
 async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   const timeout = new Promise<never>((_, reject) =>
@@ -141,14 +141,16 @@ export async function fetchRedditItems(
   }
 
   const children = parsed.data.data.children;
-  const filtered = children.filter((w) => w.data.ups >= MIN_UPVOTES);
 
-  return filtered.map(({ data }) => ({
+  const items: Item[] = children.map(({ data }) => ({
     source: `https://reddit.com/comments/${data.id}`,
-    title: sanitize(data.title),
-    content: sanitize(data.selftext),
-    score: data.ups,
+    title: normalizeWhitespace(data.title),
+    content: normalizeWhitespace(data.selftext),
+    score: data.ups ?? 0,
   }));
+
+  const filtered = filterByScore(items, MIN_SCORE);
+  return filtered;
 }
 
 export class RedditItemsProviderAdapter implements ItemsProviderPort {
