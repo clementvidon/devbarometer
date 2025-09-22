@@ -13,7 +13,6 @@ import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { WeightsPort } from '../port/WeightsPort.ts';
-import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
 
 export class Agent {
   constructor(
@@ -95,22 +94,6 @@ export class Agent {
   async getLastReport(): Promise<Report | null> {
     const snapshots = await this.persistence.getSnapshots();
     return snapshots[0]?.report ?? null;
-  }
-
-  async getLastTopHeadlines(limit: number): Promise<HeadlineInfo[]> {
-    const last: EmotionProfile[] | null = await this.getLastProfiles();
-
-    if (!last) return [];
-
-    return last
-      .slice()
-      .sort((a, b) => b.weight - a.weight)
-      .slice(0, limit)
-      .map((item) => ({
-        title: item.title,
-        weight: formatFloat(item.weight, 0),
-        source: item.source,
-      }));
   }
 
   async getAggregatedProfiles(): Promise<

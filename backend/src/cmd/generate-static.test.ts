@@ -12,9 +12,11 @@ describe('generateStatic', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
+    vi.mock('../internal/usecase/queries/getTopHeadlines.ts', () => ({
+      getTopHeadlines: () => ['Item A', 'Item B'],
+    }));
     const mockAgent = {
       getLastReport: vi.fn().mockResolvedValue({ text: 'report', emoji: '☀️' }),
-      getLastTopHeadlines: vi.fn().mockResolvedValue(['Item A', 'Item B']),
       getAggregatedProfiles: vi
         .fn()
         .mockResolvedValue([{ createdAt: '2025-08-03', aggregate: {} }]),

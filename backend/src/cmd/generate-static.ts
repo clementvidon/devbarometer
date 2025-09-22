@@ -8,6 +8,7 @@ import type { Item } from '../internal/core/entity/Item.ts';
 import type { ItemsProviderPort } from '../internal/core/port/ItemsProviderPort.ts';
 import type { LlmPort } from '../internal/core/port/LlmPort.ts';
 import { makeCoreAgent } from '../internal/core/service/makeCoreAgent.ts';
+import { getTopHeadlines } from '../internal/usecase/queries/getTopHeadlines.ts';
 
 class NoopItemsProvider implements ItemsProviderPort {
   getItems(): Promise<Item[]> {
@@ -45,7 +46,7 @@ export async function generateStatic() {
   );
 
   const report = await agent.getLastReport();
-  const ticker = await agent.getLastTopHeadlines(5);
+  const ticker = await getTopHeadlines(persistence, 5);
   const chart = await agent.getAggregatedProfiles();
 
   save('report.json', report);

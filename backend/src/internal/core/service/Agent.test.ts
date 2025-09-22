@@ -5,26 +5,7 @@ import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
 import type { WeightsPort } from '../port/WeightsPort.ts';
-import type { PipelineSnapshot } from '../types/PipelineSnapshot.ts';
 import { Agent } from './Agent.ts';
-
-const fakeEmotions = {
-  joy: 0,
-  sadness: 0,
-  anger: 0,
-  fear: 0,
-  trust: 0,
-  disgust: 0,
-} as const;
-
-const fakeTonalities = {
-  positive: 0,
-  negative: 0,
-  optimistic_anticipation: 0,
-  pessimistic_anticipation: 0,
-  positive_surprise: 0,
-  negative_surprise: 0,
-} as const;
 
 const mockItems: Item[] = [
   { source: 'reddit.com', title: 'Item 1', content: '', score: 1 },
@@ -112,95 +93,4 @@ describe('Agent updateReport', () => {
     );
     expect(spy).toHaveBeenCalledTimes(1);
   });
-});
-
-const snapshot: PipelineSnapshot = {
-  createdAt: '2025-08-01T00:00:00Z',
-  id: 'mock-id',
-  fetchLabel: 'test',
-  items: [],
-  relevantItems: [],
-  weightedItems: [],
-  emotionProfilePerItem: [
-    {
-      title: 'Item A',
-      source: 'a',
-      weight: 10,
-      emotions: fakeEmotions,
-      tonalities: fakeTonalities,
-    },
-    {
-      title: 'Item B',
-      source: 'b',
-      weight: 30,
-      emotions: fakeEmotions,
-      tonalities: fakeTonalities,
-    },
-    {
-      title: 'Item C',
-      source: 'c',
-      weight: 20,
-      emotions: fakeEmotions,
-      tonalities: fakeTonalities,
-    },
-    {
-      title: 'Item D',
-      source: 'd',
-      weight: 5,
-      emotions: fakeEmotions,
-      tonalities: fakeTonalities,
-    },
-    {
-      title: 'Item E',
-      source: 'e',
-      weight: 50,
-      emotions: fakeEmotions,
-      tonalities: fakeTonalities,
-    },
-    {
-      title: 'Item F',
-      source: 'f',
-      weight: 15,
-      emotions: fakeEmotions,
-      tonalities: fakeTonalities,
-    },
-  ],
-  aggregatedEmotionProfile: {
-    date: '2025-08-01',
-    count: 6,
-    emotions: fakeEmotions,
-    tonalities: fakeTonalities,
-    totalWeight: 130,
-  },
-  report: {
-    text: 'mock',
-    emoji: '☀️',
-  },
-};
-
-test('Agent getLastTopHeadlines returns titles of N top weighted emotionProfile', async () => {
-  const persistence: PersistencePort = {
-    storeSnapshotAt: vi.fn(),
-    getSnapshots: vi.fn().mockResolvedValue([snapshot]),
-  };
-
-  const agent = new Agent(itemsProvider, llm, persistence, weights);
-
-  const result = await agent.getLastTopHeadlines(3);
-  expect(result).toEqual([
-    { title: 'Item E', source: 'e', weight: '50' },
-    { title: 'Item B', source: 'b', weight: '30' },
-    { title: 'Item C', source: 'c', weight: '20' },
-  ]);
-});
-
-test('Agent getLastTopHeadlines returns empty array if no snapshot', async () => {
-  const persistence: PersistencePort = {
-    storeSnapshotAt: vi.fn(),
-    getSnapshots: vi.fn().mockResolvedValue([]),
-  };
-
-  const agent = new Agent(itemsProvider, llm, persistence, weights);
-  const result = await agent.getLastTopHeadlines(3);
-  expect(result).toEqual([]);
 });
