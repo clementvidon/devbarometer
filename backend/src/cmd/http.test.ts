@@ -16,8 +16,8 @@ vi.mock('../internal/adapter/driven/persistence/PostgresAdapter.ts', () => ({
 vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter.ts', () => ({
   NodeFetchAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/llm/OpenAiAdapter.ts', () => ({
-  OpenAiAdapter: vi.fn(() => ({})),
+vi.mock('../internal/adapter/driven/llm/OpenAIAdapter.ts', () => ({
+  OpenAIAdapter: vi.fn(() => ({})),
 }));
 
 vi.mock('openai', () => ({

@@ -8,11 +8,11 @@ import {
   type MockInstance,
 } from 'vitest';
 
-import type { EmotionProfileReport } from '../../../core/entity/EmotionProfileReport.ts';
+import type { Report } from '../../../core/entity/Report.ts';
 import type { Agent } from '../../../core/service/Agent.ts';
 import { makeReportController } from './ReportController.ts';
 
-type GetLastReport = () => Promise<EmotionProfileReport | null>;
+type GetLastReport = () => Promise<Report | null>;
 type UpdateReport = (
   subreddit?: string,
   limit?: number,
@@ -35,8 +35,8 @@ beforeEach(() => {
 
 afterEach(() => vi.clearAllMocks());
 
-test('GET /report → 200 avec un EmotionProfileReport', async () => {
-  const fakeReport: EmotionProfileReport = {
+test('GET /report → 200 avec un Report', async () => {
+  const fakeReport: Report = {
     text: 'dark clouds ahead',
     emoji: '🌧️',
   };

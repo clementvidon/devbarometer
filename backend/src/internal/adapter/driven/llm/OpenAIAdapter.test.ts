@@ -1,7 +1,7 @@
 import type OpenAI from 'openai';
 import { describe, expect, test, vi } from 'vitest';
 import type { LlmMessage } from '../../../core/port/LlmPort.ts';
-import { OpenAiAdapter } from './OpenAiAdapter.ts';
+import { OpenAIAdapter } from './OpenAIAdapter.ts';
 
 function createMockOpenAI(content: string | null): OpenAI {
   return {
@@ -15,10 +15,10 @@ function createMockOpenAI(content: string | null): OpenAI {
   } as unknown as OpenAI;
 }
 
-describe('OpenAiAdapter', () => {
+describe('OpenAIAdapter', () => {
   test('returns the content from OpenAI API response', async () => {
-    const openAiClient = createMockOpenAI('Hello world!');
-    const adapter = new OpenAiAdapter(openAiClient);
+    const openAIClient = createMockOpenAI('Hello world!');
+    const adapter = new OpenAIAdapter(openAIClient);
 
     const messages = [
       { role: 'user', content: 'Say hello' },

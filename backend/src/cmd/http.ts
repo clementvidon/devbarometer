@@ -2,7 +2,7 @@ import 'dotenv/config';
 import OpenAI from 'openai';
 import { NodeFetchAdapter } from '../internal/adapter/driven/fetch/NodeFetchAdapter.ts';
 import { RedditItemsProviderAdapter } from '../internal/adapter/driven/items/RedditItemsProviderAdapter.ts';
-import { OpenAiAdapter } from '../internal/adapter/driven/llm/OpenAiAdapter.ts';
+import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter.ts';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
 import { makeReportController } from '../internal/adapter/driving/web/ReportController.ts';
 import { makeCoreAgent } from '../internal/core/service/makeCoreAgent.ts';
@@ -43,7 +43,7 @@ export function depsFromEnv(): Deps {
     port,
     fetcher: new NodeFetchAdapter(globalThis.fetch),
     persistence: new PostgresAdapter(),
-    llm: new OpenAiAdapter(new OpenAI({ apiKey })),
+    llm: new OpenAIAdapter(new OpenAI({ apiKey })),
   };
 }
 

@@ -1,7 +1,7 @@
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { AggregatedEmotionProfile } from '../core/entity/EmotionProfile.ts';
-import type { EmotionProfileReport } from '../core/entity/EmotionProfileReport.ts';
+import type { Report } from '../core/entity/Report.ts';
 import { createReport } from './createReport.ts';
 
 const fakeLLMResponse = `
@@ -33,7 +33,7 @@ const fakeAggregatedEmotionProfile: AggregatedEmotionProfile = {
   totalWeight: 1,
 };
 
-const fakeEmotionProfileReport: EmotionProfileReport = {
+const fakeReport: Report = {
   text: 'Le climat est globalement positif avec quelques nuages.',
   emoji: '🌤️',
 };
@@ -49,10 +49,10 @@ describe('createProfileReport', () => {
       };
     });
 
-    test('returns valid EmotionProfileReport from correct LLM output', async () => {
+    test('returns valid Report from correct LLM output', async () => {
       const report = await createReport(fakeAggregatedEmotionProfile, llm);
 
-      expect(report).toEqual(fakeEmotionProfileReport);
+      expect(report).toEqual(fakeReport);
     });
   });
 });

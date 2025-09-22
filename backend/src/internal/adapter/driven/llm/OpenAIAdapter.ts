@@ -27,7 +27,7 @@ function isTransient(err: unknown): boolean {
   );
 }
 
-export class OpenAiAdapter implements LlmPort {
+export class OpenAIAdapter implements LlmPort {
   constructor(private readonly client: OpenAI) {}
 
   async run(
@@ -56,14 +56,14 @@ export class OpenAiAdapter implements LlmPort {
 
         const content = res.choices?.[0]?.message?.content ?? '';
         if (!content.trim()) {
-          console.error('[OpenAiAdapter] No content returned from OpenAI API');
+          console.error('[OpenAIAdapter] No content returned from OpenAI API');
           throw new Error('Empty content from OpenAI');
         }
         return content;
       } catch (err: unknown) {
         if (!isTransient(err) || attempt === maxRetries) {
           console.error(
-            '[OpenAiAdapter] OpenAI API error (fatal, no retry):',
+            '[OpenAIAdapter] OpenAI API error (fatal, no retry):',
             err,
           );
           throw err instanceof Error ? err : new Error('Unknown error');
@@ -77,7 +77,7 @@ export class OpenAiAdapter implements LlmPort {
           Math.floor(Math.random() * 250);
 
         console.warn(
-          `[OpenAiAdapter] Transient error (${
+          `[OpenAIAdapter] Transient error (${
             (err as { status?: number; code?: string }).status ??
             (err as { code?: string }).code ??
             'unknown'

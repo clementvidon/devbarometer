@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
 import type { Item, WeightedItem } from '../entity/Item.ts';
+import type { Report } from '../entity/Report.ts';
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
@@ -71,7 +71,7 @@ vi.mock('../../usecase/createReport', () => ({
   createReport: vi.fn().mockResolvedValue({
     text: 'Everything looks great!',
     emoji: '☀️',
-  } satisfies EmotionProfileReport),
+  } satisfies Report),
 }));
 
 describe('Agent updateReport', () => {

@@ -4,8 +4,8 @@ import type {
   AggregatedEmotionProfile,
   EmotionScores,
 } from '../core/entity/EmotionProfile.ts';
-import type { EmotionProfileReport } from '../core/entity/EmotionProfileReport.ts';
-import { WEATHER_EMOJIS } from '../core/entity/EmotionProfileReport.ts';
+import type { Report } from '../core/entity/Report.ts';
+import { WEATHER_EMOJIS } from '../core/entity/Report.ts';
 import type { LlmMessage, LlmPort } from '../core/port/LlmPort.ts';
 
 /* pickStandoutsByScore */
@@ -134,7 +134,7 @@ const LLMOutputSchema = z.object({
 const FALLBACK = {
   text: '',
   emoji: '☁️',
-} satisfies EmotionProfileReport;
+} satisfies Report;
 
 function makeMessages(summary: EmotionProfileSummary): readonly LlmMessage[] {
   return [
@@ -183,7 +183,7 @@ Retourne uniquement un JSON brut :
 export async function createReport(
   agregatedEmotionProfile: AggregatedEmotionProfile,
   llm: LlmPort,
-): Promise<EmotionProfileReport> {
+): Promise<Report> {
   try {
     const summary = summarizeProfile(agregatedEmotionProfile);
     console.log(summary);

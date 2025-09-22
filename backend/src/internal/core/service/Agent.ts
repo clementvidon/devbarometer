@@ -7,8 +7,8 @@ import type {
   AggregatedEmotionProfile,
   EmotionProfile,
 } from '../entity/EmotionProfile.ts';
-import type { EmotionProfileReport } from '../entity/EmotionProfileReport.ts';
 import type { RelevantItem } from '../entity/Item.ts';
+import type { Report } from '../entity/Report.ts';
 import type { ItemsProviderPort } from '../port/ItemsProviderPort.ts';
 import type { LlmPort } from '../port/LlmPort.ts';
 import type { PersistencePort } from '../port/PersistencePort.ts';
@@ -92,7 +92,7 @@ export class Agent {
     return snapshots[0]?.emotionProfilePerItem ?? null;
   }
 
-  async getLastReport(): Promise<EmotionProfileReport | null> {
+  async getLastReport(): Promise<Report | null> {
     const snapshots = await this.persistence.getSnapshots();
     return snapshots[0]?.report ?? null;
   }

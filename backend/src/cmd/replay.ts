@@ -3,7 +3,7 @@ import fs from 'fs';
 import OpenAI from 'openai';
 import path from 'path';
 import { JsonSnapshotProviderAdapter } from '../internal/adapter/driven/items/JsonSnapshotProviderAdapter.ts';
-import { OpenAiAdapter } from '../internal/adapter/driven/llm/OpenAiAdapter.ts';
+import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter.ts';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
 import type { Item } from '../internal/core/entity/Item.ts';
 import { makeCoreAgent } from '../internal/core/service/makeCoreAgent.ts';
@@ -48,7 +48,7 @@ try {
     (a, b) => Date.parse(getCreatedAtISO(a)) - Date.parse(getCreatedAtISO(b)),
   );
 
-  const llm = new OpenAiAdapter(
+  const llm = new OpenAIAdapter(
     new OpenAI({ apiKey: process.env.OPENAI_API_KEY! }),
   );
   const persistence = new PostgresAdapter();
