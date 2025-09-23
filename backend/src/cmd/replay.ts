@@ -2,7 +2,7 @@ import 'dotenv/config';
 import fs from 'fs';
 import OpenAI from 'openai';
 import path from 'path';
-import { JsonSnapshotProviderAdapter } from '../internal/adapter/driven/items/JsonSnapshotProviderAdapter.ts';
+import { JsonSnapshotAdapter } from '../internal/adapter/driven/items/JsonSnapshotAdapter.ts';
 import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter.ts';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
 import type { Item } from '../internal/core/entity/Item.ts';
@@ -59,7 +59,7 @@ try {
     if (!items.length) continue;
 
     const createdAtISO = getCreatedAtISO(r);
-    const provider = new JsonSnapshotProviderAdapter(
+    const provider = new JsonSnapshotAdapter(
       items,
       getLabel(r, createdAtISO),
       createdAtISO,

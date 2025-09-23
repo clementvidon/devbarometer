@@ -30,38 +30,38 @@ export interface NormalizeOptions {
   target: number;
 }
 
-export interface WeightsOptions {
+export interface MomentumWeightsOptions {
   momentum: MomentumOptions;
   cap: CapOptions;
   normalize: NormalizeOptions;
 }
 
-export const DEFAULT_MOMENTUM_OPTIONS: MomentumOptions = {
+export const DEFAULT_MOMENTUM_OPTIONS = {
   baseWeight: 1,
-};
+} as const satisfies MomentumOptions;
 
-export const DEFAULT_CAP_OPTIONS: CapOptions = {
+export const DEFAULT_CAP_OPTIONS = {
   minN: 10,
   percentile: 0.95,
   percentileSmallN: 0.9,
   baseWeight: 1,
   concentrationGate: 0.35,
-};
+} as const satisfies CapOptions;
 
-export const DEFAULT_NORMALIZE_OPTIONS: NormalizeOptions = {
+export const DEFAULT_NORMALIZE_OPTIONS = {
   enabled: true,
   target: 1,
-};
+} as const satisfies NormalizeOptions;
 
-export const DEFAULT_WEIGHTS_OPTIONS: WeightsOptions = {
+export const DEFAULT_WEIGHTS_OPTIONS = {
   momentum: { ...DEFAULT_MOMENTUM_OPTIONS },
   cap: { ...DEFAULT_CAP_OPTIONS },
   normalize: { ...DEFAULT_NORMALIZE_OPTIONS },
-};
+} as const satisfies MomentumWeightsOptions;
 
-function mergeWeightsOptions(
-  opts: Partial<WeightsOptions> = {},
-): WeightsOptions {
+function mergeMomentumWeightsOptions(
+  opts: Partial<MomentumWeightsOptions> = {},
+): MomentumWeightsOptions {
   return {
     momentum: { ...DEFAULT_MOMENTUM_OPTIONS, ...(opts.momentum ?? {}) },
     cap: { ...DEFAULT_CAP_OPTIONS, ...(opts.cap ?? {}) },
@@ -70,10 +70,10 @@ function mergeWeightsOptions(
 }
 
 export class MomentumWeightsService implements WeightsPort {
-  private readonly opts: WeightsOptions;
+  private readonly opts: MomentumWeightsOptions;
 
-  constructor(opts: Partial<WeightsOptions> = {}) {
-    this.opts = mergeWeightsOptions(opts);
+  constructor(opts: Partial<MomentumWeightsOptions> = {}) {
+    this.opts = mergeMomentumWeightsOptions(opts);
   }
 
   async computeWeights(

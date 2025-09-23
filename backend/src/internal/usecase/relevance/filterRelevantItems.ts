@@ -15,12 +15,11 @@ export interface FilterRelevantItemsOptions {
   llmOptions: typeof DEFAULT_LLM_OPTIONS;
 }
 
-export const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS: FilterRelevantItemsOptions =
-  {
-    prompt: relevanceFilterPrompt,
-    concurrency: CONCURRENCY,
-    llmOptions: DEFAULT_LLM_OPTIONS,
-  };
+export const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS = {
+  prompt: relevanceFilterPrompt,
+  concurrency: CONCURRENCY,
+  llmOptions: DEFAULT_LLM_OPTIONS,
+} as const satisfies FilterRelevantItemsOptions;
 
 function mergeFilterRelevantItemsOptions(
   opts: Partial<FilterRelevantItemsOptions> = {},

@@ -22,7 +22,7 @@ export const ItemsResponseSchema = z.object({
   }),
 });
 
-export interface RedditItemsProviderOptions {
+export interface RedditItemsOptions {
   /** Minimum threshold of upvotes to keep the item (default: 5) */
   minScore: number;
   /** User-Agent suffix to send to Reddit (default: devbarometer UA) */
@@ -31,17 +31,17 @@ export interface RedditItemsProviderOptions {
   baseBackoffMs: number;
 }
 
-const DEFAULT_REDDIT_ITEMS_PROVIDER_OPTIONS = {
+const DEFAULT_REDDIT_ITEMS_OPTIONS = {
   minScore: 5,
   userAgentSuffix:
     'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)',
   baseBackoffMs: 100,
-} as const satisfies RedditItemsProviderOptions;
+} as const satisfies RedditItemsOptions;
 
-function mergeRedditItemsProviderOptions(
-  opts: Partial<RedditItemsProviderOptions> = {},
-): RedditItemsProviderOptions {
-  return { ...DEFAULT_REDDIT_ITEMS_PROVIDER_OPTIONS, ...opts };
+function mergeRedditItemsOptions(
+  opts: Partial<RedditItemsOptions> = {},
+): RedditItemsOptions {
+  return { ...DEFAULT_REDDIT_ITEMS_OPTIONS, ...opts };
 }
 
 function mapRedditChildToItem(child: z.infer<typeof RedditChildSchema>): Item {
@@ -82,10 +82,10 @@ export function buildRedditHeaders(
 export async function fetchRedditItems(
   fetcher: FetchPort,
   url: string,
-  opts: Partial<RedditItemsProviderOptions> = {},
+  opts: Partial<RedditItemsOptions> = {},
 ): Promise<Item[]> {
   const { minScore, userAgentSuffix, baseBackoffMs } =
-    mergeRedditItemsProviderOptions(opts);
+    mergeRedditItemsOptions(opts);
   let token: string;
   try {
     token = await getRedditAccessToken(fetcher);
@@ -122,15 +122,15 @@ export async function fetchRedditItems(
   return filtered;
 }
 
-export class RedditItemsProviderAdapter implements ItemsProviderPort {
-  private readonly opts: RedditItemsProviderOptions;
+export class RedditItemsAdapter implements ItemsProviderPort {
+  private readonly opts: RedditItemsOptions;
 
   constructor(
     private readonly fetcher: FetchPort,
     private readonly url: string,
-    opts: Partial<RedditItemsProviderOptions> = {},
+    opts: Partial<RedditItemsOptions> = {},
   ) {
-    this.opts = { ...DEFAULT_REDDIT_ITEMS_PROVIDER_OPTIONS, ...opts };
+    this.opts = { ...DEFAULT_REDDIT_ITEMS_OPTIONS, ...opts };
   }
 
   async getItems(): Promise<Item[]> {

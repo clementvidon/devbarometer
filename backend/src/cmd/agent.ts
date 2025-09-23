@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
 import { NodeFetchAdapter } from '../internal/adapter/driven/fetch/NodeFetchAdapter.ts';
-import { RedditItemsProviderAdapter } from '../internal/adapter/driven/items/RedditItemsProviderAdapter.ts';
+import { RedditItemsAdapter } from '../internal/adapter/driven/items/RedditItemsAdapter.ts';
 import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter.ts';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
 import { makeCoreAgent } from '../internal/core/service/makeCoreAgent.ts';
@@ -18,7 +18,7 @@ type Deps = {
 };
 
 export function buildAgent(deps: Deps) {
-  const provider = new RedditItemsProviderAdapter(deps.fetcher, deps.redditUrl);
+  const provider = new RedditItemsAdapter(deps.fetcher, deps.redditUrl);
   return makeCoreAgent(provider, deps.llm, deps.persistence);
 }
 

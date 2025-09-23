@@ -1,7 +1,7 @@
 import type { Item } from '../../../core/entity/Item.ts';
 import type { ItemsProviderPort } from '../../../core/port/ItemsProviderPort.ts';
 
-export class JsonSnapshotProviderAdapter implements ItemsProviderPort {
+export class JsonSnapshotAdapter implements ItemsProviderPort {
   constructor(
     private readonly items: Item[],
     private readonly label: string,

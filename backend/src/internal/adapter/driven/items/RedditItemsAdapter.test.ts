@@ -8,10 +8,7 @@ import {
   vi,
 } from 'vitest';
 import type { FetchPort } from '../../../core/port/FetchPort.ts';
-import {
-  fetchRedditItems,
-  RedditItemsProviderAdapter,
-} from './RedditItemsProviderAdapter.ts';
+import { fetchRedditItems, RedditItemsAdapter } from './RedditItemsAdapter.ts';
 
 vi.mock('../../../../utils/redditAuth.ts', () => ({
   getRedditAccessToken: vi.fn().mockResolvedValue('mocked-access-token'),
@@ -159,14 +156,14 @@ describe('fetchRedditItems', () => {
   });
 });
 
-describe('RedditItemsProviderAdapter', () => {
+describe('RedditItemsAdapter', () => {
   test('delegates getItems to fetchRedditItems', async () => {
     const fetcher: FetchPort = {
       fetch: vi
         .fn()
         .mockResolvedValue(fakeResponse({ data: { children: fakePosts } })),
     };
-    const adapter = new RedditItemsProviderAdapter(
+    const adapter = new RedditItemsAdapter(
       fetcher,
       'https://oauth.reddit.com/r/mock/top.json?limit=3&t=week&raw_json=1',
     );

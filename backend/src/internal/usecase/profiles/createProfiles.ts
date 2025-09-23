@@ -24,12 +24,12 @@ export interface CreateProfilesOptions {
   llmOptions: typeof DEFAULT_LLM_OPTIONS;
 }
 
-export const DEFAULT_CREATE_PROFILES_OPTIONS: CreateProfilesOptions = {
+export const DEFAULT_CREATE_PROFILES_OPTIONS = {
   emotionPrompt: emotionProfilePrompt,
   tonalityPrompt: tonalityProfilePrompt,
   concurrency: CONCURRENCY,
   llmOptions: DEFAULT_LLM_OPTIONS,
-};
+} as const satisfies CreateProfilesOptions;
 
 function mergeProfilesOptions(
   opts: Partial<CreateProfilesOptions> = {},
