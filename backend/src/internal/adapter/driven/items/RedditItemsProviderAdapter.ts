@@ -3,6 +3,7 @@ import { getRedditAccessToken } from '../../../../utils/redditAuth.ts';
 import type { Item } from '../../../core/entity/Item.ts';
 import type { FetchPort } from '../../../core/port/FetchPort.ts';
 import type { ItemsProviderPort } from '../../../core/port/ItemsProviderPort.ts';
+import { fetchWithRetry } from '../../../lib/http/fetchWithRetry.ts';
 import { filterByScore } from '../../../usecase/items/filterByScore.ts';
 import { normalizeWhitespace } from '../../../usecase/items/normalizeWhitespace.ts';
 
@@ -21,115 +22,90 @@ export const ItemsResponseSchema = z.object({
   }),
 });
 
-const BASE_HEADERS = {
-  'User-Agent':
-    'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)',
-  Accept: 'application/json',
-  'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
-};
-
-const MAX_RETRIES = 3;
-const TIMEOUT_MS = 5000;
-const MIN_SCORE = 5;
-
-async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
-  const timeout = new Promise<never>((_, reject) =>
-    setTimeout(() => reject(new Error('Timeout')), ms),
-  );
-  return Promise.race([promise, timeout]);
+export interface RedditItemsProviderOptions {
+  /** Minimum threshold of upvotes to keep the item (default: 5) */
+  minScore: number;
+  /** User-Agent suffix to send to Reddit (default: devbarometer UA) */
+  userAgentSuffix: string;
+  /** Base backoff in milliseconds used by exponential backoff (default: 100) */
+  baseBackoffMs: number;
 }
 
-async function fetchWithRateLimit(
-  fetcher: FetchPort,
-  url: string,
-  options: RequestInit,
-  retries = MAX_RETRIES,
-): Promise<unknown> {
-  for (let attempt = 0; attempt < retries; attempt++) {
-    try {
-      const res = await withTimeout(fetcher.fetch(url, options), TIMEOUT_MS);
+const DEFAULT_REDDIT_ITEMS_PROVIDER_OPTIONS = {
+  minScore: 5,
+  userAgentSuffix:
+    'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)',
+  baseBackoffMs: 100,
+} as const satisfies RedditItemsProviderOptions;
 
-      if (res.status === 429) {
-        const reset = parseFloat(res.headers.get('X-Ratelimit-Reset') ?? '1');
-        const backoff = Math.pow(2, attempt) * reset * 1000;
-        console.warn(
-          `[fetchWithRateLimit] 429 Too Many Requests. Retrying in ${backoff}ms...`,
-        );
-        await new Promise((r) => setTimeout(r, backoff));
-        continue;
+function mergeRedditItemsProviderOptions(
+  opts: Partial<RedditItemsProviderOptions> = {},
+): RedditItemsProviderOptions {
+  return { ...DEFAULT_REDDIT_ITEMS_PROVIDER_OPTIONS, ...opts };
+}
+
+function mapRedditChildToItem(child: z.infer<typeof RedditChildSchema>): Item {
+  const d = child.data;
+  return {
+    source: `https://reddit.com/comments/${d.id}`,
+    title: normalizeWhitespace(d.title),
+    content: normalizeWhitespace(d.selftext ?? ''),
+    score: d.ups ?? 0,
+  };
+}
+
+export function createRedditBackoff(baseBackoffMs: number) {
+  return function redditBackoffMs(attempt: number, res?: Response): number {
+    if (res?.status === 429) {
+      const raw = res.headers.get('X-Ratelimit-Reset');
+      const resetSec = raw ? Number(raw) : NaN;
+      if (Number.isFinite(resetSec) && resetSec > 0) {
+        return Math.max(baseBackoffMs, Math.pow(2, attempt) * resetSec * 1000);
       }
-
-      if (res.status === 401) {
-        console.error(
-          `[fetchWithRateLimit] 401 Unauthorized – check Reddit credentials.`,
-        );
-        return null;
-      }
-
-      if (res.status === 403) {
-        console.error(
-          `[fetchWithRateLimit] 403 Forbidden – access denied for ${url}`,
-        );
-        return null;
-      }
-
-      if (res.status >= 500) {
-        console.warn(
-          `[fetchWithRateLimit] ${res.status} Server error. Retrying...`,
-        );
-        await new Promise((r) => setTimeout(r, 1000 * (attempt + 1)));
-        continue;
-      }
-
-      if (res.status >= 400) {
-        const msg = await res.text();
-        console.error(
-          `[fetchWithRateLimit] ${res.status} Error:\n${msg.slice(0, 300)}...`,
-        );
-        return null;
-      }
-
-      const contentType = res.headers.get('content-type') || '';
-      if (!contentType.includes('application/json')) {
-        const html = await res.text();
-        console.warn(
-          `[fetchWithRateLimit] Non-JSON response at ${url}:\n${html.slice(
-            0,
-            200,
-          )}...`,
-        );
-        return null;
-      }
-
-      return await res.json();
-    } catch (err) {
-      console.error(
-        `[fetchWithRateLimit] ${url}, attempt ${attempt + 1}:`,
-        err,
-      );
-      const backoff = Math.pow(2, attempt) * 100;
-      await new Promise((r) => setTimeout(r, backoff));
     }
-  }
+    return Math.pow(2, attempt) * baseBackoffMs;
+  };
+}
 
-  console.error(
-    `[fetchWithRateLimit] ${url}, failed after ${MAX_RETRIES} attempts.`,
-  );
-  return null;
+export function buildRedditHeaders(
+  token: string,
+  userAgentSuffix: string,
+): Record<string, string> {
+  return {
+    'User-Agent': userAgentSuffix,
+    Accept: 'application/json',
+    'Accept-Language': 'en-US,en;q=0.9,fr;q=0.8',
+    Authorization: `Bearer ${token}`,
+  };
 }
 
 export async function fetchRedditItems(
   fetcher: FetchPort,
   url: string,
+  opts: Partial<RedditItemsProviderOptions> = {},
 ): Promise<Item[]> {
-  const token = await getRedditAccessToken(fetcher);
-  const headers = {
-    ...BASE_HEADERS,
-    Authorization: `Bearer ${token}`,
-  };
+  const { minScore, userAgentSuffix, baseBackoffMs } =
+    mergeRedditItemsProviderOptions(opts);
+  let token: string;
+  try {
+    token = await getRedditAccessToken(fetcher);
+  } catch (err) {
+    console.error('[fetchRedditItems] failed to get reddit token:', err);
+    return [];
+  }
+  const headers = buildRedditHeaders(token, userAgentSuffix);
+  const computeDelay = createRedditBackoff(baseBackoffMs);
+  const res = await fetchWithRetry(fetcher, url, { headers }, { computeDelay });
 
-  const json = await fetchWithRateLimit(fetcher, url, { headers });
-  if (json == null) return [];
+  if (res == null) return [];
+
+  let json: unknown;
+  try {
+    json = await res.json();
+  } catch (err) {
+    console.error('[fetchRedditItems] failed to parse JSON response:', err);
+    return [];
+  }
 
   const parsed = ItemsResponseSchema.safeParse(json);
   if (!parsed.success) {
@@ -141,26 +117,24 @@ export async function fetchRedditItems(
   }
 
   const children = parsed.data.data.children;
-
-  const items: Item[] = children.map(({ data }) => ({
-    source: `https://reddit.com/comments/${data.id}`,
-    title: normalizeWhitespace(data.title),
-    content: normalizeWhitespace(data.selftext),
-    score: data.ups ?? 0,
-  }));
-
-  const filtered = filterByScore(items, MIN_SCORE);
+  const items: Item[] = children.map(mapRedditChildToItem);
+  const filtered = filterByScore(items, minScore);
   return filtered;
 }
 
 export class RedditItemsProviderAdapter implements ItemsProviderPort {
+  private readonly opts: RedditItemsProviderOptions;
+
   constructor(
     private readonly fetcher: FetchPort,
     private readonly url: string,
-  ) {}
+    opts: Partial<RedditItemsProviderOptions> = {},
+  ) {
+    this.opts = { ...DEFAULT_REDDIT_ITEMS_PROVIDER_OPTIONS, ...opts };
+  }
 
   async getItems(): Promise<Item[]> {
-    return fetchRedditItems(this.fetcher, this.url);
+    return fetchRedditItems(this.fetcher, this.url, this.opts);
   }
 
   getLabel(): string {

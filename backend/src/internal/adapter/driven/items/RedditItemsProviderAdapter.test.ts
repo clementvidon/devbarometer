@@ -9,8 +9,8 @@ import {
 } from 'vitest';
 import type { FetchPort } from '../../../core/port/FetchPort.ts';
 import {
-  RedditItemsProviderAdapter,
   fetchRedditItems,
+  RedditItemsProviderAdapter,
 } from './RedditItemsProviderAdapter.ts';
 
 vi.mock('../../../../utils/redditAuth.ts', () => ({
