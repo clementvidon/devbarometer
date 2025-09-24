@@ -8,7 +8,11 @@ import {
   vi,
 } from 'vitest';
 import type { FetchPort } from '../../../core/port/FetchPort.ts';
-import { fetchRedditItems, RedditItemsAdapter } from './RedditItemsAdapter.ts';
+import {
+  fetchRedditItems,
+  RedditItemsAdapter,
+  type RedditItemsOptions,
+} from './RedditItemsAdapter.ts';
 
 vi.mock('../../../../utils/redditAuth.ts', () => ({
   getRedditAccessToken: vi.fn().mockResolvedValue('mocked-access-token'),
@@ -29,6 +33,12 @@ const fakeResponse = (
     status,
     headers: new Headers({ 'Content-Type': 'application/json', ...headers }),
   });
+
+const fakeOpts = {
+  minScore: 5,
+  userAgentSuffix: 'hello',
+  baseBackoffMs: 42,
+} as const satisfies RedditItemsOptions;
 
 const fakePosts = [
   { data: { id: '00', title: '1st\nItem', selftext: 'Content\n1', ups: 15 } },
@@ -67,6 +77,7 @@ describe('fetchRedditItems', () => {
       const items = await fetchRedditItems(
         fetcher,
         'https://oauth.reddit.com/r/mock/top.json?limit=3&t=week&raw_json=1',
+        fakeOpts,
       );
 
       expect(items).toHaveLength(2);
@@ -105,7 +116,7 @@ describe('fetchRedditItems', () => {
         .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
       const items = await runWithFakeTimers(() =>
-        fetchRedditItems(fetcher, 'url'),
+        fetchRedditItems(fetcher, 'url', fakeOpts),
       );
       expect(items).toHaveLength(2);
     });
@@ -117,7 +128,7 @@ describe('fetchRedditItems', () => {
         .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
       const items = await runWithFakeTimers(() =>
-        fetchRedditItems(fetcher, 'url'),
+        fetchRedditItems(fetcher, 'url', fakeOpts),
       );
       expect(items).toHaveLength(2);
     });
@@ -126,7 +137,7 @@ describe('fetchRedditItems', () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ wrong: 'format' })),
       );
-      const items = await fetchRedditItems(fetcher, 'invalidUrl');
+      const items = await fetchRedditItems(fetcher, 'invalidUrl', fakeOpts);
       expect(items).toEqual([]);
     });
 
@@ -134,7 +145,7 @@ describe('fetchRedditItems', () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ data: { children: [] } })),
       );
-      const items = await fetchRedditItems(fetcher, 'url');
+      const items = await fetchRedditItems(fetcher, 'url', fakeOpts);
       expect(items).toEqual([]);
     });
 
@@ -150,7 +161,7 @@ describe('fetchRedditItems', () => {
           }),
         ),
       );
-      const items = await fetchRedditItems(fetcher, 'url');
+      const items = await fetchRedditItems(fetcher, 'url', fakeOpts);
       expect(items).toEqual([]);
     });
   });

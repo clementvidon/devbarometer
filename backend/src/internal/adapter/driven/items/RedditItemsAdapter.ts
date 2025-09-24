@@ -82,10 +82,9 @@ export function buildRedditHeaders(
 export async function fetchRedditItems(
   fetcher: FetchPort,
   url: string,
-  opts: Partial<RedditItemsOptions> = {},
+  opts: RedditItemsOptions,
 ): Promise<Item[]> {
-  const { minScore, userAgentSuffix, baseBackoffMs } =
-    mergeRedditItemsOptions(opts);
+  const { minScore, userAgentSuffix, baseBackoffMs } = opts;
   let token: string;
   try {
     token = await getRedditAccessToken(fetcher);
@@ -130,7 +129,7 @@ export class RedditItemsAdapter implements ItemsProviderPort {
     private readonly url: string,
     opts: Partial<RedditItemsOptions> = {},
   ) {
-    this.opts = { ...DEFAULT_REDDIT_ITEMS_OPTIONS, ...opts };
+    this.opts = mergeRedditItemsOptions(opts);
   }
 
   async getItems(): Promise<Item[]> {
