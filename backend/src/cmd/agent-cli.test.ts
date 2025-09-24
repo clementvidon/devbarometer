@@ -28,11 +28,11 @@ type Env = Record<string, string | undefined>;
 let envBak: Env;
 
 function modulePath() {
-  return new URL('./agent.ts', import.meta.url).pathname;
+  return new URL('./agent-cli.ts', import.meta.url).pathname;
 }
 async function importAgent() {
   vi.resetModules();
-  return import('./agent.ts');
+  return import('./agent-cli.ts');
 }
 
 beforeEach(() => {
@@ -52,7 +52,7 @@ afterEach(() => {
   process.env = envBak;
 });
 
-describe('agent.ts entrypoint', () => {
+describe('agent-cli.ts entrypoint', () => {
   test('exits with 0 when updateReport succeeds', async () => {
     process.env.OPENAI_API_KEY = 'sk-test';
     process.env.REDDIT_URL = 'https://example.test/r/foo.json';

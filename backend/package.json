@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "agent": "tsx src/cmd/agent.ts",
+    "agent": "tsx src/cmd/agent-cli.ts",
     "export": "tsx src/cmd/export.ts",
     "replay": "tsx src/cmd/replay.ts",
     "generate-static": "tsx src/cmd/generate-static.ts",
