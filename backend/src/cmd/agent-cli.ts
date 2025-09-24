@@ -4,11 +4,11 @@ import { NodeFetchAdapter } from '../internal/adapter/driven/fetch/NodeFetchAdap
 import { RedditItemsAdapter } from '../internal/adapter/driven/items/RedditItemsAdapter.ts';
 import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter.ts';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
-import { makeCoreAgent } from '../internal/core/service/makeCoreAgent.ts';
 
 import type { FetchPort } from '../internal/core/port/FetchPort.ts';
 import type { LlmPort } from '../internal/core/port/LlmPort.ts';
 import type { PersistencePort } from '../internal/core/port/PersistencePort.ts';
+import { makeAgent } from '../internal/usecase/agent/makeAgent.ts';
 
 type Deps = {
   redditUrl: string;
@@ -17,9 +17,9 @@ type Deps = {
   llm: LlmPort;
 };
 
-export function buildAgent(deps: Deps) {
+export function buildCLIAgent(deps: Deps) {
   const provider = new RedditItemsAdapter(deps.fetcher, deps.redditUrl);
-  return makeCoreAgent(provider, deps.llm, deps.persistence);
+  return makeAgent(provider, deps.llm, deps.persistence);
 }
 
 export function depsFromEnv(): Deps {
@@ -39,7 +39,7 @@ export function depsFromEnv(): Deps {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   try {
-    const agent = buildAgent(depsFromEnv());
+    const agent = buildCLIAgent(depsFromEnv());
     await agent.updateReport();
     process.exit(0);
   } catch (err) {

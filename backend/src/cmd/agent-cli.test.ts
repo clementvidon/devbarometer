@@ -19,8 +19,8 @@ vi.mock('../internal/adapter/driven/llm/OpenAIAdapter.ts', () => ({
 vi.mock('../internal/adapter/driven/items/RedditItemsAdapter.ts', () => ({
   RedditItemsAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/core/service/makeCoreAgent.ts', () => ({
-  makeCoreAgent: vi.fn(() => ({ updateReport: updateReportMock })),
+vi.mock('../internal/usecase/agent/makeAgent.ts', () => ({
+  makeAgent: vi.fn(() => ({ updateReport: updateReportMock })),
 }));
 vi.mock('openai', () => ({ default: vi.fn(() => ({})) }));
 

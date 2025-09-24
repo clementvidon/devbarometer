@@ -1,7 +1,7 @@
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { AggregatedEmotionProfile } from '../core/entity/EmotionProfile.ts';
-import type { Report } from '../core/entity/Report.ts';
+import type { AggregatedEmotionProfile } from '../../core/entity/EmotionProfile';
+import type { Report } from '../../core/entity/Report.ts';
 import { createReport } from './createReport.ts';
 
 const fakeLLMResponse = `

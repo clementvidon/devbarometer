@@ -3,7 +3,7 @@ import type {
   EmotionProfile,
   EmotionScores,
   TonalityScores,
-} from '../core/entity/EmotionProfile.ts';
+} from '../../core/entity/EmotionProfile.ts';
 
 export function aggregateProfiles(
   profiles: EmotionProfile[],

@@ -4,29 +4,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
-import type { Item } from '../internal/core/entity/Item.ts';
-import type { ItemsProviderPort } from '../internal/core/port/ItemsProviderPort.ts';
-import type { LlmPort } from '../internal/core/port/LlmPort.ts';
-import { makeCoreAgent } from '../internal/core/service/makeCoreAgent.ts';
+import { getAggregatedProfiles } from '../internal/usecase/queries/getAggregatedProfiles.ts';
+import { getLastReport } from '../internal/usecase/queries/getLastReport.ts';
 import { getTopHeadlines } from '../internal/usecase/queries/getTopHeadlines.ts';
-
-class NoopItemsProvider implements ItemsProviderPort {
-  getItems(): Promise<Item[]> {
-    return Promise.resolve([]);
-  }
-  getLabel() {
-    return 'noop://static-gen';
-  }
-  getCreatedAt() {
-    return null;
-  }
-}
-
-class NoopLlm implements LlmPort {
-  run(): Promise<string> {
-    return Promise.reject(new Error('[generate-static] LLM not used here'));
-  }
-}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.resolve(__dirname, '../../../frontend/public');
@@ -39,15 +19,10 @@ function save(filename: string, data: unknown) {
 
 export async function generateStatic() {
   const persistence = new PostgresAdapter();
-  const agent = makeCoreAgent(
-    new NoopItemsProvider(),
-    new NoopLlm(),
-    persistence,
-  );
 
-  const report = await agent.getLastReport();
+  const report = await getLastReport(persistence);
   const ticker = await getTopHeadlines(persistence, 5);
-  const chart = await agent.getAggregatedProfiles();
+  const chart = await getAggregatedProfiles(persistence);
 
   save('report.json', report);
   save('ticker.json', ticker);

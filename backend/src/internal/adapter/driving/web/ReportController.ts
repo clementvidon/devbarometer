@@ -1,12 +1,17 @@
 import express, { type Express } from 'express';
-import type { Agent } from '../../../core/service/Agent';
+import type { PersistencePort } from '../../../core/port/PersistencePort.ts';
+import type { Agent } from '../../../usecase/agent/Agent.ts';
+import { getLastReport } from '../../../usecase/queries/getLastReport.ts';
 
-export function makeReportController(agent: Agent): Express {
+export function makeReportController(
+  agent: Agent,
+  persistence: PersistencePort,
+): Express {
   const app = express();
   app.use(express.json());
 
   app.get('/report', async (_, res) => {
-    const report = await agent.getLastReport();
+    const report = await getLastReport(persistence);
     if (!report) return res.status(404).json({ error: 'No report found' });
     res.json(report);
   });

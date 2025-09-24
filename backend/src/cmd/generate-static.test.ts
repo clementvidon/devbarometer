@@ -1,7 +1,5 @@
 import * as fs from 'fs';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { Agent } from '../internal/core/service/Agent.ts';
-import * as agentModule from '../internal/core/service/makeCoreAgent.ts';
 import { generateStatic } from './generate-static.ts';
 
 vi.mock('fs');
@@ -15,37 +13,35 @@ describe('generateStatic', () => {
     vi.mock('../internal/usecase/queries/getTopHeadlines.ts', () => ({
       getTopHeadlines: () => ['Item A', 'Item B'],
     }));
-    const mockAgent = {
-      getLastReport: vi.fn().mockResolvedValue({ text: 'report', emoji: '☀️' }),
-      getAggregatedProfiles: vi
-        .fn()
-        .mockResolvedValue([{ createdAt: '2025-08-03', aggregate: {} }]),
-    };
-
-    vi.spyOn(agentModule, 'makeCoreAgent').mockImplementation(
-      () => mockAgent as unknown as Agent,
-    );
+    vi.mock('../internal/usecase/queries/getLastReport.ts', () => ({
+      getLastReport: () => ({ text: 'report', emoji: '☀️ ' }),
+    }));
+    vi.mock('../internal/usecase/queries/getAggregatedProfiles.ts', () => ({
+      getAggregatedProfiles: () => [{ createdAt: '2025-08-03', aggregate: {} }],
+    }));
   });
 
   test('writes report and headlines to disk', async () => {
     await generateStatic();
 
-    expect(mockWrite).toHaveBeenCalledWith(
-      expect.stringContaining('report.json'),
-      JSON.stringify({ text: 'report', emoji: '☀️' }, null, 2),
-      'utf-8',
-    );
+    expect(mockWrite).toHaveBeenCalledTimes(3);
+    const calls = vi.mocked(fs.writeFileSync).mock.calls;
 
-    expect(mockWrite).toHaveBeenCalledWith(
-      expect.stringContaining('ticker.json'),
-      JSON.stringify(['Item A', 'Item B'], null, 2),
-      'utf-8',
-    );
+    expect(calls[0][0]).toEqual(expect.stringContaining('report.json'));
+    expect(JSON.parse(calls[0][1] as string)).toEqual({
+      text: 'report',
+      emoji: '☀️ ',
+    });
+    expect(calls[0][2]).toBe('utf-8');
 
-    expect(mockWrite).toHaveBeenCalledWith(
-      expect.stringContaining('chart.json'),
-      JSON.stringify([{ createdAt: '2025-08-03', aggregate: {} }], null, 2),
-      'utf-8',
-    );
+    expect(calls[1][0]).toEqual(expect.stringContaining('ticker.json'));
+    expect(JSON.parse(calls[1][1] as string)).toEqual(['Item A', 'Item B']);
+    expect(calls[1][2]).toBe('utf-8');
+
+    expect(calls[2][0]).toEqual(expect.stringContaining('chart.json'));
+    expect(JSON.parse(calls[2][1] as string)).toEqual([
+      { createdAt: '2025-08-03', aggregate: {} },
+    ]);
+    expect(calls[2][2]).toBe('utf-8');
   });
 });
