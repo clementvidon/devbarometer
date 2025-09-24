@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { assertRawEntries } from '../../types/Chart.ts';
+import {
+  assertRawEntries,
+  type AggregatedEmotionProfile,
+} from '../../types/Chart.ts';
 import { EMOTION_KEYS, TONALITY_KEYS } from './config.ts';
 import {
   parseEmotions,
@@ -20,7 +23,12 @@ export function useChartData() {
     void (async () => {
       try {
         const res = await fetch('chart.json');
-        const raw: unknown = await res.json();
+        const agg = (await res.json()) as AggregatedEmotionProfile[];
+        const raw = agg.map((p) => ({
+          createdAt: p.date,
+          emotions: p.emotions,
+          tonalities: p.tonalities,
+        }));
         assertRawEntries(raw);
         const emotions = parseEmotions(raw);
         const tonalities = parseTonalities(raw);
