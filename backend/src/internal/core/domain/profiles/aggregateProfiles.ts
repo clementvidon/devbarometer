@@ -1,3 +1,4 @@
+import { nowIso } from '../../../../utils/time.ts';
 import type {
   AggregatedEmotionProfile,
   EmotionProfile,
@@ -5,10 +6,32 @@ import type {
   TonalityScores,
 } from '../../entity/EmotionProfile.ts';
 
+const EMOTION_KEYS = [
+  'anger',
+  'fear',
+  'trust',
+  'sadness',
+  'joy',
+  'disgust',
+] as const;
+
+const TONALITY_KEYS = [
+  'positive',
+  'negative',
+  'optimistic_anticipation',
+  'pessimistic_anticipation',
+  'positive_surprise',
+  'negative_surprise',
+] as const;
+
 export function aggregateProfiles(
   profiles: EmotionProfile[],
 ): AggregatedEmotionProfile {
-  const emotionTotals: EmotionScores = {
+  if (profiles.length === 0) {
+    throw new Error('[aggregateProfiles] No profiles provided.');
+  }
+
+  const zeroEmotions: EmotionScores = {
     anger: 0,
     fear: 0,
     trust: 0,
@@ -17,7 +40,7 @@ export function aggregateProfiles(
     disgust: 0,
   };
 
-  const tonalityTotals: TonalityScores = {
+  const zeroTonalities: TonalityScores = {
     positive: 0,
     negative: 0,
     optimistic_anticipation: 0,
@@ -26,50 +49,34 @@ export function aggregateProfiles(
     negative_surprise: 0,
   };
 
-  if (profiles.length === 0) {
-    console.error('[aggregateProfiles] No profiles provided.');
-    return {
-      date: new Date().toISOString().slice(0, 10),
-      count: 0,
-      emotions: { ...emotionTotals },
-      tonalities: { ...tonalityTotals },
-      totalWeight: 0,
-    };
-  }
-
   let weightSum = 0;
+  const emotionTotals: EmotionScores = { ...zeroEmotions };
+  const tonalityTotals: TonalityScores = { ...zeroTonalities };
 
-  for (const profile of profiles) {
-    const { weight, emotions, tonalities } = profile;
-    weightSum += weight;
+  for (const p of profiles) {
+    const w = p.weight;
+    weightSum += w;
 
-    for (const key in emotionTotals) {
-      emotionTotals[key as keyof EmotionScores] +=
-        emotions[key as keyof EmotionScores] * weight;
+    for (const k of EMOTION_KEYS) {
+      emotionTotals[k] += (p.emotions[k] ?? 0) * w;
     }
-
-    for (const key in tonalityTotals) {
-      tonalityTotals[key as keyof TonalityScores] +=
-        tonalities[key as keyof TonalityScores] * weight;
+    for (const k of TONALITY_KEYS) {
+      tonalityTotals[k] += (p.tonalities[k] ?? 0) * w;
     }
   }
 
-  const averagedEmotions = {} as EmotionScores;
-  const emotionKeys = Object.keys(emotionTotals) as (keyof EmotionScores)[];
-  for (const k of emotionKeys) {
-    const total = emotionTotals[k] ?? 0;
-    averagedEmotions[k] = weightSum > 0 ? total / weightSum : 0;
+  const averagedEmotions: EmotionScores = { ...zeroEmotions };
+  for (const k of EMOTION_KEYS) {
+    averagedEmotions[k] = weightSum > 0 ? emotionTotals[k] / weightSum : 0;
   }
 
-  const averagedTonalities = {} as TonalityScores;
-  const tonalityKeys = Object.keys(tonalityTotals) as (keyof TonalityScores)[];
-  for (const k of tonalityKeys) {
-    const total = tonalityTotals[k] ?? 0;
-    averagedTonalities[k] = weightSum > 0 ? total / weightSum : 0;
+  const averagedTonalities: TonalityScores = { ...zeroTonalities };
+  for (const k of TONALITY_KEYS) {
+    averagedTonalities[k] = weightSum > 0 ? tonalityTotals[k] / weightSum : 0;
   }
 
   return {
-    date: new Date().toISOString().slice(0, 10),
+    date: nowIso().slice(0, 10),
     count: profiles.length,
     emotions: averagedEmotions,
     tonalities: averagedTonalities,

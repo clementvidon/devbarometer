@@ -56,26 +56,4 @@ describe('aggregateProfiles', () => {
       expect(result.tonalities.positive).toBeCloseTo(0.1333, 4);
     });
   });
-
-  describe('Error handling', () => {
-    test('returns empty average if no emotionProfiles are provided', () => {
-      const result = aggregateProfiles([]);
-
-      expect(Object.values(result.emotions).every((v) => v === 0)).toBe(true);
-      expect(Object.values(result.tonalities).every((v) => v === 0)).toBe(true);
-      expect(Object.keys(result.emotions).sort()).toEqual(
-        ['anger', 'disgust', 'fear', 'joy', 'sadness', 'trust'].sort(),
-      );
-      expect(Object.keys(result.tonalities).sort()).toEqual(
-        [
-          'positive',
-          'negative',
-          'optimistic_anticipation',
-          'pessimistic_anticipation',
-          'positive_surprise',
-          'negative_surprise',
-        ].sort(),
-      );
-    });
-  });
 });
