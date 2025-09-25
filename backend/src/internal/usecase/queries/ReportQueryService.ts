@@ -1,11 +1,9 @@
-import type {
-  AggregatedEmotionProfile,
-  EmotionProfile,
-} from '../../core/entity/EmotionProfile.ts';
+import type { EmotionProfile } from '../../core/entity/EmotionProfile.ts';
 import type { Report } from '../../core/entity/Report.ts';
 import type { PersistencePort } from '../../core/port/PersistencePort.ts';
 import type { QueryPort } from '../../core/port/QueryPort.ts';
 import type { HeadlineInfo } from '../../core/types/HeadlineInfo.ts';
+import type { AggregatedEmotionProfileDto } from './dto.ts';
 import { getAggregatedProfiles } from './getAggregatedProfiles.ts';
 import { getLastProfiles } from './getLastProfiles.ts';
 import { getLastReport } from './getLastReport.ts';
@@ -20,7 +18,7 @@ export class QueryService implements QueryPort {
   getLastProfiles(): Promise<EmotionProfile[] | null> {
     return getLastProfiles(this.persistence);
   }
-  getAggregatedProfiles(): Promise<AggregatedEmotionProfile[]> {
+  getAggregatedProfiles(): Promise<AggregatedEmotionProfileDto[]> {
     return getAggregatedProfiles(this.persistence);
   }
   getTopHeadlines(limit?: number): Promise<HeadlineInfo[]> {

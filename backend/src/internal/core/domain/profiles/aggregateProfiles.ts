@@ -1,4 +1,3 @@
-import { nowIso } from '../../../../utils/time.ts';
 import type {
   AggregatedEmotionProfile,
   EmotionProfile,
@@ -76,7 +75,6 @@ export function aggregateProfiles(
   }
 
   return {
-    date: nowIso().slice(0, 10),
     count: profiles.length,
     emotions: averagedEmotions,
     tonalities: averagedTonalities,

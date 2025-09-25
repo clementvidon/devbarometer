@@ -1,19 +1,21 @@
-import type { AggregatedEmotionProfile } from '../../core/entity/EmotionProfile.ts';
 import type { PersistencePort } from '../../core/port/PersistencePort.ts';
+import type { AggregatedEmotionProfileDto } from './dto.ts';
 
 export async function getAggregatedProfiles(
   persistence: PersistencePort,
-): Promise<AggregatedEmotionProfile[]> {
+): Promise<AggregatedEmotionProfileDto[]> {
   const snapshots = await persistence.getSnapshots();
-  return snapshots
-    .filter((s) => {
-      const ok = !!s.aggregatedEmotionProfile;
-      if (!ok) {
-        console.warn(
-          `[getAggregatedEmotionProfiles] Skipping snapshot without aggregate: ${s.createdAt}`,
-        );
-      }
-      return ok;
-    })
-    .map((s) => s.aggregatedEmotionProfile);
+
+  return snapshots.reduce<AggregatedEmotionProfileDto[]>((acc, snapshot) => {
+    const aggregate = snapshot.aggregatedEmotionProfile;
+    if (!aggregate) {
+      console.warn(
+        `[getAggregatedEmotionProfiles] Skipping snapshot without aggregate: ${snapshot.createdAt}`,
+      );
+      return acc;
+    }
+
+    acc.push({ createdAt: snapshot.createdAt, ...aggregate });
+    return acc;
+  }, []);
 }

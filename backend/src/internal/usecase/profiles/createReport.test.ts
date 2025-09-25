@@ -1,6 +1,6 @@
 import type { Mock } from 'vitest';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { AggregatedEmotionProfile } from '../../core/entity/EmotionProfile';
+import type { AggregatedEmotionProfile } from '../../core/entity/EmotionProfile.ts';
 import type { Report } from '../../core/entity/Report.ts';
 import { createReport } from './createReport.ts';
 
@@ -12,7 +12,6 @@ const fakeLLMResponse = `
 `;
 
 const fakeAggregatedEmotionProfile: AggregatedEmotionProfile = {
-  date: '2025-08-03',
   count: 1,
   emotions: {
     joy: 0,

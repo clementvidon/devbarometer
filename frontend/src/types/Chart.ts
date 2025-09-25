@@ -1,3 +1,29 @@
+export interface EmotionScores {
+  anger: number;
+  fear: number;
+  trust: number;
+  sadness: number;
+  joy: number;
+  disgust: number;
+}
+
+export interface TonalityScores {
+  positive: number;
+  negative: number;
+  optimistic_anticipation: number;
+  pessimistic_anticipation: number;
+  positive_surprise: number;
+  negative_surprise: number;
+}
+
+export interface AggregatedEmotionProfileDto {
+  createdAt: string;
+  count: number;
+  totalWeight: number;
+  emotions: EmotionScores;
+  tonalities: TonalityScores;
+}
+
 export type RawEntry = {
   createdAt: string;
   emotions: Record<string, number>;
@@ -17,30 +43,4 @@ export function assertRawEntries(x: unknown): asserts x is RawEntry[] {
   if (!Array.isArray(x) || !x.every(isRawEntry)) {
     throw new Error('Invalid chart.json shape');
   }
-}
-
-export interface EmotionScores {
-  anger: number;
-  fear: number;
-  trust: number;
-  sadness: number;
-  joy: number;
-  disgust: number;
-}
-
-export interface TonalityScores {
-  positive: number;
-  negative: number;
-  optimistic_anticipation: number;
-  pessimistic_anticipation: number;
-  positive_surprise: number;
-  negative_surprise: number;
-}
-
-export interface AggregatedEmotionProfile {
-  date: string;
-  count: number;
-  totalWeight: number;
-  emotions: EmotionScores;
-  tonalities: TonalityScores;
 }

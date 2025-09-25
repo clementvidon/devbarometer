@@ -1,7 +1,5 @@
-import type {
-  AggregatedEmotionProfile,
-  EmotionProfile,
-} from '../entity/EmotionProfile.ts';
+import type { AggregatedEmotionProfileDto } from '../../usecase/queries/dto.ts';
+import type { EmotionProfile } from '../entity/EmotionProfile.ts';
 import type { Report } from '../entity/Report.ts';
 import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
 
@@ -16,6 +14,6 @@ import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
 export interface QueryPort {
   getLastReport(): Promise<Report | null>;
   getLastProfiles(): Promise<EmotionProfile[] | null>;
-  getAggregatedProfiles(): Promise<AggregatedEmotionProfile[]>;
+  getAggregatedProfiles(): Promise<AggregatedEmotionProfileDto[]>;
   getTopHeadlines(limit?: number): Promise<HeadlineInfo[]>;
 }

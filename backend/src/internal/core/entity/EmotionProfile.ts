@@ -17,7 +17,6 @@ export interface TonalityScores {
 }
 
 export interface AggregatedEmotionProfile {
-  date: string;
   count: number;
   totalWeight: number;
   emotions: EmotionScores;
