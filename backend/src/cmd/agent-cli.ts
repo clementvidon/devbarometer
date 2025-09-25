@@ -40,7 +40,7 @@ export function depsFromEnv(): Deps {
 if (import.meta.url === `file://${process.argv[1]}`) {
   try {
     const agent = buildCLIAgent(depsFromEnv());
-    await agent.updateReport();
+    await agent.captureSnapshot();
     process.exit(0);
   } catch (err) {
     console.error('Agent run failed:', err);

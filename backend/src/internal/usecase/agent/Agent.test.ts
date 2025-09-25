@@ -55,7 +55,7 @@ vi.mock('../profiles/createReport.ts', () => ({
   } satisfies Report),
 }));
 
-describe('Agent updateReport', () => {
+describe('Agent captureSnapshot', () => {
   let persistence: PersistencePort;
   let agent: Agent;
   const report = {
@@ -74,7 +74,7 @@ describe('Agent updateReport', () => {
 
   test('executes full pipeline and stores the report', async () => {
     const spy = vi.spyOn(persistence, 'storeSnapshotAt');
-    await agent.updateReport();
+    await agent.captureSnapshot();
 
     expect(spy).toHaveBeenCalledWith(
       expect.any(String),
@@ -85,7 +85,7 @@ describe('Agent updateReport', () => {
 
   test('handles empty items gracefully', async () => {
     const spy = vi.spyOn(persistence, 'storeSnapshotAt');
-    await agent.updateReport();
+    await agent.captureSnapshot();
 
     expect(spy).toHaveBeenCalledWith(
       expect.any(String),

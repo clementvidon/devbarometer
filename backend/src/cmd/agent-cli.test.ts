@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 
-const updateReportMock = vi.fn();
+const captureSnapshotMock = vi.fn();
 const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
 const exitSpy = vi
@@ -20,7 +20,9 @@ vi.mock('../internal/adapter/driven/items/RedditItemsAdapter.ts', () => ({
   RedditItemsAdapter: vi.fn(() => ({})),
 }));
 vi.mock('../internal/usecase/agent/makeAgent.ts', () => ({
-  makeAgent: vi.fn(() => ({ updateReport: updateReportMock })),
+  makeAgent: vi.fn(() => ({
+    captureSnapshot: captureSnapshotMock,
+  })),
 }));
 vi.mock('openai', () => ({ default: vi.fn(() => ({})) }));
 
@@ -37,7 +39,7 @@ async function importAgent() {
 
 beforeEach(() => {
   envBak = { ...process.env };
-  updateReportMock.mockReset();
+  captureSnapshotMock.mockReset();
   errorSpy.mockClear();
   exitSpy.mockClear();
 
@@ -53,29 +55,29 @@ afterEach(() => {
 });
 
 describe('agent-cli.ts entrypoint', () => {
-  test('exits with 0 when updateReport succeeds', async () => {
+  test('exits with 0 when captureSnapshot succeeds', async () => {
     process.env.OPENAI_API_KEY = 'sk-test';
     process.env.REDDIT_URL = 'https://example.test/r/foo.json';
     process.argv[1] = modulePath();
 
-    updateReportMock.mockResolvedValue(undefined);
+    captureSnapshotMock.mockResolvedValue(undefined);
 
     await importAgent();
-    expect(updateReportMock).toHaveBeenCalled();
+    expect(captureSnapshotMock).toHaveBeenCalled();
     expect(errorSpy).not.toHaveBeenCalled();
     expect(exitSpy).toHaveBeenCalledWith(0);
   });
 
-  test('logs error and exits with 1 when updateReport rejects', async () => {
+  test('logs error and exits with 1 when captureSnapshot rejects', async () => {
     process.env.OPENAI_API_KEY = 'sk-test';
     process.env.REDDIT_URL = 'https://example.test/r/foo.json';
     process.argv[1] = modulePath();
 
     const boom = new Error('boom');
-    updateReportMock.mockRejectedValue(boom);
+    captureSnapshotMock.mockRejectedValue(boom);
 
     await importAgent();
-    expect(updateReportMock).toHaveBeenCalled();
+    expect(captureSnapshotMock).toHaveBeenCalled();
     expect(errorSpy).toHaveBeenCalledWith('Agent run failed:', boom);
     expect(exitSpy).toHaveBeenCalledWith(1);
   });

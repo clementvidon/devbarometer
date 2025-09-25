@@ -18,7 +18,7 @@ export function makeReportController(
 
   app.post('/report', async (_, res) => {
     try {
-      await agent.updateReport();
+      await agent.captureSnapshot();
       res.json({ ok: true });
     } catch (err) {
       console.error(err);

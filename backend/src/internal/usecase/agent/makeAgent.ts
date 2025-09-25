@@ -8,10 +8,10 @@ import {
 import { Agent } from './Agent.ts';
 
 export function makeAgent(
-  itemsProvider: ItemsProviderPort,
+  items: ItemsProviderPort,
   llm: LlmPort,
   persistence: PersistencePort,
 ): Agent {
   const weights = new MomentumWeightsService(DEFAULT_WEIGHTS_OPTIONS);
-  return new Agent(itemsProvider, llm, persistence, weights);
+  return new Agent(items, llm, persistence, weights);
 }

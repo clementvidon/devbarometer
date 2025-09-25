@@ -66,7 +66,7 @@ try {
     );
     const agent = makeAgent(provider, llm, persistence);
 
-    await agent.updateReport();
+    await agent.captureSnapshot();
     ok++;
   }
 
