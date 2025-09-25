@@ -1,5 +1,5 @@
 import type { WeightedItem } from '../../entity/Item.ts';
-import type { CapOptions } from './MomentumWeightsService.ts';
+import type { CapOptions } from './MomentumWeightsStrategy.ts';
 
 export type WeightsCapReason =
   | 'no_excess'

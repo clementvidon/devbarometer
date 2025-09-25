@@ -1,5 +1,5 @@
 import type { RelevantItem, WeightedItem } from '../../entity/Item.ts';
-import type { MomentumOptions } from './MomentumWeightsService.ts';
+import type { MomentumOptions } from './MomentumWeightsStrategy.ts';
 
 function isNew(prevRaw: number | undefined): boolean {
   return prevRaw === undefined;

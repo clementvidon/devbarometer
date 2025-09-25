@@ -19,7 +19,7 @@ export function sanitizeScores(
         .map((i) => `${i.source}=${String(i.score)}`)
         .join(', ');
       console.warn(
-        `[MomentumWeightsService] ${nonFinite.length} non-finite ${fieldName}(s) found — sanitized to 0. Samples: ${sample}`,
+        `[MomentumWeightsStrategy] ${nonFinite.length} non-finite ${fieldName}(s) found — sanitized to 0. Samples: ${sample}`,
       );
     }
     return arr.map((i) => (Number.isFinite(i.score) ? i : { ...i, score: 0 }));

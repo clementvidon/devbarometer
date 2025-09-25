@@ -69,7 +69,7 @@ function mergeMomentumWeightsOptions(
   };
 }
 
-export class MomentumWeightsService implements WeightsPort {
+export class MomentumWeightsStrategy implements WeightsPort {
   private readonly opts: MomentumWeightsOptions;
 
   constructor(opts: Partial<MomentumWeightsOptions> = {}) {
@@ -87,7 +87,7 @@ export class MomentumWeightsService implements WeightsPort {
     const capResult = capByPercentile(momentumItems, cap);
     const cappedItems = capResult.cappedItems;
     const capMeta = capResult.meta;
-    console.info('[MomentumWeightsService] cap', {
+    console.info('[MomentumWeightsStrategy] cap', {
       reason: capMeta.reason,
       capped: capMeta.capped,
       capValue: capMeta.capValue,
