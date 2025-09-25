@@ -2,6 +2,7 @@ import { formatFloat } from '../../../utils/format.ts';
 import { nowIso } from '../../../utils/time.ts';
 import { aggregateProfiles } from '../../core/domain/profiles/aggregateProfiles.ts';
 import type { WeightedItem } from '../../core/entity/Item.ts';
+import type { AgentPort } from '../../core/port/AgentPort.ts';
 import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort.ts';
 import type { LlmPort } from '../../core/port/LlmPort.ts';
 import type { PersistencePort } from '../../core/port/PersistencePort.ts';
@@ -15,7 +16,7 @@ export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
   return items.slice().sort((a, b) => b.weight - a.weight);
 }
 
-export class Agent {
+export class Agent implements AgentPort {
   constructor(
     private readonly items: ItemsProviderPort,
     private readonly llm: LlmPort,

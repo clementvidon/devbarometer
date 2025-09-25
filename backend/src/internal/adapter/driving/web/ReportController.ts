@@ -1,10 +1,10 @@
 import express, { type Express } from 'express';
+import type { AgentPort } from '../../../core/port/AgentPort.ts';
 import type { PersistencePort } from '../../../core/port/PersistencePort.ts';
-import type { Agent } from '../../../usecase/agent/Agent.ts';
 import { getLastReport } from '../../../usecase/queries/getLastReport.ts';
 
 export function makeReportController(
-  agent: Agent,
+  agent: AgentPort,
   persistence: PersistencePort,
 ): Express {
   const app = express();
