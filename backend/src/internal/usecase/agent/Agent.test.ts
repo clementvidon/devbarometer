@@ -32,7 +32,7 @@ const weights: WeightsPort = {
 vi.mock('../profiles/createProfiles.ts', () => ({
   createProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
 }));
-vi.mock('../profiles/aggregateProfiles.ts', () => ({
+vi.mock('../../core/domain/profiles/aggregateProfiles.ts', () => ({
   aggregateProfiles: vi.fn().mockReturnValue({
     emotions: {
       anger: 0,

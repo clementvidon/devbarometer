@@ -1,11 +1,11 @@
 import { formatFloat } from '../../../utils/format.ts';
 import { nowIso } from '../../../utils/time.ts';
+import { aggregateProfiles } from '../../core/domain/profiles/aggregateProfiles.ts';
 import type { WeightedItem } from '../../core/entity/Item.ts';
 import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort.ts';
 import type { LlmPort } from '../../core/port/LlmPort.ts';
 import type { PersistencePort } from '../../core/port/PersistencePort.ts';
 import type { WeightsPort } from '../../core/port/WeightsPort.ts';
-import { aggregateProfiles } from '../profiles/aggregateProfiles.ts';
 import { createProfiles } from '../profiles/createProfiles.ts';
 import { createReport } from '../profiles/createReport.ts';
 import { getRelevantItemsBefore } from '../queries/getRelevantItemsBefore.ts';
