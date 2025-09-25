@@ -1,8 +1,13 @@
 [
   {
-    "title": "Et si on parlait des fraudes chez les devs seniors au lieu de toujours taper sur les juniors ?",
+    "title": "Le marché du travail des devs en ce moment",
+    "weight": "3",
+    "source": "https://reddit.com/comments/1noobph"
+  },
+  {
+    "title": "Toujours censé coder même après le travail ? Comment rester motivé pour des projets perso sans s’épuiser",
     "weight": "2",
-    "source": "https://reddit.com/comments/1nl5uxf"
+    "source": "https://reddit.com/comments/1nonh4q"
   },
   {
     "title": "Je vais commencer l'école 42",
@@ -10,18 +15,13 @@
     "source": "https://reddit.com/comments/1nnpsrc"
   },
   {
-    "title": "Avez-vous déjà atteint un revenu annuel à six chiffres (100 000 €+) en travaillant dans une startup ?",
+    "title": "Marché toujours aussi tendu pour les intermédiaires/seniors ?",
     "weight": "2",
-    "source": "https://reddit.com/comments/1nms3gj"
+    "source": "https://reddit.com/comments/1nmfcfo"
   },
   {
-    "title": "Développeurs en CDI, faites-vous aussi du freelance à côté ?",
+    "title": "«Recruter un junior relève de la philanthropie»: l’IA menace-t-elle le métier de développeur ?",
     "weight": "2",
-    "source": "https://reddit.com/comments/1nla9rf"
-  },
-  {
-    "title": "Sauvons les juniors, affamons les connard !",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1nk7yu2"
+    "source": "https://reddit.com/comments/1nog7d5"
   }
 ]
