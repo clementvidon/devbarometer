@@ -11,7 +11,7 @@ import type { Item } from '../entity/Item.ts';
  *   (prefer URI-like, e.g. "https://..." or "replay:<id>") used for auditing.
  * - `getCreatedAt()`:
  *     * if non-null => ISO 8601 string (UTC recommended) used as the snapshot timestamp.
- *     * if null     => the Agent will use `new Date().toISOString()`.
+ *     * if null     => it must be set to `new Date().toISOString()`.
  */
 export interface ItemsProviderPort {
   getItems(): Promise<Item[]>;

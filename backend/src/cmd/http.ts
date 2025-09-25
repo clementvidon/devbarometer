@@ -5,11 +5,12 @@ import { RedditItemsAdapter } from '../internal/adapter/driven/items/RedditItems
 import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter.ts';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
 import { makeReportController } from '../internal/adapter/driving/web/ReportController.ts';
-import { makeAgent } from '../internal/usecase/agent/makeAgent.ts';
+import { makeReportingAgent } from '../internal/usecase/agent/makeReportingAgent.ts';
 
 import type { FetchPort } from '../internal/core/port/FetchPort.ts';
 import type { LlmPort } from '../internal/core/port/LlmPort.ts';
 import type { PersistencePort } from '../internal/core/port/PersistencePort.ts';
+import { makeReportQueryService } from '../internal/usecase/queries/makeReportQueryService.ts';
 
 type Deps = {
   redditUrl: string;
@@ -20,12 +21,13 @@ type Deps = {
 };
 
 export function buildServer(deps: Deps) {
-  const agent = makeAgent(
+  const agent = makeReportingAgent(
     new RedditItemsAdapter(deps.fetcher, deps.redditUrl),
     deps.llm,
     deps.persistence,
   );
-  const app = makeReportController(agent, deps.persistence);
+  const query = makeReportQueryService(deps.persistence);
+  const app = makeReportController(agent, query);
   return { app, port: deps.port };
 }
 

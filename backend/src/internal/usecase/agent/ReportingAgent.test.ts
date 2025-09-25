@@ -5,7 +5,7 @@ import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort.ts';
 import type { LlmPort } from '../../core/port/LlmPort.ts';
 import type { PersistencePort } from '../../core/port/PersistencePort.ts';
 import type { WeightsPort } from '../../core/port/WeightsPort.ts';
-import { Agent } from './Agent.ts';
+import { ReportingAgent } from './ReportingAgent.ts';
 
 const mockItems: Item[] = [
   { source: 'reddit.com', title: 'Item 1', content: '', score: 1 },
@@ -57,7 +57,7 @@ vi.mock('../profiles/createReport.ts', () => ({
 
 describe('Agent captureSnapshot', () => {
   let persistence: PersistencePort;
-  let agent: Agent;
+  let agent: ReportingAgent;
   const report = {
     text: 'Everything looks great!',
     emoji: '☀️',
@@ -68,7 +68,7 @@ describe('Agent captureSnapshot', () => {
       storeSnapshotAt: vi.fn(() => Promise.resolve()),
       getSnapshots: vi.fn(() => Promise.resolve([])),
     };
-    agent = new Agent(itemsProvider, llm, persistence, weights);
+    agent = new ReportingAgent(itemsProvider, llm, persistence, weights);
     vi.clearAllMocks();
   });
 

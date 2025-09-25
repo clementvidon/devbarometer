@@ -8,7 +8,7 @@ import { PostgresAdapter } from '../internal/adapter/driven/persistence/Postgres
 import type { FetchPort } from '../internal/core/port/FetchPort.ts';
 import type { LlmPort } from '../internal/core/port/LlmPort.ts';
 import type { PersistencePort } from '../internal/core/port/PersistencePort.ts';
-import { makeAgent } from '../internal/usecase/agent/makeAgent.ts';
+import { makeReportingAgent } from '../internal/usecase/agent/makeReportingAgent.ts';
 
 type Deps = {
   redditUrl: string;
@@ -17,9 +17,9 @@ type Deps = {
   llm: LlmPort;
 };
 
-export function buildCLIAgent(deps: Deps) {
+export function buildCLIReportingAgent(deps: Deps) {
   const provider = new RedditItemsAdapter(deps.fetcher, deps.redditUrl);
-  return makeAgent(provider, deps.llm, deps.persistence);
+  return makeReportingAgent(provider, deps.llm, deps.persistence);
 }
 
 export function depsFromEnv(): Deps {
@@ -39,11 +39,11 @@ export function depsFromEnv(): Deps {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   try {
-    const agent = buildCLIAgent(depsFromEnv());
+    const agent = buildCLIReportingAgent(depsFromEnv());
     await agent.captureSnapshot();
     process.exit(0);
   } catch (err) {
-    console.error('Agent run failed:', err);
+    console.error('ReportingAgent run failed:', err);
     process.exit(1);
   }
 }

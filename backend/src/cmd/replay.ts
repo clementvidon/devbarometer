@@ -6,7 +6,7 @@ import { JsonSnapshotAdapter } from '../internal/adapter/driven/items/JsonSnapsh
 import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter.ts';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
 import type { Item } from '../internal/core/entity/Item.ts';
-import { makeAgent } from '../internal/usecase/agent/makeAgent.ts';
+import { makeReportingAgent } from '../internal/usecase/agent/makeReportingAgent.ts';
 
 // - Dump Neon UI: { id?, date_created: "YYYY-MM-DD HH:mm:ss.SSS", data: { items: Item[] } }
 // - Export Script: { id?, createdAt: "YYYY-MM-DDTHH:mm:ss.SSSZ", items: Item[] }
@@ -64,7 +64,7 @@ try {
       getLabel(r, createdAtISO),
       createdAtISO,
     );
-    const agent = makeAgent(provider, llm, persistence);
+    const agent = makeReportingAgent(provider, llm, persistence);
 
     await agent.captureSnapshot();
     ok++;

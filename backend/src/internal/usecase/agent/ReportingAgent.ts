@@ -16,7 +16,7 @@ export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
   return items.slice().sort((a, b) => b.weight - a.weight);
 }
 
-export class Agent implements AgentPort {
+export class ReportingAgent implements AgentPort {
   constructor(
     private readonly items: ItemsProviderPort,
     private readonly llm: LlmPort,

@@ -19,8 +19,8 @@ vi.mock('../internal/adapter/driven/llm/OpenAIAdapter.ts', () => ({
 vi.mock('../internal/adapter/driven/items/RedditItemsAdapter.ts', () => ({
   RedditItemsAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/usecase/agent/makeAgent.ts', () => ({
-  makeAgent: vi.fn(() => ({
+vi.mock('../internal/usecase/agent/makeReportingAgent.ts', () => ({
+  makeReportingAgent: vi.fn(() => ({
     captureSnapshot: captureSnapshotMock,
   })),
 }));
@@ -32,7 +32,7 @@ let envBak: Env;
 function modulePath() {
   return new URL('./agent-cli.ts', import.meta.url).pathname;
 }
-async function importAgent() {
+async function importReportingAgent() {
   vi.resetModules();
   return import('./agent-cli.ts');
 }
@@ -62,7 +62,7 @@ describe('agent-cli.ts entrypoint', () => {
 
     captureSnapshotMock.mockResolvedValue(undefined);
 
-    await importAgent();
+    await importReportingAgent();
     expect(captureSnapshotMock).toHaveBeenCalled();
     expect(errorSpy).not.toHaveBeenCalled();
     expect(exitSpy).toHaveBeenCalledWith(0);
@@ -76,9 +76,9 @@ describe('agent-cli.ts entrypoint', () => {
     const boom = new Error('boom');
     captureSnapshotMock.mockRejectedValue(boom);
 
-    await importAgent();
+    await importReportingAgent();
     expect(captureSnapshotMock).toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledWith('Agent run failed:', boom);
+    expect(errorSpy).toHaveBeenCalledWith('ReportingAgent run failed:', boom);
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
 });
