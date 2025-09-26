@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { stripCodeFences } from '../../../utils/stripCodeFences.ts';
 import type { EmotionScores } from '../../core/entity/EmotionProfile.ts';
+import { stripCodeFences } from '../../lib/string/stripCodeFences.ts';
 import { FALLBACK_EMOTIONS } from './policy.ts';
 
 const EmotionSchema = z.object({

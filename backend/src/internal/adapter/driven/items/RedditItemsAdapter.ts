@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import { getRedditAccessToken } from '../../../../utils/redditAuth.ts';
 import { filterByScore } from '../../../core/domain/items/filterByScore.ts';
 import type { Item } from '../../../core/entity/Item.ts';
 import type { FetchPort } from '../../../core/port/FetchPort.ts';
 import type { ItemsProviderPort } from '../../../core/port/ItemsProviderPort.ts';
 import { fetchWithRetry } from '../../../lib/http/fetchWithRetry.ts';
 import { normalizeWhitespace } from '../../../lib/string/normalizeWhitespace.ts';
+import { getRedditAccessToken } from './redditAuth.ts';
 
 export const RedditChildSchema = z.object({
   data: z.object({

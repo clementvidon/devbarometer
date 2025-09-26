@@ -1,6 +1,6 @@
-import { formatFloat } from '../../../utils/format.ts';
 import type { PersistencePort } from '../../core/port/PersistencePort.ts';
 import type { HeadlineInfo } from '../../core/types/HeadlineInfo.ts';
+import { formatFloat } from '../../lib/number/formatFloat.ts';
 
 export async function getTopHeadlines(
   persistence: PersistencePort,

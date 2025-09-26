@@ -1,4 +1,4 @@
-import type { FetchPort } from '../internal/core/port/FetchPort.ts';
+import type { FetchPort } from '../../../core/port/FetchPort';
 
 type RedditTokenResponse = {
   access_token: string;

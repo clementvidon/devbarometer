@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { stripCodeFences } from '../../../utils/stripCodeFences.ts';
 import type {
   AggregatedEmotionProfile,
   EmotionScores,
@@ -7,6 +6,7 @@ import type {
 import type { Report } from '../../core/entity/Report.ts';
 import { WEATHER_EMOJIS } from '../../core/entity/Report.ts';
 import type { LlmMessage, LlmPort } from '../../core/port/LlmPort.ts';
+import { stripCodeFences } from '../../lib/string/stripCodeFences.ts';
 
 /* pickStandoutsByScore */
 

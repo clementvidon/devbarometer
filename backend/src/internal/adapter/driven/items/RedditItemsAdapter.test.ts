@@ -14,7 +14,7 @@ import {
   type RedditItemsOptions,
 } from './RedditItemsAdapter.ts';
 
-vi.mock('../../../../utils/redditAuth.ts', () => ({
+vi.mock('./redditAuth.ts', () => ({
   getRedditAccessToken: vi.fn().mockResolvedValue('mocked-access-token'),
 }));
 
