@@ -1,27 +1,27 @@
 [
   {
     "title": "Le marché du travail des devs en ce moment",
-    "weight": "3",
+    "weight": "2",
     "source": "https://reddit.com/comments/1noobph"
   },
   {
-    "title": "Toujours censé coder même après le travail ? Comment rester motivé pour des projets perso sans s’épuiser",
+    "title": "Les sites pour postuler",
     "weight": "2",
-    "source": "https://reddit.com/comments/1nonh4q"
+    "source": "https://reddit.com/comments/1npatnt"
+  },
+  {
+    "title": "Les tests de personnalités dans le recrutement",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1npo86n"
+  },
+  {
+    "title": "Devrais-je postuler pour d'autres offres alors que je suis en CDI?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1nq7hbp"
   },
   {
     "title": "Je vais commencer l'école 42",
-    "weight": "2",
+    "weight": "1",
     "source": "https://reddit.com/comments/1nnpsrc"
-  },
-  {
-    "title": "Marché toujours aussi tendu pour les intermédiaires/seniors ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1nmfcfo"
-  },
-  {
-    "title": "«Recruter un junior relève de la philanthropie»: l’IA menace-t-elle le métier de développeur ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1nog7d5"
   }
 ]
