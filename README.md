@@ -60,7 +60,7 @@ npm run update-site       # build frontend and deploy to GitHub Pages
 
 ## Contributing
 
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and the repository [Guidelines](AGENTS.md). Run `npm run check` before pushing. See `docs/git_workflow.md` for the suggested branching/PR process.
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md). Run `npm run check` before pushing. See `docs/git_workflow.md` for the suggested branching/PR process.
 
 ---
 
