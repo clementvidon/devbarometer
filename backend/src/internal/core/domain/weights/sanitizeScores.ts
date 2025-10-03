@@ -1,4 +1,4 @@
-import type { RelevantItem } from '../../entity/Item.ts';
+import type { RelevantItem } from '../../entity/Item';
 
 /**
  * Sanitize `score` fields in current and previous RelevantItems.

@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import type { TonalityScores } from '../../core/entity/EmotionProfile.ts';
-import { stripCodeFences } from '../../lib/string/stripCodeFences.ts';
-import { FALLBACK_TONALITIES } from './policy.ts';
+import type { TonalityScores } from '../../core/entity/EmotionProfile';
+import { stripCodeFences } from '../../lib/string/stripCodeFences';
+import { FALLBACK_TONALITIES } from './policy';
 
 const TonalitySchema = z.object({
   positive: z.number().min(0).max(1),

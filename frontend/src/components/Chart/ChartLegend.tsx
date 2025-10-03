@@ -6,7 +6,7 @@ import {
   TONALITY_COLORS,
   TONALITY_KEYS,
   TONALITY_LABELS,
-} from './config.ts';
+} from './config';
 
 type Mode = 'emotions' | 'tonalities';
 

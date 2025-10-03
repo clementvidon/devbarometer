@@ -1,13 +1,9 @@
 import type {
   AggregatedEmotionProfile,
   EmotionProfile,
-} from '../../core/entity/EmotionProfile.ts';
-import type {
-  Item,
-  RelevantItem,
-  WeightedItem,
-} from '../../core/entity/Item.ts';
-import type { Report } from '../entity/Report.ts';
+} from '../../core/entity/EmotionProfile';
+import type { Item, RelevantItem, WeightedItem } from '../../core/entity/Item';
+import type { Report } from '../entity/Report';
 
 export type PipelineSnapshot = {
   id: string;

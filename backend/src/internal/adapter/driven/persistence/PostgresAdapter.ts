@@ -3,12 +3,12 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import type { Sql } from 'postgres';
 import postgres from 'postgres';
 import { v4 as uuidv4 } from 'uuid';
-import type { PersistencePort } from '../../../core/port/PersistencePort.ts';
+import type { PersistencePort } from '../../../core/port/PersistencePort';
 import type {
   PipelineSnapshot,
   SnapshotData,
-} from '../../../core/types/PipelineSnapshot.ts';
-import { snapshotsTable } from './schema.ts';
+} from '../../../core/types/PipelineSnapshot';
+import { snapshotsTable } from './schema';
 
 const pg = postgres as unknown as (...args: Parameters<typeof postgres>) => Sql;
 const client: Sql = pg(process.env.DATABASE_URL!, { ssl: 'require' });

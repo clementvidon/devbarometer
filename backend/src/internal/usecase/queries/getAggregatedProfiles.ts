@@ -1,5 +1,5 @@
-import type { PersistencePort } from '../../core/port/PersistencePort.ts';
-import type { AggregatedEmotionProfileDto } from './dto.ts';
+import type { PersistencePort } from '../../core/port/PersistencePort';
+import type { AggregatedEmotionProfileDto } from './dto';
 
 export async function getAggregatedProfiles(
   persistence: PersistencePort,

@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { generateStatic } from './generate-static.ts';
+import { generateStatic } from './generate-static';
 
 vi.mock('fs');
 
@@ -10,13 +10,13 @@ describe('generateStatic', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    vi.mock('../internal/usecase/queries/getTopHeadlines.ts', () => ({
+    vi.mock('../internal/usecase/queries/getTopHeadlines', () => ({
       getTopHeadlines: () => ['Item A', 'Item B'],
     }));
-    vi.mock('../internal/usecase/queries/getLastReport.ts', () => ({
+    vi.mock('../internal/usecase/queries/getLastReport', () => ({
       getLastReport: () => ({ text: 'report', emoji: '☀️ ' }),
     }));
-    vi.mock('../internal/usecase/queries/getAggregatedProfiles.ts', () => ({
+    vi.mock('../internal/usecase/queries/getAggregatedProfiles', () => ({
       getAggregatedProfiles: () => [{ createdAt: '2025-08-03', aggregate: {} }],
     }));
   });

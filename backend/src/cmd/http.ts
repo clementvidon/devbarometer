@@ -1,16 +1,16 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
-import { NodeFetchAdapter } from '../internal/adapter/driven/fetch/NodeFetchAdapter.ts';
-import { RedditItemsAdapter } from '../internal/adapter/driven/items/RedditItemsAdapter.ts';
-import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter.ts';
-import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
-import { makeReportController } from '../internal/adapter/driving/web/ReportController.ts';
-import { makeReportingAgent } from '../internal/usecase/agent/makeReportingAgent.ts';
+import { NodeFetchAdapter } from '../internal/adapter/driven/fetch/NodeFetchAdapter';
+import { RedditItemsAdapter } from '../internal/adapter/driven/items/RedditItemsAdapter';
+import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter';
+import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter';
+import { makeReportController } from '../internal/adapter/driving/web/ReportController';
+import { makeReportingAgent } from '../internal/usecase/agent/makeReportingAgent';
 
-import type { FetchPort } from '../internal/core/port/FetchPort.ts';
-import type { LlmPort } from '../internal/core/port/LlmPort.ts';
-import type { PersistencePort } from '../internal/core/port/PersistencePort.ts';
-import { makeReportQueryService } from '../internal/usecase/queries/makeReportQueryService.ts';
+import type { FetchPort } from '../internal/core/port/FetchPort';
+import type { LlmPort } from '../internal/core/port/LlmPort';
+import type { PersistencePort } from '../internal/core/port/PersistencePort';
+import { makeReportQueryService } from '../internal/usecase/queries/makeReportQueryService';
 
 type Deps = {
   redditUrl: string;

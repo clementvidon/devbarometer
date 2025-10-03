@@ -6,17 +6,17 @@ const listenSpy = vi.fn((_port: number, cb?: () => void): Server => {
   return { close: vi.fn() } as unknown as Server;
 });
 
-vi.mock('../internal/adapter/driving/web/ReportController.ts', () => ({
+vi.mock('../internal/adapter/driving/web/ReportController', () => ({
   makeReportController: vi.fn(() => ({ listen: listenSpy })),
 }));
 
-vi.mock('../internal/adapter/driven/persistence/PostgresAdapter.ts', () => ({
+vi.mock('../internal/adapter/driven/persistence/PostgresAdapter', () => ({
   PostgresAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter.ts', () => ({
+vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter', () => ({
   NodeFetchAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/llm/OpenAIAdapter.ts', () => ({
+vi.mock('../internal/adapter/driven/llm/OpenAIAdapter', () => ({
   OpenAIAdapter: vi.fn(() => ({})),
 }));
 
@@ -27,12 +27,14 @@ vi.mock('openai', () => ({
 type Env = Record<string, string | undefined>;
 let envBak: Env;
 
+const cliUrl = new URL('./http.ts', import.meta.url);
+
 function modulePath() {
-  return new URL('./http.ts', import.meta.url).pathname;
+  return cliUrl.pathname;
 }
-async function importHTTP() {
+async function importHTTP(): Promise<void> {
   vi.resetModules();
-  return import('./http.ts');
+  await import(cliUrl.href);
 }
 
 beforeEach(() => {

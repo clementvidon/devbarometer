@@ -1,10 +1,10 @@
 import pLimit from 'p-limit';
-import type { Item, RelevantItem } from '../../core/entity/Item.ts';
-import type { LlmPort } from '../../core/port/LlmPort.ts';
-import { makeRelevanceMessages } from './messages.ts';
-import { parseRelevanceResult } from './parseResult.ts';
-import { CONCURRENCY, DEFAULT_LLM_OPTIONS } from './policy.ts';
-import { relevanceFilterPrompt } from './prompts.ts';
+import type { Item, RelevantItem } from '../../core/entity/Item';
+import type { LlmPort } from '../../core/port/LlmPort';
+import { makeRelevanceMessages } from './messages';
+import { parseRelevanceResult } from './parseResult';
+import { CONCURRENCY, DEFAULT_LLM_OPTIONS } from './policy';
+import { relevanceFilterPrompt } from './prompts';
 
 export interface FilterRelevantItemsOptions {
   /** Prompt système utilisé pour la pertinence */

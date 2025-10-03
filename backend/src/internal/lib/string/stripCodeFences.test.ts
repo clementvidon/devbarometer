@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { stripCodeFences } from './stripCodeFences.ts';
+import { stripCodeFences } from './stripCodeFences';
 
 describe('stripCodeFences', () => {
   test('removes plain triple backticks', () => {

@@ -3,10 +3,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
-import { getAggregatedProfiles } from '../internal/usecase/queries/getAggregatedProfiles.ts';
-import { getLastReport } from '../internal/usecase/queries/getLastReport.ts';
-import { getTopHeadlines } from '../internal/usecase/queries/getTopHeadlines.ts';
+import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter';
+import { getAggregatedProfiles } from '../internal/usecase/queries/getAggregatedProfiles';
+import { getLastReport } from '../internal/usecase/queries/getLastReport';
+import { getTopHeadlines } from '../internal/usecase/queries/getTopHeadlines';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.resolve(__dirname, '../../../frontend/public');

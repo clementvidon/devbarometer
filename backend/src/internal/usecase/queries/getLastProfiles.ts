@@ -1,5 +1,5 @@
-import type { EmotionProfile } from '../../core/entity/EmotionProfile.ts';
-import type { PersistencePort } from '../../core/port/PersistencePort.ts';
+import type { EmotionProfile } from '../../core/entity/EmotionProfile';
+import type { PersistencePort } from '../../core/port/PersistencePort';
 
 export async function getLastProfiles(
   persistence: PersistencePort,

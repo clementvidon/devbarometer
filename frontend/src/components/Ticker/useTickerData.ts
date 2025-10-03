@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { isHeadline, type HeadlineInfo } from '../../types/HeadlineInfo.ts';
-import { shuffleArray } from '../../utils/shuffle.ts';
+import { isHeadline, type HeadlineInfo } from '../../types/HeadlineInfo';
+import { shuffleArray } from '../../utils/shuffle';
 
 export function useTickerData() {
   const [headlines, setHeadlines] = useState<HeadlineInfo[] | null>(null);

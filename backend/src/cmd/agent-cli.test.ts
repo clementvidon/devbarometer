@@ -7,19 +7,19 @@ const exitSpy = vi
   .spyOn(process, 'exit')
   .mockImplementation((() => undefined) as unknown as never);
 
-vi.mock('../internal/adapter/driven/persistence/PostgresAdapter.ts', () => ({
+vi.mock('../internal/adapter/driven/persistence/PostgresAdapter', () => ({
   PostgresAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter.ts', () => ({
+vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter', () => ({
   NodeFetchAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/llm/OpenAIAdapter.ts', () => ({
+vi.mock('../internal/adapter/driven/llm/OpenAIAdapter', () => ({
   OpenAIAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/items/RedditItemsAdapter.ts', () => ({
+vi.mock('../internal/adapter/driven/items/RedditItemsAdapter', () => ({
   RedditItemsAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/usecase/agent/makeReportingAgent.ts', () => ({
+vi.mock('../internal/usecase/agent/makeReportingAgent', () => ({
   makeReportingAgent: vi.fn(() => ({
     captureSnapshot: captureSnapshotMock,
   })),
@@ -29,12 +29,14 @@ vi.mock('openai', () => ({ default: vi.fn(() => ({})) }));
 type Env = Record<string, string | undefined>;
 let envBak: Env;
 
+const cliUrl = new URL('./agent-cli.ts', import.meta.url);
+
 function modulePath() {
-  return new URL('./agent-cli.ts', import.meta.url).pathname;
+  return cliUrl.pathname;
 }
-async function importReportingAgent() {
+async function importReportingAgent(): Promise<void> {
   vi.resetModules();
-  return import('./agent-cli.ts');
+  await import(cliUrl.href);
 }
 
 beforeEach(() => {

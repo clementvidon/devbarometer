@@ -1,13 +1,13 @@
-import type { EmotionProfile } from '../../core/entity/EmotionProfile.ts';
-import type { Report } from '../../core/entity/Report.ts';
-import type { PersistencePort } from '../../core/port/PersistencePort.ts';
-import type { QueryPort } from '../../core/port/QueryPort.ts';
-import type { HeadlineInfo } from '../../core/types/HeadlineInfo.ts';
-import type { AggregatedEmotionProfileDto } from './dto.ts';
-import { getAggregatedProfiles } from './getAggregatedProfiles.ts';
-import { getLastProfiles } from './getLastProfiles.ts';
-import { getLastReport } from './getLastReport.ts';
-import { getTopHeadlines } from './getTopHeadlines.ts';
+import type { EmotionProfile } from '../../core/entity/EmotionProfile';
+import type { Report } from '../../core/entity/Report';
+import type { PersistencePort } from '../../core/port/PersistencePort';
+import type { QueryPort } from '../../core/port/QueryPort';
+import type { HeadlineInfo } from '../../core/types/HeadlineInfo';
+import type { AggregatedEmotionProfileDto } from './dto';
+import { getAggregatedProfiles } from './getAggregatedProfiles';
+import { getLastProfiles } from './getLastProfiles';
+import { getLastReport } from './getLastReport';
+import { getTopHeadlines } from './getTopHeadlines';
 
 export class QueryService implements QueryPort {
   constructor(private readonly persistence: PersistencePort) {}

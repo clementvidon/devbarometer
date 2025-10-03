@@ -1,7 +1,7 @@
 import type OpenAI from 'openai';
 import { describe, expect, test, vi } from 'vitest';
-import type { LlmMessage } from '../../../core/port/LlmPort.ts';
-import { OpenAIAdapter } from './OpenAIAdapter.ts';
+import type { LlmMessage } from '../../../core/port/LlmPort';
+import { OpenAIAdapter } from './OpenAIAdapter';
 
 function createMockOpenAI(content: string | null): OpenAI {
   return {

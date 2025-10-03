@@ -1,17 +1,17 @@
 import pLimit from 'p-limit';
-import type { EmotionProfile } from '../../core/entity/EmotionProfile.ts';
-import type { WeightedItem } from '../../core/entity/Item.ts';
-import type { LlmPort } from '../../core/port/LlmPort.ts';
-import { makeEmotionMessages, makeTonalityMessages } from './messages.ts';
-import { parseEmotionRaw } from './parseEmotion.ts';
-import { parseTonalityRaw } from './parseTonality.ts';
+import type { EmotionProfile } from '../../core/entity/EmotionProfile';
+import type { WeightedItem } from '../../core/entity/Item';
+import type { LlmPort } from '../../core/port/LlmPort';
+import { makeEmotionMessages, makeTonalityMessages } from './messages';
+import { parseEmotionRaw } from './parseEmotion';
+import { parseTonalityRaw } from './parseTonality';
 import {
   CONCURRENCY,
   DEFAULT_LLM_OPTIONS,
   FALLBACK_EMOTIONS,
   FALLBACK_TONALITIES,
-} from './policy.ts';
-import { emotionProfilePrompt, tonalityProfilePrompt } from './prompts.ts';
+} from './policy';
+import { emotionProfilePrompt, tonalityProfilePrompt } from './prompts';
 
 export interface CreateProfilesOptions {
   /** Prompt système pour l’analyse des émotions */

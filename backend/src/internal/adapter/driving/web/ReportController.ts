@@ -1,6 +1,6 @@
 import express, { type Express } from 'express';
-import type { AgentPort } from '../../../core/port/AgentPort.ts';
-import type { QueryPort } from '../../../core/port/QueryPort.ts';
+import type { AgentPort } from '../../../core/port/AgentPort';
+import type { QueryPort } from '../../../core/port/QueryPort';
 
 export function makeReportController(
   agent: AgentPort,

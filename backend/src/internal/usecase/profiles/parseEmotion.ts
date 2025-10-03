@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import type { EmotionScores } from '../../core/entity/EmotionProfile.ts';
-import { stripCodeFences } from '../../lib/string/stripCodeFences.ts';
-import { FALLBACK_EMOTIONS } from './policy.ts';
+import type { EmotionScores } from '../../core/entity/EmotionProfile';
+import { stripCodeFences } from '../../lib/string/stripCodeFences';
+import { FALLBACK_EMOTIONS } from './policy';
 
 const EmotionSchema = z.object({
   joy: z.number().min(0).max(1),

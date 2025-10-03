@@ -1,5 +1,5 @@
-import type { Report } from '../../core/entity/Report.ts';
-import type { PersistencePort } from '../../core/port/PersistencePort.ts';
+import type { Report } from '../../core/entity/Report';
+import type { PersistencePort } from '../../core/port/PersistencePort';
 
 export async function getLastReport(
   persistence: PersistencePort,

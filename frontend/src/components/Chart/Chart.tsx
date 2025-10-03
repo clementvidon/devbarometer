@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import styles from './Chart.module.css';
-import { ChartControls } from './ChartControls.tsx';
-import { ChartEmotions } from './ChartEmotions.tsx';
-import { ChartLegend } from './ChartLegend.tsx';
-import { ChartTonalities } from './ChartTonalities.tsx';
-import { useChartData } from './useChartData.ts';
+import { ChartControls } from './ChartControls';
+import { ChartEmotions } from './ChartEmotions';
+import { ChartLegend } from './ChartLegend';
+import { ChartTonalities } from './ChartTonalities';
+import { useChartData } from './useChartData';
 
 type View = 'emotions' | 'tonalities';
 

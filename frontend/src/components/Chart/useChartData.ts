@@ -2,15 +2,15 @@ import { useEffect, useState } from 'react';
 import {
   assertRawEntries,
   type AggregatedEmotionProfileDto,
-} from '../../types/Chart.ts';
-import { EMOTION_KEYS, TONALITY_KEYS } from './config.ts';
+} from '../../types/Chart';
+import { EMOTION_KEYS, TONALITY_KEYS } from './config';
 import {
   parseEmotions,
   parseTonalities,
   type EmotionPoint,
   type TonalityPoint,
-} from './parsers.ts';
-import { smoothUX } from './smoothing.ts';
+} from './parsers';
+import { smoothUX } from './smoothing';
 
 export function useChartData() {
   const [emotionData, setEmotionData] = useState<EmotionPoint[] | null>(null);

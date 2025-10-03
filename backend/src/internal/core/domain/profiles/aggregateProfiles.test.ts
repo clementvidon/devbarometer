@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import type { EmotionProfile } from '../../entity/EmotionProfile.ts';
-import { aggregateProfiles } from './aggregateProfiles.ts';
+import type { EmotionProfile } from '../../entity/EmotionProfile';
+import { aggregateProfiles } from './aggregateProfiles';
 
 const fakeEmotionProfiles: EmotionProfile[] = [
   {

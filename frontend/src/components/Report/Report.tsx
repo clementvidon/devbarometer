@@ -1,5 +1,5 @@
 import styles from './Report.module.css';
-import { useReport } from './useReport.ts';
+import { useReport } from './useReport';
 
 export function Report() {
   const { report, isLoading, error } = useReport();

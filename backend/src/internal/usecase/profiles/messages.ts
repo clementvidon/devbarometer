@@ -1,5 +1,5 @@
-import type { WeightedItem } from '../../core/entity/Item.ts';
-import type { LlmMessage } from '../../core/port/LlmPort.ts';
+import type { WeightedItem } from '../../core/entity/Item';
+import type { LlmMessage } from '../../core/port/LlmPort';
 
 export function makeEmotionMessages(
   item: WeightedItem,

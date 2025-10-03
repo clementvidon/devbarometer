@@ -1,11 +1,11 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { Item, WeightedItem } from '../../core/entity/Item.ts';
-import type { Report } from '../../core/entity/Report.ts';
-import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort.ts';
-import type { LlmPort } from '../../core/port/LlmPort.ts';
-import type { PersistencePort } from '../../core/port/PersistencePort.ts';
-import type { WeightsPort } from '../../core/port/WeightsPort.ts';
-import { ReportingAgent } from './ReportingAgent.ts';
+import type { Item, WeightedItem } from '../../core/entity/Item';
+import type { Report } from '../../core/entity/Report';
+import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort';
+import type { LlmPort } from '../../core/port/LlmPort';
+import type { PersistencePort } from '../../core/port/PersistencePort';
+import type { WeightsPort } from '../../core/port/WeightsPort';
+import { ReportingAgent } from './ReportingAgent';
 
 const mockItems: Item[] = [
   { source: 'reddit.com', title: 'Item 1', content: '', score: 1 },
@@ -29,10 +29,10 @@ const weights: WeightsPort = {
   computeWeights: vi.fn(() => Promise.resolve(mockWeightedItems)),
 };
 
-vi.mock('../profiles/createProfiles.ts', () => ({
+vi.mock('../profiles/createProfiles', () => ({
   createProfiles: vi.fn().mockResolvedValue(['emotionProfile']),
 }));
-vi.mock('../../core/domain/profiles/aggregateProfiles.ts', () => ({
+vi.mock('../../core/domain/profiles/aggregateProfiles', () => ({
   aggregateProfiles: vi.fn().mockReturnValue({
     emotions: {
       anger: 0,
@@ -48,7 +48,7 @@ vi.mock('../../core/domain/profiles/aggregateProfiles.ts', () => ({
     },
   }),
 }));
-vi.mock('../profiles/createReport.ts', () => ({
+vi.mock('../profiles/createReport', () => ({
   createReport: vi.fn().mockResolvedValue({
     text: 'Everything looks great!',
     emoji: '☀️',

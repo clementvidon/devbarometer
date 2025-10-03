@@ -1,7 +1,7 @@
-import type { AggregatedEmotionProfileDto } from '../../usecase/queries/dto.ts';
-import type { EmotionProfile } from '../entity/EmotionProfile.ts';
-import type { Report } from '../entity/Report.ts';
-import type { HeadlineInfo } from '../types/HeadlineInfo.ts';
+import type { AggregatedEmotionProfileDto } from '../../usecase/queries/dto';
+import type { EmotionProfile } from '../entity/EmotionProfile';
+import type { Report } from '../entity/Report';
+import type { HeadlineInfo } from '../types/HeadlineInfo';
 
 /**
  * Read-only query port for application-level snapshot data.

@@ -1,7 +1,4 @@
-import type {
-  PipelineSnapshot,
-  SnapshotData,
-} from '../types/PipelineSnapshot.ts';
+import type { PipelineSnapshot, SnapshotData } from '../types/PipelineSnapshot';
 
 export interface PersistencePort {
   /**

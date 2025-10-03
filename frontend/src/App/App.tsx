@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { Chart } from '../components/Chart/Chart.tsx';
-import { Report } from '../components/Report/Report.tsx';
-import { Ticker } from '../components/Ticker/Ticker.tsx';
-import { setupAppHeightListener } from '../utils/setAppHeight.ts';
+import { Chart } from '../components/Chart/Chart';
+import { Report } from '../components/Report/Report';
+import { Ticker } from '../components/Ticker/Ticker';
+import { setupAppHeightListener } from '../utils/setAppHeight';
 import styles from './App.module.css';
 
 function App() {

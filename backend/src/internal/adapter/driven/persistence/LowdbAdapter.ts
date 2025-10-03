@@ -1,10 +1,10 @@
 import { JSONFilePreset } from 'lowdb/node';
 import { v4 as uuidv4 } from 'uuid';
-import type { PersistencePort } from '../../../../internal/core/port/PersistencePort.ts';
+import type { PersistencePort } from '../../../../internal/core/port/PersistencePort';
 import type {
   PipelineSnapshot,
   SnapshotData,
-} from '../../../core/types/PipelineSnapshot.ts';
+} from '../../../core/types/PipelineSnapshot';
 
 type Data = {
   snapshots: PipelineSnapshot[];

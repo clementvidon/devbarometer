@@ -1,9 +1,9 @@
-import type { FetchPort } from '../../core/port/FetchPort.ts';
-import { sleep } from '../async/sleep.ts';
-import { withTimeout } from '../async/withTimeout.ts';
-import { truncate } from '../log/truncate.ts';
-import { MAX_RETRIES, TIMEOUT_MS } from './constants.ts';
-import { isJsonResponse } from './isJsonResponse.ts';
+import type { FetchPort } from '../../core/port/FetchPort';
+import { sleep } from '../async/sleep';
+import { withTimeout } from '../async/withTimeout';
+import { truncate } from '../log/truncate';
+import { MAX_RETRIES, TIMEOUT_MS } from './constants';
+import { isJsonResponse } from './isJsonResponse';
 
 export interface FetchWithRetryOptions {
   maxRetries: number;

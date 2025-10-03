@@ -1,16 +1,16 @@
-import { aggregateProfiles } from '../../core/domain/profiles/aggregateProfiles.ts';
-import type { WeightedItem } from '../../core/entity/Item.ts';
-import type { AgentPort } from '../../core/port/AgentPort.ts';
-import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort.ts';
-import type { LlmPort } from '../../core/port/LlmPort.ts';
-import type { PersistencePort } from '../../core/port/PersistencePort.ts';
-import type { WeightsPort } from '../../core/port/WeightsPort.ts';
-import { formatFloat } from '../../lib/number/formatFloat.ts';
-import { nowIso } from '../../lib/time/nowIso.ts';
-import { createProfiles } from '../profiles/createProfiles.ts';
-import { createReport } from '../profiles/createReport.ts';
-import { getRelevantItemsBefore } from '../queries/getRelevantItemsBefore.ts';
-import { filterRelevantItems } from '../relevance/filterRelevantItems.ts';
+import { aggregateProfiles } from '../../core/domain/profiles/aggregateProfiles';
+import type { WeightedItem } from '../../core/entity/Item';
+import type { AgentPort } from '../../core/port/AgentPort';
+import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort';
+import type { LlmPort } from '../../core/port/LlmPort';
+import type { PersistencePort } from '../../core/port/PersistencePort';
+import type { WeightsPort } from '../../core/port/WeightsPort';
+import { formatFloat } from '../../lib/number/formatFloat';
+import { nowIso } from '../../lib/time/nowIso';
+import { createProfiles } from '../profiles/createProfiles';
+import { createReport } from '../profiles/createReport';
+import { getRelevantItemsBefore } from '../queries/getRelevantItemsBefore';
+import { filterRelevantItems } from '../relevance/filterRelevantItems';
 
 export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
   return items.slice().sort((a, b) => b.weight - a.weight);

@@ -1,6 +1,6 @@
-import type { RawEntry } from '../../types/Chart.ts';
-import { EMOTION_COLORS } from './config.ts';
-import { dateFmtTooltip } from './formatters.ts';
+import type { RawEntry } from '../../types/Chart';
+import { EMOTION_COLORS } from './config';
+import { dateFmtTooltip } from './formatters';
 
 export type EmotionPoint = {
   dateLabel: string;

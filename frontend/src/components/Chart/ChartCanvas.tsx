@@ -8,8 +8,8 @@ import {
   YAxis,
 } from 'recharts';
 import styles from './Chart.module.css';
-import { THEME } from './config.ts';
-import { dateFmtAxis, dateFmtTooltip, numFmt } from './formatters.ts';
+import { THEME } from './config';
+import { dateFmtAxis, dateFmtTooltip, numFmt } from './formatters';
 
 type SeriesSpec = {
   key: string;

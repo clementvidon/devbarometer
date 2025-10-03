@@ -2,11 +2,11 @@ import 'dotenv/config';
 import fs from 'fs';
 import OpenAI from 'openai';
 import path from 'path';
-import { JsonSnapshotAdapter } from '../internal/adapter/driven/items/JsonSnapshotAdapter.ts';
-import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter.ts';
-import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
-import type { Item } from '../internal/core/entity/Item.ts';
-import { makeReportingAgent } from '../internal/usecase/agent/makeReportingAgent.ts';
+import { JsonSnapshotAdapter } from '../internal/adapter/driven/items/JsonSnapshotAdapter';
+import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter';
+import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter';
+import type { Item } from '../internal/core/entity/Item';
+import { makeReportingAgent } from '../internal/usecase/agent/makeReportingAgent';
 
 // - Dump Neon UI: { id?, date_created: "YYYY-MM-DD HH:mm:ss.SSS", data: { items: Item[] } }
 // - Export Script: { id?, createdAt: "YYYY-MM-DDTHH:mm:ss.SSSZ", items: Item[] }
@@ -15,7 +15,7 @@ type SnapRow = { id?: string; createdAt: string; items: Item[] };
 type AnyRow = RawRow | SnapRow;
 
 function usage() {
-  console.log('Usage: tsx src/cmd/replay.ts <input.json>');
+  console.log('Usage: tsx src/cmd/replay <input.json>');
   process.exit(1);
 }
 

@@ -1,9 +1,9 @@
-import type { RelevantItem, WeightedItem } from '../../entity/Item.ts';
-import type { WeightsPort } from '../../port/WeightsPort.ts';
-import { capByPercentile } from './capByPercentile.ts';
-import { computeMomentum } from './computeMomentum.ts';
-import { normalizeByMean } from './normalizeByMean.ts';
-import { sanitizeScores } from './sanitizeScores.ts';
+import type { RelevantItem, WeightedItem } from '../../entity/Item';
+import type { WeightsPort } from '../../port/WeightsPort';
+import { capByPercentile } from './capByPercentile';
+import { computeMomentum } from './computeMomentum';
+import { normalizeByMean } from './normalizeByMean';
+import { sanitizeScores } from './sanitizeScores';
 
 export interface MomentumOptions {
   /** Weight assigned when item is new or delta <= 0. */

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { stripCodeFences } from '../../lib/string/stripCodeFences.ts';
+import { stripCodeFences } from '../../lib/string/stripCodeFences';
 
 const RelevanceSchema = z.object({ relevant: z.boolean() });
 

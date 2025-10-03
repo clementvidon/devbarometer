@@ -1,6 +1,6 @@
-import { ChartCanvas } from './ChartCanvas.tsx';
-import { TONALITY_COLORS, TONALITY_KEYS, TONALITY_LABELS } from './config.ts';
-import type { TonalityPoint } from './parsers.ts';
+import { ChartCanvas } from './ChartCanvas';
+import { TONALITY_COLORS, TONALITY_KEYS, TONALITY_LABELS } from './config';
+import type { TonalityPoint } from './parsers';
 
 type Props = {
   data: TonalityPoint[];

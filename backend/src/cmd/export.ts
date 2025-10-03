@@ -2,7 +2,7 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter.ts';
+import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 

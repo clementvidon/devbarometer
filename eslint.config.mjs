@@ -5,11 +5,9 @@ import vitest from 'eslint-plugin-vitest';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 
-
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
 
 export default defineConfig([
   {
@@ -40,16 +38,17 @@ export default defineConfig([
     },
     plugins: { js, import: importPlugin },
     extends: ['js/recommended'],
+    settings: {
+      'import/resolver': {
+        node: { extensions: ['.ts', '.tsx', '.js', '.jsx'] },
+      },
+    },
     rules: {
       'import/extensions': [
-        'warn',
+        'error',
         'ignorePackages',
-        { js: 'always', ts: 'always', tsx: 'always' },
+        { js: 'always', ts: 'never', tsx: 'never' },
       ],
-      'no-unused-vars': ['warn', {
-        varsIgnorePattern: '^_',
-        argsIgnorePattern: '^_',
-      }],
     },
   },
   {

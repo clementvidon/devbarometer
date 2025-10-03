@@ -1,5 +1,5 @@
-import type { RelevantItem } from '../../core/entity/Item.ts';
-import type { PersistencePort } from '../../core/port/PersistencePort.ts';
+import type { RelevantItem } from '../../core/entity/Item';
+import type { PersistencePort } from '../../core/port/PersistencePort';
 
 export async function getRelevantItemsBefore(
   createdAtISO: string,

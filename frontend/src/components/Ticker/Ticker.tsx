@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './Ticker.module.css';
-import { useTickerData } from './useTickerData.ts';
-import { useTickerScroll } from './useTickerScroll.ts';
+import { useTickerData } from './useTickerData';
+import { useTickerScroll } from './useTickerScroll';
 
 const COPIES = 3;
 

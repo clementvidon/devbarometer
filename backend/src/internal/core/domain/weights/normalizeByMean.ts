@@ -1,5 +1,5 @@
-import type { WeightedItem } from '../../entity/Item.ts';
-import type { NormalizeOptions } from './MomentumWeightsStrategy.ts';
+import type { WeightedItem } from '../../entity/Item';
+import type { NormalizeOptions } from './MomentumWeightsStrategy';
 
 /**
  * Normalize weights so that their mean equals `target`. Input is not mutated.

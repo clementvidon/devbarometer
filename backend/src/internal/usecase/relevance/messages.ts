@@ -1,5 +1,5 @@
-import type { Item } from '../../core/entity/Item.ts';
-import type { LlmMessage } from '../../core/port/LlmPort.ts';
+import type { Item } from '../../core/entity/Item';
+import type { LlmMessage } from '../../core/port/LlmPort';
 
 export function makeRelevanceMessages(
   item: Item,

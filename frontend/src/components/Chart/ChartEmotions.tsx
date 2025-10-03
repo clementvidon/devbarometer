@@ -1,6 +1,6 @@
-import { ChartCanvas } from './ChartCanvas.tsx';
-import { EMOTION_COLORS, EMOTION_KEYS, EMOTION_LABELS } from './config.ts';
-import type { EmotionPoint } from './parsers.ts';
+import { ChartCanvas } from './ChartCanvas';
+import { EMOTION_COLORS, EMOTION_KEYS, EMOTION_LABELS } from './config';
+import type { EmotionPoint } from './parsers';
 
 type Props = {
   data: EmotionPoint[];

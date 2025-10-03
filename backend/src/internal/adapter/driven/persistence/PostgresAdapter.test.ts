@@ -52,7 +52,7 @@ vi.mock('drizzle-orm/postgres-js', () => {
 
 vi.mock('uuid', () => ({ v4: () => 'generated-id' }));
 
-import { PostgresAdapter } from './PostgresAdapter.ts';
+import { PostgresAdapter } from './PostgresAdapter';
 
 const getSpies = (): DrizzleSpies =>
   (globalThis as GlobalWithSpies).__drizzleSpies;
