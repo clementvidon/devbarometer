@@ -1,8 +1,13 @@
 [
   {
     "title": "Marché développeur en chute libre ? Retour promo école ~50 élèves",
-    "weight": "3",
+    "weight": "2",
     "source": "https://reddit.com/comments/1num95p"
+  },
+  {
+    "title": "Travaille-t-on forcément tard lorsqu'on deviens sénior ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1nvdeor"
   },
   {
     "title": "Pourquoi Java est si prédominant en backend ?",
@@ -10,18 +15,13 @@
     "source": "https://reddit.com/comments/1nv1hga"
   },
   {
+    "title": "Les offres d'emplois demandant plus de 5 années d'expériences sont hors sol",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1nthg32"
+  },
+  {
     "title": "Tech Dev & RH -> \"IA un problème\"",
     "weight": "2",
     "source": "https://reddit.com/comments/1ntrybh"
-  },
-  {
-    "title": "Je commence à regretter mon choix d’étude d’il y a 3 ans…",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1nu8gej"
-  },
-  {
-    "title": "Reconversion où je continue ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1nuh71q"
   }
 ]
