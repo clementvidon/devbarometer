@@ -1,4 +1,4 @@
-import type { RawEntry } from '../../types/Chart';
+import type { ChartEntry } from '@devbarometer/shared';
 import { EMOTION_COLORS } from './config';
 import { dateFmtTooltip } from './formatters';
 
@@ -7,7 +7,7 @@ export type EmotionPoint = {
   createdAt: string;
 } & Record<keyof typeof EMOTION_COLORS, number>;
 
-export function parseEmotions(raw: RawEntry[]): EmotionPoint[] {
+export function parseEmotions(raw: ChartEntry[]): EmotionPoint[] {
   const keys = Object.keys(EMOTION_COLORS) as (keyof typeof EMOTION_COLORS)[];
   return raw
     .slice()
@@ -23,7 +23,7 @@ export function parseEmotions(raw: RawEntry[]): EmotionPoint[] {
     });
 }
 
-type RawEntryWithTonalities = RawEntry & {
+type RawEntryWithTonalities = ChartEntry & {
   tonalities?: {
     positive?: number;
     negative?: number;
@@ -41,7 +41,7 @@ export type TonalityPoint = {
   anticipation: number;
 };
 
-export function parseTonalities(raw: RawEntry[]): TonalityPoint[] {
+export function parseTonalities(raw: ChartEntry[]): TonalityPoint[] {
   return raw
     .slice()
     .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))

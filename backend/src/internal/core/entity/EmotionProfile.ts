@@ -1,20 +1,10 @@
-export interface EmotionScores {
-  anger: number;
-  fear: number;
-  trust: number;
-  sadness: number;
-  joy: number;
-  disgust: number;
-}
+import type {
+  EmotionScores as SharedEmotionScores,
+  TonalityScores as SharedTonalityScores,
+} from '@devbarometer/shared';
 
-export interface TonalityScores {
-  positive: number;
-  negative: number;
-  optimistic_anticipation: number;
-  pessimistic_anticipation: number;
-  positive_surprise: number;
-  negative_surprise: number;
-}
+export type EmotionScores = SharedEmotionScores;
+export type TonalityScores = SharedTonalityScores;
 
 export interface AggregatedEmotionProfile {
   count: number;

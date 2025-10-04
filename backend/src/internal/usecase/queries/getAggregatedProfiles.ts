@@ -1,5 +1,5 @@
+import { type AggregatedEmotionProfileDto } from '@devbarometer/shared';
 import type { PersistencePort } from '../../core/port/PersistencePort';
-import type { AggregatedEmotionProfileDto } from './dto';
 
 export async function getAggregatedProfiles(
   persistence: PersistencePort,

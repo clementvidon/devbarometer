@@ -28,6 +28,7 @@ export default defineConfig([
         project: [
           path.resolve(__dirname, 'frontend/tsconfig.json'),
           path.resolve(__dirname, 'backend/tsconfig.json'),
+          path.resolve(__dirname, 'shared/tsconfig.json'),
         ],
         tsconfigRootDir: __dirname,
       },
@@ -60,6 +61,7 @@ export default defineConfig([
         project: [
           path.resolve(__dirname, 'frontend/tsconfig.json'),
           path.resolve(__dirname, 'backend/tsconfig.json'),
+          path.resolve(__dirname, 'shared/tsconfig.json'),
         ],
         tsconfigRootDir: __dirname,
       },

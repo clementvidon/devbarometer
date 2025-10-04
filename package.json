@@ -4,36 +4,51 @@
   "type": "module",
   "workspaces": [
     "frontend",
-    "backend"
+    "backend",
+    "shared"
   ],
   "scripts": {
     "prepare": "husky",
 
     "format:frontend": "npm --workspace frontend run format",
     "format:backend": "npm --workspace backend run format",
-    "format": "npm-run-all --parallel --print-label format:frontend format:backend",
+    "format:shared": "npm --workspace shared run format",
+    "format": "npm-run-all --parallel --print-label format:frontend format:backend format:shared",
+
     "format:check:frontend": "npm --workspace frontend run format:check",
     "format:check:backend": "npm --workspace backend run format:check",
-    "format:check": "npm-run-all --parallel --print-label format:check:frontend format:check:backend",
+    "format:check:shared": "npm --workspace shared run format:check",
+    "format:check": "npm-run-all --parallel --print-label format:check:frontend format:check:backend format:check:shared",
+
     "lint:frontend": "npm --workspace frontend run lint",
     "lint:backend": "npm --workspace backend run lint",
-    "lint": "npm-run-all --parallel --print-label lint:frontend lint:backend",
+    "lint:shared": "npm --workspace shared run lint",
+    "lint": "npm-run-all --parallel --print-label lint:frontend lint:backend lint:shared",
+
     "type-check:frontend": "npm --workspace frontend run type-check",
     "type-check:backend": "npm --workspace backend run type-check",
-    "type-check": "npm-run-all --parallel --print-label type-check:frontend type-check:backend",
+    "type-check:shared": "npm --workspace shared run type-check",
+    "type-check": "npm-run-all --parallel --print-label type-check:frontend type-check:backend type-check:shared",
+
     "test:frontend": "npm --workspace frontend run test",
     "test:backend": "npm --workspace backend run test",
-    "test": "npm-run-all --parallel --print-label test:frontend test:backend",
+    "test:shared": "npm --workspace shared run test",
+    "test": "npm-run-all --parallel --print-label test:frontend test:backend test:shared",
+
     "test:coverage:frontend": "npm --workspace frontend run test:coverage",
     "test:coverage:backend": "npm --workspace backend run test:coverage",
-    "test:coverage": "npm-run-all --parallel --print-label test:coverage:frontend test:coverage:backend",
-    "check": "npm-run-all --sequential lint format:check type-check test",
+    "test:coverage:shared": "npm --workspace shared run test:coverage",
+    "test:coverage": "npm-run-all --parallel --print-label test:coverage:frontend test:coverage:backend test:coverage:shared",
+
+    "check": "npm-run-all --sequential lint format type-check test",
     "audit": "audit-ci --config ./audit-ci.jsonc",
     "audit:prod": "npm audit --omit=dev",
 
     "agent": "npm --workspace backend run agent",
     "export": "npm --workspace backend run export",
     "restore": "npm --workspace backend run restore",
+
+    "build-shared": "npm --workspace shared run type-check && npm --workspace shared run build",
 
     "generate-static": "npm --workspace backend run generate-static",
     "build-frontend": "npm --workspace frontend run predeploy",
@@ -43,12 +58,12 @@
   },
   "lint-staged": {
     "frontend/src/**/*.{ts,tsx}": [
-      "npm --workspace frontend run format:check",
+      "npm --workspace frontend run format",
       "npm --workspace frontend run lint",
       "npm --workspace frontend run test:changed"
     ],
     "backend/src/**/*.{ts,tsx}": [
-      "npm --workspace backend run format:check",
+      "npm --workspace backend run format",
       "npm --workspace backend run lint",
       "npm --workspace backend run test:changed"
     ]
