@@ -1,42 +1,37 @@
-import {
-  AggregatedEmotionProfileDtoSchema,
-  parseChartEntries,
-} from '@devbarometer/shared';
+import { AggregatedEmotionProfileDtoSchema } from '@devbarometer/shared';
 import { useEffect, useState } from 'react';
 import { EMOTION_KEYS, TONALITY_KEYS } from './config';
-import {
-  parseEmotions,
-  parseTonalities,
-  type EmotionPoint,
-  type TonalityPoint,
-} from './parsers';
 import { smoothUX } from './smoothing';
+import {
+  buildEmotionSeries,
+  buildTonalitySeries,
+  type EmotionSeriesPoint,
+  type TonalitySeriesPoint,
+} from './transformChartSeries';
 
 export function useChartData() {
-  const [emotionData, setEmotionData] = useState<EmotionPoint[] | null>(null);
-  const [tonalityData, setTonalityData] = useState<TonalityPoint[] | null>(
+  const [emotionData, setEmotionData] = useState<EmotionSeriesPoint[] | null>(
     null,
   );
+  const [tonalityData, setTonalityData] = useState<
+    TonalitySeriesPoint[] | null
+  >(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
     void (async () => {
       try {
-        const res = await fetch('chart.json');
-        const agg = AggregatedEmotionProfileDtoSchema.array().parse(
+        const baseUrl = import.meta.env.BASE_URL ?? '/';
+        const res = await fetch(baseUrl + 'chart.json');
+        const profiles = AggregatedEmotionProfileDtoSchema.array().parse(
           await res.json(),
         );
-        const chartEntries = parseChartEntries(
-          agg.map(({ createdAt, emotions, tonalities }) => ({
-            createdAt,
-            emotions,
-            tonalities,
-          })),
+        setEmotionData(
+          smoothUX(buildEmotionSeries(profiles), EMOTION_KEYS, 'custom'),
         );
-        const emotions = parseEmotions(chartEntries);
-        const tonalities = parseTonalities(chartEntries);
-        setEmotionData(smoothUX(emotions, EMOTION_KEYS, 'custom'));
-        setTonalityData(smoothUX(tonalities, TONALITY_KEYS, 'custom'));
+        setTonalityData(
+          smoothUX(buildTonalitySeries(profiles), TONALITY_KEYS, 'custom'),
+        );
       } catch (e) {
         setError(e instanceof Error ? e : new Error('Erreur inconnue'));
         setEmotionData([]);

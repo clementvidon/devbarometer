@@ -1,26 +1,33 @@
+import { type HeadlineDto, HeadlineDtoSchema } from '@devbarometer/shared';
 import { useEffect, useState } from 'react';
-import { isHeadline, type HeadlineInfo } from '../../types/HeadlineInfo';
 import { shuffleArray } from '../../utils/shuffle';
 
 export function useTickerData() {
-  const [headlines, setHeadlines] = useState<HeadlineInfo[] | null>(null);
+  const [headlines, setHeadlines] = useState<HeadlineDto[] | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const baseUrl = import.meta.env.BASE_URL ?? '/';
-    void fetch(baseUrl + 'ticker.json')
-      .then((r) => (r.ok ? r.json() : []))
-      .then((data: unknown) => {
-        if (Array.isArray(data) && data.every(isHeadline)) {
-          setHeadlines(shuffleArray(data));
-        } else {
-          throw new Error('Format de données invalide');
+    void (async () => {
+      try {
+        const baseUrl = import.meta.env.BASE_URL ?? '/';
+        const res = await fetch(baseUrl + 'ticker.json');
+        if (!res.ok) {
+          setHeadlines([]);
+          return;
         }
-      })
-      .catch((e) => {
+        const payload: unknown = await res.json();
+        const result = HeadlineDtoSchema.array().safeParse(payload);
+        if (!result.success) {
+          setError(new Error(result.error.message));
+          setHeadlines([]);
+          return;
+        }
+        setHeadlines(shuffleArray(result.data));
+      } catch (e) {
         setError(e instanceof Error ? e : new Error('Erreur inconnue'));
         setHeadlines([]);
-      });
+      }
+    })();
   }, []);
 
   return {

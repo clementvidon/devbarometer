@@ -1,7 +1,7 @@
+import type { HeadlineDto } from '@devbarometer/shared';
 import { type AggregatedEmotionProfileDto } from '@devbarometer/shared';
 import type { EmotionProfile } from '../entity/EmotionProfile';
 import type { Report } from '../entity/Report';
-import type { HeadlineInfo } from '../types/HeadlineInfo';
 
 /**
  * Read-only query port for application-level snapshot data.
@@ -15,5 +15,5 @@ export interface QueryPort {
   getLastReport(): Promise<Report | null>;
   getLastProfiles(): Promise<EmotionProfile[] | null>;
   getAggregatedProfiles(): Promise<AggregatedEmotionProfileDto[]>;
-  getTopHeadlines(limit?: number): Promise<HeadlineInfo[]>;
+  getTopHeadlines(limit?: number): Promise<HeadlineDto[]>;
 }

@@ -1,9 +1,9 @@
 import { ChartCanvas } from './ChartCanvas';
 import { TONALITY_COLORS, TONALITY_KEYS, TONALITY_LABELS } from './config';
-import type { TonalityPoint } from './parsers';
+import type { TonalitySeriesPoint } from './transformChartSeries';
 
 type Props = {
-  data: TonalityPoint[];
+  data: TonalitySeriesPoint[];
   hudVisible: boolean;
   tooltipActive: boolean;
   setTooltipActive: (v: boolean) => void;

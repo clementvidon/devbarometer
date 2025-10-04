@@ -1,9 +1,9 @@
 import { ChartCanvas } from './ChartCanvas';
 import { EMOTION_COLORS, EMOTION_KEYS, EMOTION_LABELS } from './config';
-import type { EmotionPoint } from './parsers';
+import type { EmotionSeriesPoint } from './transformChartSeries';
 
 type Props = {
-  data: EmotionPoint[];
+  data: EmotionSeriesPoint[];
   hudVisible: boolean;
   tooltipActive: boolean;
   setTooltipActive: (v: boolean) => void;
