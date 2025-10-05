@@ -1,5 +1,23 @@
-import { type AggregatedEmotionProfileDto } from '@devbarometer/shared';
+import {
+  AggregatedEmotionProfileDtoSchema,
+  type AggregatedEmotionProfileDto,
+} from '@devbarometer/shared';
+import { type AggregatedEmotionProfile } from '../../core/entity/EmotionProfile';
+
 import type { PersistencePort } from '../../core/port/PersistencePort';
+
+function mapAggregateToDto(
+  createdAt: string,
+  aggregate: AggregatedEmotionProfile,
+): AggregatedEmotionProfileDto {
+  return AggregatedEmotionProfileDtoSchema.parse({
+    createdAt,
+    count: aggregate.count,
+    totalWeight: aggregate.totalWeight,
+    emotions: aggregate.emotions,
+    tonalities: aggregate.tonalities,
+  });
+}
 
 export async function getAggregatedProfiles(
   persistence: PersistencePort,
@@ -15,7 +33,7 @@ export async function getAggregatedProfiles(
       return acc;
     }
 
-    acc.push({ createdAt: snapshot.createdAt, ...aggregate });
+    acc.push(mapAggregateToDto(snapshot.createdAt, aggregate));
     return acc;
   }, []);
 }

@@ -1,6 +1,18 @@
-import type { HeadlineDto } from '@devbarometer/shared';
+import { type HeadlineDto, HeadlineDtoSchema } from '@devbarometer/shared';
 import type { PersistencePort } from '../../core/port/PersistencePort';
 import { formatFloat } from '../../lib/number/formatFloat';
+
+function mapHeadlineToDto(raw: {
+  title: string;
+  weight: number;
+  source: string;
+}): HeadlineDto {
+  return HeadlineDtoSchema.parse({
+    title: raw.title,
+    weight: formatFloat(raw.weight, 0),
+    source: raw.source,
+  });
+}
 
 export async function getTopHeadlines(
   persistence: PersistencePort,
@@ -14,9 +26,5 @@ export async function getTopHeadlines(
     .slice()
     .sort((a, b) => b.weight - a.weight)
     .slice(0, limit)
-    .map((item) => ({
-      title: item.title,
-      weight: formatFloat(item.weight, 0),
-      source: item.source,
-    }));
+    .map(mapHeadlineToDto);
 }
