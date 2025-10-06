@@ -3,7 +3,7 @@ import type {
   EmotionProfile,
   EmotionScores,
   TonalityScores,
-} from '../../entity/EmotionProfile';
+} from '../../entity';
 
 const EMOTION_KEYS = [
   'anger',

@@ -1,4 +1,4 @@
-import type { RelevantItem, WeightedItem } from '../../entity/Item';
+import type { RelevantItem, WeightedItem } from '../../entity';
 import type { WeightsPort } from '../../port/WeightsPort';
 import { capByPercentile } from './capByPercentile';
 import { computeMomentum } from './computeMomentum';

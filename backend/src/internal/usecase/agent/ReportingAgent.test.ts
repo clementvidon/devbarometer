@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { Item, WeightedItem } from '../../core/entity/Item';
-import type { Report } from '../../core/entity/Report';
+import type { Item, Report, WeightedItem } from '../../core/entity';
 import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort';
 import type { LlmPort } from '../../core/port/LlmPort';
 import type { PersistencePort } from '../../core/port/PersistencePort';

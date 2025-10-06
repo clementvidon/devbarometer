@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { TonalityScores } from '../../core/entity/EmotionProfile';
+import type { TonalityScores } from '../../core/entity';
 import { stripCodeFences } from '../../lib/string/stripCodeFences';
 import { FALLBACK_TONALITIES } from './policy';
 

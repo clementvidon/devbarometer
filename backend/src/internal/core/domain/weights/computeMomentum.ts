@@ -1,4 +1,4 @@
-import type { RelevantItem, WeightedItem } from '../../entity/Item';
+import type { RelevantItem, WeightedItem } from '../../entity';
 import type { MomentumOptions } from './MomentumWeightsStrategy';
 
 function isNew(prevRaw: number | undefined): boolean {

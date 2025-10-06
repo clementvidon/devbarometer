@@ -1,4 +1,4 @@
-import type { Item } from '../../core/entity/Item';
+import type { Item } from '../../core/entity';
 import type { LlmMessage } from '../../core/port/LlmPort';
 
 export function makeRelevanceMessages(

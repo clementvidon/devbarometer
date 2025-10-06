@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { EmotionProfile } from '../../core/entity/EmotionProfile';
-import type { WeightedItem } from '../../core/entity/Item';
+import type { EmotionProfile, WeightedItem } from '../../core/entity';
 import type { LlmMessage } from '../../core/port/LlmPort';
 import { createProfiles } from './createProfiles';
 
@@ -117,8 +116,16 @@ describe('createProfiles', () => {
         expect(res.source).toBe(fakeWeightedItems[index].source);
         expect(res.title).toBe(fakeWeightedItems[index].title);
         expect(res.weight).toBe(0);
-        expect(Object.values(res.emotions).every((v) => v === 0)).toBe(true);
-        expect(Object.values(res.tonalities).every((v) => v === 0)).toBe(true);
+        expect(
+          Object.values(res.emotions as Record<string, number>).every(
+            (v) => v === 0,
+          ),
+        ).toBe(true);
+        expect(
+          Object.values(res.tonalities as Record<string, number>).every(
+            (v) => v === 0,
+          ),
+        ).toBe(true);
       });
     });
   });

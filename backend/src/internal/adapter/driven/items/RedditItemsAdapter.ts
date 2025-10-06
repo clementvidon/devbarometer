@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { filterByScore } from '../../../core/domain/items/filterByScore';
-import type { Item } from '../../../core/entity/Item';
+import type { Item } from '../../../core/entity';
 import type { FetchPort } from '../../../core/port/FetchPort';
 import type { ItemsProviderPort } from '../../../core/port/ItemsProviderPort';
 import { fetchWithRetry } from '../../../lib/http/fetchWithRetry';

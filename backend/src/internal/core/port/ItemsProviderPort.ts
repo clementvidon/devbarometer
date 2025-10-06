@@ -1,4 +1,4 @@
-import type { Item } from '../entity/Item';
+import type { Item } from '../entity';
 
 /**
  * Provides raw items for the pipeline.

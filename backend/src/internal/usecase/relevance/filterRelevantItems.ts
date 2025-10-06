@@ -1,5 +1,5 @@
 import pLimit from 'p-limit';
-import type { Item, RelevantItem } from '../../core/entity/Item';
+import type { Item, RelevantItem } from '../../core/entity';
 import type { LlmPort } from '../../core/port/LlmPort';
 import { makeRelevanceMessages } from './messages';
 import { parseRelevanceResult } from './parseResult';

@@ -1,4 +1,4 @@
-import type { RelevantItem } from '../../entity/Item';
+import type { RelevantItem } from '../../entity';
 
 /**
  * Sanitize `score` fields in current and previous RelevantItems.

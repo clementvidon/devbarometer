@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { EmotionScores } from '../../core/entity/EmotionProfile';
+import type { EmotionScores } from '../../core/entity';
 import { stripCodeFences } from '../../lib/string/stripCodeFences';
 import { FALLBACK_EMOTIONS } from './policy';
 

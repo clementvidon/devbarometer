@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import type {
-  AggregatedEmotionProfile,
-  EmotionScores,
-} from '../../core/entity/EmotionProfile';
-import type { Report } from '../../core/entity/Report';
-import { WEATHER_EMOJIS } from '../../core/entity/Report';
+import {
+  type AggregatedEmotionProfile,
+  type EmotionScores,
+  type Report,
+  WEATHER_EMOJIS,
+} from '../../core/entity';
 import type { LlmMessage, LlmPort } from '../../core/port/LlmPort';
 import { stripCodeFences } from '../../lib/string/stripCodeFences';
 

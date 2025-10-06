@@ -2,8 +2,7 @@ import type {
   AggregatedEmotionProfileDto,
   HeadlineDto,
 } from '@devbarometer/shared';
-import type { EmotionProfile } from '../../core/entity/EmotionProfile';
-import type { Report } from '../../core/entity/Report';
+import type { EmotionProfile, Report } from '../../core/entity';
 import type { PersistencePort } from '../../core/port/PersistencePort';
 import type { QueryPort } from '../../core/port/QueryPort';
 import { getAggregatedProfiles } from './getAggregatedProfiles';

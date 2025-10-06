@@ -15,6 +15,31 @@ export default defineConfig([
   },
   sharedConfig,
   {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: [
+                './entity/*',
+                '../entity/*',
+                '../../entity/*',
+                '../core/entity/*',
+                '../../core/entity/*',
+                '../../../core/entity/*',
+                '@/internal/core/entity/*',
+              ],
+              message:
+                'Import backend entities via the barrel (e.g. "../entity" or "../../core/entity").',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.ts'],
     languageOptions: {
       parser: tsparser,
