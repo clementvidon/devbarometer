@@ -1,6 +1,6 @@
-import type {
-  EmotionScores as SharedEmotionScores,
-  TonalityScores as SharedTonalityScores,
+import {
+  type EmotionScores as SharedEmotionScores,
+  type TonalityScores as SharedTonalityScores,
 } from '@devbarometer/shared';
 
 export type EmotionScores = SharedEmotionScores;

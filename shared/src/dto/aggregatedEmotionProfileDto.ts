@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { EmotionScoresSchema, TonalityScoresSchema } from '../domain/emotion';
+import { EmotionScoresSchema, TonalityScoresSchema } from '../domain/Emotion';
 import { IsoDateStringSchema } from '../primitives/date';
 
 export const AggregatedEmotionProfileDtoSchema = z.object({

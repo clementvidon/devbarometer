@@ -48,7 +48,7 @@
     "export": "npm --workspace backend run export",
     "restore": "npm --workspace backend run restore",
 
-    "build-shared": "npm --workspace shared run type-check && npm --workspace shared run build",
+    "build-shared": "npm --workspace shared run type-check && npm --workspace shared run clean && npm --workspace shared run build",
 
     "generate-static": "npm --workspace backend run generate-static",
     "build-frontend": "npm --workspace frontend run predeploy",
