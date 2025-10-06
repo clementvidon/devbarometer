@@ -1,27 +1,27 @@
 [
   {
-    "title": "Valoriser notre dépôt Github !",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1nwud8i"
-  },
-  {
-    "title": "Marché développeur en chute libre ? Retour promo école ~50 élèves",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1num95p"
-  },
-  {
     "title": "L'enfer pour les juniors qui entrent sur le marché du travail",
     "weight": "2",
     "source": "https://reddit.com/comments/1nw6sll"
   },
   {
-    "title": "Vous pensez quoi de ce test technique pour alternance ?",
+    "title": "Moldu reconverti",
     "weight": "2",
-    "source": "https://reddit.com/comments/1nu9pbx"
+    "source": "https://reddit.com/comments/1nx7c7y"
   },
   {
-    "title": "Reconversion où je continue ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1nuh71q"
+    "title": "Marché développeur en chute libre ? Retour promo école ~50 élèves",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1num95p"
+  },
+  {
+    "title": "Pourquoi Java est si prédominant en backend ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1nv1hga"
+  },
+  {
+    "title": "Salaire et avenir professionnel",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1nv4trx"
   }
 ]
