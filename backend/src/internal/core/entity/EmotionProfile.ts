@@ -1,10 +1,9 @@
-import {
-  type EmotionScores as SharedEmotionScores,
-  type TonalityScores as SharedTonalityScores,
-} from '@devbarometer/shared';
+import type {
+  EmotionScores,
+  TonalityScores,
+} from '@devbarometer/shared/domain';
 
-export type EmotionScores = SharedEmotionScores;
-export type TonalityScores = SharedTonalityScores;
+export type { EmotionScores, TonalityScores };
 
 export interface AggregatedEmotionProfile {
   count: number;

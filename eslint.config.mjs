@@ -77,4 +77,21 @@ export default defineConfig([
       },
     },
   },
+  {
+    files: ['frontend/src/**/*.{ts,tsx}', 'backend/src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@devbarometer/shared/*/*'],
+              message:
+                'Use the published barrels (e.g. "@devbarometer/shared") instead of deep internal paths.',
+            },
+          ],
+        },
+      ],
+    },
+  },
 ]);

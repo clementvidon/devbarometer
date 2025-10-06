@@ -1,5 +1,7 @@
-import type { HeadlineDto } from '@devbarometer/shared';
-import { type AggregatedEmotionProfileDto } from '@devbarometer/shared';
+import type {
+  AggregatedEmotionProfileDto,
+  HeadlineDto,
+} from '@devbarometer/shared/dto';
 import type { EmotionProfile } from '../entity/EmotionProfile';
 import type { Report } from '../entity/Report';
 

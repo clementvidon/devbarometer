@@ -7,9 +7,34 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./domain": {
+      "types": "./dist/domain/index.d.ts",
+      "default": "./dist/domain/index.js"
+    },
+    "./dto": {
+      "types": "./dist/dto/index.d.ts",
+      "default": "./dist/dto/index.js"
+    },
+    "./primitives": {
+      "types": "./dist/primitives/index.d.ts",
+      "default": "./dist/primitives/index.js"
     }
   },
   "types": "./dist/index.d.ts",
+  "typesVersions": {
+    "*": {
+      "domain": [
+        "dist/domain/index.d.ts"
+      ],
+      "dto": [
+        "dist/dto/index.d.ts"
+      ],
+      "primitives": [
+        "dist/primitives/index.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
