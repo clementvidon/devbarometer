@@ -26,6 +26,9 @@ jobs:
         env:
           CI: true
 
+      - name: Build shared package
+        run: npm run build-shared
+
       - name: Generate sentiment report
         run: npm --workspace backend run agent
         env:
