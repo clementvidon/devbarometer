@@ -24,7 +24,7 @@
     "recharts": "^3.1.0"
   },
   "devDependencies": {
-    "@devbarometer/shared": "workspace:*",
+    "@devbarometer/shared": "*",
     "drizzle-orm": "^0.43.1",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
