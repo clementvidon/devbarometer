@@ -10,7 +10,7 @@ import { getLastProfiles } from './getLastProfiles';
 import { getLastReport } from './getLastReport';
 import { getTopHeadlines } from './getTopHeadlines';
 
-export class QueryService implements SnapshotQueryPort {
+export class SnapshotQueryService implements SnapshotQueryPort {
   constructor(private readonly persistence: PersistencePort) {}
 
   async getLastReport(): Promise<Report | null> {

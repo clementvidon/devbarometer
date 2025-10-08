@@ -1,9 +1,9 @@
 import type { PersistencePort } from '../../ports/PersistencePort';
 import type { SnapshotQueryPort } from '../../ports/SnapshotQueryPort';
-import { QueryService } from './ReportQueryService';
+import { SnapshotQueryService } from './SnapshotQueryService';
 
-export function makeReportQueryService(
+export function makeSnapshotQueryService(
   persistence: PersistencePort,
 ): SnapshotQueryPort {
-  return new QueryService(persistence);
+  return new SnapshotQueryService(persistence);
 }

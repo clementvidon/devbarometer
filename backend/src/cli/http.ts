@@ -9,7 +9,7 @@ import type { FetchPort } from '../application/ports/FetchPort';
 import type { LlmPort } from '../application/ports/LlmPort';
 import type { PersistencePort } from '../application/ports/PersistencePort';
 import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
-import { makeReportQueryService } from '../application/usecases/queries/makeReportQueryService';
+import { makeSnapshotQueryService } from '../application/usecases/queries/makeSnapshotQueryService';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
 type Deps = {
@@ -26,7 +26,7 @@ export function buildServer(deps: Deps) {
     deps.llm,
     deps.persistence,
   );
-  const query = makeReportQueryService(deps.persistence);
+  const query = makeSnapshotQueryService(deps.persistence);
   const app = makeReportController(agent, query);
   return { app, port: deps.port };
 }
