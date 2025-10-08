@@ -16,7 +16,7 @@ vi.mock('../infrastructure/fetch/NodeFetchAdapter', () => ({
 vi.mock('../infrastructure/llm/OpenAIAdapter', () => ({
   OpenAIAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../infrastructure/items/RedditItemsAdapter', () => ({
+vi.mock('../infrastructure/sources/RedditItemsAdapter', () => ({
   RedditItemsAdapter: vi.fn(() => ({})),
 }));
 vi.mock('../application/usecases/agent/makeReportingAgent', () => ({
