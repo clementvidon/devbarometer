@@ -19,7 +19,7 @@ vi.mock('../internal/adapter/driven/llm/OpenAIAdapter', () => ({
 vi.mock('../internal/adapter/driven/items/RedditItemsAdapter', () => ({
   RedditItemsAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/usecase/agent/makeReportingAgent', () => ({
+vi.mock('../application/usecases/agent/makeReportingAgent', () => ({
   makeReportingAgent: vi.fn(() => ({
     captureSnapshot: captureSnapshotMock,
   })),

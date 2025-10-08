@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { Item, Report, WeightedItem } from '../../../domain/entities';
-import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort';
-import type { LlmPort } from '../../core/port/LlmPort';
-import type { PersistencePort } from '../../core/port/PersistencePort';
-import type { WeightsPort } from '../../core/port/WeightsPort';
+import type { ItemsProviderPort } from '../../../internal/core/port/ItemsProviderPort';
+import type { LlmPort } from '../../../internal/core/port/LlmPort';
+import type { PersistencePort } from '../../../internal/core/port/PersistencePort';
+import type { WeightsPort } from '../../../internal/core/port/WeightsPort';
 import { ReportingAgent } from './ReportingAgent';
 
 const mockItems: Item[] = [

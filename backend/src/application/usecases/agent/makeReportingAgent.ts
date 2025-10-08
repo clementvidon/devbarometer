@@ -2,10 +2,10 @@ import {
   DEFAULT_WEIGHTS_OPTIONS,
   MomentumWeightsStrategy,
 } from '../../../domain/services/weights/MomentumWeightsStrategy';
-import type { AgentPort } from '../../core/port/AgentPort';
-import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort';
-import type { LlmPort } from '../../core/port/LlmPort';
-import type { PersistencePort } from '../../core/port/PersistencePort';
+import type { AgentPort } from '../../../internal/core/port/AgentPort';
+import type { ItemsProviderPort } from '../../../internal/core/port/ItemsProviderPort';
+import type { LlmPort } from '../../../internal/core/port/LlmPort';
+import type { PersistencePort } from '../../../internal/core/port/PersistencePort';
 import { ReportingAgent } from './ReportingAgent';
 
 export function makeReportingAgent(

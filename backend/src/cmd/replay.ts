@@ -2,11 +2,11 @@ import 'dotenv/config';
 import fs from 'fs';
 import OpenAI from 'openai';
 import path from 'path';
+import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
 import type { Item } from '../domain/entities';
 import { JsonSnapshotAdapter } from '../internal/adapter/driven/items/JsonSnapshotAdapter';
 import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter';
-import { makeReportingAgent } from '../internal/usecase/agent/makeReportingAgent';
 
 // - Dump Neon UI: { id?, date_created: "YYYY-MM-DD HH:mm:ss.SSS", data: { items: Item[] } }
 // - Export Script: { id?, createdAt: "YYYY-MM-DDTHH:mm:ss.SSSZ", items: Item[] }

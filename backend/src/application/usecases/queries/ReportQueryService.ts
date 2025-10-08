@@ -3,8 +3,8 @@ import type {
   HeadlineDto,
 } from '@devbarometer/shared/dto';
 import type { EmotionProfile, Report } from '../../../domain/entities';
-import type { PersistencePort } from '../../core/port/PersistencePort';
-import type { QueryPort } from '../../core/port/QueryPort';
+import type { PersistencePort } from '../../../internal/core/port/PersistencePort';
+import type { QueryPort } from '../../../internal/core/port/QueryPort';
 import { getAggregatedProfiles } from './getAggregatedProfiles';
 import { getLastProfiles } from './getLastProfiles';
 import { getLastReport } from './getLastReport';

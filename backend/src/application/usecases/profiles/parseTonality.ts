@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type { TonalityScores } from '../../../domain/entities';
-import { stripCodeFences } from '../../lib/string/stripCodeFences';
+import { stripCodeFences } from '../../../internal/lib/string/stripCodeFences';
 import { FALLBACK_TONALITIES } from './policy';
 
 const TonalitySchema = z.object({

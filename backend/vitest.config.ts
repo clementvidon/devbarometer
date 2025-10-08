@@ -11,7 +11,7 @@ export default defineConfig({
       exclude: [
         'domain/entities/**',
         'internal/core/port/**',
-        'internal/core/types/**',
+        'domain/value-objects/**',
       ],
     },
   },

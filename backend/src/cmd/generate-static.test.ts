@@ -10,13 +10,13 @@ describe('generateStatic', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    vi.mock('../internal/usecase/queries/getTopHeadlines', () => ({
+    vi.mock('../application/usecases/queries/getTopHeadlines', () => ({
       getTopHeadlines: () => ['Item A', 'Item B'],
     }));
-    vi.mock('../internal/usecase/queries/getLastReport', () => ({
+    vi.mock('../application/usecases/queries/getLastReport', () => ({
       getLastReport: () => ({ text: 'report', emoji: '☀️ ' }),
     }));
-    vi.mock('../internal/usecase/queries/getAggregatedProfiles', () => ({
+    vi.mock('../application/usecases/queries/getAggregatedProfiles', () => ({
       getAggregatedProfiles: () => [{ createdAt: '2025-08-03', aggregate: {} }],
     }));
   });

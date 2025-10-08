@@ -1,12 +1,12 @@
 import type { WeightedItem } from '../../../domain/entities';
 import { aggregateProfiles } from '../../../domain/services/profiles/aggregateProfiles';
-import type { AgentPort } from '../../core/port/AgentPort';
-import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort';
-import type { LlmPort } from '../../core/port/LlmPort';
-import type { PersistencePort } from '../../core/port/PersistencePort';
-import type { WeightsPort } from '../../core/port/WeightsPort';
-import { formatFloat } from '../../lib/number/formatFloat';
-import { nowIso } from '../../lib/time/nowIso';
+import type { AgentPort } from '../../../internal/core/port/AgentPort';
+import type { ItemsProviderPort } from '../../../internal/core/port/ItemsProviderPort';
+import type { LlmPort } from '../../../internal/core/port/LlmPort';
+import type { PersistencePort } from '../../../internal/core/port/PersistencePort';
+import type { WeightsPort } from '../../../internal/core/port/WeightsPort';
+import { formatFloat } from '../../../internal/lib/number/formatFloat';
+import { nowIso } from '../../../internal/lib/time/nowIso';
 import { createProfiles } from '../profiles/createProfiles';
 import { createReport } from '../profiles/createReport';
 import { getRelevantItemsBefore } from '../queries/getRelevantItemsBefore';
@@ -29,6 +29,7 @@ export class ReportingAgent implements AgentPort {
     const items = await this.items.getItems();
     console.log(`[Agent] Got ${items.length} items`);
     const label = this.items.getLabel();
+
     const createdAt = this.items.getCreatedAt() ?? nowIso();
     const previous = await getRelevantItemsBefore(createdAt, this.persistence);
     console.log(`[Agent] Got ${previous.length} previous`);

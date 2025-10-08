@@ -1,6 +1,6 @@
 import pLimit from 'p-limit';
 import type { Item, RelevantItem } from '../../../domain/entities';
-import type { LlmPort } from '../../core/port/LlmPort';
+import type { LlmPort } from '../../../internal/core/port/LlmPort';
 import { makeRelevanceMessages } from './messages';
 import { parseRelevanceResult } from './parseResult';
 import { CONCURRENCY, DEFAULT_LLM_OPTIONS } from './policy';

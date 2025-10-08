@@ -5,10 +5,10 @@ import { RedditItemsAdapter } from '../internal/adapter/driven/items/RedditItems
 import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter';
 
+import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
 import type { FetchPort } from '../internal/core/port/FetchPort';
 import type { LlmPort } from '../internal/core/port/LlmPort';
 import type { PersistencePort } from '../internal/core/port/PersistencePort';
-import { makeReportingAgent } from '../internal/usecase/agent/makeReportingAgent';
 
 type Deps = {
   redditUrl: string;
