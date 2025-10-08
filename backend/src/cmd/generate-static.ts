@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import { getAggregatedProfiles } from '../application/usecases/queries/getAggregatedProfiles';
 import { getLastReport } from '../application/usecases/queries/getLastReport';
 import { getTopHeadlines } from '../application/usecases/queries/getTopHeadlines';
-import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter';
+import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.resolve(__dirname, '../../../frontend/public');

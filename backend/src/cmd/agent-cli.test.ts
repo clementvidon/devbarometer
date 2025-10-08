@@ -10,13 +10,13 @@ const exitSpy = vi
 vi.mock('../internal/adapter/driven/persistence/PostgresAdapter', () => ({
   PostgresAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter', () => ({
+vi.mock('../infrastructure/fetch/NodeFetchAdapter', () => ({
   NodeFetchAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/llm/OpenAIAdapter', () => ({
+vi.mock('../infrastructure/llm/OpenAIAdapter', () => ({
   OpenAIAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/items/RedditItemsAdapter', () => ({
+vi.mock('../infrastructure/items/RedditItemsAdapter', () => ({
   RedditItemsAdapter: vi.fn(() => ({})),
 }));
 vi.mock('../application/usecases/agent/makeReportingAgent', () => ({

@@ -10,13 +10,13 @@ vi.mock('../internal/adapter/driving/web/ReportController', () => ({
   makeReportController: vi.fn(() => ({ listen: listenSpy })),
 }));
 
-vi.mock('../internal/adapter/driven/persistence/PostgresAdapter', () => ({
+vi.mock('../infrastructure/persistence/PostgresAdapter', () => ({
   PostgresAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/fetch/NodeFetchAdapter', () => ({
+vi.mock('../infrastructure/fetch/NodeFetchAdapter', () => ({
   NodeFetchAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../internal/adapter/driven/llm/OpenAIAdapter', () => ({
+vi.mock('../infrastructure/llm/OpenAIAdapter', () => ({
   OpenAIAdapter: vi.fn(() => ({})),
 }));
 

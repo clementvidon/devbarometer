@@ -1,14 +1,14 @@
 import 'dotenv/config';
 import OpenAI from 'openai';
-import { NodeFetchAdapter } from '../internal/adapter/driven/fetch/NodeFetchAdapter';
-import { RedditItemsAdapter } from '../internal/adapter/driven/items/RedditItemsAdapter';
-import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter';
-import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter';
+import { NodeFetchAdapter } from '../infrastructure/fetch/NodeFetchAdapter';
+import { RedditItemsAdapter } from '../infrastructure/items/RedditItemsAdapter';
+import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
 
 import type { FetchPort } from '../application/ports/FetchPort';
 import type { LlmPort } from '../application/ports/LlmPort';
 import type { PersistencePort } from '../application/ports/PersistencePort';
 import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
+import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
 type Deps = {
   redditUrl: string;
