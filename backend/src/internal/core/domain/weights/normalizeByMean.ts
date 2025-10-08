@@ -1,4 +1,4 @@
-import type { WeightedItem } from '../../entity';
+import type { WeightedItem } from '../../../../domain/entities';
 import type { NormalizeOptions } from './MomentumWeightsStrategy';
 
 /**

@@ -9,7 +9,7 @@ export default defineConfig({
       reportsDirectory: './.coverage',
       provider: 'v8',
       exclude: [
-        'internal/core/entity/**',
+        'domain/entities/**',
         'internal/core/port/**',
         'internal/core/types/**',
       ],

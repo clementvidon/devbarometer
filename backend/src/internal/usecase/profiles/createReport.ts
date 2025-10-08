@@ -4,7 +4,7 @@ import {
   type EmotionScores,
   type Report,
   WEATHER_EMOJIS,
-} from '../../core/entity';
+} from '../../../domain/entities';
 import type { LlmMessage, LlmPort } from '../../core/port/LlmPort';
 import { stripCodeFences } from '../../lib/string/stripCodeFences';
 

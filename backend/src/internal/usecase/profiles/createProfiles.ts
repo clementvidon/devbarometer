@@ -1,5 +1,5 @@
 import pLimit from 'p-limit';
-import type { EmotionProfile, WeightedItem } from '../../core/entity';
+import type { EmotionProfile, WeightedItem } from '../../../domain/entities';
 import type { LlmPort } from '../../core/port/LlmPort';
 import { makeEmotionMessages, makeTonalityMessages } from './messages';
 import { parseEmotionRaw } from './parseEmotion';

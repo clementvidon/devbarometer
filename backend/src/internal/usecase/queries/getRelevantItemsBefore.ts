@@ -1,4 +1,4 @@
-import type { RelevantItem } from '../../core/entity';
+import type { RelevantItem } from '../../../domain/entities';
 import type { PersistencePort } from '../../core/port/PersistencePort';
 
 export async function getRelevantItemsBefore(

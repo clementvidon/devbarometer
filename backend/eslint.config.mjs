@@ -23,16 +23,14 @@ export default defineConfig([
           patterns: [
             {
               group: [
-                './entity/*',
-                '../entity/*',
-                '../../entity/*',
-                '../core/entity/*',
-                '../../core/entity/*',
-                '../../../core/entity/*',
-                '@/internal/core/entity/*',
+                './entities/*',
+                '../entities/*',
+                '../domain/entities/*',
+                '../../domain/entities/*',
+                '@/domain/entities/*',
               ],
               message:
-                'Import backend entities via the barrel (e.g. "../entity" or "../../core/entity").',
+                'Import backend entities via the barrel (e.g. "../entity" or "../domain/entity").',
             },
           ],
         },

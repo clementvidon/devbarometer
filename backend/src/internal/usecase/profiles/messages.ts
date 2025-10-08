@@ -1,4 +1,4 @@
-import type { WeightedItem } from '../../core/entity';
+import type { WeightedItem } from '../../../domain/entities';
 import type { LlmMessage } from '../../core/port/LlmPort';
 
 export function makeEmotionMessages(

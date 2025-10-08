@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import type { EmotionProfile, WeightedItem } from '../../core/entity';
+import type { EmotionProfile, WeightedItem } from '../../../domain/entities';
 import type { LlmMessage } from '../../core/port/LlmPort';
 import { createProfiles } from './createProfiles';
 

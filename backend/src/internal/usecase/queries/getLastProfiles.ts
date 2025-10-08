@@ -1,4 +1,4 @@
-import type { EmotionProfile } from '../../core/entity';
+import type { EmotionProfile } from '../../../domain/entities';
 import type { PersistencePort } from '../../core/port/PersistencePort';
 
 export async function getLastProfiles(

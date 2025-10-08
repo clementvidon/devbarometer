@@ -1,4 +1,4 @@
-import type { Report } from '../../core/entity';
+import type { Report } from '../../../domain/entities';
 import type { PersistencePort } from '../../core/port/PersistencePort';
 
 export async function getLastReport(
