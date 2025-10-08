@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 import { NodeFetchAdapter } from '../infrastructure/fetch/NodeFetchAdapter';
 import { RedditItemsAdapter } from '../infrastructure/items/RedditItemsAdapter';
 import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
-import { makeReportController } from '../internal/adapter/driving/web/ReportController';
+import { makeReportController } from '../interface/web/ReportController';
 
 import type { FetchPort } from '../application/ports/FetchPort';
 import type { LlmPort } from '../application/ports/LlmPort';

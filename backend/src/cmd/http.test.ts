@@ -6,7 +6,7 @@ const listenSpy = vi.fn((_port: number, cb?: () => void): Server => {
   return { close: vi.fn() } as unknown as Server;
 });
 
-vi.mock('../internal/adapter/driving/web/ReportController', () => ({
+vi.mock('../interface/web/ReportController', () => ({
   makeReportController: vi.fn(() => ({ listen: listenSpy })),
 }));
 
