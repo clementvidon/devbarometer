@@ -15,7 +15,7 @@ type SnapRow = { id?: string; createdAt: string; items: Item[] };
 type AnyRow = RawRow | SnapRow;
 
 function usage() {
-  console.log('Usage: tsx src/cmd/replay <input.json>');
+  console.log('Usage: tsx src/cli/replay <input.json>');
   process.exit(1);
 }
 
