@@ -3,8 +3,8 @@ import type { FetchPort } from '../../application/ports/FetchPort';
 import type { ItemsProviderPort } from '../../application/ports/ItemsProviderPort';
 import type { Item } from '../../domain/entities';
 import { filterByScore } from '../../domain/services/items/filterByScore';
-import { fetchWithRetry } from '../../internal/lib/http/fetchWithRetry';
-import { normalizeWhitespace } from '../../internal/lib/string/normalizeWhitespace';
+import { fetchWithRetry } from '../../lib/http/fetchWithRetry';
+import { normalizeWhitespace } from '../../lib/string/normalizeWhitespace';
 import { getRedditAccessToken } from './redditAuth';
 
 export const RedditChildSchema = z.object({

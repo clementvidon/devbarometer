@@ -8,8 +8,8 @@ import type {
   LlmPort,
   LlmRunOptions,
 } from '../../application/ports/LlmPort';
-import { sleep } from '../../internal/lib/async/sleep';
-import { parseRetryAfter } from '../../internal/lib/http/parseRetryAfter';
+import { sleep } from '../../lib/async/sleep';
+import { parseRetryAfter } from '../../lib/http/parseRetryAfter';
 
 export interface OpenAIOptions {
   maxRetries: number;

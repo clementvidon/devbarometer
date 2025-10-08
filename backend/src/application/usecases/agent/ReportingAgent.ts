@@ -1,7 +1,7 @@
 import type { WeightedItem } from '../../../domain/entities';
 import { aggregateProfiles } from '../../../domain/services/profiles/aggregateProfiles';
-import { formatFloat } from '../../../internal/lib/number/formatFloat';
-import { nowIso } from '../../../internal/lib/time/nowIso';
+import { formatFloat } from '../../../lib/number/formatFloat';
+import { nowIso } from '../../../lib/time/nowIso';
 import type { AgentPort } from '../../ports/AgentPort';
 import type { ItemsProviderPort } from '../../ports/ItemsProviderPort';
 import type { LlmPort } from '../../ports/LlmPort';
