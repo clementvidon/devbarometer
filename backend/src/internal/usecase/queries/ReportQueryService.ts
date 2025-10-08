@@ -1,7 +1,7 @@
 import type {
   AggregatedEmotionProfileDto,
   HeadlineDto,
-} from '@devbarometer/shared';
+} from '@devbarometer/shared/dto';
 import type { EmotionProfile, Report } from '../../core/entity';
 import type { PersistencePort } from '../../core/port/PersistencePort';
 import type { QueryPort } from '../../core/port/QueryPort';
