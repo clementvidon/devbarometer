@@ -4,13 +4,13 @@ import type {
 } from '@devbarometer/shared/dto';
 import type { EmotionProfile, Report } from '../../../domain/entities';
 import type { PersistencePort } from '../../ports/PersistencePort';
-import type { QueryPort } from '../../ports/QueryPort';
+import type { SnapshotQueryPort } from '../../ports/SnapshotQueryPort';
 import { getAggregatedProfiles } from './getAggregatedProfiles';
 import { getLastProfiles } from './getLastProfiles';
 import { getLastReport } from './getLastReport';
 import { getTopHeadlines } from './getTopHeadlines';
 
-export class QueryService implements QueryPort {
+export class QueryService implements SnapshotQueryPort {
   constructor(private readonly persistence: PersistencePort) {}
 
   async getLastReport(): Promise<Report | null> {

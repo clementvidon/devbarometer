@@ -12,7 +12,7 @@ import type { EmotionProfile, Report } from '../../domain/entities';
  * - No side-effects: callers manage caching/retry/authorization.
  * - Implementations must not mutate returned objects; stable shapes expected.
  */
-export interface QueryPort {
+export interface SnapshotQueryPort {
   getLastReport(): Promise<Report | null>;
   getLastProfiles(): Promise<EmotionProfile[] | null>;
   getAggregatedProfiles(): Promise<AggregatedEmotionProfileDto[]>;
