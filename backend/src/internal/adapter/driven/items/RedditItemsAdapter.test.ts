@@ -7,7 +7,7 @@ import {
   test,
   vi,
 } from 'vitest';
-import type { FetchPort } from '../../../core/port/FetchPort';
+import type { FetchPort } from '../../../../application/ports/FetchPort';
 import {
   fetchRedditItems,
   RedditItemsAdapter,

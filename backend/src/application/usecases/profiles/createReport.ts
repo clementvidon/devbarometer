@@ -5,8 +5,8 @@ import {
   type Report,
   WEATHER_EMOJIS,
 } from '../../../domain/entities';
-import type { LlmMessage, LlmPort } from '../../../internal/core/port/LlmPort';
 import { stripCodeFences } from '../../../internal/lib/string/stripCodeFences';
+import type { LlmMessage, LlmPort } from '../../ports/LlmPort';
 
 /* pickStandoutsByScore */
 

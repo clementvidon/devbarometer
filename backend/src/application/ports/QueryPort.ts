@@ -2,7 +2,7 @@ import type {
   AggregatedEmotionProfileDto,
   HeadlineDto,
 } from '@devbarometer/shared/dto';
-import type { EmotionProfile, Report } from '../../../domain/entities';
+import type { EmotionProfile, Report } from '../../domain/entities';
 
 /**
  * Read-only query port for application-level snapshot data.

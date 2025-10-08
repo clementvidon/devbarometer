@@ -1,4 +1,4 @@
-import type { RelevantItem, WeightedItem } from '../../../domain/entities';
+import type { RelevantItem, WeightedItem } from '../../domain/entities';
 
 /**
  * Compute weights for the given items.

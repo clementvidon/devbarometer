@@ -1,4 +1,4 @@
-import type { WeightsPort } from '../../../internal/core/port/WeightsPort';
+import type { WeightsPort } from '../../../application/ports/WeightsPort';
 import type { RelevantItem, WeightedItem } from '../../entities';
 import { capByPercentile } from './capByPercentile';
 import { computeMomentum } from './computeMomentum';

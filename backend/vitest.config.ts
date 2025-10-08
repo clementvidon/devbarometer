@@ -10,8 +10,8 @@ export default defineConfig({
       provider: 'v8',
       exclude: [
         'domain/entities/**',
-        'internal/core/port/**',
         'domain/value-objects/**',
+        'application/ports/**',
       ],
     },
   },

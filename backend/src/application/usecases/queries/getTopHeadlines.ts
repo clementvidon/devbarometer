@@ -1,6 +1,6 @@
 import { type HeadlineDto, HeadlineDtoSchema } from '@devbarometer/shared/dto';
-import type { PersistencePort } from '../../../internal/core/port/PersistencePort';
 import { formatFloat } from '../../../internal/lib/number/formatFloat';
+import type { PersistencePort } from '../../ports/PersistencePort';
 
 function mapHeadlineToDto(raw: {
   title: string;

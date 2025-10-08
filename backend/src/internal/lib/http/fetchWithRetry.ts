@@ -1,4 +1,4 @@
-import type { FetchPort } from '../../core/port/FetchPort';
+import type { FetchPort } from '../../../application/ports/FetchPort';
 import { sleep } from '../async/sleep';
 import { withTimeout } from '../async/withTimeout';
 import { truncate } from '../log/truncate';

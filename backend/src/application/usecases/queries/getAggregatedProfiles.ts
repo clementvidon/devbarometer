@@ -3,7 +3,7 @@ import {
   type AggregatedEmotionProfileDto,
 } from '@devbarometer/shared/dto';
 import type { AggregatedEmotionProfile } from '../../../domain/entities';
-import type { PersistencePort } from '../../../internal/core/port/PersistencePort';
+import type { PersistencePort } from '../../ports/PersistencePort';
 
 function mapAggregateToDto(
   createdAt: string,

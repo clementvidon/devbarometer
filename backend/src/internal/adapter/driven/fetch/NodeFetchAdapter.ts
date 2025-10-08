@@ -1,4 +1,4 @@
-import type { FetchPort } from '../../../core/port/FetchPort';
+import type { FetchPort } from '../../../../application/ports/FetchPort';
 
 export class NodeFetchAdapter implements FetchPort {
   constructor(private readonly fetchFn: typeof fetch) {}

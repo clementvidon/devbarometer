@@ -6,11 +6,11 @@ import { OpenAIAdapter } from '../internal/adapter/driven/llm/OpenAIAdapter';
 import { PostgresAdapter } from '../internal/adapter/driven/persistence/PostgresAdapter';
 import { makeReportController } from '../internal/adapter/driving/web/ReportController';
 
+import type { FetchPort } from '../application/ports/FetchPort';
+import type { LlmPort } from '../application/ports/LlmPort';
+import type { PersistencePort } from '../application/ports/PersistencePort';
 import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
 import { makeReportQueryService } from '../application/usecases/queries/makeReportQueryService';
-import type { FetchPort } from '../internal/core/port/FetchPort';
-import type { LlmPort } from '../internal/core/port/LlmPort';
-import type { PersistencePort } from '../internal/core/port/PersistencePort';
 
 type Deps = {
   redditUrl: string;

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { EmotionProfile, WeightedItem } from '../../../domain/entities';
-import type { LlmMessage } from '../../../internal/core/port/LlmPort';
+import type { LlmMessage } from '../../ports/LlmPort';
 import { createProfiles } from './createProfiles';
 
 type RunFn = (

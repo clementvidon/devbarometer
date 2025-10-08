@@ -1,4 +1,4 @@
-import type { LlmRunOptions } from '../../../internal/core/port/LlmPort';
+import type { LlmRunOptions } from '../../ports/LlmPort';
 
 export const CONCURRENCY = 1;
 
