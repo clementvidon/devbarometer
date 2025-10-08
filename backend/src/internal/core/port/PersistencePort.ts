@@ -1,4 +1,7 @@
-import type { PipelineSnapshot, SnapshotData } from '../types/PipelineSnapshot';
+import type {
+  PipelineSnapshot,
+  SnapshotData,
+} from '../../../domain/value-objects/PipelineSnapshot';
 
 export interface PersistencePort {
   /**

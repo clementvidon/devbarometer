@@ -5,7 +5,7 @@ import type {
   RelevantItem,
   Report,
   WeightedItem,
-} from '../../../domain/entities';
+} from '../entities';
 
 export type PipelineSnapshot = {
   id: string;

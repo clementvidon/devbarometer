@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { SnapshotData } from '../../../core/types/PipelineSnapshot';
+import type { SnapshotData } from '../../../../domain/value-objects/PipelineSnapshot';
 
 type DrizzleSpies = {
   insert: ReturnType<typeof vi.fn>;
