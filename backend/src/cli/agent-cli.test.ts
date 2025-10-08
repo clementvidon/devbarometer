@@ -7,7 +7,7 @@ const exitSpy = vi
   .spyOn(process, 'exit')
   .mockImplementation((() => undefined) as unknown as never);
 
-vi.mock('../internal/adapter/driven/persistence/PostgresAdapter', () => ({
+vi.mock('../infrastructure/persistence/PostgresAdapter', () => ({
   PostgresAdapter: vi.fn(() => ({})),
 }));
 vi.mock('../infrastructure/fetch/NodeFetchAdapter', () => ({
