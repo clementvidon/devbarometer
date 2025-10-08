@@ -1,5 +1,5 @@
-import type { RelevantItem, WeightedItem } from '../../../../domain/entities';
-import type { WeightsPort } from '../../port/WeightsPort';
+import type { WeightsPort } from '../../../internal/core/port/WeightsPort';
+import type { RelevantItem, WeightedItem } from '../../entities';
 import { capByPercentile } from './capByPercentile';
 import { computeMomentum } from './computeMomentum';
 import { normalizeByMean } from './normalizeByMean';

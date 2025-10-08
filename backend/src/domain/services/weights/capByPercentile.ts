@@ -1,4 +1,4 @@
-import type { WeightedItem } from '../../../../domain/entities';
+import type { WeightedItem } from '../../entities';
 import type { CapOptions } from './MomentumWeightsStrategy';
 
 export type WeightsCapReason =

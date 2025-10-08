@@ -1,7 +1,7 @@
 import {
   DEFAULT_WEIGHTS_OPTIONS,
   MomentumWeightsStrategy,
-} from '../../core/domain/weights/MomentumWeightsStrategy';
+} from '../../../domain/services/weights/MomentumWeightsStrategy';
 import type { AgentPort } from '../../core/port/AgentPort';
 import type { ItemsProviderPort } from '../../core/port/ItemsProviderPort';
 import type { LlmPort } from '../../core/port/LlmPort';
