@@ -1,3 +1,3 @@
 export * from './domain';
-export * from './dto';
+export * from './dtos';
 export * from './primitives';
