@@ -181,11 +181,11 @@ Retourne uniquement un JSON brut :
 }
 
 export async function createReport(
-  agregatedEmotionProfile: AggregatedEmotionProfile,
+  aggregatedEmotionProfile: AggregatedEmotionProfile,
   llm: LlmPort,
 ): Promise<Report> {
   try {
-    const summary = summarizeProfile(agregatedEmotionProfile);
+    const summary = summarizeProfile(aggregatedEmotionProfile);
     console.log(summary);
     const raw = await llm.run('gpt-5-chat-latest', makeMessages(summary), {
       temperature: 0.4,
