@@ -1,4 +1,4 @@
-import { type HeadlineDto, HeadlineDtoSchema } from '@devbarometer/shared/dto';
+import { type HeadlineDto, HeadlineDtoSchema } from '@devbarometer/shared/dtos';
 import { formatFloat } from '../../../lib/number/formatFloat';
 import type { PersistencePort } from '../../ports/PersistencePort';
 

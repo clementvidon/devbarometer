@@ -1,7 +1,7 @@
 import {
   AggregatedEmotionProfileDtoSchema,
   type AggregatedEmotionProfileDto,
-} from '@devbarometer/shared/dto';
+} from '@devbarometer/shared/dtos';
 import type { AggregatedEmotionProfile } from '../../../domain/entities';
 import type { PersistencePort } from '../../ports/PersistencePort';
 

@@ -12,9 +12,9 @@
       "types": "./dist/domain/index.d.ts",
       "default": "./dist/domain/index.js"
     },
-    "./dto": {
-      "types": "./dist/dto/index.d.ts",
-      "default": "./dist/dto/index.js"
+    "./dtos": {
+      "types": "./dist/dtos/index.d.ts",
+      "default": "./dist/dtos/index.js"
     },
     "./primitives": {
       "types": "./dist/primitives/index.d.ts",
@@ -27,8 +27,8 @@
       "domain": [
         "dist/domain/index.d.ts"
       ],
-      "dto": [
-        "dist/dto/index.d.ts"
+      "dtos": [
+        "dist/dtos/index.d.ts"
       ],
       "primitives": [
         "dist/primitives/index.d.ts"

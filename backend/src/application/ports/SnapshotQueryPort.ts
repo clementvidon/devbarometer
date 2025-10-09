@@ -1,7 +1,7 @@
 import type {
   AggregatedEmotionProfileDto,
   HeadlineDto,
-} from '@devbarometer/shared/dto';
+} from '@devbarometer/shared/dtos';
 import type { EmotionProfile, Report } from '../../domain/entities';
 
 /**
