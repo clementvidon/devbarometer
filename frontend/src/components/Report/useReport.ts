@@ -1,8 +1,8 @@
-import type { Report } from '@devbarometer/shared';
+import type { ReportDto } from '@devbarometer/shared';
 import { useEffect, useState } from 'react';
 
 export function useReport() {
-  const [report, setReport] = useState<Report | null>(null);
+  const [report, setReport] = useState<ReportDto | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -11,7 +11,7 @@ export function useReport() {
       .then((r) => (r.ok ? r.json() : null))
       .then((data: unknown) => {
         if (data && typeof data === 'object') {
-          setReport(data as Report);
+          setReport(data as ReportDto);
         } else {
           throw new Error('Format de données invalide');
         }
