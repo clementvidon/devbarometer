@@ -46,7 +46,8 @@
     "lint": "eslint .",
     "type-check": "tsc --noEmit",
     "test": "vitest run --silent",
-    "test:coverage": "vitest --coverage --silent"
+    "test:coverage": "vitest --coverage --silent",
+    "check": "npm-run-all --sequential format lint type-check test"
   },
   "dependencies": {
     "zod": "^3.25.76"
