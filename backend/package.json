@@ -23,23 +23,22 @@
   },
   "dependencies": {
     "@devbarometer/shared": "*",
+    "dotenv": "^16.5.0",
     "drizzle-orm": "^0.43.1",
     "express": "^5.1.0",
     "lowdb": "^7.0.1",
-    "node-fetch": "^2.7.0",
     "openai": "^4.95.0",
     "p-limit": "^5.0.0",
-    "pg": "^8.15.6",
-    "postgres": "^3.4.5",
+    "postgres": "^3.4.7",
     "uuid": "^11.1.0",
-    "zod": "^3.24.3"
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/node": "^22.17.0",
     "@types/supertest": "^6.0.3",
-    "dotenv": "^16.5.0",
     "drizzle-kit": "^0.31.4",
-    "supertest": "^7.1.4"
+    "supertest": "^7.1.4",
+    "tsx": "^4.20.3"
   }
 }
