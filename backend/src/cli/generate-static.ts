@@ -1,12 +1,13 @@
 import 'dotenv/config';
 import fs from 'fs';
+import { pathToFileURL } from 'node:url';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { getAggregatedProfiles } from '../application/usecases/queries/getAggregatedProfiles';
 import { getLastReport } from '../application/usecases/queries/getLastReport';
 import { getTopHeadlines } from '../application/usecases/queries/getTopHeadlines';
-import { EnvConfigAdapter } from '../infrastructure/config/EnvConfigAdapter';
+import { loadCoreConfig } from '../infrastructure/config/loaders';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -19,8 +20,8 @@ function save(filename: string, data: unknown) {
 }
 
 export async function generateStatic() {
-  const config = new EnvConfigAdapter();
-  const persistence = new PostgresAdapter(config.databaseUrl);
+  const { databaseUrl } = loadCoreConfig();
+  const persistence = new PostgresAdapter(databaseUrl);
 
   const report = await getLastReport(persistence);
   const ticker = await getTopHeadlines(persistence, 5);
@@ -31,11 +32,16 @@ export async function generateStatic() {
   save('chart.json', chart);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  generateStatic()
-    .then(() => process.exit(0))
-    .catch((err) => {
-      console.error('[generate-static] Failed to generate static JSON:', err);
-      process.exit(1);
-    });
+const entryUrl = process.argv[1]
+  ? pathToFileURL(process.argv[1]).href
+  : undefined;
+
+if (import.meta.url === entryUrl) {
+  try {
+    await generateStatic();
+    process.exit(0);
+  } catch (err) {
+    console.error('[generate-static] Failed to generate static JSON:', err);
+    process.exit(1);
+  }
 }

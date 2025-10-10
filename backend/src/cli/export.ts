@@ -1,17 +1,18 @@
 import 'dotenv/config';
 import fs from 'fs';
+import { pathToFileURL } from 'node:url';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { EnvConfigAdapter } from '../infrastructure/config/EnvConfigAdapter';
+import { loadCoreConfig } from '../infrastructure/config/loaders';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-async function main() {
-  const out = process.argv[2] ?? './snapshots-export.json';
+export async function runExport(outArg = process.argv[2]) {
+  const out = outArg ?? './snapshots-export.json';
 
-  const config = new EnvConfigAdapter();
-  const persistence = new PostgresAdapter(config.databaseUrl);
+  const { databaseUrl } = loadCoreConfig();
+  const persistence = new PostgresAdapter(databaseUrl);
   const snapshots = await persistence.getSnapshots();
 
   const ordered = snapshots.sort(
@@ -21,13 +22,18 @@ async function main() {
   const abs = path.isAbsolute(out) ? out : path.resolve(__dirname, out);
   fs.writeFileSync(abs, JSON.stringify(ordered, null, 2), 'utf-8');
   console.log(`[export-db] wrote ${ordered.length} snapshots -> ${abs}`);
-
-  process.exit(0);
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main().catch((err) => {
+const entryUrl = process.argv[1]
+  ? pathToFileURL(process.argv[1]).href
+  : undefined;
+
+if (import.meta.url === entryUrl) {
+  try {
+    await runExport();
+    process.exit(0);
+  } catch (err) {
     console.error('[export-db] failed:', err);
     process.exit(1);
-  });
+  }
 }

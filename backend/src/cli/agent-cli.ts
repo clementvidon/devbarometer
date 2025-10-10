@@ -1,17 +1,17 @@
 import 'dotenv/config';
+import { pathToFileURL } from 'node:url';
 import OpenAI from 'openai';
-import { NodeFetchAdapter } from '../infrastructure/fetch/NodeFetchAdapter';
-import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
-import { RedditItemsAdapter } from '../infrastructure/sources/RedditItemsAdapter';
-
-import type { ConfigPort } from '../application/ports/ConfigPort';
 import type { FetchPort } from '../application/ports/FetchPort';
 import type { LlmPort } from '../application/ports/LlmPort';
 import type { PersistencePort } from '../application/ports/PersistencePort';
 import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
-import { EnvConfigAdapter } from '../infrastructure/config/EnvConfigAdapter';
+import type { ReportingAgentConfig } from '../infrastructure/config/loaders';
+import { loadReportingAgentConfig } from '../infrastructure/config/loaders';
+import { NodeFetchAdapter } from '../infrastructure/fetch/NodeFetchAdapter';
+import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 import type { RedditCredentials } from '../infrastructure/sources/redditAuth';
+import { RedditItemsAdapter } from '../infrastructure/sources/RedditItemsAdapter';
 
 type Deps = {
   fetcher: FetchPort;
@@ -30,46 +30,36 @@ export function buildCLIReportingAgent(deps: Deps) {
   return makeReportingAgent(provider, deps.llm, deps.persistence);
 }
 
-export function depsFromConfigEnv(config: ConfigPort): Deps {
-  const {
-    databaseUrl,
-    openaiApiKey,
-
-    redditUrl,
-    redditClientId,
-    redditClientSecret,
-    redditUsername,
-    redditPassword,
-  } = config;
-
-  if (!databaseUrl) throw new Error('Invalid databaseUrl');
-  if (!openaiApiKey) throw new Error('Invalid openaiApiKey');
-
-  if (!redditUrl) throw new Error('Invalid redditUrl');
-  if (!redditClientId) throw new Error('Invalid redditClientId');
-  if (!redditClientSecret) throw new Error('Invalid redditClientSecret');
-  if (!redditUsername) throw new Error('Invalid redditUsername');
-  if (!redditPassword) throw new Error('Invalid redditPassword');
+export function depsFromConfig(config: ReportingAgentConfig): Deps {
+  const { databaseUrl, openaiApiKey, reddit } = config;
 
   return {
-    redditUrl,
+    redditUrl: reddit.url,
     fetcher: new NodeFetchAdapter(globalThis.fetch),
     persistence: new PostgresAdapter(databaseUrl),
     llm: new OpenAIAdapter(new OpenAI({ apiKey: openaiApiKey })),
     redditCreds: {
-      clientId: redditClientId,
-      clientSecret: redditClientSecret,
-      username: redditUsername,
-      password: redditPassword,
+      clientId: reddit.clientId,
+      clientSecret: reddit.clientSecret,
+      username: reddit.username,
+      password: reddit.password,
     },
   };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+export async function runCLI() {
+  const config = loadReportingAgentConfig();
+  const agent = buildCLIReportingAgent(depsFromConfig(config));
+  await agent.captureSnapshot();
+}
+
+const entryUrl = process.argv[1]
+  ? pathToFileURL(process.argv[1]).href
+  : undefined;
+
+if (import.meta.url === entryUrl) {
   try {
-    const config = new EnvConfigAdapter();
-    const agent = buildCLIReportingAgent(depsFromConfigEnv(config));
-    await agent.captureSnapshot();
+    await runCLI();
     process.exit(0);
   } catch (err) {
     console.error('ReportingAgent run failed:', err);

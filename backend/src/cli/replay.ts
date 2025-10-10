@@ -1,10 +1,11 @@
 import 'dotenv/config';
 import fs from 'fs';
+import { pathToFileURL } from 'node:url';
 import OpenAI from 'openai';
 import path from 'path';
 import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
 import type { Item } from '../domain/entities';
-import { EnvConfigAdapter } from '../infrastructure/config/EnvConfigAdapter';
+import { loadReplayConfig } from '../infrastructure/config/loaders';
 import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 import { JsonSnapshotAdapter } from '../infrastructure/sources/JsonSnapshotAdapter';
@@ -15,9 +16,13 @@ type RawRow = { id?: string; date_created: string; data: { items: Item[] } };
 type SnapRow = { id?: string; createdAt: string; items: Item[] };
 type AnyRow = RawRow | SnapRow;
 
-function usage() {
-  console.log('Usage: tsx src/cli/replay <input.json>');
-  process.exit(1);
+const USAGE = 'Usage: tsx src/cli/replay <input.json>';
+
+class ReplayUsageError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'ReplayUsageError';
+  }
 }
 
 function toISO(s: string): string {
@@ -38,19 +43,19 @@ function getLabel(row: AnyRow, createdAtISO: string): string {
   return `replay:${row.id ?? createdAtISO}`;
 }
 
-try {
-  const file = process.argv[2];
-  if (!file) usage();
+export async function runReplay(fileArg = process.argv[2]) {
+  if (!fileArg) {
+    throw new ReplayUsageError(USAGE);
+  }
 
-  const abs = path.resolve(process.cwd(), file);
+  const abs = path.resolve(process.cwd(), fileArg);
   const rows = JSON.parse(fs.readFileSync(abs, 'utf-8')) as AnyRow[];
 
   rows.sort(
     (a, b) => Date.parse(getCreatedAtISO(a)) - Date.parse(getCreatedAtISO(b)),
   );
 
-  const config = new EnvConfigAdapter();
-  const { openaiApiKey, databaseUrl } = config;
+  const { openaiApiKey, databaseUrl } = loadReplayConfig();
 
   const llm = new OpenAIAdapter(new OpenAI({ apiKey: openaiApiKey }));
   const persistence = new PostgresAdapter(databaseUrl);
@@ -73,8 +78,22 @@ try {
   }
 
   console.log(`[replay] processed ${ok}/${rows.length}`);
-  process.exit(0);
-} catch (err) {
-  console.error('[replay] failed:', err);
-  process.exit(1);
+}
+
+const entryUrl = process.argv[1]
+  ? pathToFileURL(process.argv[1]).href
+  : undefined;
+
+if (import.meta.url === entryUrl) {
+  try {
+    await runReplay();
+    process.exit(0);
+  } catch (err) {
+    if (err instanceof ReplayUsageError) {
+      console.log(err.message);
+    } else {
+      console.error('[replay] failed:', err);
+    }
+    process.exit(1);
+  }
 }

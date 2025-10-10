@@ -1,19 +1,19 @@
 import 'dotenv/config';
+import { pathToFileURL } from 'node:url';
 import OpenAI from 'openai';
-import { NodeFetchAdapter } from '../infrastructure/fetch/NodeFetchAdapter';
-import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
-import { RedditItemsAdapter } from '../infrastructure/sources/RedditItemsAdapter';
-import { makeReportController } from '../interface/web/ReportController';
-
-import type { ConfigPort } from '../application/ports/ConfigPort';
 import type { FetchPort } from '../application/ports/FetchPort';
 import type { LlmPort } from '../application/ports/LlmPort';
 import type { PersistencePort } from '../application/ports/PersistencePort';
 import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
 import { makeSnapshotQueryService } from '../application/usecases/queries/makeSnapshotQueryService';
-import { EnvConfigAdapter } from '../infrastructure/config/EnvConfigAdapter';
+import type { ReportingAgentConfig } from '../infrastructure/config/loaders';
+import { loadReportingAgentConfig } from '../infrastructure/config/loaders';
+import { NodeFetchAdapter } from '../infrastructure/fetch/NodeFetchAdapter';
+import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 import type { RedditCredentials } from '../infrastructure/sources/redditAuth';
+import { RedditItemsAdapter } from '../infrastructure/sources/RedditItemsAdapter';
+import { makeReportController } from '../interface/web/ReportController';
 
 type Deps = {
   port: number;
@@ -37,46 +37,42 @@ export function buildServer(deps: Deps) {
   return { app, port: deps.port };
 }
 
-export function depsFromConfigEnv(config: ConfigPort): Deps {
-  const {
-    port,
-    databaseUrl,
-    openaiApiKey,
-
-    redditUrl,
-    redditClientId,
-    redditClientSecret,
-    redditUsername,
-    redditPassword,
-  } = config;
-
-  if (!databaseUrl) throw new Error('Invalid databaseUrl');
-  if (!openaiApiKey) throw new Error('Invalid openaiApiKey');
-  if (!port) throw new Error('Invalid port');
-
-  if (!redditUrl) throw new Error('Invalid redditUrl');
-  if (!redditClientId) throw new Error('Invalid redditClientId');
-  if (!redditClientSecret) throw new Error('Invalid redditClientSecret');
-  if (!redditUsername) throw new Error('Invalid redditUsername');
-  if (!redditPassword) throw new Error('Invalid redditPassword');
+export function depsFromConfig(config: ReportingAgentConfig): Deps {
+  const { port, databaseUrl, openaiApiKey, reddit } = config;
 
   return {
-    redditUrl,
+    redditUrl: reddit.url,
     port,
     fetcher: new NodeFetchAdapter(globalThis.fetch),
     persistence: new PostgresAdapter(databaseUrl),
     llm: new OpenAIAdapter(new OpenAI({ apiKey: openaiApiKey })),
     redditCreds: {
-      clientId: redditClientId,
-      clientSecret: redditClientSecret,
-      username: redditUsername,
-      password: redditPassword,
+      clientId: reddit.clientId,
+      clientSecret: reddit.clientSecret,
+      username: reddit.username,
+      password: reddit.password,
     },
   };
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
-  const config = new EnvConfigAdapter();
-  const { app, port } = buildServer(depsFromConfigEnv(config));
-  app.listen(port, () => console.log(`→ http://localhost:${port}`));
+export function runHttpServer() {
+  const config = loadReportingAgentConfig();
+  const { app, port } = buildServer(depsFromConfig(config));
+
+  return app.listen(port, () => {
+    console.log(`→ http://localhost:${port}`);
+  });
+}
+
+const entryUrl = process.argv[1]
+  ? pathToFileURL(process.argv[1]).href
+  : undefined;
+
+if (import.meta.url === entryUrl) {
+  try {
+    runHttpServer();
+  } catch (err) {
+    console.error('ReportingAgent run failed:', err);
+    process.exit(1);
+  }
 }

@@ -55,8 +55,13 @@ afterEach(() => {
 
 describe('http.ts entrypoint', () => {
   test('starts the server on the provided port and logs the URL', async () => {
+    process.env.DATABASE_URL = 'postgres://user:pass@localhost:5432/db';
     process.env.OPENAI_API_KEY = 'sk-test';
     process.env.REDDIT_URL = 'https://example.test/r/foo.json';
+    process.env.REDDIT_CLIENT_ID = 'id';
+    process.env.REDDIT_CLIENT_SECRET = 'secret';
+    process.env.REDDIT_USERNAME = 'user';
+    process.env.REDDIT_PASSWORD = 'pass';
     process.env.PORT = '4321';
 
     process.argv[1] = modulePath();
@@ -68,6 +73,11 @@ describe('http.ts entrypoint', () => {
   test.skip('defaults to port 3000 if PORT is not defined', async () => {
     process.env.OPENAI_API_KEY = 'sk-test';
     process.env.REDDIT_URL = 'https://example.test/r/foo.json';
+    process.env.DATABASE_URL = 'postgres://user:pass@localhost:5432/db';
+    process.env.REDDIT_CLIENT_ID = 'id';
+    process.env.REDDIT_CLIENT_SECRET = 'secret';
+    process.env.REDDIT_USERNAME = 'user';
+    process.env.REDDIT_PASSWORD = 'pass';
     delete process.env.PORT;
 
     process.argv[1] = modulePath();
