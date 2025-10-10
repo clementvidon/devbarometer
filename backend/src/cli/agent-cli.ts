@@ -8,10 +8,10 @@ import { makeReportingAgent } from '../application/usecases/agent/makeReportingA
 import type { ReportingAgentConfig } from '../infrastructure/config/loaders';
 import { loadReportingAgentConfig } from '../infrastructure/config/loaders';
 import { NodeFetchAdapter } from '../infrastructure/fetch/NodeFetchAdapter';
+import type { RedditCredentials } from '../infrastructure/items/redditAuth';
+import { RedditItemsAdapter } from '../infrastructure/items/RedditItemsAdapter';
 import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
-import type { RedditCredentials } from '../infrastructure/sources/redditAuth';
-import { RedditItemsAdapter } from '../infrastructure/sources/RedditItemsAdapter';
 
 type Deps = {
   fetcher: FetchPort;

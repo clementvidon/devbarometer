@@ -6,9 +6,9 @@ import path from 'path';
 import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
 import type { Item } from '../domain/entities';
 import { loadReplayConfig } from '../infrastructure/config/loaders';
+import { JsonSnapshotAdapter } from '../infrastructure/items/JsonSnapshotAdapter';
 import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
-import { JsonSnapshotAdapter } from '../infrastructure/sources/JsonSnapshotAdapter';
 
 // - Dump Neon UI: { id?, date_created: "YYYY-MM-DD HH:mm:ss.SSS", data: { items: Item[] } }
 // - Export Script: { id?, createdAt: "YYYY-MM-DDTHH:mm:ss.SSSZ", items: Item[] }
