@@ -1,27 +1,27 @@
 [
   {
-    "title": "CodinGame lors des entretiens technique : Bullshit !",
+    "title": "On review vos CVs dev en live, chaque semaine sur Discord",
     "weight": "2",
+    "source": "https://reddit.com/comments/1o1du0h"
+  },
+  {
+    "title": "CodinGame lors des entretiens technique : Bullshit !",
+    "weight": "1",
     "source": "https://reddit.com/comments/1nzjhdb"
   },
   {
+    "title": "Devoir que corriger des bugs : normal? (junior)",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1nzdg6w"
+  },
+  {
     "title": "Le problème des dev \"passionné\" qui codent en dehors des heures \"normales\"",
-    "weight": "2",
+    "weight": "1",
     "source": "https://reddit.com/comments/1ny2vm4"
   },
   {
     "title": "Moldu reconverti",
     "weight": "1",
     "source": "https://reddit.com/comments/1nx7c7y"
-  },
-  {
-    "title": "L'enfer pour les juniors qui entrent sur le marché du travail",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1nw6sll"
-  },
-  {
-    "title": "Mener un projet fullstack complet seul avec seulement 1 an d’expérience ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1ny49um"
   }
 ]
