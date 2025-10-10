@@ -7,15 +7,18 @@ type RedditTokenResponse = {
   scope: string;
 };
 
+export type RedditCredentials = {
+  clientId: string;
+  clientSecret: string;
+  username: string;
+  password: string;
+};
+
 export async function getRedditAccessToken(
   fetcher: FetchPort,
+  creds: RedditCredentials,
 ): Promise<string> {
-  const {
-    REDDIT_CLIENT_ID: clientId,
-    REDDIT_CLIENT_SECRET: clientSecret,
-    REDDIT_USERNAME: username,
-    REDDIT_PASSWORD: password,
-  } = process.env;
+  const { clientId, clientSecret, username, password } = creds;
 
   if (!clientId || !clientSecret || !username || !password) {
     throw new Error('Missing Reddit credentials in env variables');

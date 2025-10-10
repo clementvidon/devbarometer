@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import { getAggregatedProfiles } from '../application/usecases/queries/getAggregatedProfiles';
 import { getLastReport } from '../application/usecases/queries/getLastReport';
 import { getTopHeadlines } from '../application/usecases/queries/getTopHeadlines';
+import { EnvConfigAdapter } from '../infrastructure/config/EnvConfigAdapter';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -18,7 +19,8 @@ function save(filename: string, data: unknown) {
 }
 
 export async function generateStatic() {
-  const persistence = new PostgresAdapter();
+  const config = new EnvConfigAdapter();
+  const persistence = new PostgresAdapter(config.databaseUrl);
 
   const report = await getLastReport(persistence);
   const ticker = await getTopHeadlines(persistence, 5);

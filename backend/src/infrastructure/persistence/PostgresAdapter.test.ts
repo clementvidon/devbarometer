@@ -57,12 +57,14 @@ import { PostgresAdapter } from './PostgresAdapter';
 const getSpies = (): DrizzleSpies =>
   (globalThis as GlobalWithSpies).__drizzleSpies;
 
+const FAKE_DATABASE_URL = 'postgres://user:pass@localhost:5432/db';
+
 describe('PostgresAdapter', () => {
   let adapter: PostgresAdapter;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    adapter = new PostgresAdapter();
+    adapter = new PostgresAdapter(FAKE_DATABASE_URL);
   });
 
   it('storeSnapshotAt() insert a snapshot with id and date', async () => {

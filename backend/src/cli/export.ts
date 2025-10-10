@@ -2,6 +2,7 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { EnvConfigAdapter } from '../infrastructure/config/EnvConfigAdapter';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -9,7 +10,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 async function main() {
   const out = process.argv[2] ?? './snapshots-export.json';
 
-  const persistence = new PostgresAdapter();
+  const config = new EnvConfigAdapter();
+  const persistence = new PostgresAdapter(config.databaseUrl);
   const snapshots = await persistence.getSnapshots();
 
   const ordered = snapshots.sort(

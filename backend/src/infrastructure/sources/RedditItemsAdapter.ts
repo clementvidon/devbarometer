@@ -5,7 +5,7 @@ import type { Item } from '../../domain/entities';
 import { filterByScore } from '../../domain/services/items/filterByScore';
 import { fetchWithRetry } from '../../lib/http/fetchWithRetry';
 import { normalizeWhitespace } from '../../lib/string/normalizeWhitespace';
-import { getRedditAccessToken } from './redditAuth';
+import { getRedditAccessToken, type RedditCredentials } from './redditAuth';
 
 export const RedditChildSchema = z.object({
   data: z.object({
@@ -82,12 +82,13 @@ export function buildRedditHeaders(
 export async function fetchRedditItems(
   fetcher: FetchPort,
   url: string,
+  creds: RedditCredentials,
   opts: RedditItemsOptions,
 ): Promise<Item[]> {
   const { minScore, userAgentSuffix, baseBackoffMs } = opts;
   let token: string;
   try {
-    token = await getRedditAccessToken(fetcher);
+    token = await getRedditAccessToken(fetcher, creds);
   } catch (err) {
     console.error('[fetchRedditItems] failed to get reddit token:', err);
     return [];
@@ -127,13 +128,14 @@ export class RedditItemsAdapter implements ItemsProviderPort {
   constructor(
     private readonly fetcher: FetchPort,
     private readonly url: string,
+    private readonly creds: RedditCredentials,
     opts: Partial<RedditItemsOptions> = {},
   ) {
     this.opts = mergeRedditItemsOptions(opts);
   }
 
   async getItems(): Promise<Item[]> {
-    return fetchRedditItems(this.fetcher, this.url, this.opts);
+    return fetchRedditItems(this.fetcher, this.url, this.creds, this.opts);
   }
 
   getLabel(): string {

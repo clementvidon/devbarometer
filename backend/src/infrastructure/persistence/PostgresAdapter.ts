@@ -1,5 +1,5 @@
 import { desc } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/postgres-js';
+import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import type { Sql } from 'postgres';
 import postgres from 'postgres';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,15 +11,20 @@ import type {
 import { snapshotsTable } from './schema';
 
 const pg = postgres as unknown as (...args: Parameters<typeof postgres>) => Sql;
-const client: Sql = pg(process.env.DATABASE_URL!, { ssl: 'require' });
-const db = drizzle(client);
 
 export class PostgresAdapter implements PersistencePort {
+  private readonly db: PostgresJsDatabase;
+
+  constructor(databaseUrl: string) {
+    const client = pg(databaseUrl, { ssl: 'require' });
+    this.db = drizzle(client);
+  }
+
   async storeSnapshotAt(
     createdAtISO: string,
     snapshot: SnapshotData,
   ): Promise<void> {
-    await db.insert(snapshotsTable).values({
+    await this.db.insert(snapshotsTable).values({
       id: uuidv4(),
       data: snapshot,
       date_created: new Date(createdAtISO),
@@ -27,7 +32,7 @@ export class PostgresAdapter implements PersistencePort {
   }
 
   async getSnapshots(): Promise<PipelineSnapshot[]> {
-    const rows = await db
+    const rows = await this.db
       .select({
         id: snapshotsTable.id,
         data: snapshotsTable.data,

@@ -4,6 +4,7 @@ import OpenAI from 'openai';
 import path from 'path';
 import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
 import type { Item } from '../domain/entities';
+import { EnvConfigAdapter } from '../infrastructure/config/EnvConfigAdapter';
 import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 import { JsonSnapshotAdapter } from '../infrastructure/sources/JsonSnapshotAdapter';
@@ -48,10 +49,11 @@ try {
     (a, b) => Date.parse(getCreatedAtISO(a)) - Date.parse(getCreatedAtISO(b)),
   );
 
-  const llm = new OpenAIAdapter(
-    new OpenAI({ apiKey: process.env.OPENAI_API_KEY! }),
-  );
-  const persistence = new PostgresAdapter();
+  const config = new EnvConfigAdapter();
+  const { openaiApiKey, databaseUrl } = config;
+
+  const llm = new OpenAIAdapter(new OpenAI({ apiKey: openaiApiKey }));
+  const persistence = new PostgresAdapter(databaseUrl);
 
   let ok = 0;
   for (const r of rows) {

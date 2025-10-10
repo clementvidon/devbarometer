@@ -39,8 +39,12 @@ async function importReportingAgent(): Promise<void> {
   await import(cliUrl.href);
 }
 
+let argvBak: string[];
+
 beforeEach(() => {
   envBak = { ...process.env };
+  argvBak = [...process.argv];
+  process.argv[1] = modulePath();
   captureSnapshotMock.mockReset();
   errorSpy.mockClear();
   exitSpy.mockClear();
@@ -54,13 +58,18 @@ beforeEach(() => {
 
 afterEach(() => {
   process.env = envBak;
+  process.argv = argvBak;
 });
 
 describe('agent-cli.ts entrypoint', () => {
   test('exits with 0 when captureSnapshot succeeds', async () => {
+    process.env.DATABASE_URL = 'postgres://user:pass@localhost:5432/db';
     process.env.OPENAI_API_KEY = 'sk-test';
     process.env.REDDIT_URL = 'https://example.test/r/foo.json';
-    process.argv[1] = modulePath();
+    process.env.REDDIT_CLIENT_ID = 'id';
+    process.env.REDDIT_CLIENT_SECRET = 'secret';
+    process.env.REDDIT_USERNAME = 'user';
+    process.env.REDDIT_PASSWORD = 'pass';
 
     captureSnapshotMock.mockResolvedValue(undefined);
 
@@ -71,15 +80,24 @@ describe('agent-cli.ts entrypoint', () => {
   });
 
   test('logs error and exits with 1 when captureSnapshot rejects', async () => {
+    process.env.DATABASE_URL = 'postgres://user:pass@localhost:5432/db';
     process.env.OPENAI_API_KEY = 'sk-test';
     process.env.REDDIT_URL = 'https://example.test/r/foo.json';
+    process.env.REDDIT_CLIENT_ID = 'id';
+    process.env.REDDIT_CLIENT_SECRET = 'secret';
+    process.env.REDDIT_USERNAME = 'user';
+    process.env.REDDIT_PASSWORD = 'pass';
+
     process.argv[1] = modulePath();
 
     const boom = new Error('boom');
     captureSnapshotMock.mockRejectedValue(boom);
 
     await importReportingAgent();
-    expect(captureSnapshotMock).toHaveBeenCalled();
+    await vi.waitFor(() => {
+      expect(errorSpy).toHaveBeenCalledWith('ReportingAgent run failed:', boom);
+    });
+
     expect(errorSpy).toHaveBeenCalledWith('ReportingAgent run failed:', boom);
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
