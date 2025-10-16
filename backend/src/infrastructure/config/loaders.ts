@@ -1,5 +1,12 @@
 import { z } from 'zod';
-import { CoreEnvSchema, LlmEnvSchema, RedditEnvSchema } from './schemas';
+import type { LoggingConfig } from './schemas';
+import {
+  CoreEnvSchema,
+  LlmEnvSchema,
+  LoggingEnvSchema,
+  RedditEnvSchema,
+  toLoggingConfig,
+} from './schemas';
 
 /* ---------- helpers ---------- */
 
@@ -13,7 +20,10 @@ function prettyErrors(issues: z.ZodIssue[]) {
     .join('; ');
 }
 
-export function parseEnv<T>(schema: z.ZodSchema<T>, env: Env = process.env): T {
+export function parseEnv<Output, Input = Output>(
+  schema: z.ZodType<Output, z.ZodTypeDef, Input>,
+  env: Env = process.env,
+): Output {
   const parsed = schema.safeParse(env);
   if (parsed.success) return parsed.data;
   throw new ConfigError(`Invalid env: ${prettyErrors(parsed.error.issues)}`);
@@ -29,6 +39,13 @@ export function loadCoreConfig(env: Env = process.env): CoreConfig {
   const parsed = parseEnv(CoreEnvSchema, env);
   const port = parsed.PORT ?? 3000;
   return { port, databaseUrl: parsed.DATABASE_URL };
+}
+
+/* ---------- logging ---------- */
+
+export function loadLoggingConfig(env: Env = process.env): LoggingConfig {
+  const parsed = parseEnv(LoggingEnvSchema, env);
+  return toLoggingConfig(parsed);
 }
 
 /* ---------- replay ---------- */
