@@ -70,7 +70,7 @@ export function loadReplayConfig(env: Env = process.env): ReplayConfig {
 }
 
 /* ---------- reporting agent ---------- */
-export type RedditCredentials = {
+export type RedditConfig = {
   url: string;
   clientId: string;
   clientSecret: string;
@@ -84,7 +84,7 @@ export type ReportingAgentConfig = {
   port: number;
   databaseUrl: string;
   openaiApiKey: string;
-  reddit: RedditCredentials;
+  reddit: RedditConfig;
   llmProvider: LlmProvider;
 };
 
