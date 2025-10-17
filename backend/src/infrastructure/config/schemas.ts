@@ -3,7 +3,9 @@ import { z } from 'zod';
 export const GlobalEnvSchema = z.object({
   APP_NAME: z.string().optional().default('app'),
   APP_VERSION: z.string().optional().default('0.0.0'),
-  NODE_ENV: z.enum(['development', 'production']).default('development'),
+  NODE_ENV: z
+    .enum(['development', 'production', 'test'])
+    .default('development'),
 });
 
 export const CoreEnvSchema = z.object({
