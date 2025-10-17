@@ -1,5 +1,10 @@
 import { z } from 'zod';
-import type { LogLevel } from '../../application/ports/output/LoggerPort';
+
+export const GlobalEnvSchema = z.object({
+  APP_NAME: z.string().optional().default('app'),
+  APP_VERSION: z.string().optional().default('0.0.0'),
+  NODE_ENV: z.enum(['development', 'production']).default('development'),
+});
 
 export const CoreEnvSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),
@@ -27,12 +32,10 @@ const LogLevelInputSchema = z
   .optional()
   .transform((value) => {
     if (!value) return undefined;
-    const normalized = value.trim().toLowerCase();
-    return LOG_LEVEL_VALUES.includes(
-      normalized as (typeof LOG_LEVEL_VALUES)[number],
-    )
-      ? (normalized as (typeof LOG_LEVEL_VALUES)[number])
-      : undefined;
+    const normalized = value
+      .trim()
+      .toLowerCase() as (typeof LOG_LEVEL_VALUES)[number];
+    return LOG_LEVEL_VALUES.includes(normalized) ? normalized : undefined;
   })
   .pipe(LogLevelEnum.optional());
 
@@ -53,22 +56,4 @@ const LogPrettyInputSchema = z
 export const LoggingEnvSchema = z.object({
   LOG_LEVEL: LogLevelInputSchema,
   LOG_PRETTY: LogPrettyInputSchema,
-  NODE_ENV: z.string().optional(),
 });
-
-export type LoggingEnv = z.infer<typeof LoggingEnvSchema>;
-
-export type LoggingConfig = {
-  level: LogLevel;
-  pretty: boolean;
-};
-
-export function toLoggingConfig(env: LoggingEnv): LoggingConfig {
-  const normalizedNodeEnv = env.NODE_ENV?.trim().toLowerCase();
-  const pretty =
-    env.LOG_PRETTY ??
-    (normalizedNodeEnv ? normalizedNodeEnv !== 'production' : true);
-  const level: LogLevel = (env.LOG_LEVEL ??
-    (pretty ? 'debug' : 'info')) as LogLevel;
-  return { level, pretty };
-}

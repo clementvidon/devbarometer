@@ -1,11 +1,11 @@
 import { z } from 'zod';
-import type { LoggingConfig } from './schemas';
+import type { LogLevel } from '../../application/ports/output/LoggerPort';
 import {
   CoreEnvSchema,
+  GlobalEnvSchema,
   LlmEnvSchema,
   LoggingEnvSchema,
   RedditEnvSchema,
-  toLoggingConfig,
 } from './schemas';
 
 /* ---------- helpers ---------- */
@@ -29,23 +29,51 @@ export function parseEnv<Output, Input = Output>(
   throw new ConfigError(`Invalid env: ${prettyErrors(parsed.error.issues)}`);
 }
 
+/* ---------- global ---------- */
+
+export type NodeEnv = z.infer<typeof GlobalEnvSchema>['NODE_ENV'];
+
+export type GlobalConfig = {
+  appName: string;
+  appVersion: string;
+  nodeEnv: NodeEnv;
+};
+
+export function loadGlobalConfig(env: Env = process.env): GlobalConfig {
+  const globalEnv = parseEnv(GlobalEnvSchema, env);
+  const nodeEnv = globalEnv.NODE_ENV;
+  return {
+    appName: globalEnv.APP_NAME,
+    appVersion: globalEnv.APP_VERSION,
+    nodeEnv,
+  };
+}
 /* ---------- core ---------- */
+
 export type CoreConfig = {
   port: number;
   databaseUrl: string;
 };
 
 export function loadCoreConfig(env: Env = process.env): CoreConfig {
-  const parsed = parseEnv(CoreEnvSchema, env);
-  const port = parsed.PORT ?? 3000;
-  return { port, databaseUrl: parsed.DATABASE_URL };
+  const core = parseEnv(CoreEnvSchema, env);
+  const port = core.PORT ?? 3000;
+  return { port, databaseUrl: core.DATABASE_URL };
 }
 
 /* ---------- logging ---------- */
 
+export type LoggingConfig = {
+  level: LogLevel;
+  pretty: boolean;
+};
+
 export function loadLoggingConfig(env: Env = process.env): LoggingConfig {
-  const parsed = parseEnv(LoggingEnvSchema, env);
-  return toLoggingConfig(parsed);
+  const logging = parseEnv(LoggingEnvSchema, env);
+  const { nodeEnv } = loadGlobalConfig(env);
+  const pretty = logging.LOG_PRETTY ?? nodeEnv !== 'production';
+  const level = (logging.LOG_LEVEL ?? (pretty ? 'debug' : 'info')) as LogLevel;
+  return { level, pretty };
 }
 
 /* ---------- replay ---------- */
