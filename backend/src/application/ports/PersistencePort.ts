@@ -3,6 +3,14 @@ import type {
   SnapshotData,
 } from '../../domain/value-objects/PipelineSnapshot';
 
+/**
+ * Persistence for pipeline snapshots.
+ *
+ * Contract (interface-wide):
+ * - Timestamps are respected (no override); operations aim to be atomic.
+ * - `id` is assigned by the adapter; reads are newest-first.
+ */
+
 export interface PersistencePort {
   /**
    * Persist a snapshot at an explicit timestamp.

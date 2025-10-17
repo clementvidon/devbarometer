@@ -20,15 +20,14 @@ export type LlmRunOptions = {
 /**
  * Minimal LLM interface.
  *
- * Contract:
- * - `model` must be a model identifier understood by the adapter.
- * - `messages` are treated as read-only; the adapter must not mutate them.
- * - `options` are best-effort; unsupported fields may be ignored.
- * - On transport/API errors, the Promise rejects. On valid empty content,
- *   it may resolve to an empty string (adapter-specific).
- * - Returned string is raw model output (no JSON parsing).
+ * Contract (interface-wide):
+ * - `model` is adapter-specific; messages are read-only.
+ * - Options are best-effort; unsupported fields may be ignored.
+ * - Rejects on transport/API errors or invalid/empty content.
+ * - Returns raw model text (no parsing).
  */
 export interface LlmPort {
+  /** Runs a chat completion and returns raw text; may throw on empty content. */
   run(
     model: string,
     messages: readonly LlmMessage[],

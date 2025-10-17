@@ -3,18 +3,16 @@ import type { Item } from '../../domain/entities';
 /**
  * Provides raw items for the pipeline.
  *
- * Contract:
- * - `getItems()` returns a finite list of Items with non-negative `score`.
- *   The list should be stable for a given run (idempotent; no side-effects).
- *   Ordering is not required and will not be relied upon.
- * - `getLabel()` returns a stable, human-readable source identifier
- *   (prefer URI-like, e.g. "https://..." or "replay:<id>") used for auditing.
- * - `getCreatedAt()`:
- *     * if non-null => ISO 8601 string (UTC recommended) used as the snapshot timestamp.
- *     * if null     => it must be set to `new Date().toISOString()`.
+ * Contract (interface-wide):
+ * - Returns finite, non-mutated data; stable within a single run.
+ * - Scores are non-negative; order is not required.
+ * - If `createdAt` is null, the agent will use the current time.
  */
 export interface ItemsProviderPort {
+  /** Finite list of Items (non-negative `score`; no side effects). */
   getItems(): Promise<Item[]>;
+  /** Stable, human-readable source label (URI-like recommended). */
   getLabel(): string;
+  /** ISO 8601 string or null to defer to the agent timestamp. */
   getCreatedAt(): string | null;
 }

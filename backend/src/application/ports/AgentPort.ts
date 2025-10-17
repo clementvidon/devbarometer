@@ -1,11 +1,12 @@
 /**
  * Agent orchestration port for capturing a single pipeline snapshot.
  *
- * Contract:
- * - Executes full pipeline: fetch -> relevance -> weighting -> profiling -> aggregation -> reporting -> persist.
- * - Performs external I/O (network/DB) and other side-effects (persistence, logging).
- * - Must not mutate input objects; errors propagate to the caller.
+ * Contract (interface-wide):
+ * - Runs the full pipeline end-to-end (fetch → relevance → weights → profiles → aggregate → report → persist).
+ * - May perform external I/O and side effects; does not mutate inputs.
+ * - Errors propagate to caller; caller owns retries/scheduling.
  */
 export interface AgentPort {
+  /** Triggers one full snapshot capture, or rejects on failure. */
   captureSnapshot(): Promise<void>;
 }

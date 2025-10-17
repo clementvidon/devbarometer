@@ -3,14 +3,12 @@ import type { RelevantItem, WeightedItem } from '../../domain/entities';
 /**
  * Compute weights for the given items.
  *
- * Contract:
- * - Input: `items` may be empty. Must not be mutated.
- * - Input: `prevItems` may be an empty array (default `[]`). When present,
- *   entries should be matched by `source` to allow momentum-based calculations.
- * - Output: returns a new array of WeightedItems (0..n). Order of `items` is preserved.
- * - Implementations must not mutate input objects and should be deterministic for identical input.
+ * Contract (interface-wide):
+ * - Inputs are read-only; `items` may be empty; order preserved in output.
+ * - Deterministic for identical inputs; may use `source`-based matching.
  */
 export interface WeightsPort {
+  /** Returns new WeightedItems for `items` using `prevItems` as context. */
   computeWeights(
     items: RelevantItem[],
     prevItems: RelevantItem[],
