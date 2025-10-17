@@ -1,4 +1,4 @@
-import type { LoggerPort } from '../../application/ports/LoggerPort';
+import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 import { loadLoggingConfig } from '../config/loaders';
 import { ConsoleLoggerAdapter } from './ConsoleLoggerAdapter';
 

@@ -1,9 +1,9 @@
 import express, { type Express } from 'express';
-import type { AgentPort } from '../../application/ports/AgentPort';
-import type { SnapshotQueryPort } from '../../application/ports/SnapshotQueryPort';
+import type { ReportingAgentPort } from '../../application/ports/input/ReportingAgentPort';
+import type { SnapshotQueryPort } from '../../application/ports/input/SnapshotQueryPort';
 
 export function makeReportController(
-  agent: AgentPort,
+  agent: ReportingAgentPort,
   query: SnapshotQueryPort,
 ): Express {
   const app = express();

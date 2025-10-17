@@ -19,8 +19,8 @@ vi.mock('../infrastructure/llm/OpenAIAdapter', () => ({
 vi.mock('../infrastructure/items/RedditItemsAdapter', () => ({
   RedditItemsAdapter: vi.fn(() => ({})),
 }));
-vi.mock('../application/usecases/agent/makeReportingAgent', () => ({
-  makeReportingAgent: vi.fn(() => ({
+vi.mock('../application/usecases/agent/makeReportingAgentService', () => ({
+  makeReportingAgentService: vi.fn(() => ({
     captureSnapshot: captureSnapshotMock,
   })),
 }));
@@ -95,10 +95,16 @@ describe('agent-cli.ts entrypoint', () => {
 
     await importReportingAgent();
     await vi.waitFor(() => {
-      expect(errorSpy).toHaveBeenCalledWith('ReportingAgent run failed:', boom);
+      expect(errorSpy).toHaveBeenCalledWith(
+        'ReportingAgentService run failed:',
+        boom,
+      );
     });
 
-    expect(errorSpy).toHaveBeenCalledWith('ReportingAgent run failed:', boom);
+    expect(errorSpy).toHaveBeenCalledWith(
+      'ReportingAgentService run failed:',
+      boom,
+    );
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
 });

@@ -1,5 +1,5 @@
 import type { WeightedItem } from '../../../domain/entities';
-import type { LlmMessage } from '../../ports/LlmPort';
+import type { LlmMessage } from '../../ports/output/LlmPort';
 
 export function makeEmotionMessages(
   item: WeightedItem,

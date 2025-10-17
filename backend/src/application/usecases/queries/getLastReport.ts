@@ -1,7 +1,7 @@
 import { type ReportDto, ReportDtoSchema } from '@devbarometer/shared/dtos';
 
 import type { Report } from '../../../domain/entities';
-import type { PersistencePort } from '../../ports/PersistencePort';
+import type { PersistencePort } from '../../ports/output/PersistencePort';
 
 function mapReportDto(report: Report): ReportDto {
   return ReportDtoSchema.parse({

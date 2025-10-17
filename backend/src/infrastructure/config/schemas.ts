@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import type { LogLevel } from '../../application/ports/LoggerPort';
+import type { LogLevel } from '../../application/ports/output/LoggerPort';
 
 export const CoreEnvSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3000),

@@ -6,7 +6,7 @@ import {
   WEATHER_EMOJIS,
 } from '../../../domain/entities';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
-import type { LlmMessage, LlmPort } from '../../ports/LlmPort';
+import type { LlmMessage, LlmPort } from '../../ports/output/LlmPort';
 
 /* pickStandoutsByScore */
 

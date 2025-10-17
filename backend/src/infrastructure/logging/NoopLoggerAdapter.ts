@@ -1,6 +1,6 @@
-import type { LoggerPort } from '../../application/ports/LoggerPort';
+import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 
-export class NoopLogger implements LoggerPort {
+export class NoopLoggerAdapter implements LoggerPort {
   debug(_msg: string, _meta?: Record<string, unknown>): void {}
   info(_msg: string, _meta?: Record<string, unknown>): void {}
   warn(_msg: string, _meta?: Record<string, unknown>): void {}

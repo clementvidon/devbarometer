@@ -1,10 +1,10 @@
 import 'dotenv/config';
 import { pathToFileURL } from 'node:url';
 import OpenAI from 'openai';
-import type { FetchPort } from '../application/ports/FetchPort';
-import type { LlmPort } from '../application/ports/LlmPort';
-import type { PersistencePort } from '../application/ports/PersistencePort';
-import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
+import type { FetchPort } from '../application/ports/output/FetchPort';
+import type { LlmPort } from '../application/ports/output/LlmPort';
+import type { PersistencePort } from '../application/ports/output/PersistencePort';
+import { makeReportingAgentService } from '../application/usecases/agent/makeReportingAgentService';
 import type { ReportingAgentConfig } from '../infrastructure/config/loaders';
 import { loadReportingAgentConfig } from '../infrastructure/config/loaders';
 import { NodeFetchAdapter } from '../infrastructure/fetch/NodeFetchAdapter';
@@ -27,7 +27,7 @@ export function buildCLIReportingAgent(deps: Deps) {
     deps.redditUrl,
     deps.redditCreds,
   );
-  return makeReportingAgent(provider, deps.llm, deps.persistence);
+  return makeReportingAgentService(provider, deps.llm, deps.persistence);
 }
 
 export function depsFromConfig(config: ReportingAgentConfig): Deps {
@@ -62,7 +62,7 @@ if (import.meta.url === entryUrl) {
     await runCLI();
     process.exit(0);
   } catch (err) {
-    console.error('ReportingAgent run failed:', err);
+    console.error('ReportingAgentService run failed:', err);
     process.exit(1);
   }
 }

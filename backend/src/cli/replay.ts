@@ -3,7 +3,7 @@ import fs from 'fs';
 import { pathToFileURL } from 'node:url';
 import OpenAI from 'openai';
 import path from 'path';
-import { makeReportingAgent } from '../application/usecases/agent/makeReportingAgent';
+import { makeReportingAgentService } from '../application/usecases/agent/makeReportingAgentService';
 import type { Item } from '../domain/entities';
 import { loadReplayConfig } from '../infrastructure/config/loaders';
 import { JsonSnapshotAdapter } from '../infrastructure/items/JsonSnapshotAdapter';
@@ -71,7 +71,7 @@ export async function runReplay(fileArg = process.argv[2]) {
       getLabel(r, createdAtISO),
       createdAtISO,
     );
-    const agent = makeReportingAgent(provider, llm, persistence);
+    const agent = makeReportingAgentService(provider, llm, persistence);
 
     await agent.captureSnapshot();
     ok++;

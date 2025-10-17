@@ -7,7 +7,7 @@ import type {
   LlmMessage,
   LlmPort,
   LlmRunOptions,
-} from '../../application/ports/LlmPort';
+} from '../../application/ports/output/LlmPort';
 import { sleep } from '../../lib/async/sleep';
 import { parseRetryAfter } from '../../lib/http/parseRetryAfter';
 

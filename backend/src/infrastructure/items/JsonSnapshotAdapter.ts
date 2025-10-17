@@ -1,4 +1,4 @@
-import type { ItemsProviderPort } from '../../application/ports/ItemsProviderPort';
+import type { ItemsProviderPort } from '../../application/ports/output/ItemsProviderPort';
 import type { Item } from '../../domain/entities';
 
 export class JsonSnapshotAdapter implements ItemsProviderPort {

@@ -6,7 +6,7 @@
  * - May perform external I/O and side effects; does not mutate inputs.
  * - Errors propagate to caller; caller owns retries/scheduling.
  */
-export interface AgentPort {
+export interface ReportingAgentPort {
   /** Triggers one full snapshot capture, or rejects on failure. */
   captureSnapshot(): Promise<void>;
 }

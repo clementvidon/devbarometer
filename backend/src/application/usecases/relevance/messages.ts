@@ -1,5 +1,5 @@
 import type { Item } from '../../../domain/entities';
-import type { LlmMessage } from '../../ports/LlmPort';
+import type { LlmMessage } from '../../ports/output/LlmPort';
 
 export function makeRelevanceMessages(
   item: Item,

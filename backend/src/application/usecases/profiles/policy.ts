@@ -1,5 +1,5 @@
 import type { EmotionScores, TonalityScores } from '../../../domain/entities';
-import type { LlmRunOptions } from '../../ports/LlmPort';
+import type { LlmRunOptions } from '../../ports/output/LlmPort';
 
 export const CONCURRENCY = 1;
 

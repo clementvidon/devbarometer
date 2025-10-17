@@ -3,8 +3,8 @@ import type {
   HeadlineDto,
   ReportDto,
 } from '@devbarometer/shared/dtos';
-import type { PersistencePort } from '../../ports/PersistencePort';
-import type { SnapshotQueryPort } from '../../ports/SnapshotQueryPort';
+import type { SnapshotQueryPort } from '../../ports/input/SnapshotQueryPort';
+import type { PersistencePort } from '../../ports/output/PersistencePort';
 import { getAggregatedProfiles } from './getAggregatedProfiles';
 import { getLastReport } from './getLastReport';
 import { getTopHeadlines } from './getTopHeadlines';

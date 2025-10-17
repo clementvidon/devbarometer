@@ -1,7 +1,7 @@
 import type {
   PipelineSnapshot,
   SnapshotData,
-} from '../../domain/value-objects/PipelineSnapshot';
+} from '../../../domain/value-objects/PipelineSnapshot';
 
 /**
  * Persistence for pipeline snapshots.

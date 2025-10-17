@@ -1,5 +1,5 @@
 import type { RelevantItem } from '../../../domain/entities';
-import type { PersistencePort } from '../../ports/PersistencePort';
+import type { PersistencePort } from '../../ports/output/PersistencePort';
 
 export async function getRelevantItemsBefore(
   createdAtISO: string,

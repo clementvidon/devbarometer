@@ -2,11 +2,11 @@ import type { WeightedItem } from '../../../domain/entities';
 import { aggregateProfiles } from '../../../domain/services/profiles/aggregateProfiles';
 import { formatFloat } from '../../../lib/number/formatFloat';
 import { nowIso } from '../../../lib/time/nowIso';
-import type { AgentPort } from '../../ports/AgentPort';
-import type { ItemsProviderPort } from '../../ports/ItemsProviderPort';
-import type { LlmPort } from '../../ports/LlmPort';
-import type { PersistencePort } from '../../ports/PersistencePort';
-import type { WeightsPort } from '../../ports/WeightsPort';
+import type { ReportingAgentPort } from '../../ports/input/ReportingAgentPort';
+import type { ItemsProviderPort } from '../../ports/output/ItemsProviderPort';
+import type { LlmPort } from '../../ports/output/LlmPort';
+import type { PersistencePort } from '../../ports/output/PersistencePort';
+import type { WeightsPort } from '../../ports/output/WeightsPort';
 import { createProfiles } from '../profiles/createProfiles';
 import { createReport } from '../profiles/createReport';
 import { getRelevantItemsBefore } from '../queries/getRelevantItemsBefore';
@@ -16,7 +16,7 @@ export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
   return items.slice().sort((a, b) => b.weight - a.weight);
 }
 
-export class ReportingAgent implements AgentPort {
+export class ReportingAgentService implements ReportingAgentPort {
   constructor(
     private readonly items: ItemsProviderPort,
     private readonly llm: LlmPort,

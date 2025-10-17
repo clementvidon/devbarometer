@@ -1,4 +1,7 @@
-import type { LoggerPort, LogLevel } from '../../application/ports/LoggerPort';
+import type {
+  LoggerPort,
+  LogLevel,
+} from '../../application/ports/output/LoggerPort';
 
 export interface ConsoleLoggerOptions {
   level: LogLevel;
