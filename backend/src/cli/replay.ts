@@ -36,7 +36,7 @@ function getCreatedAtISO(row: AnyRow): string {
 }
 
 function getItems(row: AnyRow): Item[] {
-  return 'data' in row ? (row.data?.items ?? []) : (row.items ?? []);
+  return 'data' in row ? row.data.items : row.items;
 }
 
 function getLabel(row: AnyRow, createdAtISO: string): string {
@@ -77,7 +77,7 @@ export async function runReplay(fileArg = process.argv[2]) {
     ok++;
   }
 
-  console.log(`[replay] processed ${ok}/${rows.length}`);
+  console.log(`[replay] processed ${String(ok)}/${String(rows.length)}`);
 }
 
 const entryUrl = process.argv[1]

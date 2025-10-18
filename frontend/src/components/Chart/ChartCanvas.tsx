@@ -35,10 +35,18 @@ export function ChartCanvas<T extends { createdAt: string }>({
   return (
     <div
       className={styles.chart}
-      onPointerDown={() => setTooltipActive(true)}
-      onPointerUp={() => setTooltipActive(false)}
-      onPointerCancel={() => setTooltipActive(false)}
-      onPointerLeave={() => setTooltipActive(false)}
+      onPointerDown={() => {
+        setTooltipActive(true);
+      }}
+      onPointerUp={() => {
+        setTooltipActive(false);
+      }}
+      onPointerCancel={() => {
+        setTooltipActive(false);
+      }}
+      onPointerLeave={() => {
+        setTooltipActive(false);
+      }}
     >
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>

@@ -25,15 +25,12 @@ function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
   const first = sorted[0];
   const second = sorted[1];
 
-  if (!first) return [];
-
   const res: Standout[] = [];
   if (first.score + EPS >= MIN_STANDOUT) res.push(first);
 
   if (
-    second &&
-    (second.score + EPS >= MIN_STANDOUT ||
-      first.score - second.score <= REL_GAP)
+    second.score + EPS >= MIN_STANDOUT ||
+    first.score - second.score <= REL_GAP
   ) {
     res.push(second);
   }
@@ -145,7 +142,7 @@ Tu es un expert en analyse émotionnelle qui traduit un profil émotionnel en un
 
 Tu recevras un objet JSON contenant :
 - un champ "emotions" : liste des 6 émotions humaines de base avec leur intensité,
-- un champ "standoutEmotions" : liste (éventuellement vide) des émotions dont l'intensité ≥ ${MIN_STANDOUT}, triées par intensité décroissante,
+- un champ "standoutEmotions" : liste (éventuellement vide) des émotions dont l'intensité ≥ ${String(MIN_STANDOUT)}, triées par intensité décroissante,
 - trois tonalités globales : "polarité", "anticipation" et "surprise" (avec direction et force).
 
 Ta tâche :

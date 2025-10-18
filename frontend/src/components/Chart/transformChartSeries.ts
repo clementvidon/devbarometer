@@ -16,7 +16,7 @@ export function buildEmotionSeries(
     .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
     .map(({ createdAt, emotions }) => {
       const base = {} as Record<keyof typeof EMOTION_COLORS, number>;
-      for (const key of keys) base[key] = +(emotions[key] ?? 0);
+      for (const key of keys) base[key] = emotions[key];
       return {
         dateLabel: dateFmtTooltip.format(new Date(createdAt)),
         createdAt,
@@ -40,10 +40,10 @@ export function buildTonalitySeries(
     .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
     .map(({ createdAt, tonalities }) => ({
       createdAt,
-      polarity: +(tonalities.positive - tonalities.negative),
-      surprise: +(tonalities.positive_surprise - tonalities.negative_surprise),
-      anticipation: +(
-        tonalities.optimistic_anticipation - tonalities.pessimistic_anticipation
-      ),
+      polarity: tonalities.positive - tonalities.negative,
+      surprise: tonalities.positive_surprise - tonalities.negative_surprise,
+      anticipation:
+        tonalities.optimistic_anticipation -
+        tonalities.pessimistic_anticipation,
     }));
 }

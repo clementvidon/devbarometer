@@ -39,17 +39,18 @@ export function Chart() {
     );
   }
 
-  const diffDays = emotionData?.length ?? 0;
+  const diffDays = emotionData.length;
 
-  const toggle = () =>
+  const toggle = () => {
     setView((v) => (v === 'emotions' ? 'tonalities' : 'emotions'));
+  };
 
   return (
     <div className={styles.chartContainer}>
       <p className={styles.heading}>
         {view === 'emotions'
-          ? `Intensité des émotions – ${diffDays}\u00A0jours`
-          : `Polarité des tonalités – ${diffDays}\u00A0jours`}
+          ? `Intensité des émotions – ${String(diffDays)}\u00A0jours`
+          : `Polarité des tonalités – ${String(diffDays)}\u00A0jours`}
       </p>
 
       {view === 'emotions' ? (
@@ -77,7 +78,9 @@ export function Chart() {
           view={view}
           onToggleView={toggle}
           hudVisible={hudVisible}
-          onToggleHud={() => setHudVisible((v) => !v)}
+          onToggleHud={() => {
+            setHudVisible((v) => !v);
+          }}
         />
       </div>
     </div>

@@ -57,10 +57,10 @@ export function aggregateProfiles(
     weightSum += w;
 
     for (const k of EMOTION_KEYS) {
-      emotionTotals[k] += (p.emotions[k] ?? 0) * w;
+      emotionTotals[k] += p.emotions[k] * w;
     }
     for (const k of TONALITY_KEYS) {
-      tonalityTotals[k] += (p.tonalities[k] ?? 0) * w;
+      tonalityTotals[k] += p.tonalities[k] * w;
     }
   }
 

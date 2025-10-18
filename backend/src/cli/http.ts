@@ -83,7 +83,9 @@ export function runHttpServer() {
   const { app, port } = buildServer(deps);
 
   const httpLogger = rootLogger.child({ module: 'http' });
-  return app.listen(port, () => httpLogger.info('Server listening', { port }));
+  return app.listen(port, () => {
+    httpLogger.info('Server listening', { port });
+  });
 }
 
 const entryUrl = process.argv[1]

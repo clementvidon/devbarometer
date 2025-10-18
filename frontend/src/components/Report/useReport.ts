@@ -6,7 +6,7 @@ export function useReport() {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const baseUrl: string = import.meta.env.BASE_URL ?? '/';
+    const baseUrl: string = import.meta.env.BASE_URL;
     void fetch(baseUrl + 'report.json')
       .then((r) => (r.ok ? r.json() : null))
       .then((data: unknown) => {
@@ -16,8 +16,8 @@ export function useReport() {
           throw new Error('Format de données invalide');
         }
       })
-      .catch((e) => {
-        setError(e instanceof Error ? e : new Error('Erreur inconnue'));
+      .catch((err: unknown) => {
+        setError(err instanceof Error ? err : new Error('Erreur inconnue'));
         setReport(null);
       });
   }, []);

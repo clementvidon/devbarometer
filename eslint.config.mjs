@@ -38,13 +38,13 @@ export default defineConfig([
       },
     },
     plugins: { js, import: importPlugin },
-    extends: ['js/recommended'],
     settings: {
       'import/resolver': {
         node: { extensions: ['.ts', '.tsx', '.js', '.jsx'] },
       },
     },
     rules: {
+      ...js.configs.recommended.rules,
       'import/extensions': [
         'error',
         'ignorePackages',

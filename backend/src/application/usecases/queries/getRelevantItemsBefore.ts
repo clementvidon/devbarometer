@@ -8,11 +8,10 @@ export async function getRelevantItemsBefore(
   const snapshots = await persistence.getSnapshots();
   const target = Date.parse(createdAtISO);
 
-  const prev =
-    snapshots
-      .filter((s) => Date.parse(s.createdAt) < target)
-      .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))[0] ??
-    null;
+  const prev = snapshots
+    .filter((s) => Date.parse(s.createdAt) < target)
+    .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
+    .at(0);
 
   return prev?.relevantItems ?? [];
 }

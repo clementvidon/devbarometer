@@ -25,13 +25,6 @@ export async function getAggregatedProfiles(
 
   return snapshots.reduce<AggregatedEmotionProfileDto[]>((acc, snapshot) => {
     const aggregate = snapshot.aggregatedEmotionProfile;
-    if (!aggregate) {
-      console.warn(
-        `[getAggregatedEmotionProfiles] Skipping snapshot without aggregate: ${snapshot.createdAt}`,
-      );
-      return acc;
-    }
-
     acc.push(mapAggregateToDto(snapshot.createdAt, aggregate));
     return acc;
   }, []);

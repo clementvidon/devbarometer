@@ -14,8 +14,6 @@ export async function getLastReport(
   persistence: PersistencePort,
 ): Promise<ReportDto | null> {
   const snapshots = await persistence.getSnapshots();
-
-  const report = snapshots[0]?.report;
-  if (report === null || report === undefined) return null;
-  return mapReportDto(report);
+  if (snapshots.length === 0) return null;
+  return mapReportDto(snapshots[0].report);
 }

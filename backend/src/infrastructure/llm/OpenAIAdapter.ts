@@ -53,9 +53,9 @@ export function getOpenAIErrorHeaders(
 
 export function isRetryableOpenAIError(err: unknown): boolean {
   const e = err as { status?: number; code?: string };
-  const isTooManyRequests = e?.status === 429;
-  const isServerError = typeof e?.status === 'number' && e.status >= 500;
-  const isRateLimitExceeded = e?.code === 'rate_limit_exceeded';
+  const isTooManyRequests = e.status === 429;
+  const isServerError = typeof e.status === 'number' && e.status >= 500;
+  const isRateLimitExceeded = e.code === 'rate_limit_exceeded';
   return isTooManyRequests || isServerError || isRateLimitExceeded;
 }
 
@@ -70,7 +70,7 @@ export function shouldRetry(
 export function extractOpenAIMessageContent(
   res: ChatCompletion,
 ): string | null {
-  return res.choices?.[0]?.message?.content?.trim() ?? null;
+  return res.choices[0]?.message.content?.trim() ?? null;
 }
 
 export function buildOpenAIRequestPayload(
@@ -131,7 +131,7 @@ export class OpenAIAdapter implements LlmPort {
         const retryAfterMs = parseRetryAfter(getOpenAIErrorHeaders(err));
         const delay = computeDelay(attempt, retryAfterMs ?? baseBackoffMs);
         console.warn(
-          `[OpenAIAdapter] Transient error (${getErrorStatus(err)}). Retrying in ${delay}ms (attempt ${attempt}/${maxRetries})`,
+          `[OpenAIAdapter] Transient error (${getErrorStatus(err)}). Retrying in ${String(delay)}ms (attempt ${String(attempt)}/${String(maxRetries)})`,
         );
         await sleep(delay);
       }

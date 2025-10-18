@@ -49,8 +49,8 @@ function mapRedditChildToItem(child: z.infer<typeof RedditChildSchema>): Item {
   return {
     source: `https://reddit.com/comments/${d.id}`,
     title: normalizeWhitespace(d.title),
-    content: normalizeWhitespace(d.selftext ?? ''),
-    score: d.ups ?? 0,
+    content: normalizeWhitespace(d.selftext),
+    score: d.ups,
   };
 }
 

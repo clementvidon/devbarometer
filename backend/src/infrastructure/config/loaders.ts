@@ -57,7 +57,7 @@ export type CoreConfig = {
 
 export function loadCoreConfig(env: Env = process.env): CoreConfig {
   const core = parseEnv(CoreEnvSchema, env);
-  const port = core.PORT ?? 3000;
+  const port = core.PORT;
   return { port, databaseUrl: core.DATABASE_URL };
 }
 
@@ -123,32 +123,34 @@ export function loadReportingAgentConfig(
   const llm = parseEnv(LlmEnvSchema, env);
   const reddit = parseEnv(RedditEnvSchema, env);
 
-  const openaiApiKey = llm.OPENAI_API_KEY;
-  if (llm.LLM_PROVIDER !== 'openai')
-    throw new ConfigError('Reporting agent requires OpenAI as LLM_PROVIDER');
-  if (!openaiApiKey)
-    throw new ConfigError('Reporting agent requires OPENAI_API_KEY');
+  if (!llm.OPENAI_API_KEY) {
+    throw new ConfigError(
+      'OPENAI_API_KEY is required for this reporting agent configuration',
+    );
+  }
 
-  const missing: string[] = [];
-  if (!reddit.REDDIT_URL) missing.push('REDDIT_URL');
-  if (!reddit.REDDIT_CLIENT_ID) missing.push('REDDIT_CLIENT_ID');
-  if (!reddit.REDDIT_CLIENT_SECRET) missing.push('REDDIT_CLIENT_SECRET');
-  if (!reddit.REDDIT_USERNAME) missing.push('REDDIT_USERNAME');
-  if (!reddit.REDDIT_PASSWORD) missing.push('REDDIT_PASSWORD');
-
-  if (missing.length)
-    throw new ConfigError(`Missing Reddit credentials: ${missing.join(', ')}`);
+  if (
+    !reddit.REDDIT_URL ||
+    !reddit.REDDIT_CLIENT_ID ||
+    !reddit.REDDIT_CLIENT_SECRET ||
+    !reddit.REDDIT_USERNAME ||
+    !reddit.REDDIT_PASSWORD
+  ) {
+    throw new ConfigError(
+      'All Reddit credentials are required for this reporting agent configuration',
+    );
+  }
 
   return {
-    port: core.PORT ?? 3000,
+    port: core.PORT,
     databaseUrl: core.DATABASE_URL,
-    openaiApiKey,
+    openaiApiKey: llm.OPENAI_API_KEY,
     reddit: {
-      url: reddit.REDDIT_URL!,
-      clientId: reddit.REDDIT_CLIENT_ID!,
-      clientSecret: reddit.REDDIT_CLIENT_SECRET!,
-      username: reddit.REDDIT_USERNAME!,
-      password: reddit.REDDIT_PASSWORD!,
+      url: reddit.REDDIT_URL,
+      clientId: reddit.REDDIT_CLIENT_ID,
+      clientSecret: reddit.REDDIT_CLIENT_SECRET,
+      username: reddit.REDDIT_USERNAME,
+      password: reddit.REDDIT_PASSWORD,
     },
     llmProvider: llm.LLM_PROVIDER,
   };

@@ -20,9 +20,7 @@ export function computeMomentum(
   prev: RelevantItem[] = [],
   opts: MomentumOptions,
 ): WeightedItem[] {
-  const prevMap = new Map<string, number>(
-    prev.map((i) => [i.source, i.score ?? 0]),
-  );
+  const prevMap = new Map<string, number>(prev.map((i) => [i.source, i.score]));
   const { baseWeight } = opts;
 
   return today.map((it) => {

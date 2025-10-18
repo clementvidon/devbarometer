@@ -27,14 +27,14 @@ export class ReportingAgentService implements ReportingAgentPort {
   async captureSnapshot(): Promise<void> {
     console.log(`=== PIPELINE START ===`);
     const items = await this.items.getItems();
-    console.log(`[Agent] Got ${items.length} items`);
+    console.log(`[Agent] Got ${String(items.length)} items`);
     const label = this.items.getLabel();
 
     const createdAt = this.items.getCreatedAt() ?? nowIso();
     const previous = await getRelevantItemsBefore(createdAt, this.persistence);
-    console.log(`[Agent] Got ${previous.length} previous`);
+    console.log(`[Agent] Got ${String(previous.length)} previous`);
     const relevant = await filterRelevantItems(items, this.llm);
-    console.log(`[Agent] Got ${relevant.length} relevant`);
+    console.log(`[Agent] Got ${String(relevant.length)} relevant`);
     const weighted = await this.weights.computeWeights(relevant, previous);
     console.log(`[Agent] Computed weights`);
     const profiles = await createProfiles(weighted, this.llm);
@@ -61,11 +61,11 @@ export class ReportingAgentService implements ReportingAgentPort {
       console.log(` score: ${formatFloat(it.score)}, title: ${it.title}`);
     }
     console.log(`>>> relevant <<<`);
-    for (const it of relevant ?? []) {
+    for (const it of relevant) {
       console.log(` score: ${formatFloat(it.score)}, title: ${it.title}`);
     }
     console.log(`>>> weights <<<`);
-    for (const it of sortByWeightDesc(weighted ?? [])) {
+    for (const it of sortByWeightDesc(weighted)) {
       console.log(` weight: ${formatFloat(it.weight)}, title: ${it.title}`);
     }
     console.log(`>>> aggregated <<<`);

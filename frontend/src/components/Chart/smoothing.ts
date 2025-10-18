@@ -19,19 +19,19 @@ function alphaFromHalfLife(h: number): number {
   return Math.min(0.95, Math.max(0.02, a));
 }
 
-function emaPass<T extends Record<string, unknown>, K extends NumericKey<T>>(
+function emaPass<T extends Record<string, unknown>>(
   data: readonly T[],
-  keys: readonly K[],
+  keys: readonly NumericKey<T>[],
   alpha: number,
 ): T[] {
-  const acc = {} as Partial<Record<K, number>>;
+  const acc = {} as Partial<Record<NumericKey<T>, number>>;
   return data.map((p, i) => {
     const out: Writeable<T> = { ...p };
     for (const k of keys) {
       const v = p[k];
       if (typeof v !== 'number') continue;
       const prev = i === 0 ? v : alpha * v + (1 - alpha) * (acc[k] ?? v);
-      (out as unknown as Record<K, number>)[k] = prev;
+      (out as unknown as Record<NumericKey<T>, number>)[k] = prev;
       acc[k] = prev;
     }
     return out;
@@ -80,10 +80,11 @@ function makePchip(xs: number[], ys: number[]) {
   };
 }
 
-function reconstructWithAnchors<
-  T extends Record<string, unknown>,
-  K extends NumericKey<T>,
->(data: readonly T[], keys: readonly K[], anchors: number): T[] {
+function reconstructWithAnchors<T extends Record<string, unknown>>(
+  data: readonly T[],
+  keys: readonly NumericKey<T>[],
+  anchors: number,
+): T[] {
   const N = data.length;
   if (N <= anchors) return [...data];
 
@@ -95,25 +96,22 @@ function reconstructWithAnchors<
   const out = data.map((p) => ({ ...p })) as Writeable<T>[];
   for (const k of keys) {
     const vals: number[] = data.map((d) =>
-      typeof d[k] === 'number' ? (d[k] as number) : 0,
+      typeof d[k] === 'number' ? d[k] : 0,
     );
     const f = makePchip(
       idx,
       idx.map((i) => vals[i]),
     );
     for (let i = 0; i < N; i++) {
-      (out[i] as unknown as Record<K, number>)[k] = f(xs[i]);
+      (out[i] as unknown as Record<NumericKey<T>, number>)[k] = f(xs[i]);
     }
   }
   return out;
 }
 
-export function smoothUX<
-  T extends Record<string, unknown>,
-  K extends NumericKey<T>,
->(
+export function smoothUX<T extends Record<string, unknown>>(
   data: readonly T[],
-  numericKeys: readonly K[],
+  numericKeys: readonly NumericKey<T>[],
   level: SmoothLevel = 'clean',
 ): T[] {
   const N = data.length;
@@ -123,11 +121,11 @@ export function smoothUX<
   const alpha = alphaFromHalfLife(Math.max(2, N / kPreset));
   let tmp: T[] = [...data];
   for (let i = 0; i < passes; i++) {
-    tmp = emaPass<T, K>(tmp, numericKeys, alpha);
+    tmp = emaPass(tmp, numericKeys, alpha);
   }
 
   const safeAnchors = Math.min(Math.max(3, anchors), N);
   return safeAnchors < N
-    ? reconstructWithAnchors<T, K>(tmp, numericKeys, safeAnchors)
+    ? reconstructWithAnchors(tmp, numericKeys, safeAnchors)
     : tmp;
 }

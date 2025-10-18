@@ -17,8 +17,12 @@ export function Ticker() {
   );
 
   const [paused, setPaused] = useState(false);
-  const onPause = useCallback(() => setPaused(true), []);
-  const onResume = useCallback(() => setPaused(false), []);
+  const onPause = useCallback(() => {
+    setPaused(true);
+  }, []);
+  const onResume = useCallback(() => {
+    setPaused(false);
+  }, []);
 
   const { onPointerDown, onPointerMove, onClickCapture, placeInitialScroll } =
     useTickerScroll(trackRef, rowRef, {

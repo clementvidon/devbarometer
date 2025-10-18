@@ -63,7 +63,7 @@ describe('createProfiles', () => {
         run: vi.fn<RunFn>().mockImplementation((_model, messages) => {
           const first = messages[0];
           const content =
-            typeof first?.content === 'string' ? first.content : '';
+            typeof first.content === 'string' ? first.content : '';
 
           if (content.includes('"joy"') && content.includes('"disgust"')) {
             return Promise.resolve(JSON.stringify(fakeEmotionProfile.emotions));

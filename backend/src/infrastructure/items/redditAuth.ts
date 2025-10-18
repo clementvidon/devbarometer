@@ -48,7 +48,7 @@ export async function getRedditAccessToken(
   if (!('ok' in response) || !response.ok) {
     const msg = 'text' in response ? await response.text() : '<no text>';
     const status = 'status' in response ? response.status : '???';
-    throw new Error(`Reddit token fetch failed (${status}): ${msg}`);
+    throw new Error(`Reddit token fetch failed (${String(status)}): ${msg}`);
   }
 
   const data = (await response.json()) as Partial<RedditTokenResponse>;

@@ -18,8 +18,7 @@ export function makeReportController(
   app.use(express.json());
 
   app.use((req, _res, next) => {
-    const requestId =
-      globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2);
+    const requestId = globalThis.crypto.randomUUID();
     req.logger = logger.child({ requestId });
     next();
   });

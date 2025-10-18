@@ -125,7 +125,7 @@ export class ConsoleLoggerAdapter implements LoggerPort {
     const kv = Object.entries(context)
       .map(([k, v]) =>
         typeof v === 'string' || typeof v === 'number' || typeof v === 'boolean'
-          ? `${k}=${v}`
+          ? `${k}=${String(v)}`
           : `${k}=${safeStringify(v)}`,
       )
       .join(' ');

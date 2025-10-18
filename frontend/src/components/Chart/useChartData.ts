@@ -21,7 +21,7 @@ export function useChartData() {
   useEffect(() => {
     void (async () => {
       try {
-        const baseUrl = import.meta.env.BASE_URL ?? '/';
+        const baseUrl = import.meta.env.BASE_URL;
         const res = await fetch(baseUrl + 'chart.json');
         const profiles = AggregatedEmotionProfileDtoSchema.array().parse(
           await res.json(),

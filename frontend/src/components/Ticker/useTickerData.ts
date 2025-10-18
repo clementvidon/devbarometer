@@ -9,7 +9,7 @@ export function useTickerData() {
   useEffect(() => {
     void (async () => {
       try {
-        const baseUrl = import.meta.env.BASE_URL ?? '/';
+        const baseUrl = import.meta.env.BASE_URL;
         const res = await fetch(baseUrl + 'ticker.json');
         if (!res.ok) {
           setHeadlines([]);

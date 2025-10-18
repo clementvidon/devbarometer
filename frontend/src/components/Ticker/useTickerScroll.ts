@@ -53,7 +53,9 @@ export function useTickerScroll(
       track.scrollLeft = row.scrollWidth / copies;
     });
 
-    return () => cancelAnimationFrame(id);
+    return () => {
+      cancelAnimationFrame(id);
+    };
   }, [copies]);
 
   const clearPauseTimer = () => {

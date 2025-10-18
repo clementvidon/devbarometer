@@ -19,10 +19,8 @@ export async function getTopHeadlines(
   limit = 10,
 ): Promise<HeadlineDto[]> {
   const snapshots = await persistence.getSnapshots();
-  const latest = snapshots[0];
-  if (!latest?.emotionProfilePerItem) return [];
-
-  return latest.emotionProfilePerItem
+  if (snapshots.length === 0) return [];
+  return snapshots[0].emotionProfilePerItem
     .slice()
     .sort((a, b) => b.weight - a.weight)
     .slice(0, limit)

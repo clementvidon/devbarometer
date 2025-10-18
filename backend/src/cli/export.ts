@@ -8,8 +8,8 @@ import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export async function runExport(outArg = process.argv[2]) {
-  const out = outArg ?? './snapshots-export.json';
+export async function runExport(outArg?: string) {
+  const out = outArg ?? process.argv.at(2) ?? './snapshots-export.json';
 
   const { databaseUrl } = loadCoreConfig();
   const persistence = new PostgresAdapter(databaseUrl);
@@ -21,7 +21,9 @@ export async function runExport(outArg = process.argv[2]) {
 
   const abs = path.isAbsolute(out) ? out : path.resolve(__dirname, out);
   fs.writeFileSync(abs, JSON.stringify(ordered, null, 2), 'utf-8');
-  console.log(`[export-db] wrote ${ordered.length} snapshots -> ${abs}`);
+  console.log(
+    `[export-db] wrote ${String(ordered.length)} snapshots -> ${abs}`,
+  );
 }
 
 const entryUrl = process.argv[1]

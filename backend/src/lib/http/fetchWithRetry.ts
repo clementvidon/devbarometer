@@ -39,13 +39,17 @@ export async function fetchWithRetry(
       const res = await withTimeout(fetcher.fetch(url, init), timeoutMs);
 
       if (res.status === 401 || res.status === 403) {
-        console.error(`[fetchWithRetry] ${res.status} fatal (no retry)`);
+        console.error(
+          `[fetchWithRetry] ${String(res.status)} fatal (no retry)`,
+        );
         return null;
       }
 
       if (shouldRetry(res)) {
         const delay = computeDelay(attempt, res);
-        console.warn(`[fetchWithRetry] ${res.status} -> retry in ${delay}ms`);
+        console.warn(
+          `[fetchWithRetry] ${String(res.status)} -> retry in ${String(delay)}ms`,
+        );
         await sleep(delay);
         continue;
       }
@@ -53,7 +57,7 @@ export async function fetchWithRetry(
       if (res.status >= 400) {
         const msg = await res.text();
         console.error(
-          `[fetchWithRetry] ${res.status} Error:\n${truncate(msg)}`,
+          `[fetchWithRetry] ${String(res.status)} Error:\n${truncate(msg)}`,
         );
         return null;
       }
@@ -68,12 +72,17 @@ export async function fetchWithRetry(
 
       return res;
     } catch (err) {
-      console.error(`[fetchWithRetry] ${url} attempt ${attempt + 1}:`, err);
+      console.error(
+        `[fetchWithRetry] ${url} attempt ${String(attempt + 1)}:`,
+        err,
+      );
       const delay = computeDelay(attempt, undefined, err);
       await sleep(delay);
     }
   }
 
-  console.error(`[fetchWithRetry] ${url} failed after ${maxRetries} attempts.`);
+  console.error(
+    `[fetchWithRetry] ${url} failed after ${String(maxRetries)} attempts.`,
+  );
   return null;
 }

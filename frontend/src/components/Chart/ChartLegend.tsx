@@ -14,12 +14,12 @@ export function ChartLegend({ mode = 'emotions' }: { mode?: Mode }) {
   const items =
     mode === 'emotions'
       ? EMOTION_KEYS.map((k) => ({
-          key: String(k),
+          key: k,
           color: EMOTION_COLORS[k],
           label: EMOTION_LABELS[k],
         }))
       : TONALITY_KEYS.map((k) => ({
-          key: String(k),
+          key: k,
           color: TONALITY_COLORS[k],
           label: TONALITY_LABELS[k],
         }));

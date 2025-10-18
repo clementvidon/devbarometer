@@ -60,8 +60,8 @@ export async function createProfiles(
           llm.run(model, makeTonalityMessages(item, tonalityPrompt), runOpts),
         ]);
 
-        const emotions = parseEmotionRaw(String(rawEmotion));
-        const tonalities = parseTonalityRaw(String(rawTonality));
+        const emotions = parseEmotionRaw(rawEmotion);
+        const tonalities = parseTonalityRaw(rawTonality);
         const hasFailed =
           emotions === FALLBACK_EMOTIONS || tonalities === FALLBACK_TONALITIES;
 
@@ -72,7 +72,7 @@ export async function createProfiles(
         return {
           title: item.title,
           source: item.source,
-          weight: hasFailed ? 0 : (item.weight ?? 0),
+          weight: hasFailed ? 0 : item.weight,
           emotions,
           tonalities,
         };
