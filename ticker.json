@@ -1,27 +1,27 @@
 [
   {
-    "title": "Rust : la hype est-elle méritée ?",
+    "title": "Le 70k+ à Paris en full stack JS/TS est il encore possible ?",
     "weight": "2",
+    "source": "https://reddit.com/comments/1o9e13c"
+  },
+  {
+    "title": "C’est moi qui suis une tanche ou GitHub Copilot est impressionnant ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1o7zozw"
+  },
+  {
+    "title": "Rust : la hype est-elle méritée ?",
+    "weight": "1",
     "source": "https://reddit.com/comments/1o8je49"
   },
   {
-    "title": "Je recherche un freelance mais j’ai besoin de conseil",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1o85ye0"
+    "title": "Jeune reconverti qui échoue aux entretiens",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1o6oozl"
   },
   {
     "title": "Vibe coding, IA... En tant que dev, sur quoi se concentrer pour rester pertinent ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1o8d7l7"
-  },
-  {
-    "title": "C’est moi qui suis une tanche ou GitHub Copilot est impressionnant ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1o7zozw"
-  },
-  {
-    "title": "Est-ce que je sui en burn-out ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1o6afjv"
   }
 ]
