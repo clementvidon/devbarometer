@@ -7,6 +7,7 @@ import {
 } from '../../../domain/entities';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 import type { LlmMessage, LlmPort } from '../../ports/output/LlmPort';
+import type { LoggerPort } from '../../ports/output/LoggerPort';
 
 /* pickStandoutsByScore */
 
@@ -178,12 +179,14 @@ Retourne uniquement un JSON brut :
 }
 
 export async function createReport(
+  logger: LoggerPort,
   aggregatedEmotionProfile: AggregatedEmotionProfile,
   llm: LlmPort,
 ): Promise<Report> {
+  const reportLogger = logger.child({ module: 'profiles.report' });
   try {
     const summary = summarizeProfile(aggregatedEmotionProfile);
-    console.log(summary);
+    reportLogger.debug('Summarized profile', { summary });
     const raw = await llm.run('gpt-5-chat-latest', makeMessages(summary), {
       temperature: 0.4,
       maxOutputTokens: 100,
@@ -191,12 +194,22 @@ export async function createReport(
       frequencyPenalty: 0.2,
       responseFormat: { type: 'json_object' },
     });
+    reportLogger.info('LLM call succeeded', { model: 'gpt-5-chat-latest' });
 
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = LLMOutputSchema.safeParse(json);
-    return parsed.success ? parsed.data : FALLBACK;
+
+    if (!parsed.success) {
+      reportLogger.warn('LLM output invalid, using fallback', {
+        issues: parsed.error.issues.map((issue) => issue.message),
+      });
+      return FALLBACK;
+    }
+
+    reportLogger.info('Report parsed successfully');
+    return parsed.data;
   } catch (err) {
-    console.error('[createReport] LLM error:', err);
+    reportLogger.error('LLM call failed, using fallback', { error: err });
     return FALLBACK;
   }
 }

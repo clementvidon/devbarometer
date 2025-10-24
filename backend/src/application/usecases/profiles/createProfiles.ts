@@ -1,6 +1,7 @@
 import pLimit from 'p-limit';
 import type { EmotionProfile, WeightedItem } from '../../../domain/entities';
-import type { LlmPort } from '../../ports/output/LlmPort';
+import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
+import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { makeEmotionMessages, makeTonalityMessages } from './messages';
 import { parseEmotionRaw } from './parseEmotion';
 import { parseTonalityRaw } from './parseTonality';
@@ -20,7 +21,7 @@ export interface CreateProfilesOptions {
   /** Concurrence p-limit pour les appels LLM */
   concurrency: number;
   /** Options LLM finales (incluant le modèle) */
-  llmOptions: typeof DEFAULT_LLM_OPTIONS;
+  llmOptions: LlmRunOptions & { model: string };
 }
 
 export const DEFAULT_CREATE_PROFILES_OPTIONS = {
@@ -30,6 +31,7 @@ export const DEFAULT_CREATE_PROFILES_OPTIONS = {
   llmOptions: DEFAULT_LLM_OPTIONS,
 } as const satisfies CreateProfilesOptions;
 
+/** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
 function mergeProfilesOptions(
   opts: Partial<CreateProfilesOptions> = {},
 ): CreateProfilesOptions {
@@ -37,12 +39,15 @@ function mergeProfilesOptions(
 }
 
 export async function createProfiles(
+  logger: LoggerPort,
   items: WeightedItem[],
   llm: LlmPort,
   opts: Partial<CreateProfilesOptions> = {},
 ): Promise<EmotionProfile[]> {
+  const profilesLogger = logger.child({ module: 'profiles.create' });
+
   if (items.length === 0) {
-    console.error('[createProfiles] Received empty items array.');
+    profilesLogger.error('No items to profile.');
     return [];
   }
 
@@ -66,7 +71,10 @@ export async function createProfiles(
           emotions === FALLBACK_EMOTIONS || tonalities === FALLBACK_TONALITIES;
 
         if (hasFailed) {
-          console.error(`[createProfiles] LLM fallback for ${item.source}`);
+          profilesLogger.warn('LLM fallback', {
+            source: item.source,
+            title: item.title,
+          });
         }
 
         return {
@@ -77,7 +85,11 @@ export async function createProfiles(
           tonalities,
         };
       } catch (err) {
-        console.error(`[createProfiles] Error for ${item.source}`, err);
+        profilesLogger.error('LLM error', {
+          source: item.source,
+          title: item.title,
+          error: err,
+        });
         return {
           title: item.title,
           source: item.source,

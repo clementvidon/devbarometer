@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { EmotionProfile, WeightedItem } from '../../../domain/entities';
 import type { LlmMessage } from '../../ports/output/LlmPort';
+import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { createProfiles } from './createProfiles';
 
 type RunFn = (
@@ -8,6 +9,30 @@ type RunFn = (
   messages: readonly LlmMessage[],
   options?: unknown,
 ) => Promise<string>;
+
+const debugMock = vi.fn();
+const infoMock = vi.fn();
+const warnMock = vi.fn();
+const errorMock = vi.fn();
+const childMock = vi.fn();
+
+const loggerMock: LoggerPort = {
+  debug: debugMock,
+  info: infoMock,
+  warn: warnMock,
+  error: errorMock,
+  child: childMock.mockReturnValue({
+    debug: debugMock,
+    info: infoMock,
+    warn: warnMock,
+    error: errorMock,
+    child: childMock,
+  } as LoggerPort),
+};
+
+vi.mock('../../../infrastructure/logging/root.ts', () => ({
+  makeLogger: () => loggerMock,
+}));
 
 const fakeEmotions = {
   joy: 0.2,
@@ -84,7 +109,11 @@ describe('createProfiles', () => {
     });
 
     test('analyzes data points and returns emotionProfile results', async () => {
-      const emotionProfiles = await createProfiles(fakeWeightedItems, llm);
+      const emotionProfiles = await createProfiles(
+        loggerMock,
+        fakeWeightedItems,
+        llm,
+      );
 
       expect(emotionProfiles).toHaveLength(2);
       emotionProfiles.forEach((res, index) => {
@@ -109,7 +138,11 @@ describe('createProfiles', () => {
     });
 
     test('returns fallback emotions/tonalities and sets weight to 0 when LLM fails', async () => {
-      const emotionProfiles = await createProfiles(fakeWeightedItems, llm);
+      const emotionProfiles = await createProfiles(
+        loggerMock,
+        fakeWeightedItems,
+        llm,
+      );
 
       expect(emotionProfiles).toHaveLength(2);
       emotionProfiles.forEach((res, index) => {

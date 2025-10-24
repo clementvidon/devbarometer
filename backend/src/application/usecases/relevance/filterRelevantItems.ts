@@ -1,9 +1,14 @@
 import pLimit from 'p-limit';
 import type { Item, RelevantItem } from '../../../domain/entities';
-import type { LlmPort } from '../../ports/output/LlmPort';
+import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
+import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { makeRelevanceMessages } from './messages';
 import { parseRelevanceResult } from './parseResult';
-import { CONCURRENCY, DEFAULT_LLM_OPTIONS } from './policy';
+import {
+  CONCURRENCY,
+  DEFAULT_LLM_OPTIONS,
+  DEFAULT_RELEVANCE_ON_ERROR,
+} from './policy';
 import { relevanceFilterPrompt } from './prompts';
 
 export interface FilterRelevantItemsOptions {
@@ -12,7 +17,7 @@ export interface FilterRelevantItemsOptions {
   /** Concurrence p-limit pour les appels LLM */
   concurrency: number;
   /** Options LLM finales (incluant le modèle) */
-  llmOptions: typeof DEFAULT_LLM_OPTIONS;
+  llmOptions: LlmRunOptions & { model: string };
 }
 
 export const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS = {
@@ -21,6 +26,7 @@ export const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS = {
   llmOptions: DEFAULT_LLM_OPTIONS,
 } as const satisfies FilterRelevantItemsOptions;
 
+/** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
 function mergeFilterRelevantItemsOptions(
   opts: Partial<FilterRelevantItemsOptions> = {},
 ): FilterRelevantItemsOptions {
@@ -28,11 +34,12 @@ function mergeFilterRelevantItemsOptions(
 }
 
 async function isRelevant(
+  logger: LoggerPort,
   item: Item,
   llm: LlmPort,
   prompt: string,
   model: string,
-  runOpts: Omit<typeof DEFAULT_LLM_OPTIONS, 'model'>,
+  runOpts: LlmRunOptions,
 ): Promise<boolean> {
   try {
     const raw = await llm.run(
@@ -42,23 +49,29 @@ async function isRelevant(
     );
     return parseRelevanceResult(raw);
   } catch (err) {
-    console.error(
-      `[filterRelevantItems] Failed to check relevance for item "${item.title}"`,
-      err,
-    );
-    return false;
+    logger.warn('Failed to check relevance for item', {
+      error: err instanceof Error ? err : String(err),
+      itemTitle: item.title,
+      itemSource: item.source,
+    });
+    return DEFAULT_RELEVANCE_ON_ERROR;
   }
 }
 
+type LabeledItem = { item: Item; ok: boolean };
+
 export async function filterRelevantItems(
+  logger: LoggerPort,
   items: Item[],
   llm: LlmPort,
   opts: Partial<FilterRelevantItemsOptions> = {},
 ): Promise<RelevantItem[]> {
-  if (items.length === 0) {
-    console.error('[filterRelevantItems] Received empty items array.');
-    return [];
-  }
+  const relevanceLogger = logger.child({
+    module: 'relevance.filter',
+  });
+
+  relevanceLogger.info('Start relevance filter', { total: items.length });
+  if (items.length === 0) return [];
 
   const { prompt, concurrency, llmOptions } =
     mergeFilterRelevantItemsOptions(opts);
@@ -66,20 +79,29 @@ export async function filterRelevantItems(
   const limit = pLimit(concurrency);
   const { model, ...runOpts } = llmOptions;
 
-  const labeledItems = await Promise.all(
+  const labeledItems: LabeledItem[] = await Promise.all(
     items.map((item) =>
-      limit(async () => ({
-        item,
-        ok: await isRelevant(item, llm, prompt, model, runOpts),
-      })),
+      limit(async () => {
+        const ok = await isRelevant(
+          relevanceLogger,
+          item,
+          llm,
+          prompt,
+          model,
+          runOpts,
+        );
+        return { item, ok };
+      }),
     ),
   );
 
   const relevantItems = labeledItems.filter((r) => r.ok).map((r) => r.item);
 
-  if (relevantItems.length === 0) {
-    console.error('[filterRelevantItems] No relevant items identified.');
-  }
+  relevanceLogger.info('End relevance filter', {
+    total: items.length,
+    relevant: relevantItems.length,
+    discarded: items.length - relevantItems.length,
+  });
 
   return relevantItems;
 }

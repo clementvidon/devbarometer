@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import OpenAI from 'openai';
 import type { FetchPort } from '../application/ports/output/FetchPort';
@@ -19,50 +20,44 @@ import { makeReportController } from '../interface/web/ReportController';
 
 const rootLogger = makeLogger();
 
-process.on('unhandledRejection', (reason) => {
-  rootLogger.error('Unhandled rejection', { error: reason });
-  process.exit(1);
-});
-
-process.on('uncaughtException', (err) => {
-  rootLogger.error('Uncaught exception', { error: err });
-  process.exit(1);
-});
-
 type Deps = {
   logger: LoggerPort;
   port: number;
-
   fetcher: FetchPort;
   persistence: PersistencePort;
-
   llm: LlmPort;
   redditUrl: string;
   redditCreds: RedditCredentials;
 };
 
-export function buildServer(deps: Deps) {
-  const provider = new RedditItemsAdapter(
+export function buildHttpServer(deps: Deps) {
+  const itemsProvider = new RedditItemsAdapter(
     deps.fetcher,
     deps.redditUrl,
     deps.redditCreds,
   );
-
-  const agent = makeReportingAgentService(provider, deps.llm, deps.persistence);
+  const agent = makeReportingAgentService(
+    deps.logger.child({ scope: 'agent' }),
+    itemsProvider,
+    deps.llm,
+    deps.persistence,
+  );
   const query = makeSnapshotQueryService(deps.persistence);
   const app = makeReportController(
-    deps.logger.child({ module: 'http' }),
+    deps.logger.child({ scope: 'web' }),
     agent,
     query,
   );
   return { app, port: deps.port };
 }
 
-export function buildDeps(config: ReportingAgentConfig): Deps {
+export function buildDeps(
+  logger: LoggerPort,
+  config: ReportingAgentConfig,
+): Deps {
   const { port, databaseUrl, openaiApiKey, reddit } = config;
-
   return {
-    logger: rootLogger,
+    logger,
     port,
     fetcher: new NodeFetchAdapter(globalThis.fetch),
     persistence: new PostgresAdapter(databaseUrl),
@@ -77,26 +72,35 @@ export function buildDeps(config: ReportingAgentConfig): Deps {
   };
 }
 
-export function runHttpServer() {
+export function runHttpServer(logger: LoggerPort) {
+  const webLogger = logger.child({ module: 'http' });
   const config = loadReportingAgentConfig();
-  const deps = buildDeps(config);
-  const { app, port } = buildServer(deps);
-
-  const httpLogger = rootLogger.child({ module: 'http' });
+  const deps = buildDeps(webLogger, config);
+  const { app, port } = buildHttpServer(deps);
   return app.listen(port, () => {
-    httpLogger.info('Server listening', { port });
+    webLogger.info('Server listening', { port });
   });
 }
 
 const entryUrl = process.argv[1]
   ? pathToFileURL(process.argv[1]).href
   : undefined;
+const isEntryPoint = import.meta.url === entryUrl;
 
-if (import.meta.url === entryUrl) {
+if (isEntryPoint) {
+  const logger = rootLogger.child({ cmd: 'httpServer', traceId: randomUUID() });
+  process.on('unhandledRejection', (reason) => {
+    logger.error('Unhandled rejection', { error: reason });
+    process.exit(1);
+  });
+  process.on('uncaughtException', (err) => {
+    logger.error('Uncaught exception', { error: err });
+    process.exit(1);
+  });
   try {
-    runHttpServer();
+    runHttpServer(logger);
   } catch (err) {
-    rootLogger.error('ReportingAgentService run failed:', { error: err });
+    logger.error('HTTP server error', { error: err });
     process.exit(1);
   }
 }

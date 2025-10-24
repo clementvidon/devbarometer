@@ -1,8 +1,11 @@
 import 'dotenv/config';
+import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import OpenAI from 'openai';
+import type { ReportingAgentPort } from '../application/ports/input/ReportingAgentPort';
 import type { FetchPort } from '../application/ports/output/FetchPort';
 import type { LlmPort } from '../application/ports/output/LlmPort';
+import type { LoggerPort } from '../application/ports/output/LoggerPort';
 import type { PersistencePort } from '../application/ports/output/PersistencePort';
 import { makeReportingAgentService } from '../application/usecases/agent/makeReportingAgentService';
 import type { ReportingAgentConfig } from '../infrastructure/config/loaders';
@@ -11,9 +14,13 @@ import { NodeFetchAdapter } from '../infrastructure/fetch/NodeFetchAdapter';
 import type { RedditCredentials } from '../infrastructure/items/redditAuth';
 import { RedditItemsAdapter } from '../infrastructure/items/RedditItemsAdapter';
 import { OpenAIAdapter } from '../infrastructure/llm/OpenAIAdapter';
+import { makeLogger } from '../infrastructure/logging/root';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
+const rootLogger = makeLogger();
+
 type Deps = {
+  logger: LoggerPort;
   fetcher: FetchPort;
   persistence: PersistencePort;
   llm: LlmPort;
@@ -21,23 +28,31 @@ type Deps = {
   redditCreds: RedditCredentials;
 };
 
-export function buildCLIReportingAgent(deps: Deps) {
-  const provider = new RedditItemsAdapter(
+export function buildCliAgent(deps: Deps): ReportingAgentPort {
+  const itemsProvider = new RedditItemsAdapter(
     deps.fetcher,
     deps.redditUrl,
     deps.redditCreds,
   );
-  return makeReportingAgentService(provider, deps.llm, deps.persistence);
+  return makeReportingAgentService(
+    deps.logger.child({ scope: 'agent' }),
+    itemsProvider,
+    deps.llm,
+    deps.persistence,
+  );
 }
 
-export function depsFromConfig(config: ReportingAgentConfig): Deps {
+export function buildDeps(
+  logger: LoggerPort,
+  config: ReportingAgentConfig,
+): Deps {
   const { databaseUrl, openaiApiKey, reddit } = config;
-
   return {
-    redditUrl: reddit.url,
+    logger,
     fetcher: new NodeFetchAdapter(globalThis.fetch),
     persistence: new PostgresAdapter(databaseUrl),
     llm: new OpenAIAdapter(new OpenAI({ apiKey: openaiApiKey })),
+    redditUrl: reddit.url,
     redditCreds: {
       clientId: reddit.clientId,
       clientSecret: reddit.clientSecret,
@@ -47,22 +62,34 @@ export function depsFromConfig(config: ReportingAgentConfig): Deps {
   };
 }
 
-export async function runCLI() {
+export async function runCLI(logger: LoggerPort) {
+  const agentLogger = logger.child({ module: 'cli' });
   const config = loadReportingAgentConfig();
-  const agent = buildCLIReportingAgent(depsFromConfig(config));
+  const deps = buildDeps(agentLogger, config);
+  const agent = buildCliAgent(deps);
   await agent.captureSnapshot();
 }
 
 const entryUrl = process.argv[1]
   ? pathToFileURL(process.argv[1]).href
   : undefined;
+const isEntryPoint = import.meta.url === entryUrl;
 
-if (import.meta.url === entryUrl) {
+if (isEntryPoint) {
+  const logger = rootLogger.child({ cmd: 'agent', traceId: randomUUID() });
+  process.on('unhandledRejection', (reason) => {
+    logger.error('Unhandled rejection', { error: reason });
+    process.exit(1);
+  });
+  process.on('uncaughtException', (err) => {
+    logger.error('Uncaught exception', { error: err });
+    process.exit(1);
+  });
   try {
-    await runCLI();
+    await runCLI(logger);
     process.exit(0);
   } catch (err) {
-    console.error('ReportingAgentService run failed:', err);
+    logger.error('ReportingAgentService run failed', { error: err });
     process.exit(1);
   }
 }

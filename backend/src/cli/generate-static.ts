@@ -1,25 +1,32 @@
 import 'dotenv/config';
 import fs from 'fs';
-import { pathToFileURL } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
+import { randomUUID } from 'node:crypto';
+import type { LoggerPort } from '../application/ports/output/LoggerPort';
 import { getAggregatedProfiles } from '../application/usecases/queries/getAggregatedProfiles';
 import { getLastReport } from '../application/usecases/queries/getLastReport';
 import { getTopHeadlines } from '../application/usecases/queries/getTopHeadlines';
 import { loadCoreConfig } from '../infrastructure/config/loaders';
+import { makeLogger } from '../infrastructure/logging/root';
 import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const outputDir = path.resolve(__dirname, '../../../frontend/public');
+const rootLogger = makeLogger();
 
-function save(filename: string, data: unknown) {
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+const outputDir = path.resolve(__dirname, '../../../frontend/public');
+function save(logger: LoggerPort, filename: string, data: unknown) {
   const filePath = path.join(outputDir, filename);
+  fs.mkdirSync(path.dirname(filePath), { recursive: true });
   fs.writeFileSync(filePath, JSON.stringify(data ?? null, null, 2), 'utf-8');
-  console.log(`[generate-static] ${filename} saved.`);
+  logger.info('Static file saved', { filename, outputDir });
 }
 
-export async function generateStatic() {
+export async function generateStatic(logger: LoggerPort) {
+  const cliLogger = logger.child({ module: 'cli' });
+  cliLogger.info('Generate static start');
   const { databaseUrl } = loadCoreConfig();
   const persistence = new PostgresAdapter(databaseUrl);
 
@@ -27,21 +34,36 @@ export async function generateStatic() {
   const ticker = await getTopHeadlines(persistence, 5);
   const chart = await getAggregatedProfiles(persistence);
 
-  save('report.json', report);
-  save('ticker.json', ticker);
-  save('chart.json', chart);
+  save(cliLogger, 'report.json', report);
+  save(cliLogger, 'ticker.json', ticker);
+  save(cliLogger, 'chart.json', chart);
+
+  cliLogger.info('Generate static done');
 }
 
 const entryUrl = process.argv[1]
   ? pathToFileURL(process.argv[1]).href
   : undefined;
+const isEntryPoint = import.meta.url === entryUrl;
 
-if (import.meta.url === entryUrl) {
+if (isEntryPoint) {
+  const logger = rootLogger.child({
+    cmd: 'generateStatic',
+    traceId: randomUUID(),
+  });
+  process.on('unhandledRejection', (reason) => {
+    logger.error('Unhandled rejection', { error: reason });
+    process.exit(1);
+  });
+  process.on('uncaughtException', (err) => {
+    logger.error('Uncaught exception', { error: err });
+    process.exit(1);
+  });
   try {
-    await generateStatic();
+    await generateStatic(logger);
     process.exit(0);
   } catch (err) {
-    console.error('[generate-static] Failed to generate static JSON:', err);
+    logger.error('Failed to generate static JSON', { error: err });
     process.exit(1);
   }
 }

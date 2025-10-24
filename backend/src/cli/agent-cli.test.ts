@@ -1,7 +1,28 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
+import type { LoggerPort } from '../application/ports/output/LoggerPort';
 
 const captureSnapshotMock = vi.fn();
-const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+// Create proper mock functions with vi.fn()
+const debugMock = vi.fn();
+const infoMock = vi.fn();
+const warnMock = vi.fn();
+const errorMock = vi.fn();
+const childMock = vi.fn();
+
+const loggerMock: LoggerPort = {
+  debug: debugMock,
+  info: infoMock,
+  warn: warnMock,
+  error: errorMock,
+  child: childMock.mockReturnValue({
+    debug: debugMock,
+    info: infoMock,
+    warn: warnMock,
+    error: errorMock,
+    child: childMock,
+  } as LoggerPort),
+};
 
 const exitSpy = vi
   .spyOn(process, 'exit')
@@ -23,6 +44,9 @@ vi.mock('../application/usecases/agent/makeReportingAgentService', () => ({
   makeReportingAgentService: vi.fn(() => ({
     captureSnapshot: captureSnapshotMock,
   })),
+}));
+vi.mock('../infrastructure/logging/root', () => ({
+  makeLogger: () => loggerMock,
 }));
 vi.mock('openai', () => ({ default: vi.fn(() => ({})) }));
 
@@ -46,8 +70,13 @@ beforeEach(() => {
   argvBak = [...process.argv];
   process.argv[1] = modulePath();
   captureSnapshotMock.mockReset();
-  errorSpy.mockClear();
-  exitSpy.mockClear();
+  // exitSpy.mockClear();
+  vi.clearAllMocks();
+  // debugMock.mockClear();
+  // infoMock.mockClear();
+  // warnMock.mockClear();
+  // errorMock.mockClear();
+  // childMock.mockClear();
 
   if (typeof globalThis.fetch !== 'function') {
     globalThis.fetch = vi.fn(() =>
@@ -75,7 +104,7 @@ describe('agent-cli.ts entrypoint', () => {
 
     await importReportingAgent();
     expect(captureSnapshotMock).toHaveBeenCalled();
-    expect(errorSpy).not.toHaveBeenCalled();
+    expect(errorMock).not.toHaveBeenCalled();
     expect(exitSpy).toHaveBeenCalledWith(0);
   });
 
@@ -87,24 +116,23 @@ describe('agent-cli.ts entrypoint', () => {
     process.env.REDDIT_CLIENT_SECRET = 'secret';
     process.env.REDDIT_USERNAME = 'user';
     process.env.REDDIT_PASSWORD = 'pass';
-
     process.argv[1] = modulePath();
 
     const boom = new Error('boom');
     captureSnapshotMock.mockRejectedValue(boom);
 
     await importReportingAgent();
+
     await vi.waitFor(() => {
-      expect(errorSpy).toHaveBeenCalledWith(
-        'ReportingAgentService run failed:',
-        boom,
+      expect(errorMock).toHaveBeenCalledWith(
+        'ReportingAgentService run failed',
+        { error: boom },
       );
     });
 
-    expect(errorSpy).toHaveBeenCalledWith(
-      'ReportingAgentService run failed:',
-      boom,
-    );
+    expect(errorMock).toHaveBeenCalledWith('ReportingAgentService run failed', {
+      error: boom,
+    });
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
 });

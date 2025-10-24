@@ -1,10 +1,11 @@
 /**
  * Aggregate and emit logs.
  *
- * Contract (interface-wide):
- * - Non-throwing best-effort logging; synchronous API.
- * - Level-based filtering; implementations may redact sensitive data.
- * - `child` returns a logger with merged immutable context.
+ * Contract (interface‑wide):
+ * - Best‑effort, non‑throwing; synchronous API.
+ * - Level‑based filtering; implementations may redact sensitive data.
+ * - child returns a logger with merged, immutable context.
+ * - Implementations must accept native Error in meta and serialize safely
  */
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error' | 'silent';
