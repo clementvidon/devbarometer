@@ -1,27 +1,27 @@
 [
   {
-    "title": "Capgemini avis (vs PME)",
+    "title": "Estimation salaire brut espéré",
     "weight": "2",
-    "source": "https://reddit.com/comments/1od9xwv"
+    "source": "https://reddit.com/comments/1oe6q9b"
+  },
+  {
+    "title": "Anxiété, carrière et IA",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1obf9vc"
   },
   {
     "title": "[Appel à témoignage impact IA sur l'emploi] Cherche jeune dev qui galère a trouvé son premier boulot",
-    "weight": "2",
+    "weight": "1",
     "source": "https://reddit.com/comments/1oc680r"
+  },
+  {
+    "title": "Capgemini avis (vs PME)",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1od9xwv"
   },
   {
     "title": "Profil Junior qui galère à trouver un poste ...",
     "weight": "1",
     "source": "https://reddit.com/comments/1oambub"
-  },
-  {
-    "title": "Le 70k+ à Paris en full stack JS/TS est il encore possible ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1o9e13c"
-  },
-  {
-    "title": "Choix de carrière en sortie d’école",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1oal0l5"
   }
 ]
