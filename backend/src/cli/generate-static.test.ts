@@ -1,29 +1,9 @@
 import * as fs from 'fs';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
-import type { LoggerPort } from '../application/ports/output/LoggerPort';
+import { NoopLoggerAdapter } from '../infrastructure/logging/NoopLoggerAdapter';
 import { generateStatic } from './generate-static';
 
 vi.mock('fs');
-
-const debugMock = vi.fn();
-const infoMock = vi.fn();
-const warnMock = vi.fn();
-const errorMock = vi.fn();
-const childMock = vi.fn();
-
-const loggerMock: LoggerPort = {
-  debug: debugMock,
-  info: infoMock,
-  warn: warnMock,
-  error: errorMock,
-  child: childMock.mockReturnValue({
-    debug: debugMock,
-    info: infoMock,
-    warn: warnMock,
-    error: errorMock,
-    child: childMock,
-  } as LoggerPort),
-};
 
 describe('generateStatic', () => {
   const DATABASE_URL = 'postgres://user:pass@localhost:5432/db';
@@ -56,7 +36,7 @@ describe('generateStatic', () => {
   });
 
   test('writes report and headlines to disk', async () => {
-    await generateStatic(loggerMock);
+    await generateStatic(new NoopLoggerAdapter());
 
     expect(mockWrite).toHaveBeenCalledTimes(3);
     const calls = vi.mocked(fs.writeFileSync).mock.calls;

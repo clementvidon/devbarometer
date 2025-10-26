@@ -4,32 +4,8 @@ import type {
   AggregatedEmotionProfile,
   Report,
 } from '../../../domain/entities';
-import type { LoggerPort } from '../../ports/output/LoggerPort';
+import { NoopLoggerAdapter } from '../../../infrastructure/logging/NoopLoggerAdapter';
 import { createReport } from './createReport';
-
-const debugMock = vi.fn();
-const infoMock = vi.fn();
-const warnMock = vi.fn();
-const errorMock = vi.fn();
-const childMock = vi.fn();
-
-const loggerMock: LoggerPort = {
-  debug: debugMock,
-  info: infoMock,
-  warn: warnMock,
-  error: errorMock,
-  child: childMock.mockReturnValue({
-    debug: debugMock,
-    info: infoMock,
-    warn: warnMock,
-    error: errorMock,
-    child: childMock,
-  } as LoggerPort),
-};
-
-vi.mock('../../../infrastructure/logging/root.ts', () => ({
-  makeLogger: () => loggerMock,
-}));
 
 const fakeLLMResponse = `
 {
@@ -77,7 +53,7 @@ describe('createProfileReport', () => {
 
     test('returns valid Report from correct LLM output', async () => {
       const report = await createReport(
-        loggerMock,
+        new NoopLoggerAdapter(),
         fakeAggregatedEmotionProfile,
         llm,
       );

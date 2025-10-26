@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import type { Item, Report, WeightedItem } from '../../../domain/entities';
+import { NoopLoggerAdapter } from '../../../infrastructure/logging/NoopLoggerAdapter';
 import type { ItemsProviderPort } from '../../ports/output/ItemsProviderPort';
 import type { LlmPort } from '../../ports/output/LlmPort';
-import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 import type { WeightsPort } from '../../ports/output/WeightsPort';
 import { ReportingAgentService } from './ReportingAgentService';
@@ -14,14 +14,6 @@ const mockItems: Item[] = [
 const mockWeightedItems: WeightedItem[] = [
   { source: 'reddit.com', title: 'Item 1', content: '', score: 1, weight: 0.5 },
 ];
-
-const loggerMock: LoggerPort = {
-  debug: vi.fn(),
-  info: vi.fn(),
-  warn: vi.fn(),
-  error: vi.fn(),
-  child: vi.fn(() => loggerMock),
-};
 
 const itemsProvider: ItemsProviderPort = {
   getItems: vi.fn(() => Promise.resolve(mockItems)),
@@ -77,7 +69,7 @@ describe('Agent captureSnapshot', () => {
       getSnapshots: vi.fn(() => Promise.resolve([])),
     };
     agent = new ReportingAgentService(
-      loggerMock,
+      new NoopLoggerAdapter(),
       itemsProvider,
       llm,
       persistence,

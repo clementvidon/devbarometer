@@ -83,9 +83,8 @@ describe('fetchRedditItems', () => {
     });
 
     test('maps, filters (ups>=5), and sanitizes correctly', async () => {
-      const logger = new NoopLoggerAdapter();
       const items = await fetchRedditItems(
-        logger,
+        new NoopLoggerAdapter(),
         fetcher,
         'https://oauth.reddit.com/r/mock/top.json?limit=3&t=week&raw_json=1',
         fakeCreds,

@@ -70,13 +70,7 @@ beforeEach(() => {
   argvBak = [...process.argv];
   process.argv[1] = modulePath();
   captureSnapshotMock.mockReset();
-  // exitSpy.mockClear();
   vi.clearAllMocks();
-  // debugMock.mockClear();
-  // infoMock.mockClear();
-  // warnMock.mockClear();
-  // errorMock.mockClear();
-  // childMock.mockClear();
 
   if (typeof globalThis.fetch !== 'function') {
     globalThis.fetch = vi.fn(() =>
