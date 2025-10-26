@@ -97,7 +97,13 @@ export async function fetchRedditItems(
   }
   const headers = buildRedditHeaders(token, userAgentSuffix);
   const computeDelay = createRedditBackoff(baseBackoffMs);
-  const res = await fetchWithRetry(fetcher, url, { headers }, { computeDelay });
+  const res = await fetchWithRetry(
+    fetcher,
+    url,
+    { headers },
+    { computeDelay },
+    logger.child({ module: 'lib.fetch' }),
+  );
 
   if (res == null) return [];
 

@@ -1,4 +1,5 @@
 import type { FetchPort } from '../../application/ports/output/FetchPort';
+import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 import { sleep } from '../async/sleep';
 import { withTimeout } from '../async/withTimeout';
 import { truncate } from '../log/truncate';
@@ -30,24 +31,24 @@ export async function fetchWithRetry(
   url: string,
   init: RequestInit,
   opts: Partial<FetchWithRetryOptions> = {},
+  logger?: LoggerPort,
 ): Promise<Response | null> {
   const { maxRetries, timeoutMs, shouldRetry, computeDelay } =
     mergeFetchWithRetryOptions(opts);
+  const log = logger?.child({ module: 'lib.fetch' });
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
       const res = await withTimeout(fetcher.fetch(url, init), timeoutMs);
 
       if (res.status === 401 || res.status === 403) {
-        console.error(
-          `[fetchWithRetry] ${String(res.status)} fatal (no retry)`,
-        );
+        log?.error(`[fetchWithRetry] ${String(res.status)} fatal (no retry)`);
         return null;
       }
 
       if (shouldRetry(res)) {
         const delay = computeDelay(attempt, res);
-        console.warn(
+        log?.warn(
           `[fetchWithRetry] ${String(res.status)} -> retry in ${String(delay)}ms`,
         );
         await sleep(delay);
@@ -56,7 +57,7 @@ export async function fetchWithRetry(
 
       if (res.status >= 400) {
         const msg = await res.text();
-        console.error(
+        log?.error(
           `[fetchWithRetry] ${String(res.status)} Error:\n${truncate(msg)}`,
         );
         return null;
@@ -64,7 +65,7 @@ export async function fetchWithRetry(
 
       if (!isJsonResponse(res)) {
         const html = await res.text();
-        console.warn(
+        log?.warn(
           `[fetchWithRetry] Non-JSON @ ${url}:\n${truncate(html, 200)}`,
         );
         return null;
@@ -72,16 +73,15 @@ export async function fetchWithRetry(
 
       return res;
     } catch (err) {
-      console.error(
-        `[fetchWithRetry] ${url} attempt ${String(attempt + 1)}:`,
-        err,
-      );
+      log?.error(`[fetchWithRetry] ${url} attempt ${String(attempt + 1)}:`, {
+        error: err,
+      });
       const delay = computeDelay(attempt, undefined, err);
       await sleep(delay);
     }
   }
 
-  console.error(
+  log?.error(
     `[fetchWithRetry] ${url} failed after ${String(maxRetries)} attempts.`,
   );
   return null;
