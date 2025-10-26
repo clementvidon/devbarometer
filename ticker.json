@@ -1,27 +1,27 @@
 [
   {
-    "title": "Estimation salaire brut espéré",
+    "title": "Dénigrement avec perte d'embauche",
     "weight": "2",
-    "source": "https://reddit.com/comments/1oe6q9b"
-  },
-  {
-    "title": "Anxiété, carrière et IA",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1obf9vc"
+    "source": "https://reddit.com/comments/1ofbn4t"
   },
   {
     "title": "[Appel à témoignage impact IA sur l'emploi] Cherche jeune dev qui galère a trouvé son premier boulot",
-    "weight": "1",
+    "weight": "2",
     "source": "https://reddit.com/comments/1oc680r"
   },
   {
-    "title": "Capgemini avis (vs PME)",
+    "title": "Marché pour senior data scientist / engineer / analyst Toulouse",
     "weight": "1",
-    "source": "https://reddit.com/comments/1od9xwv"
+    "source": "https://reddit.com/comments/1ocgnmg"
   },
   {
-    "title": "Profil Junior qui galère à trouver un poste ...",
+    "title": "Des sites comme Malt mais pour d'autres pays européens comme le UK ?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1oambub"
+    "source": "https://reddit.com/comments/1of3maa"
+  },
+  {
+    "title": "Est-ce qu’on peut vraiment continuer à monter en compétence en devenant freelance ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1obj2jt"
   }
 ]
