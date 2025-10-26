@@ -25,8 +25,8 @@ function save(logger: LoggerPort, filename: string, data: unknown) {
 }
 
 export async function generateStatic(logger: LoggerPort) {
-  const cliLogger = logger.child({ module: 'cli' });
-  cliLogger.info('Generate static start');
+  const log = logger.child({ module: 'cli' });
+  log.info('Generate static start');
   const { databaseUrl } = loadCoreConfig();
   const persistence = new PostgresAdapter(databaseUrl);
 
@@ -34,11 +34,11 @@ export async function generateStatic(logger: LoggerPort) {
   const ticker = await getTopHeadlines(persistence, 5);
   const chart = await getAggregatedProfiles(persistence);
 
-  save(cliLogger, 'report.json', report);
-  save(cliLogger, 'ticker.json', ticker);
-  save(cliLogger, 'chart.json', chart);
+  save(log, 'report.json', report);
+  save(log, 'ticker.json', ticker);
+  save(log, 'chart.json', chart);
 
-  cliLogger.info('Generate static done');
+  log.info('Generate static done');
 }
 
 const entryUrl = process.argv[1]

@@ -44,10 +44,10 @@ export async function createProfiles(
   llm: LlmPort,
   opts: Partial<CreateProfilesOptions> = {},
 ): Promise<EmotionProfile[]> {
-  const profilesLogger = logger.child({ module: 'profiles.create' });
+  const log = logger.child({ module: 'profiles.create' });
 
   if (items.length === 0) {
-    profilesLogger.error('No items to profile.');
+    log.error('No items to profile.');
     return [];
   }
 
@@ -71,7 +71,7 @@ export async function createProfiles(
           emotions === FALLBACK_EMOTIONS || tonalities === FALLBACK_TONALITIES;
 
         if (hasFailed) {
-          profilesLogger.warn('LLM fallback', {
+          log.warn('LLM fallback', {
             source: item.source,
             title: item.title,
           });
@@ -85,7 +85,7 @@ export async function createProfiles(
           tonalities,
         };
       } catch (err) {
-        profilesLogger.error('LLM error', {
+        log.error('LLM error', {
           source: item.source,
           title: item.title,
           error: err,

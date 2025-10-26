@@ -85,7 +85,7 @@ export function buildDeps(logger: LoggerPort, config: ReplayConfig): Deps {
 }
 
 export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
-  const replayLogger = logger.child({ module: 'cli' });
+  const log = logger.child({ module: 'cli' });
   if (!fileArg) throw new ReplayUsageError(USAGE);
 
   const abs = path.resolve(process.cwd(), fileArg);
@@ -110,9 +110,9 @@ export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
   );
 
   const config = loadReplayConfig();
-  const deps = buildDeps(replayLogger, config);
+  const deps = buildDeps(log, config);
 
-  replayLogger.info('Snapshots replay start', { input: abs });
+  log.info('Snapshots replay start', { input: abs });
 
   let ok = 0;
   for (const [rIndex, r] of rows.entries()) {
@@ -121,7 +121,7 @@ export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
     const items = getItems(r);
 
     if (!items.length) {
-      replayLogger.debug('Skip empty row', {
+      log.debug('Skip empty row', {
         reason: 'no_items',
         rIndex,
         createdAt,
@@ -134,7 +134,7 @@ export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
     ok++;
   }
 
-  replayLogger.info('Snapshots replay done', {
+  log.info('Snapshots replay done', {
     processedCount: ok,
     totalCount: rows.length,
   });

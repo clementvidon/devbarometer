@@ -64,9 +64,9 @@ export function buildDeps(
 }
 
 export async function runCLI(logger: LoggerPort) {
-  const agentLogger = logger.child({ module: 'cli' });
+  const log = logger.child({ module: 'cli' });
   const config = loadReportingAgentConfig();
-  const deps = buildDeps(agentLogger, config);
+  const deps = buildDeps(log, config);
   const agent = buildCliAgent(deps);
   await agent.captureSnapshot();
 }

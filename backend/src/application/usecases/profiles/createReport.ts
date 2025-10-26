@@ -183,10 +183,10 @@ export async function createReport(
   aggregatedEmotionProfile: AggregatedEmotionProfile,
   llm: LlmPort,
 ): Promise<Report> {
-  const reportLogger = logger.child({ module: 'profiles.report' });
+  const log = logger.child({ module: 'profiles.report' });
   try {
     const summary = summarizeProfile(aggregatedEmotionProfile);
-    reportLogger.debug('Summarized profile', { summary });
+    log.debug('Summarized profile', { summary });
     const raw = await llm.run('gpt-5-chat-latest', makeMessages(summary), {
       temperature: 0.4,
       maxOutputTokens: 100,
@@ -194,22 +194,22 @@ export async function createReport(
       frequencyPenalty: 0.2,
       responseFormat: { type: 'json_object' },
     });
-    reportLogger.info('LLM call succeeded', { model: 'gpt-5-chat-latest' });
+    log.info('LLM call succeeded', { model: 'gpt-5-chat-latest' });
 
     const json: unknown = JSON.parse(stripCodeFences(raw));
     const parsed = LLMOutputSchema.safeParse(json);
 
     if (!parsed.success) {
-      reportLogger.warn('LLM output invalid, using fallback', {
+      log.warn('LLM output invalid, using fallback', {
         issues: parsed.error.issues.map((issue) => issue.message),
       });
       return FALLBACK;
     }
 
-    reportLogger.info('Report parsed successfully');
+    log.info('Report parsed successfully');
     return parsed.data;
   } catch (err) {
-    reportLogger.error('LLM call failed, using fallback', { error: err });
+    log.error('LLM call failed, using fallback', { error: err });
     return FALLBACK;
   }
 }

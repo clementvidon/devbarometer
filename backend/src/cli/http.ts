@@ -74,12 +74,12 @@ export function buildDeps(
 }
 
 export function runHttpServer(logger: LoggerPort) {
-  const webLogger = logger.child({ module: 'http' });
+  const log = logger.child({ module: 'http' });
   const config = loadReportingAgentConfig();
-  const deps = buildDeps(webLogger, config);
+  const deps = buildDeps(log, config);
   const { app, port } = buildHttpServer(deps);
   return app.listen(port, () => {
-    webLogger.info('Server listening', { port });
+    log.info('Server listening', { port });
   });
 }
 

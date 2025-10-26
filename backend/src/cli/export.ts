@@ -11,8 +11,8 @@ import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 const rootLogger = makeLogger();
 
 export async function runExport(logger: LoggerPort, outArg?: string) {
-  const cliLogger = logger.child({ module: 'cli' });
-  cliLogger.info('Snapshots export start');
+  const log = logger.child({ module: 'cli' });
+  log.info('Snapshots export start');
   const outPath = outArg ?? process.argv.at(2) ?? './snapshots-export.json';
 
   const { databaseUrl } = loadCoreConfig();
@@ -28,7 +28,7 @@ export async function runExport(logger: LoggerPort, outArg?: string) {
     : path.resolve(process.cwd(), outPath);
   fs.mkdirSync(path.dirname(absPath), { recursive: true });
   fs.writeFileSync(absPath, JSON.stringify(ordered, null, 2), 'utf-8');
-  cliLogger.info('Snapshots export done', {
+  log.info('Snapshots export done', {
     snapshotCount: ordered.length,
     outputPath: absPath,
   });

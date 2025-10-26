@@ -66,11 +66,11 @@ export async function filterRelevantItems(
   llm: LlmPort,
   opts: Partial<FilterRelevantItemsOptions> = {},
 ): Promise<RelevantItem[]> {
-  const relevanceLogger = logger.child({
+  const log = logger.child({
     module: 'relevance.filter',
   });
 
-  relevanceLogger.info('Start relevance filter', { total: items.length });
+  log.info('Start relevance filter', { total: items.length });
   if (items.length === 0) return [];
 
   const { prompt, concurrency, llmOptions } =
@@ -82,14 +82,7 @@ export async function filterRelevantItems(
   const labeledItems: LabeledItem[] = await Promise.all(
     items.map((item) =>
       limit(async () => {
-        const ok = await isRelevant(
-          relevanceLogger,
-          item,
-          llm,
-          prompt,
-          model,
-          runOpts,
-        );
+        const ok = await isRelevant(log, item, llm, prompt, model, runOpts);
         return { item, ok };
       }),
     ),
@@ -97,7 +90,7 @@ export async function filterRelevantItems(
 
   const relevantItems = labeledItems.filter((r) => r.ok).map((r) => r.item);
 
-  relevanceLogger.info('End relevance filter', {
+  log.info('End relevance filter', {
     total: items.length,
     relevant: relevantItems.length,
     discarded: items.length - relevantItems.length,

@@ -5,9 +5,9 @@ export async function withSpan<T>(
   name: string,
   fn: () => Promise<T> | T,
 ): Promise<T> {
-  const span = logger.child({ span: name });
+  const log = logger.child({ span: name });
   const start = Date.now();
-  span.debug('start', { ts: start });
+  log.debug('start', { ts: start });
   let error: unknown;
   try {
     const result = await fn();
@@ -20,6 +20,6 @@ export async function withSpan<T>(
     const durationMs = end - start;
     const meta: Record<string, unknown> = { ts: end, durationMs };
     if (error) meta.error = error as unknown;
-    span.debug('end', meta);
+    log.debug('end', meta);
   }
 }
