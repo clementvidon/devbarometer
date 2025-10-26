@@ -32,6 +32,7 @@ type Deps = {
 
 export function buildHttpServer(deps: Deps) {
   const itemsProvider = new RedditItemsAdapter(
+    deps.logger,
     deps.fetcher,
     deps.redditUrl,
     deps.redditCreds,

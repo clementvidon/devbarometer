@@ -1,4 +1,5 @@
 import type { FetchPort } from '../../application/ports/output/FetchPort';
+import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 
 type RedditTokenResponse = {
   access_token: string;
@@ -17,7 +18,9 @@ export type RedditCredentials = {
 export async function getRedditAccessToken(
   fetcher: FetchPort,
   creds: RedditCredentials,
+  logger?: LoggerPort,
 ): Promise<string> {
+  const log = logger?.child({ module: 'items.reddit.auth' });
   const { clientId, clientSecret, username, password } = creds;
 
   if (!clientId || !clientSecret || !username || !password) {
@@ -31,6 +34,7 @@ export async function getRedditAccessToken(
     password,
   });
 
+  log?.debug('Requesting Reddit access token');
   const response = await fetcher.fetch(
     'https://www.reddit.com/api/v1/access_token',
     {
@@ -48,16 +52,23 @@ export async function getRedditAccessToken(
   if (!('ok' in response) || !response.ok) {
     const msg = 'text' in response ? await response.text() : '<no text>';
     const status = 'status' in response ? response.status : '???';
+    log?.error('Reddit token fetch failed', { status, msg });
     throw new Error(`Reddit token fetch failed (${String(status)}): ${msg}`);
   }
 
   const data = (await response.json()) as Partial<RedditTokenResponse>;
 
   if (!data.access_token) {
+    log?.error('No access_token in Reddit response', { data });
     throw new Error(
       `No access_token in Reddit response: ${JSON.stringify(data)}`,
     );
   }
 
+  log?.debug('Received Reddit access token', {
+    token_type: data.token_type,
+    expires_in: data.expires_in,
+    scope: data.scope,
+  });
   return data.access_token;
 }

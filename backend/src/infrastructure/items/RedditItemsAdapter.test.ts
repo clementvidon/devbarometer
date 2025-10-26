@@ -8,12 +8,13 @@ import {
   vi,
 } from 'vitest';
 import type { FetchPort } from '../../application/ports/output/FetchPort';
+import { NoopLoggerAdapter } from '../logging/NoopLoggerAdapter';
+import type { RedditCredentials } from './redditAuth';
 import {
   fetchRedditItems,
   RedditItemsAdapter,
   type RedditItemsOptions,
 } from './RedditItemsAdapter';
-import type { RedditCredentials } from './redditAuth';
 
 vi.mock('./redditAuth', () => ({
   getRedditAccessToken: vi.fn().mockResolvedValue('mocked-access-token'),
@@ -82,7 +83,9 @@ describe('fetchRedditItems', () => {
     });
 
     test('maps, filters (ups>=5), and sanitizes correctly', async () => {
+      const logger = new NoopLoggerAdapter();
       const items = await fetchRedditItems(
+        logger,
         fetcher,
         'https://oauth.reddit.com/r/mock/top.json?limit=3&t=week&raw_json=1',
         fakeCreds,
@@ -125,7 +128,13 @@ describe('fetchRedditItems', () => {
         .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
       const items = await runWithFakeTimers(() =>
-        fetchRedditItems(fetcher, 'url', fakeCreds, fakeOpts),
+        fetchRedditItems(
+          new NoopLoggerAdapter(),
+          fetcher,
+          'url',
+          fakeCreds,
+          fakeOpts,
+        ),
       );
       expect(items).toHaveLength(2);
     });
@@ -137,7 +146,13 @@ describe('fetchRedditItems', () => {
         .mockResolvedValueOnce(fakeResponse({ data: { children: fakePosts } }));
 
       const items = await runWithFakeTimers(() =>
-        fetchRedditItems(fetcher, 'url', fakeCreds, fakeOpts),
+        fetchRedditItems(
+          new NoopLoggerAdapter(),
+          fetcher,
+          'url',
+          fakeCreds,
+          fakeOpts,
+        ),
       );
       expect(items).toHaveLength(2);
     });
@@ -147,6 +162,7 @@ describe('fetchRedditItems', () => {
         Promise.resolve(fakeResponse({ wrong: 'format' })),
       );
       const items = await fetchRedditItems(
+        new NoopLoggerAdapter(),
         fetcher,
         'invalidUrl',
         fakeCreds,
@@ -159,7 +175,13 @@ describe('fetchRedditItems', () => {
       fetcher.fetch = vi.fn(() =>
         Promise.resolve(fakeResponse({ data: { children: [] } })),
       );
-      const items = await fetchRedditItems(fetcher, 'url', fakeCreds, fakeOpts);
+      const items = await fetchRedditItems(
+        new NoopLoggerAdapter(),
+        fetcher,
+        'url',
+        fakeCreds,
+        fakeOpts,
+      );
       expect(items).toEqual([]);
     });
 
@@ -175,7 +197,13 @@ describe('fetchRedditItems', () => {
           }),
         ),
       );
-      const items = await fetchRedditItems(fetcher, 'url', fakeCreds, fakeOpts);
+      const items = await fetchRedditItems(
+        new NoopLoggerAdapter(),
+        fetcher,
+        'url',
+        fakeCreds,
+        fakeOpts,
+      );
       expect(items).toEqual([]);
     });
   });
@@ -189,6 +217,7 @@ describe('RedditItemsAdapter', () => {
         .mockResolvedValue(fakeResponse({ data: { children: fakePosts } })),
     };
     const adapter = new RedditItemsAdapter(
+      new NoopLoggerAdapter(),
       fetcher,
       'https://oauth.reddit.com/r/mock/top.json?limit=3&t=week&raw_json=1',
       fakeCreds,

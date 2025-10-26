@@ -30,6 +30,7 @@ type Deps = {
 
 export function buildCliAgent(deps: Deps): ReportingAgentPort {
   const itemsProvider = new RedditItemsAdapter(
+    deps.logger,
     deps.fetcher,
     deps.redditUrl,
     deps.redditCreds,

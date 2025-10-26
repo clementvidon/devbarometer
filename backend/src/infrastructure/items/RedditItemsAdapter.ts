@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import type { FetchPort } from '../../application/ports/output/FetchPort';
 import type { ItemsProviderPort } from '../../application/ports/output/ItemsProviderPort';
+import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 import type { Item } from '../../domain/entities';
 import { filterByScore } from '../../domain/services/items/filterByScore';
 import { fetchWithRetry } from '../../lib/http/fetchWithRetry';
@@ -80,6 +81,7 @@ export function buildRedditHeaders(
 }
 
 export async function fetchRedditItems(
+  logger: LoggerPort,
   fetcher: FetchPort,
   url: string,
   creds: RedditCredentials,
@@ -88,9 +90,9 @@ export async function fetchRedditItems(
   const { minScore, userAgentSuffix, baseBackoffMs } = opts;
   let token: string;
   try {
-    token = await getRedditAccessToken(fetcher, creds);
+    token = await getRedditAccessToken(fetcher, creds, logger);
   } catch (err) {
-    console.error('[fetchRedditItems] failed to get reddit token:', err);
+    logger.error('Failed to get Reddit token', { error: err });
     return [];
   }
   const headers = buildRedditHeaders(token, userAgentSuffix);
@@ -103,16 +105,16 @@ export async function fetchRedditItems(
   try {
     json = await res.json();
   } catch (err) {
-    console.error('[fetchRedditItems] failed to parse JSON response:', err);
+    logger.error('Failed to parse Reddit JSON response', { error: err });
     return [];
   }
 
   const parsed = ItemsResponseSchema.safeParse(json);
   if (!parsed.success) {
-    console.error(
-      `[fetchRedditItems] URL: ${url}, Errors:`,
-      parsed.error.flatten(),
-    );
+    logger.error('Invalid Reddit items JSON', {
+      url,
+      errors: parsed.error.flatten(),
+    });
     return [];
   }
 
@@ -124,18 +126,27 @@ export async function fetchRedditItems(
 
 export class RedditItemsAdapter implements ItemsProviderPort {
   private readonly opts: RedditItemsOptions;
+  private readonly logger: LoggerPort;
 
   constructor(
+    logger: LoggerPort,
     private readonly fetcher: FetchPort,
     private readonly url: string,
     private readonly creds: RedditCredentials,
     opts: Partial<RedditItemsOptions> = {},
   ) {
+    this.logger = logger.child({ module: 'items.reddit' });
     this.opts = mergeRedditItemsOptions(opts);
   }
 
   async getItems(): Promise<Item[]> {
-    return fetchRedditItems(this.fetcher, this.url, this.creds, this.opts);
+    return fetchRedditItems(
+      this.logger,
+      this.fetcher,
+      this.url,
+      this.creds,
+      this.opts,
+    );
   }
 
   getLabel(): string {

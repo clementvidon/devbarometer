@@ -3,12 +3,6 @@ import type { ReportingAgentPort } from '../../application/ports/input/Reporting
 import type { SnapshotQueryPort } from '../../application/ports/input/SnapshotQueryPort';
 import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 
-declare module 'express-serve-static-core' {
-  interface Request {
-    logger?: LoggerPort;
-  }
-}
-
 export function makeReportController(
   logger: LoggerPort,
   agent: ReportingAgentPort,
