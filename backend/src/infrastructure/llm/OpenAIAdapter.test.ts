@@ -1,6 +1,7 @@
 import type OpenAI from 'openai';
 import { describe, expect, test, vi } from 'vitest';
 import type { LlmMessage } from '../../application/ports/output/LlmPort';
+import { NoopLoggerAdapter } from '../logging/NoopLoggerAdapter';
 import { OpenAIAdapter } from './OpenAIAdapter';
 
 function createMockOpenAI(content: string | null): OpenAI {
@@ -18,7 +19,7 @@ function createMockOpenAI(content: string | null): OpenAI {
 describe('OpenAIAdapter', () => {
   test('returns the content from OpenAI API response', async () => {
     const openAIClient = createMockOpenAI('Hello world!');
-    const adapter = new OpenAIAdapter(openAIClient);
+    const adapter = new OpenAIAdapter(openAIClient, new NoopLoggerAdapter());
 
     const messages = [
       { role: 'user', content: 'Say hello' },

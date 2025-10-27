@@ -62,7 +62,7 @@ export function buildDeps(
     port,
     fetcher: new NodeFetchAdapter(globalThis.fetch),
     persistence: new PostgresAdapter(databaseUrl),
-    llm: new OpenAIAdapter(new OpenAI({ apiKey: openaiApiKey })),
+    llm: new OpenAIAdapter(new OpenAI({ apiKey: openaiApiKey }), logger),
     redditUrl: reddit.url,
     redditCreds: {
       clientId: reddit.clientId,

@@ -80,7 +80,7 @@ export function buildDeps(logger: LoggerPort, config: ReplayConfig): Deps {
   return {
     logger,
     persistence: new PostgresAdapter(databaseUrl),
-    llm: new OpenAIAdapter(new OpenAI({ apiKey: openaiApiKey })),
+    llm: new OpenAIAdapter(new OpenAI({ apiKey: openaiApiKey }), logger),
   };
 }
 

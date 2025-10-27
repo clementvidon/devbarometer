@@ -8,6 +8,7 @@ import type {
   LlmPort,
   LlmRunOptions,
 } from '../../application/ports/output/LlmPort';
+import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 import { sleep } from '../../lib/async/sleep';
 import { parseRetryAfter } from '../../lib/http/parseRetryAfter';
 
@@ -95,12 +96,15 @@ export function buildOpenAIRequestPayload(
 
 export class OpenAIAdapter implements LlmPort {
   private readonly opts: OpenAIOptions;
+  private readonly logger: LoggerPort;
 
   constructor(
     private readonly client: OpenAI,
+    logger: LoggerPort,
     opts: Partial<OpenAIOptions> = {},
   ) {
     this.opts = mergeOpenAIOptions(opts);
+    this.logger = logger.child({ module: 'llm.openai' });
   }
 
   async run(
@@ -116,23 +120,34 @@ export class OpenAIAdapter implements LlmPort {
         const res = await this.client.chat.completions.create(payload);
         const content = extractOpenAIMessageContent(res);
         if (!content) {
-          console.error('[OpenAIAdapter] No content returned from OpenAI API');
+          this.logger.error('No content returned from OpenAI API', {
+            model,
+            messageCount: messages.length,
+          });
           throw new Error('Empty content from OpenAI');
         }
         return content;
       } catch (err) {
         if (!shouldRetry(err, attempt, maxRetries)) {
-          console.error(
-            '[OpenAIAdapter] OpenAI API error (fatal, no retry):',
-            err,
-          );
+          this.logger.error('OpenAI API error (fatal, no retry)', {
+            error: err,
+            model,
+            attempt,
+            maxRetries,
+            status: getErrorStatus(err),
+          });
           throw err instanceof Error ? err : new Error('Unknown error');
         }
         const retryAfterMs = parseRetryAfter(getOpenAIErrorHeaders(err));
         const delay = computeDelay(attempt, retryAfterMs ?? baseBackoffMs);
-        console.warn(
-          `[OpenAIAdapter] Transient error (${getErrorStatus(err)}). Retrying in ${String(delay)}ms (attempt ${String(attempt)}/${String(maxRetries)})`,
-        );
+        this.logger.warn('OpenAI transient error. Retrying soon', {
+          status: getErrorStatus(err),
+          delayMs: delay,
+          retryAfterMs: retryAfterMs ?? null,
+          attempt,
+          maxRetries,
+          model,
+        });
         await sleep(delay);
       }
     }
