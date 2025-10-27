@@ -93,7 +93,10 @@ export async function fetchWithRetry(
       const res = await withTimeout(fetcher.fetch(url, init), timeoutMs);
 
       if (res.status === 401 || res.status === 403) {
-        log?.error(`[fetchWithRetry] ${String(res.status)} fatal (no retry)`);
+        log?.error('HTTP auth error (fatal, no retry)', {
+          url,
+          status: res.status,
+        });
         return {
           ok: false,
           code: 'AUTH',
@@ -107,18 +110,25 @@ export async function fetchWithRetry(
         lastStatus = res.status;
         lastErrorCode = res.status === 429 ? 'RATE_LIMIT' : 'HTTP';
         lastRetryAfterMs = getRetryAfterMsFromHeaders(res.headers);
-        log?.warn(
-          `[fetchWithRetry] ${String(res.status)} -> retry in ${String(delay)}ms`,
-        );
+        log?.warn('HTTP transient error. Retrying soon', {
+          url,
+          status: res.status,
+          delayMs: delay,
+          retryAfterMs: lastRetryAfterMs ?? null,
+          attempt: attempt + 1,
+          maxRetries,
+        });
         await sleep(delay);
         continue;
       }
 
       if (res.status >= 400) {
         const msg = await res.clone().text();
-        log?.error(
-          `[fetchWithRetry] ${String(res.status)} Error:\n${truncate(msg)}`,
-        );
+        log?.error('HTTP error', {
+          url,
+          status: res.status,
+          body: truncate(msg),
+        });
         return {
           ok: false,
           code: res.status === 429 ? 'RATE_LIMIT' : 'HTTP',
@@ -130,9 +140,11 @@ export async function fetchWithRetry(
 
       if (!isJsonResponse(res)) {
         const html = await res.clone().text();
-        log?.warn(
-          `[fetchWithRetry] Non-JSON @ ${url}:\n${truncate(html, 200)}`,
-        );
+        log?.warn('Non-JSON response', {
+          url,
+          status: res.status,
+          body: truncate(html, 200),
+        });
         return {
           ok: false,
           code: 'NON_JSON',
@@ -143,7 +155,10 @@ export async function fetchWithRetry(
 
       return { ok: true, res };
     } catch (err) {
-      log?.error(`[fetchWithRetry] ${url} attempt ${String(attempt + 1)}:`, {
+      log?.error('HTTP attempt failed', {
+        url,
+        attempt: attempt + 1,
+        maxRetries,
         error: err,
       });
       lastError = err;
@@ -153,9 +168,13 @@ export async function fetchWithRetry(
     }
   }
 
-  log?.error(
-    `[fetchWithRetry] ${url} failed after ${String(maxRetries)} attempts.`,
-  );
+  log?.error('HTTP failed after all attempts', {
+    url,
+    attempts: maxRetries,
+    lastStatus: lastStatus ?? null,
+    lastErrorCode: lastErrorCode ?? null,
+    retryAfterMs: lastRetryAfterMs ?? null,
+  });
 
   if (lastErrorCode) {
     return {
