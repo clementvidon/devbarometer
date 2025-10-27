@@ -10,11 +10,13 @@ import type {
 } from '../../application/ports/output/LlmPort';
 import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 import { sleep } from '../../lib/async/sleep';
+import { withTimeout } from '../../lib/async/withTimeout';
 import { parseRetryAfter } from '../../lib/http/parseRetryAfter';
 
 export interface OpenAIOptions {
   maxRetries: number;
   baseBackoffMs: number;
+  requestTimeoutMs: number;
 }
 
 const DEFAULT_OPENAI_OPTIONS = {
@@ -22,6 +24,8 @@ const DEFAULT_OPENAI_OPTIONS = {
   maxRetries: 3,
   /** Base backoff duration (ms) before multiplying by attempt */
   baseBackoffMs: 1200,
+  /** Per-request timeout for the OpenAI API call */
+  requestTimeoutMs: 30000,
 } as const satisfies OpenAIOptions;
 
 export function mergeOpenAIOptions(
@@ -37,13 +41,21 @@ function getErrorStatus(err: unknown): string {
   return 'unknown';
 }
 
+export function linearBackoffMs(
+  attempt: number,
+  baseMs = 1200,
+  jitterRangeMs = 250,
+): number {
+  const jitter = Math.floor(Math.random() * jitterRangeMs);
+  return baseMs * attempt + jitter;
+}
+
 export function computeDelay(
   attempt: number,
   baseDelayMs: number,
   jitterRangeMs = 250,
 ): number {
-  const jitter = Math.floor(Math.random() * jitterRangeMs);
-  return baseDelayMs * attempt + jitter;
+  return linearBackoffMs(attempt, baseDelayMs, jitterRangeMs);
 }
 
 export function getOpenAIErrorHeaders(
@@ -117,7 +129,10 @@ export class OpenAIAdapter implements LlmPort {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         const payload = buildOpenAIRequestPayload(model, messages, options);
-        const res = await this.client.chat.completions.create(payload);
+        const res = await withTimeout(
+          this.client.chat.completions.create(payload),
+          this.opts.requestTimeoutMs,
+        );
         const content = extractOpenAIMessageContent(res);
         if (!content) {
           this.logger.error('No content returned from OpenAI API', {
