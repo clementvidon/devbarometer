@@ -103,6 +103,17 @@ export class ReportingAgentService implements ReportingAgentPort {
         weight: formatFloat(it.weight),
       })),
     });
+    if (weighted.length > 0) {
+      const total = weighted.reduce((s, it) => s + it.weight, 0);
+      const top = sortByWeightDesc(weighted)[0];
+      const topShare = total > 0 ? top.weight / total : 0;
+      log.info('Weights summary', {
+        N: weighted.length,
+        totalWeight: Number.isFinite(total) ? total : 0,
+        topWeight: top.weight,
+        topShare,
+      });
+    }
     log.debug('Aggregated profile', { aggregated });
     log.debug('Report payload', { report });
   }

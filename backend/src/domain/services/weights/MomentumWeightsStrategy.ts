@@ -86,15 +86,6 @@ export class MomentumWeightsStrategy implements WeightsPort {
     const momentumItems = computeMomentum(safeItems, safePrevItems, momentum);
     const capResult = capByPercentile(momentumItems, cap);
     const cappedItems = capResult.cappedItems;
-    const capMeta = capResult.meta;
-    console.info('[MomentumWeightsStrategy] cap', {
-      reason: capMeta.reason,
-      capped: capMeta.capped,
-      capValue: capMeta.capValue,
-      usedPercentile: capMeta.usedPercentile,
-      topShare: capMeta.topShare,
-      N: capMeta.N,
-    });
 
     const weightedItems = normalize.enabled
       ? normalizeByMean(cappedItems, normalize)
