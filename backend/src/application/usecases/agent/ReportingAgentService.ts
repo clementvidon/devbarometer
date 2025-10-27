@@ -36,7 +36,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     const label = this.items.getLabel();
 
     const items = await withSpan(log, 'getItems', () => this.items.getItems());
-    log.info('Items fetched', { count: items.length });
+    log.info('Items fetched', { count: items.length, fetchLabel: label });
 
     const createdAt = this.items.getCreatedAt() ?? nowIso();
     const previous = await withSpan(log, 'getRelevantItemsBefore', () =>
@@ -80,7 +80,7 @@ export class ReportingAgentService implements ReportingAgentPort {
         report,
       }),
     );
-    log.info('Snapshot persisted', { createdAt, fetchLabel: label });
+    log.info('Snapshot persisted', { createdAt });
 
     const ms = Math.round(performance.now() - startedAt);
     log.info('Pipeline finished', { ms });
