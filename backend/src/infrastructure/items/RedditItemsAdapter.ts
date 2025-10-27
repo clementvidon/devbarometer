@@ -97,15 +97,24 @@ export async function fetchRedditItems(
   }
   const headers = buildRedditHeaders(token, userAgentSuffix);
   const computeDelay = createRedditBackoff(baseBackoffMs);
-  const res = await fetchWithRetry(
+  const result = await fetchWithRetry(
     fetcher,
     url,
     { headers },
     { computeDelay },
-    logger.child({ module: 'lib.fetch' }),
+    logger,
   );
 
-  if (res == null) return [];
+  if (!result.ok) {
+    logger.error('Reddit fetch failed', {
+      code: result.code,
+      status: result.status ?? null,
+      retryAfterMs: result.retryAfterMs ?? null,
+      error: result.error ?? null,
+    });
+    return [];
+  }
+  const res = result.res;
 
   let json: unknown;
   try {
@@ -119,7 +128,7 @@ export async function fetchRedditItems(
   if (!parsed.success) {
     logger.error('Invalid Reddit items JSON', {
       url,
-      errors: parsed.error.flatten(),
+      errors: parsed.error.format(),
     });
     return [];
   }

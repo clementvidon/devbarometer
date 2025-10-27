@@ -5,6 +5,7 @@ import { withTimeout } from '../async/withTimeout';
 import { truncate } from '../log/truncate';
 import { MAX_RETRIES, TIMEOUT_MS } from './constants';
 import { isJsonResponse } from './isJsonResponse';
+import { parseRetryAfter } from './parseRetryAfter';
 
 export interface FetchWithRetryOptions {
   maxRetries: number;
@@ -13,11 +14,26 @@ export interface FetchWithRetryOptions {
   computeDelay: (attempt: number, res?: Response, err?: unknown) => number;
 }
 
+export function exponentialBackoffMs(
+  attempt: number,
+  baseMs = 100,
+  jitterRangeMs = 100,
+): number {
+  const jitter = Math.floor(Math.random() * jitterRangeMs);
+  return Math.pow(2, attempt) * baseMs + jitter;
+}
+
 export const DEFAULT_FETCH_WITH_RETRY_OPTIONS = {
   maxRetries: MAX_RETRIES,
   timeoutMs: TIMEOUT_MS,
   shouldRetry: (res: Response) => res.status === 429 || res.status >= 500,
-  computeDelay: (attempt: number) => Math.pow(2, attempt) * 100,
+  computeDelay: (attempt: number, res?: Response) => {
+    if (res) {
+      const retryAfter = getRetryAfterMsFromHeaders(res.headers);
+      if (retryAfter) return retryAfter;
+    }
+    return exponentialBackoffMs(attempt, 100, 100);
+  },
 } as const satisfies FetchWithRetryOptions;
 
 export function mergeFetchWithRetryOptions(
@@ -26,16 +42,51 @@ export function mergeFetchWithRetryOptions(
   return { ...DEFAULT_FETCH_WITH_RETRY_OPTIONS, ...opts };
 }
 
+export type FetchErrorCode =
+  | 'TIMEOUT'
+  | 'NETWORK'
+  | 'AUTH'
+  | 'HTTP'
+  | 'NON_JSON'
+  | 'RATE_LIMIT';
+
+export type FetchResult =
+  | { ok: true; res: Response }
+  | {
+      ok: false;
+      code: FetchErrorCode;
+      retryable: boolean;
+      status?: number;
+      retryAfterMs?: number;
+      error?: unknown;
+    };
+
+function isTimeoutError(err: unknown): boolean {
+  return err instanceof Error && err.message === 'Timeout';
+}
+
+function getRetryAfterMsFromHeaders(headers: Headers): number | undefined {
+  const raw = headers.get('Retry-After');
+  if (!raw) return undefined;
+  const ms = parseRetryAfter({ 'retry-after': raw });
+  return ms ?? undefined;
+}
+
 export async function fetchWithRetry(
   fetcher: FetchPort,
   url: string,
   init: RequestInit,
   opts: Partial<FetchWithRetryOptions> = {},
   logger?: LoggerPort,
-): Promise<Response | null> {
+): Promise<FetchResult> {
   const { maxRetries, timeoutMs, shouldRetry, computeDelay } =
     mergeFetchWithRetryOptions(opts);
   const log = logger?.child({ module: 'lib.fetch' });
+
+  let lastError: unknown;
+  let lastErrorCode: FetchErrorCode | undefined;
+  let lastStatus: number | undefined;
+  let lastRetryAfterMs: number | undefined;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
@@ -43,11 +94,19 @@ export async function fetchWithRetry(
 
       if (res.status === 401 || res.status === 403) {
         log?.error(`[fetchWithRetry] ${String(res.status)} fatal (no retry)`);
-        return null;
+        return {
+          ok: false,
+          code: 'AUTH',
+          retryable: false,
+          status: res.status,
+        };
       }
 
       if (shouldRetry(res)) {
         const delay = computeDelay(attempt, res);
+        lastStatus = res.status;
+        lastErrorCode = res.status === 429 ? 'RATE_LIMIT' : 'HTTP';
+        lastRetryAfterMs = getRetryAfterMsFromHeaders(res.headers);
         log?.warn(
           `[fetchWithRetry] ${String(res.status)} -> retry in ${String(delay)}ms`,
         );
@@ -56,26 +115,39 @@ export async function fetchWithRetry(
       }
 
       if (res.status >= 400) {
-        const msg = await res.text();
+        const msg = await res.clone().text();
         log?.error(
           `[fetchWithRetry] ${String(res.status)} Error:\n${truncate(msg)}`,
         );
-        return null;
+        return {
+          ok: false,
+          code: res.status === 429 ? 'RATE_LIMIT' : 'HTTP',
+          retryable: res.status === 429 ? true : false,
+          status: res.status,
+          retryAfterMs: getRetryAfterMsFromHeaders(res.headers),
+        };
       }
 
       if (!isJsonResponse(res)) {
-        const html = await res.text();
+        const html = await res.clone().text();
         log?.warn(
           `[fetchWithRetry] Non-JSON @ ${url}:\n${truncate(html, 200)}`,
         );
-        return null;
+        return {
+          ok: false,
+          code: 'NON_JSON',
+          retryable: false,
+          status: res.status,
+        };
       }
 
-      return res;
+      return { ok: true, res };
     } catch (err) {
       log?.error(`[fetchWithRetry] ${url} attempt ${String(attempt + 1)}:`, {
         error: err,
       });
+      lastError = err;
+      lastErrorCode = isTimeoutError(err) ? 'TIMEOUT' : 'NETWORK';
       const delay = computeDelay(attempt, undefined, err);
       await sleep(delay);
     }
@@ -84,5 +156,26 @@ export async function fetchWithRetry(
   log?.error(
     `[fetchWithRetry] ${url} failed after ${String(maxRetries)} attempts.`,
   );
-  return null;
+
+  if (lastErrorCode) {
+    return {
+      ok: false,
+      code: lastErrorCode,
+      retryable: true,
+      error: lastError,
+    };
+  }
+
+  if (typeof lastStatus === 'number') {
+    const code: FetchErrorCode = lastStatus === 429 ? 'RATE_LIMIT' : 'HTTP';
+    return {
+      ok: false,
+      code,
+      retryable: lastStatus === 429 || lastStatus >= 500,
+      status: lastStatus,
+      retryAfterMs: lastRetryAfterMs,
+    };
+  }
+
+  return { ok: false, code: 'NETWORK', retryable: true };
 }
