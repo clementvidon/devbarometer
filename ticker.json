@@ -1,13 +1,18 @@
 [
   {
+    "title": "Condescendance en entretien",
+    "weight": "3",
+    "source": "https://reddit.com/comments/1ojclbj"
+  },
+  {
     "title": "Salaires tech en France = blague ?",
     "weight": "2",
     "source": "https://reddit.com/comments/1ohempb"
   },
   {
-    "title": "Clause d'exclusivité / non concurrence et ESN.",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1oihci5"
+    "title": "[Question d’un dev Web3] Où sont passés les développeurs du Web3 ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1ohmdls"
   },
   {
     "title": "Plafond de verre des salaires en France (100K)",
@@ -15,13 +20,8 @@
     "source": "https://reddit.com/comments/1ohcnci"
   },
   {
-    "title": "Comment préparer des tests techniques d'embauche ?",
+    "title": "Clause d'exclusivité / non concurrence et ESN.",
     "weight": "1",
-    "source": "https://reddit.com/comments/1ohmjd4"
-  },
-  {
-    "title": "Dénigrement avec perte d'embauche",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1ofbn4t"
+    "source": "https://reddit.com/comments/1oihci5"
   }
 ]
