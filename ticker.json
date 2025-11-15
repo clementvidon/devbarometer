@@ -1,27 +1,27 @@
 [
   {
-    "title": "Suis je finito ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1otd07m"
-  },
-  {
     "title": "Rant: Quota de prompt IA",
     "weight": "2",
     "source": "https://reddit.com/comments/1ot9snt"
   },
   {
+    "title": "Suis je finito ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1otd07m"
+  },
+  {
+    "title": "Être bon ne suffit plus",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1ouaa0e"
+  },
+  {
+    "title": "Sites d’offres d’emploi à l’étranger ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1orxjcb"
+  },
+  {
     "title": "Les ESN nous prennent pour des cons et ça commence à se voir",
     "weight": "1",
     "source": "https://reddit.com/comments/1ormp1v"
-  },
-  {
-    "title": "Qu’est-ce qui compte le plus pour décrocher un emploi de développeur : un haut niveau en problem solving (type LeetCode) ou une vraie expérience pratique ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1oujw15"
-  },
-  {
-    "title": "L'IA n'est pas le tueur d'emplois qu'on imaginait...",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1orpwyj"
   }
 ]
