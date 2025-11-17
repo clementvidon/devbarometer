@@ -1,27 +1,27 @@
 [
   {
-    "title": "Je suis pessimiste et je sais plus quoi faire …",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1oxdzla"
-  },
-  {
-    "title": "Rant: Quota de prompt IA",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1ot9snt"
-  },
-  {
     "title": "Suis je finito ?",
-    "weight": "1",
+    "weight": "2",
     "source": "https://reddit.com/comments/1otd07m"
   },
   {
-    "title": "Je réussis mes entretiens techniques mais personne me recrute",
+    "title": "J'me pose des questions.",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1otm3rm"
+  },
+  {
+    "title": "Je suis pessimiste et je sais plus quoi faire …",
     "weight": "1",
-    "source": "https://reddit.com/comments/1otdv3r"
+    "source": "https://reddit.com/comments/1oxdzla"
   },
   {
     "title": "Qu’est-ce qui compte le plus pour décrocher un emploi de développeur : un haut niveau en problem solving (type LeetCode) ou une vraie expérience pratique ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1oujw15"
+  },
+  {
+    "title": "[podcast] Le langage ou la techno qui marquera 2026 est...",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1oue0cx"
   }
 ]
