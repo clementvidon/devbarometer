@@ -1,13 +1,18 @@
 [
   {
-    "title": "Suis je finito ?",
+    "title": "Que feriez-vous si vous étiez à ma place",
     "weight": "2",
-    "source": "https://reddit.com/comments/1otd07m"
+    "source": "https://reddit.com/comments/1oyqemy"
   },
   {
-    "title": "J'me pose des questions.",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1otm3rm"
+    "title": "Quoi faire ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1oxdjvo"
+  },
+  {
+    "title": "Transition cybersécurité",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1ovc6of"
   },
   {
     "title": "Je suis pessimiste et je sais plus quoi faire …",
@@ -18,10 +23,5 @@
     "title": "Qu’est-ce qui compte le plus pour décrocher un emploi de développeur : un haut niveau en problem solving (type LeetCode) ou une vraie expérience pratique ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1oujw15"
-  },
-  {
-    "title": "[podcast] Le langage ou la techno qui marquera 2026 est...",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1oue0cx"
   }
 ]
