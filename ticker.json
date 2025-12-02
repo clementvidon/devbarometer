@@ -1,27 +1,27 @@
 [
   {
     "title": "Ras-le-bol des entretiens",
-    "weight": "2",
+    "weight": "1",
     "source": "https://reddit.com/comments/1p8jh6s"
-  },
-  {
-    "title": "Cette offre pour un junior ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1p5jpv3"
-  },
-  {
-    "title": "Études en informatique en 2025 : est-ce toujours une bonne idée ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1p8f7zq"
-  },
-  {
-    "title": "Suis-je un éternel pigeon ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1p8yhg8"
   },
   {
     "title": "Est-ce que les LLM ont nettement amélioré le quotidien et la productivité de votre équipe ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1p8b83a"
+  },
+  {
+    "title": "Rupture période d'essai initiative employeur en intercontrat",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1p6irrq"
+  },
+  {
+    "title": "Changement de CDI - Risques",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1p75q24"
+  },
+  {
+    "title": "Études en informatique en 2025 : est-ce toujours une bonne idée ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1p8f7zq"
   }
 ]
