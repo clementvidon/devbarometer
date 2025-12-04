@@ -1,27 +1,27 @@
 [
   {
-    "title": "L'enfer du recrutement",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1pbaue7"
-  },
-  {
     "title": "Je me suis résigné à la reconversion",
     "weight": "2",
     "source": "https://reddit.com/comments/1pblf3v"
   },
   {
-    "title": "Les développeurs qui prospectent pour des ESN: respectez-vous.",
+    "title": "L'enfer du recrutement",
     "weight": "2",
+    "source": "https://reddit.com/comments/1pbaue7"
+  },
+  {
+    "title": "Est-ce que les LLM ont nettement amélioré le quotidien et la productivité de votre équipe ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1p8b83a"
+  },
+  {
+    "title": "Les développeurs qui prospectent pour des ESN: respectez-vous.",
+    "weight": "1",
     "source": "https://reddit.com/comments/1pbfrn4"
   },
   {
     "title": "CTO freelance : surmenage, précarité et burn-out. Que feriez-vous à ma place ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1pbspcj"
-  },
-  {
-    "title": "J’ai du mal à savoir si l’IA a rendu notre métier plus ou moins intéressant",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pbkgvh"
   }
 ]
