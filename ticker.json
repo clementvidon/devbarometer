@@ -1,27 +1,27 @@
 [
   {
-    "title": "Data scientists senior à Paris, vous êtes où ?",
+    "title": "Le marché de l'amour des devs et des sociétés",
+    "weight": "3",
+    "source": "https://reddit.com/comments/1pi1t62"
+  },
+  {
+    "title": "Ces recruteurs qui se vexent facilement",
     "weight": "2",
-    "source": "https://reddit.com/comments/1pflur2"
+    "source": "https://reddit.com/comments/1pgfq42"
   },
   {
-    "title": "Comment sortir de l'errance professionnelle ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pdi4h8"
+    "title": "Cette annonce montre pourquoi il faut changer de métier.",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1pgf2kn"
   },
   {
-    "title": "Y a-t-il toujours autant de monde dans les écoles d’info ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pdubt6"
+    "title": "Dev embarqué C++ en nucléaire à la Défense -> 40K",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1pgjtd6"
   },
   {
-    "title": "Comment trouver mon premier poste en DevOps junior",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pd9gbc"
-  },
-  {
-    "title": "Thèse en Informatique post-Master : Vos Opinions, expériences et opportunités de carrière en industrie.",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pfo3p2"
+    "title": "Dev et autistes, vous êtes où ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1ph720p"
   }
 ]
