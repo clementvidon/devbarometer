@@ -1,8 +1,13 @@
 [
   {
-    "title": "Le marché de l'amour des devs et des sociétés",
-    "weight": "3",
-    "source": "https://reddit.com/comments/1pi1t62"
+    "title": "Augmentation ESN",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1piwdqg"
+  },
+  {
+    "title": "Marché du travail IT, le pire est derrière nous… ou devant ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1pil5xz"
   },
   {
     "title": "Ces recruteurs qui se vexent facilement",
@@ -15,13 +20,8 @@
     "source": "https://reddit.com/comments/1pgf2kn"
   },
   {
-    "title": "Dev embarqué C++ en nucléaire à la Défense -> 40K",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1pgjtd6"
-  },
-  {
-    "title": "Dev et autistes, vous êtes où ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1ph720p"
+    "title": "Le marché de l'amour des devs et des sociétés",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1pi1t62"
   }
 ]
