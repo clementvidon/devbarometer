@@ -1,8 +1,13 @@
 [
   {
-    "title": "Est-ce que ça sert encore à postuler comme développeur junior à 37 ans après une reconversion ?",
+    "title": "Si on lit vraiment l’article “The Eternal Return of Abstraction”, on comprend un truc que presque personne ne dit : le code n’a jamais été l’essentiel.",
     "weight": "2",
-    "source": "https://reddit.com/comments/1pljjcg"
+    "source": "https://reddit.com/comments/1pjxtyj"
+  },
+  {
+    "title": "2030 = encore plus de développeurs",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1pjzkzg"
   },
   {
     "title": "Après le thread sur la Data Science, quid du Dev \"classique\" face à la montée des Agents IA ? (Ressenti & Avenir)",
@@ -10,18 +15,13 @@
     "source": "https://reddit.com/comments/1pl2i7s"
   },
   {
-    "title": "Salaire des boîtes de presta / conseil vs grand groupe",
+    "title": "La Data Science est-elle en train de saturer ?",
     "weight": "2",
-    "source": "https://reddit.com/comments/1picew0"
+    "source": "https://reddit.com/comments/1pkzb8s"
   },
   {
     "title": "Être loyal ou penser à son intérêt ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1pk6zma"
-  },
-  {
-    "title": "Évolution carrière data engineer junior",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pmrydp"
   }
 ]
