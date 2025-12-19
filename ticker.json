@@ -1,13 +1,13 @@
 [
   {
-    "title": "Votre top 5 des pire ESN",
-    "weight": "3",
-    "source": "https://reddit.com/comments/1pof1ri"
-  },
-  {
     "title": "Je fais partie d'une boite qui cherche à faire de l'IA à tout prix",
     "weight": "2",
     "source": "https://reddit.com/comments/1poajbk"
+  },
+  {
+    "title": "avis job data",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1pp9125"
   },
   {
     "title": "Ma première expérience pro a été un traumatisme.. j'ai ruiné ma santé pour une boîte qui m'a viré une semaine après mon opération.",
@@ -15,13 +15,13 @@
     "source": "https://reddit.com/comments/1pohe2j"
   },
   {
-    "title": "Est-ce que ça sert encore à postuler comme développeur junior à 37 ans après une reconversion ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pljjcg"
+    "title": "On est vraiment mieux payé ailleurs en Europe dans le domaine de la Data?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1pp89tm"
   },
   {
-    "title": "Évolution carrière data engineer junior",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pmrydp"
+    "title": "Votre top 5 des pire ESN",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1pof1ri"
   }
 ]
