@@ -10,18 +10,18 @@
     "source": "https://reddit.com/comments/1pw0om4"
   },
   {
-    "title": "Avis esn développeur senior",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pukyf4"
-  },
-  {
-    "title": "Pénurie de développeur...dans les médias",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1ptcyds"
-  },
-  {
     "title": "Quelle sont les vraies raisons pour lesquelles les développeurs sont sous-payés en France ?",
-    "weight": "1",
+    "weight": "2",
     "source": "https://reddit.com/comments/1pw1uxv"
+  },
+  {
+    "title": "Le mythe du “SaaS millionnaire” : rêve collectif ou réalité très minoritaire ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1pwwskv"
+  },
+  {
+    "title": "Code, freelance, SaaS : est-ce que des devs deviennent riches sans Big Tech ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1pvc0hh"
   }
 ]
