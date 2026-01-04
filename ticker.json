@@ -1,13 +1,13 @@
 [
   {
-    "title": "L'IA freine l'emploi des profils juniors en France",
+    "title": "Entretiens et tests techniques developpeurs Java Angular junior",
     "weight": "2",
-    "source": "https://reddit.com/comments/1q0i4c8"
+    "source": "https://reddit.com/comments/1pxx923"
   },
   {
-    "title": "Avis sur les boîtes Tech (Datadog, Criteo, Doctolib...) pour un Dev Backend",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1px30sv"
+    "title": "L'IA freine l'emploi des profils juniors en France",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1q0i4c8"
   },
   {
     "title": "Mes frustrations sont justifiées ?",
@@ -15,13 +15,13 @@
     "source": "https://reddit.com/comments/1pzcv3v"
   },
   {
-    "title": "Le mythe du “SaaS millionnaire” : rêve collectif ou réalité très minoritaire ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pwwskv"
-  },
-  {
     "title": "LLM nécessaires pour Data scientist ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1q08qjk"
+  },
+  {
+    "title": "Avez-vous des retours d'expérience sur Orange Business ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1pzcvzn"
   }
 ]
