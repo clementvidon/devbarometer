@@ -1,18 +1,13 @@
 [
   {
-    "title": "Entretiens et tests techniques developpeurs Java Angular junior",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1pxx923"
-  },
-  {
     "title": "L'IA freine l'emploi des profils juniors en France",
-    "weight": "1",
+    "weight": "2",
     "source": "https://reddit.com/comments/1q0i4c8"
   },
   {
-    "title": "Mes frustrations sont justifiées ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1pzcv3v"
+    "title": "Devs, comment adaptez-vous votre carrière à l'IA ? Quelle réorientation ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1q2tcxp"
   },
   {
     "title": "LLM nécessaires pour Data scientist ?",
@@ -20,8 +15,13 @@
     "source": "https://reddit.com/comments/1q08qjk"
   },
   {
-    "title": "Avez-vous des retours d'expérience sur Orange Business ?",
+    "title": "Mes frustrations sont justifiées ?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1pzcvzn"
+    "source": "https://reddit.com/comments/1pzcv3v"
+  },
+  {
+    "title": "Importance du diplôme ingé (ou équivalent) dans les grands groupes",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1q3nqzq"
   }
 ]
