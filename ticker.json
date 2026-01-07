@@ -1,18 +1,8 @@
 [
   {
-    "title": "Ingénieur structures, 31 ans, perdu sur la suite (reconversion / pivot ?)",
+    "title": "Devs, comment adaptez-vous votre carrière à l'IA ? Quelle réorientation ?",
     "weight": "2",
-    "source": "https://reddit.com/comments/1q3qhpm"
-  },
-  {
-    "title": "Importance du diplôme ingé (ou équivalent) dans les grands groupes",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1q3nqzq"
-  },
-  {
-    "title": "L'IA freine l'emploi des profils juniors en France",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1q0i4c8"
+    "source": "https://reddit.com/comments/1q2tcxp"
   },
   {
     "title": "Projets qui se lancent ? (PAS d'IA)",
@@ -20,8 +10,18 @@
     "source": "https://reddit.com/comments/1q4li19"
   },
   {
+    "title": "Importance du diplôme ingé (ou équivalent) dans les grands groupes",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1q3nqzq"
+  },
+  {
     "title": "Débuter comme Data Engineer : quelles ESN recommandez-vous à Paris ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1q4ky76"
+  },
+  {
+    "title": "L'IA freine l'emploi des profils juniors en France",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1q0i4c8"
   }
 ]
