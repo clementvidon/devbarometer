@@ -1,13 +1,18 @@
 [
   {
-    "title": "Devs, comment adaptez-vous votre carrière à l'IA ? Quelle réorientation ?",
+    "title": "Le métier de data scientist est-il en train de décliner ?",
     "weight": "2",
-    "source": "https://reddit.com/comments/1q2tcxp"
+    "source": "https://reddit.com/comments/1q5if9h"
   },
   {
     "title": "Projets qui se lancent ? (PAS d'IA)",
-    "weight": "1",
+    "weight": "2",
     "source": "https://reddit.com/comments/1q4li19"
+  },
+  {
+    "title": "Débuter comme Data Engineer : quelles ESN recommandez-vous à Paris ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1q4ky76"
   },
   {
     "title": "Importance du diplôme ingé (ou équivalent) dans les grands groupes",
@@ -15,13 +20,8 @@
     "source": "https://reddit.com/comments/1q3nqzq"
   },
   {
-    "title": "Débuter comme Data Engineer : quelles ESN recommandez-vous à Paris ?",
+    "title": "Les ESN ont-elles tué le secteur de la tech ?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1q4ky76"
-  },
-  {
-    "title": "L'IA freine l'emploi des profils juniors en France",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1q0i4c8"
+    "source": "https://reddit.com/comments/1q6cb0p"
   }
 ]
