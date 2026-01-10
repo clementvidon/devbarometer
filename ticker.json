@@ -5,23 +5,23 @@
     "source": "https://reddit.com/comments/1q6cb0p"
   },
   {
-    "title": "Projets qui se lancent ? (PAS d'IA)",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1q4li19"
-  },
-  {
     "title": "La légende des RH qui blacklist un profil si pas le niveau ? Mythe ou réalité ?",
-    "weight": "1",
+    "weight": "2",
     "source": "https://reddit.com/comments/1q6lokj"
   },
   {
-    "title": "Dilemme du développeur déjà en poste : continuer à se former seul VS passer le diplôme d'ingénieur du CNAM",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1q6hdd8"
+    "title": "Quels postes pour atteindre les 100k annuel ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1q7cach"
   },
   {
-    "title": "Comment indiquer des nouvelles compétences ?",
+    "title": "Devs, comment adaptez-vous votre carrière à l'IA ? Quelle réorientation ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1q2tcxp"
+  },
+  {
+    "title": "Le métier de data scientist est-il en train de décliner ?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1q3073r"
+    "source": "https://reddit.com/comments/1q5if9h"
   }
 ]
