@@ -1,13 +1,8 @@
 [
   {
-    "title": "Les ESN ont-elles tué le secteur de la tech ?",
+    "title": "Étudiant en informatique qui galère à trouver sa première expérience",
     "weight": "2",
-    "source": "https://reddit.com/comments/1q6cb0p"
-  },
-  {
-    "title": "La légende des RH qui blacklist un profil si pas le niveau ? Mythe ou réalité ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1q6lokj"
+    "source": "https://reddit.com/comments/1q8dpl9"
   },
   {
     "title": "Quels postes pour atteindre les 100k annuel ?",
@@ -15,13 +10,18 @@
     "source": "https://reddit.com/comments/1q7cach"
   },
   {
-    "title": "Devs, comment adaptez-vous votre carrière à l'IA ? Quelle réorientation ?",
+    "title": "Arrêter en cours de M1 - est-ce que je me ferme des portes pour la suite ?",
     "weight": "2",
-    "source": "https://reddit.com/comments/1q2tcxp"
+    "source": "https://reddit.com/comments/1q8an82"
   },
   {
     "title": "Le métier de data scientist est-il en train de décliner ?",
     "weight": "1",
     "source": "https://reddit.com/comments/1q5if9h"
+  },
+  {
+    "title": "C'est quoi votre go-to architecture pour un backend .NET ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1q85qvu"
   }
 ]
