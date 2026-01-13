@@ -1,27 +1,27 @@
 [
   {
-    "title": "Les ESN ont-elles tué le secteur de la tech ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1q6cb0p"
-  },
-  {
-    "title": "Quels postes pour atteindre les 100k annuel ?",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1q7cach"
-  },
-  {
-    "title": "Projets qui se lancent ? (PAS d'IA)",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1q4li19"
-  },
-  {
     "title": "Quel secteur de l’informatique est le plus junior friendly ?",
     "weight": "2",
     "source": "https://reddit.com/comments/1q8cvit"
   },
   {
-    "title": "Des vraies ressources pour apprendre à tirer parti de l’IA ?",
+    "title": "C'est quoi votre avis sur les certifications ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1q88nw6"
+  },
+  {
+    "title": "Les ESN ont-elles tué le secteur de la tech ?",
     "weight": "1",
-    "source": "https://reddit.com/comments/1q88eg0"
+    "source": "https://reddit.com/comments/1q6cb0p"
+  },
+  {
+    "title": "Étudiant en informatique qui galère à trouver sa première expérience",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1q8dpl9"
+  },
+  {
+    "title": "Demande d’augmentation Junior",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1qaax6v"
   }
 ]
