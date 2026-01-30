@@ -1,27 +1,27 @@
 [
   {
     "title": "Fatiguée du manque de qualité",
-    "weight": "4",
+    "weight": "2",
     "source": "https://reddit.com/comments/1qp5a6c"
   },
   {
-    "title": "Avez-vous déjà fait passer des entretiens ? Si oui, pour vous, une année d'alternance vaut 1 an d'expérience ?",
+    "title": "Capgemini collabore avec ICE la police anti migration de Trump",
     "weight": "2",
-    "source": "https://reddit.com/comments/1qoo5p2"
+    "source": "https://reddit.com/comments/1qpo6lm"
   },
   {
-    "title": "Titre : Dev Senior (6 ans exp) bloqué en ESN à 38k€ - Sous-payé ou Syndrome de l'imposteur ?",
+    "title": "Je recrute 50% de non diplômés",
     "weight": "2",
-    "source": "https://reddit.com/comments/1qol2jn"
+    "source": "https://reddit.com/comments/1qpc787"
+  },
+  {
+    "title": "[RANT] Je préfère un code non commenté ou mal commenté qu'un amas de commentaires générés avec un modèle IA même pas fine tuné",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1qnhxqb"
   },
   {
     "title": "L'Europe va faciliter le recrutement des indiens notamment dans l'IT",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1qovy4h"
-  },
-  {
-    "title": "Les apprentis développeurs sont piégés par l’IA : s’ils l’utilisent, ils n’apprennent pas. S’ils ne l’utilisent pas, ils paraissent nuls.",
     "weight": "1",
-    "source": "https://reddit.com/comments/1qjs0jm"
+    "source": "https://reddit.com/comments/1qovy4h"
   }
 ]
