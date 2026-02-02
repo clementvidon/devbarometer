@@ -1,8 +1,18 @@
 [
   {
     "title": "La fin de mon calvaire en tant qu'indépendant",
-    "weight": "3",
+    "weight": "2",
     "source": "https://reddit.com/comments/1qqzeu1"
+  },
+  {
+    "title": "How much do European SWEs get paid?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1qqf0ww"
+  },
+  {
+    "title": "Fatiguée du manque de qualité",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1qp5a6c"
   },
   {
     "title": "Un tiers des employés de l'industrie états-unienne du jeu vidéo a été licencié au cours des deux dernières années.",
@@ -10,18 +20,8 @@
     "source": "https://reddit.com/comments/1qr5ax4"
   },
   {
-    "title": "Vous aussi vous allez avoir entre 3 et 5% d'augmentation ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1qr25qs"
-  },
-  {
-    "title": "Dev .NET 10+ ans d'XP, 1 an de chômage, je suis le seul ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1qr1yes"
-  },
-  {
-    "title": "Fatiguée du manque de qualité",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1qp5a6c"
+    "title": "Quelles boîtes pour maximiser les jours de congés / rtt ?",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1qr74rx"
   }
 ]
