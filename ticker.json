@@ -1,27 +1,27 @@
 [
   {
-    "title": "L'IA c'est fantastique",
+    "title": "Constat de jeune diplômé",
+    "weight": "3",
+    "source": "https://reddit.com/comments/1qvxnqv"
+  },
+  {
+    "title": "Avec l'IA, avez vous peur pour vos emplois ?",
     "weight": "2",
-    "source": "https://reddit.com/comments/1qu1hlp"
+    "source": "https://reddit.com/comments/1qvxvvj"
+  },
+  {
+    "title": "Meilleure plateforme pour postes full remote (junior–intermédiaire) ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1qtr08z"
   },
   {
     "title": "Trouver un emploi dans l'informatique est devenu un calvaire",
-    "weight": "2",
+    "weight": "1",
     "source": "https://reddit.com/comments/1qub6t3"
   },
   {
     "title": "Quand tu postules à deux ESN pour la même mission..",
-    "weight": "2",
+    "weight": "1",
     "source": "https://reddit.com/comments/1qurbbh"
-  },
-  {
-    "title": "Designers/Développeurs en reconversion, vous avez fait quoi?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1qur333"
-  },
-  {
-    "title": "Un tiers des employés de l'industrie états-unienne du jeu vidéo a été licencié au cours des deux dernières années.",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1qr5ax4"
   }
 ]
