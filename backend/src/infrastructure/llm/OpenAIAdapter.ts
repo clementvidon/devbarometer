@@ -135,7 +135,7 @@ export class OpenAIAdapter implements LlmPort {
         );
         const content = extractOpenAIMessageContent(res);
         if (!content) {
-          this.logger.error('No content returned from OpenAI API', {
+          this.logger.debug('No content returned from OpenAI API', {
             model,
             messageCount: messages.length,
           });
@@ -144,25 +144,32 @@ export class OpenAIAdapter implements LlmPort {
         return content;
       } catch (err) {
         if (!shouldRetry(err, attempt, maxRetries)) {
-          this.logger.error('OpenAI API error (fatal, no retry)', {
-            error: err,
-            model,
-            attempt,
-            maxRetries,
-            status: getErrorStatus(err),
-          });
+          this.logger.debug(
+            'OpenAI API error (fatal, no retry)',
+            {
+              model,
+              attempt,
+              maxRetries,
+              status: getErrorStatus(err),
+            },
+            err,
+          );
           throw err instanceof Error ? err : new Error('Unknown error');
         }
         const retryAfterMs = parseRetryAfter(getOpenAIErrorHeaders(err));
         const delay = computeDelay(attempt, retryAfterMs ?? baseBackoffMs);
-        this.logger.warn('OpenAI transient error. Retrying soon', {
-          status: getErrorStatus(err),
-          delayMs: delay,
-          retryAfterMs: retryAfterMs ?? null,
-          attempt,
-          maxRetries,
-          model,
-        });
+        this.logger.debug(
+          'OpenAI transient error. Retrying soon',
+          {
+            status: getErrorStatus(err),
+            delayMs: delay,
+            retryAfterMs: retryAfterMs ?? null,
+            attempt,
+            maxRetries,
+            model,
+          },
+          err,
+        );
         await sleep(delay);
       }
     }

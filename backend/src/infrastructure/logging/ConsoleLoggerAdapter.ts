@@ -1,4 +1,5 @@
 import type {
+  LogContext,
   LoggerPort,
   LogLevel,
 } from '../../application/ports/output/LoggerPort';
@@ -109,7 +110,7 @@ function safeStringify(value: unknown): string {
 export class ConsoleLoggerAdapter implements LoggerPort {
   constructor(
     private readonly opts: ConsoleLoggerOptions,
-    private readonly baseContext: Record<string, unknown> = {},
+    private readonly baseContext: LogContext = {},
   ) {}
 
   private shouldLog(level: LogLevel) {
@@ -119,7 +120,8 @@ export class ConsoleLoggerAdapter implements LoggerPort {
   private formatPretty(
     level: LogLevel,
     msg: string,
-    context: Record<string, unknown>,
+    context: LogContext,
+    error: unknown,
   ): string {
     const time = new Date().toISOString().slice(11, 19); // UTC HH:MM:SS
     const kv = Object.entries(context)
@@ -129,16 +131,18 @@ export class ConsoleLoggerAdapter implements LoggerPort {
           : `${k}=${safeStringify(v)}`,
       )
       .join(' ');
-    return `[${time}] ${level.toUpperCase()} ${msg}${kv ? ` ${kv}` : ''}`;
+    const errPart = error === undefined ? '' : ` error=${safeStringify(error)}`;
+    return `[${time}] ${level.toUpperCase()} ${msg}${kv ? ` ${kv}` : ''}${errPart}`;
   }
 
-  private emit(level: LogLevel, msg: string, meta: Record<string, unknown>) {
-    const context = redactObject({ ...this.baseContext, ...meta }) as Record<
-      string,
-      unknown
-    >;
+  private emit(level: LogLevel, msg: string, meta: LogContext, error: unknown) {
+    const context = redactObject({
+      ...this.baseContext,
+      ...meta,
+    }) as LogContext;
+    const redactedError = error === undefined ? undefined : redactObject(error);
     if (this.opts.pretty) {
-      const line = this.formatPretty(level, msg, context);
+      const line = this.formatPretty(level, msg, context, redactedError);
 
       (level === 'error' ? console.error : console.log)(line);
     } else {
@@ -147,31 +151,37 @@ export class ConsoleLoggerAdapter implements LoggerPort {
         level,
         msg,
         context,
+        error: redactedError,
       };
       const line = safeStringify(payload);
       (level === 'error' ? console.error : console.log)(line);
     }
   }
 
-  private log(level: LogLevel, msg: string, meta?: Record<string, unknown>) {
+  private log(
+    level: LogLevel,
+    msg: string,
+    meta?: LogContext,
+    error?: unknown,
+  ) {
     if (!this.shouldLog(level)) return;
-    this.emit(level, msg, meta ?? {});
+    this.emit(level, msg, meta ?? {}, error);
   }
 
-  debug(msg: string, meta?: Record<string, unknown>) {
-    this.log('debug', msg, meta);
+  debug(msg: string, meta?: LogContext, error?: unknown) {
+    this.log('debug', msg, meta, error);
   }
-  info(msg: string, meta?: Record<string, unknown>) {
+  info(msg: string, meta?: LogContext) {
     this.log('info', msg, meta);
   }
-  warn(msg: string, meta?: Record<string, unknown>) {
-    this.log('warn', msg, meta);
+  warn(msg: string, meta?: LogContext, error?: unknown) {
+    this.log('warn', msg, meta, error);
   }
-  error(msg: string, meta?: Record<string, unknown>) {
-    this.log('error', msg, meta);
+  error(msg: string, meta?: LogContext, error?: unknown) {
+    this.log('error', msg, meta, error);
   }
 
-  child(context: Record<string, unknown>): LoggerPort {
+  child(context: LogContext): LoggerPort {
     return new ConsoleLoggerAdapter(this.opts, {
       ...this.baseContext,
       ...context,

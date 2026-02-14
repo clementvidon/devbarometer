@@ -1,8 +1,8 @@
 import type { WeightedItem } from '../../../domain/entities';
 import { aggregateProfiles } from '../../../domain/services/profiles/aggregateProfiles';
 import { formatFloat } from '../../../lib/number/formatFloat';
-import { withSpan } from '../../../lib/observability/withSpan';
 import { nowIso } from '../../../lib/time/nowIso';
+import { withSpan } from '../../observability/withSpan';
 import type { ReportingAgentPort } from '../../ports/input/ReportingAgentPort';
 import type { ItemsProviderPort } from '../../ports/output/ItemsProviderPort';
 import type { LlmPort } from '../../ports/output/LlmPort';

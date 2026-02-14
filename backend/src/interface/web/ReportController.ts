@@ -28,7 +28,11 @@ export function makeReportController(
       res.json(report);
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
-      reqLogger.error('Failed to load report', { error });
+      reqLogger.warn(
+        'Failed to load report',
+        { path: '/report', method: 'GET' },
+        error,
+      );
       res.status(500).json({ error: 'Failed to load report' });
     }
   });
@@ -41,7 +45,11 @@ export function makeReportController(
       res.json({ ok: true });
     } catch (err) {
       const error = err instanceof Error ? err : new Error(String(err));
-      reqLogger.error('Failed to update report', { error });
+      reqLogger.warn(
+        'Failed to update report',
+        { path: '/report', method: 'POST' },
+        error,
+      );
       res.status(500).json({ error: 'Failed to update report' });
     }
   });

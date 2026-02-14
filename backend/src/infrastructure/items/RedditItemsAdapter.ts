@@ -92,7 +92,7 @@ export async function fetchRedditItems(
   try {
     token = await getRedditAccessToken(fetcher, creds, logger);
   } catch (err) {
-    logger.error('Failed to get Reddit token', { error: err });
+    logger.debug('Failed to get Reddit token', { url }, err);
     return [];
   }
   const headers = buildRedditHeaders(token, userAgentSuffix);
@@ -102,16 +102,18 @@ export async function fetchRedditItems(
     url,
     { headers },
     { computeDelay },
-    logger,
   );
 
   if (!result.ok) {
-    logger.error('Reddit fetch failed', {
-      code: result.code,
-      status: result.status ?? null,
-      retryAfterMs: result.retryAfterMs ?? null,
-      error: result.error ?? null,
-    });
+    logger.debug(
+      'Reddit fetch failed',
+      {
+        code: result.code,
+        status: result.status ?? null,
+        retryAfterMs: result.retryAfterMs ?? null,
+      },
+      result.error,
+    );
     return [];
   }
   const res = result.res;
@@ -120,13 +122,13 @@ export async function fetchRedditItems(
   try {
     json = await res.json();
   } catch (err) {
-    logger.error('Failed to parse Reddit JSON response', { error: err });
+    logger.debug('Failed to parse Reddit JSON response', { url }, err);
     return [];
   }
 
   const parsed = ItemsResponseSchema.safeParse(json);
   if (!parsed.success) {
-    logger.error('Invalid Reddit items JSON', {
+    logger.debug('Invalid Reddit items JSON', {
       url,
       errors: parsed.error.format(),
     });

@@ -52,14 +52,14 @@ export async function getRedditAccessToken(
   if (!('ok' in response) || !response.ok) {
     const msg = 'text' in response ? await response.text() : '<no text>';
     const status = 'status' in response ? response.status : '???';
-    log?.error('Reddit token fetch failed', { status, msg });
+    log?.debug('Reddit token fetch failed', { status, msg });
     throw new Error(`Reddit token fetch failed (${String(status)}): ${msg}`);
   }
 
   const data = (await response.json()) as Partial<RedditTokenResponse>;
 
   if (!data.access_token) {
-    log?.error('No access_token in Reddit response', { data });
+    log?.debug('No access_token in Reddit response', { data });
     throw new Error(
       `No access_token in Reddit response: ${JSON.stringify(data)}`,
     );

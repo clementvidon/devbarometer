@@ -1,8 +1,6 @@
 import type { FetchPort } from '../../application/ports/output/FetchPort';
-import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 import { sleep } from '../async/sleep';
 import { withTimeout } from '../async/withTimeout';
-import { truncate } from '../log/truncate';
 import { MAX_RETRIES, TIMEOUT_MS } from './constants';
 import { isJsonResponse } from './isJsonResponse';
 import { parseRetryAfter } from './parseRetryAfter';
@@ -77,11 +75,9 @@ export async function fetchWithRetry(
   url: string,
   init: RequestInit,
   opts: Partial<FetchWithRetryOptions> = {},
-  logger?: LoggerPort,
 ): Promise<FetchResult> {
   const { maxRetries, timeoutMs, shouldRetry, computeDelay } =
     mergeFetchWithRetryOptions(opts);
-  const log = logger?.child({ module: 'lib.fetch' });
 
   let lastError: unknown;
   let lastErrorCode: FetchErrorCode | undefined;
@@ -93,10 +89,6 @@ export async function fetchWithRetry(
       const res = await withTimeout(fetcher.fetch(url, init), timeoutMs);
 
       if (res.status === 401 || res.status === 403) {
-        log?.error('HTTP auth error (fatal, no retry)', {
-          url,
-          status: res.status,
-        });
         return {
           ok: false,
           code: 'AUTH',
@@ -110,25 +102,11 @@ export async function fetchWithRetry(
         lastStatus = res.status;
         lastErrorCode = res.status === 429 ? 'RATE_LIMIT' : 'HTTP';
         lastRetryAfterMs = getRetryAfterMsFromHeaders(res.headers);
-        log?.warn('HTTP transient error. Retrying soon', {
-          url,
-          status: res.status,
-          delayMs: delay,
-          retryAfterMs: lastRetryAfterMs ?? null,
-          attempt: attempt + 1,
-          maxRetries,
-        });
         await sleep(delay);
         continue;
       }
 
       if (res.status >= 400) {
-        const msg = await res.clone().text();
-        log?.error('HTTP error', {
-          url,
-          status: res.status,
-          body: truncate(msg),
-        });
         return {
           ok: false,
           code: res.status === 429 ? 'RATE_LIMIT' : 'HTTP',
@@ -139,12 +117,6 @@ export async function fetchWithRetry(
       }
 
       if (!isJsonResponse(res)) {
-        const html = await res.clone().text();
-        log?.warn('Non-JSON response', {
-          url,
-          status: res.status,
-          body: truncate(html, 200),
-        });
         return {
           ok: false,
           code: 'NON_JSON',
@@ -155,26 +127,12 @@ export async function fetchWithRetry(
 
       return { ok: true, res };
     } catch (err) {
-      log?.error('HTTP attempt failed', {
-        url,
-        attempt: attempt + 1,
-        maxRetries,
-        error: err,
-      });
       lastError = err;
       lastErrorCode = isTimeoutError(err) ? 'TIMEOUT' : 'NETWORK';
       const delay = computeDelay(attempt, undefined, err);
       await sleep(delay);
     }
   }
-
-  log?.error('HTTP failed after all attempts', {
-    url,
-    attempts: maxRetries,
-    lastStatus: lastStatus ?? null,
-    lastErrorCode: lastErrorCode ?? null,
-    retryAfterMs: lastRetryAfterMs ?? null,
-  });
 
   if (lastErrorCode) {
     return {
