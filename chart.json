@@ -1,5 +1,26 @@
 [
   {
+    "createdAt": "2026-02-16T10:51:28.325Z",
+    "count": 27,
+    "totalWeight": 26.99999999999998,
+    "emotions": {
+      "joy": 0.21189473721924101,
+      "trust": 0.4280904547701612,
+      "anger": 0.2359486883718303,
+      "fear": 0.35278718983860874,
+      "sadness": 0.3744121496066595,
+      "disgust": 0.18872094620466812
+    },
+    "tonalities": {
+      "positive": 0.25207839970241297,
+      "negative": 0.4376050114802556,
+      "positive_surprise": 0.14350846881763482,
+      "negative_surprise": 0.29688411484464555,
+      "optimistic_anticipation": 0.2953833239402704,
+      "pessimistic_anticipation": 0.4076097583663771
+    }
+  },
+  {
     "createdAt": "2026-02-15T10:28:10.084Z",
     "count": 26,
     "totalWeight": 26.000000000000018,

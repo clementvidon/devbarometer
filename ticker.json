@@ -1,18 +1,8 @@
 [
   {
-    "title": "Il est désormais plus difficile de recruter des employés du BTP et de l'industrie que des informaticiens",
+    "title": "Faudrait réformer notre façon d'enseigner l'informatique",
     "weight": "2",
-    "source": "https://reddit.com/comments/1r3ii50"
-  },
-  {
-    "title": "⚠️ ALERTE ARNAQUE POEI : Faux recrutement \"Nexys Recrutement\" & Formation \"Webtotrain\" (On me demande 1250€)",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1r1gw7z"
-  },
-  {
-    "title": "Salaires à Mistral AI",
-    "weight": "2",
-    "source": "https://reddit.com/comments/1r3mmeq"
+    "source": "https://reddit.com/comments/1r24l65"
   },
   {
     "title": "Vous aimez encore dev depuis l’arrivé de l’IA ?",
@@ -20,8 +10,18 @@
     "source": "https://reddit.com/comments/1r3l48e"
   },
   {
-    "title": "Les boîtes qui cherchent des devs ne sont pas naïves",
+    "title": "Il est désormais plus difficile de recruter des employés du BTP et de l'industrie que des informaticiens",
     "weight": "2",
-    "source": "https://reddit.com/comments/1r3illg"
+    "source": "https://reddit.com/comments/1r3ii50"
+  },
+  {
+    "title": "Devs & Recruteurs : on a le même problème en ce moment (les clients indécis)",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1r2v9or"
+  },
+  {
+    "title": "Salaires à Mistral AI",
+    "weight": "2",
+    "source": "https://reddit.com/comments/1r3mmeq"
   }
 ]
