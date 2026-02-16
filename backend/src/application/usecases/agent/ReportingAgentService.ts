@@ -11,7 +11,7 @@ import type { PersistencePort } from '../../ports/output/PersistencePort';
 import type { WeightsPort } from '../../ports/output/WeightsPort';
 import { createProfiles } from '../profiles/createProfiles';
 import { createReport } from '../profiles/createReport';
-import { getRelevantItemsBefore } from '../queries/getRelevantItemsBefore';
+import { getLastRelevantItemsBefore } from '../queries/getLastRelevantItemsBefore';
 import { filterRelevantItems } from '../relevance/filterRelevantItems';
 
 export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
@@ -40,7 +40,7 @@ export class ReportingAgentService implements ReportingAgentPort {
 
     const createdAt = this.items.getCreatedAt() ?? nowIso();
     const previous = await withSpan(log, 'getRelevantItemsBefore', () =>
-      getRelevantItemsBefore(createdAt, this.persistence),
+      getLastRelevantItemsBefore(createdAt, this.persistence),
     );
     log.info('Previous items fetched', { count: previous.length });
 
