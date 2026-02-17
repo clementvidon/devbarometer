@@ -33,7 +33,7 @@ function mergeFilterRelevantItemsOptions(
   return { ...DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS, ...opts };
 }
 
-async function isRelevant(
+export async function isRelevant(
   logger: LoggerPort,
   llm: LlmPort,
   item: Item,
