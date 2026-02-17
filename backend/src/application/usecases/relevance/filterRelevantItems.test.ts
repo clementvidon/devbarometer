@@ -10,11 +10,12 @@ import { DEFAULT_RELEVANCE_ON_ERROR } from './policy';
  *
  * Inputs:
  * - a logger (LoggerPort)
- * - a LLM provider (LlmPort)
  * - an item (Item)
- * - a prompt (string)
- * - an LLM model (string)
- * - LLM run options (LlmRunOptions)
+ * - a LLM provider (LlmPort)
+ * - a set of options
+ *  - a prompt (string)
+ *  - an LLM model (string)
+ *  - LLM run options (LlmRunOptions)
  *
  * Output:
  * - a Promise<boolean>, resolves to:
@@ -66,7 +67,11 @@ describe('isRelevant', () => {
     llm.run.mockResolvedValue('{ "relevant": true }');
     const item = makeItem();
 
-    const result = await isRelevant(logger, llm, item, 'prompt', 'model', {});
+    const result = await isRelevant(logger, item, llm, {
+      prompt: 'prompt',
+      model: 'model',
+      runOpts: {},
+    });
 
     expect(result).toBe(true);
     expect(llm.run).toHaveBeenCalledTimes(1);
@@ -79,7 +84,11 @@ describe('isRelevant', () => {
     llm.run.mockResolvedValue('{ "relevant": false }');
     const item = makeItem();
 
-    const result = await isRelevant(logger, llm, item, 'prompt', 'model', {});
+    const result = await isRelevant(logger, item, llm, {
+      prompt: 'prompt',
+      model: 'model',
+      runOpts: {},
+    });
 
     expect(result).toBe(false);
     expect(llm.run).toHaveBeenCalledTimes(1);
@@ -92,7 +101,11 @@ describe('isRelevant', () => {
     llm.run.mockRejectedValue(new Error('boom'));
     const item = makeItem();
 
-    const result = await isRelevant(logger, llm, item, 'prompt', 'model', {});
+    const result = await isRelevant(logger, item, llm, {
+      prompt: 'prompt',
+      model: 'model',
+      runOpts: {},
+    });
 
     expect(result).toBe(DEFAULT_RELEVANCE_ON_ERROR);
     expect(llm.run).toHaveBeenCalledTimes(1);

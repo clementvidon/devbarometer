@@ -35,17 +35,19 @@ function mergeFilterRelevantItemsOptions(
 
 export async function isRelevant(
   logger: LoggerPort,
-  llm: LlmPort,
   item: Item,
-  prompt: string,
-  llmModel: string,
-  runOpts: LlmRunOptions,
+  llm: LlmPort,
+  options: {
+    prompt: string;
+    model: string;
+    runOpts: LlmRunOptions;
+  },
 ): Promise<boolean> {
   try {
     const raw = await llm.run(
-      llmModel,
-      makeRelevanceMessages(item, prompt),
-      runOpts,
+      options.model,
+      makeRelevanceMessages(item, options.prompt),
+      options.runOpts,
     );
     return parseRelevanceResult(raw);
   } catch (err) {
@@ -82,7 +84,7 @@ export async function filterRelevantItems(
   const labeledItems: LabeledItem[] = await Promise.all(
     items.map((item) =>
       limit(async () => {
-        const ok = await isRelevant(log, llm, item, prompt, model, runOpts);
+        const ok = await isRelevant(log, item, llm, { prompt, model, runOpts });
         return { item, ok };
       }),
     ),
