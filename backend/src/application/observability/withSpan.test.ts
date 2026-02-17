@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test, vi } from 'vitest';
+import { afterEach, describe, expect, test, vi, type Mocked } from 'vitest';
 import type { LoggerPort } from '../ports/output/LoggerPort';
 import { withSpan } from './withSpan';
 
@@ -35,21 +35,26 @@ import { withSpan } from './withSpan';
  * - the returned promise resolves or rejects exactly as the task does
  */
 
-function makeLoggerDouble() {
+type LoggerDouble = {
+  logger: Mocked<LoggerPort>;
+  childLogger: Mocked<LoggerPort>;
+};
+
+function makeLoggerDouble(): LoggerDouble {
   const childLogger = {
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
     child: vi.fn(),
-  } satisfies LoggerPort;
+  };
   const logger = {
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
-    child: vi.fn(() => childLogger),
-  } satisfies LoggerPort;
+    child: vi.fn((_context) => childLogger),
+  };
   return { logger, childLogger };
 }
 

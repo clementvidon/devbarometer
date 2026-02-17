@@ -81,7 +81,7 @@ function makeSnapshot(
   };
 }
 
-function makePersistence() {
+function makePersistence(): PersistencePort {
   const snapshots: PipelineSnapshot[] = [
     makeSnapshot({
       createdAt: '2026-02-01',
@@ -104,7 +104,7 @@ function makePersistence() {
   const persistence = {
     getSnapshots: vi.fn().mockResolvedValue(snapshots),
     storeSnapshotAt: vi.fn(),
-  } satisfies PersistencePort;
+  };
   return persistence;
 }
 
