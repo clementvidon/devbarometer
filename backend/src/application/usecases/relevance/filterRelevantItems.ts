@@ -35,15 +35,15 @@ function mergeFilterRelevantItemsOptions(
 
 async function isRelevant(
   logger: LoggerPort,
-  item: Item,
   llm: LlmPort,
+  item: Item,
   prompt: string,
-  model: string,
+  llmModel: string,
   runOpts: LlmRunOptions,
 ): Promise<boolean> {
   try {
     const raw = await llm.run(
-      model,
+      llmModel,
       makeRelevanceMessages(item, prompt),
       runOpts,
     );
@@ -82,7 +82,7 @@ export async function filterRelevantItems(
   const labeledItems: LabeledItem[] = await Promise.all(
     items.map((item) =>
       limit(async () => {
-        const ok = await isRelevant(log, item, llm, prompt, model, runOpts);
+        const ok = await isRelevant(log, llm, item, prompt, model, runOpts);
         return { item, ok };
       }),
     ),
