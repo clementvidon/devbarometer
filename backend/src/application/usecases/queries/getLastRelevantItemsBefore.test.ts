@@ -5,21 +5,31 @@ import type { PersistencePort } from '../../ports/output/PersistencePort';
 import { getLastRelevantItemsBefore } from './getLastRelevantItemsBefore';
 
 /**
- * Spec: Return relevant items from closest snapshot before the given date
+ * Spec: Returns relevant items from the closest snapshot strictly before a given date.
+ *
  * Inputs:
- * - a reference ISO date
- * - a source of snapshots
+ * - a reference ISO date (string)
+ * - a persistence port providing snapshots
+ *
+ * Output:
+ * - RelevantItem[] from the most recent snapshot with createdAt < reference date
+ * - [] if no such snapshot exists
+ *
  * Side effects:
  * - reads snapshots from persistence
- * Output:
- * - RelevantItem[] from the most recent snapshot with a date strictly before the given date
- * - [] if no such snapshot exists
+ *
  * Throws:
- * - if the snapshot source fails
+ * - if snapshot retrieval fails
+ *
  * Behavior:
- * - ignore snapshots at or after the given date
- * - selects the closest snapshot before the given date
- * - always returns an array
+ * - fetches all snapshots from persistence
+ * - ignores snapshots with createdAt >= reference date
+ * - selects the snapshot with the greatest createdAt strictly before the reference date
+ * - returns its relevantItems
+ *
+ * Invariants:
+ * - always return an array
+ * - selection is strictly before (not equal)
  */
 
 function makeRelevantItem(overrides: Partial<RelevantItem> = {}): RelevantItem {

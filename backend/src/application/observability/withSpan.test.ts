@@ -3,23 +3,36 @@ import type { LoggerPort } from '../ports/output/LoggerPort';
 import { withSpan } from './withSpan';
 
 /**
- * Spec: Log the time span of a task
+ * Spec: Wraps a task in a logging span and measures its execution time.
+ *
  * Inputs:
- * - a logger for span lifecycle
- * - a span name for log context
- * - a task to execute
- * Side effects:
- * - use the current time
+ * - a logger (LoggerPort)
+ * - a span name (string)
+ * - a task function (sync or async)
+ *
  * Output:
- * - the output of the given task (as a Promise)
+ * - returns the resolved value of the task as a Promise
+ *
+ * Side effects:
+ * - creates a child logger scoped with { span: name }
+ * - logs start and end timestamps using Date.now()
+ *
  * Throws:
- * - if the given task throws
+ * - rethrows any error thrown by the task
+ *
  * Behavior:
- * - logs are contextualized with the given span name
- * - logs the start time before task execution
- * - logs the end time and duration after task completion (even if it throws)
- * - includes the error in the end log meta if the task execution fails
- * - supports both sync and async tasks
+ * - creates a child logger contextualized with the given span name
+ * - logs a "start" debug entry before executing the task
+ * - executes the task (supports sync and async functions)
+ * - logs an "end" debug entry after execution
+ * - includes execution duration in milliseconds
+ * - includes the error in the end log metadata if the task fails
+ *
+ * Invariants:
+ * - the task is executed exactly once
+ * - "start" log happens before task execution
+ * - "end" log always happens after execution (success or failure)
+ * - the returned promise resolves or rejects exactly as the task does
  */
 
 function makeLoggerDouble() {
