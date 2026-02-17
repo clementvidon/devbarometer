@@ -3,12 +3,12 @@ import type { LlmMessage } from '../../ports/output/LlmPort';
 
 export function makeRelevanceMessages(
   item: Item,
-  prompt: string,
+  systemPrompt: string,
 ): readonly LlmMessage[] {
   return [
     {
       role: 'system' as const,
-      content: prompt,
+      content: systemPrompt,
     },
     {
       role: 'user' as const,

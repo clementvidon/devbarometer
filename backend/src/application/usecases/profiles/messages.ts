@@ -3,12 +3,12 @@ import type { LlmMessage } from '../../ports/output/LlmPort';
 
 export function makeEmotionMessages(
   item: WeightedItem,
-  prompt: string,
+  systemPrompt: string,
 ): readonly LlmMessage[] {
   return [
     {
       role: 'system',
-      content: prompt,
+      content: systemPrompt,
     },
     {
       role: 'user',
@@ -19,12 +19,12 @@ export function makeEmotionMessages(
 
 export function makeTonalityMessages(
   item: WeightedItem,
-  prompt: string,
+  systemPrompt: string,
 ): readonly LlmMessage[] {
   return [
     {
       role: 'system',
-      content: prompt,
+      content: systemPrompt,
     },
     {
       role: 'user',
