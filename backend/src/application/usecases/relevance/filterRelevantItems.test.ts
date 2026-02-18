@@ -23,14 +23,10 @@ import { isRelevant } from './isRelevant';
  * - triggers LLM calls via isRelevant
  *
  * Behavior
- * - creates a child logger scoped to 'relevance.filter'
- * - logs the total number of input items
- * - log and returns [] immediately if input array is empty
- * - merges default and custom options
- * - limits concurrency using p-limit
+ * - returns [] if input is empty
+ * - merges default/custom options
  * - calls isRelevant for each item
- * - keeps only items marked as relevant
- * - logs total, relevant and discarded counts
+ * - filters relevant items
  *
  * Invariants:
  * - always returns an array
@@ -89,7 +85,7 @@ describe('filterRelevantItems', () => {
   });
 
   test('filters relevant items', async () => {
-    const { logger, childLogger } = makeLoggerDouble();
+    const { logger } = makeLoggerDouble();
     const llm = makeLlm();
     const items = [
       makeItem({ title: 'yes' }),
@@ -97,25 +93,12 @@ describe('filterRelevantItems', () => {
       makeItem({ title: 'nop' }),
       makeItem({ title: 'yes' }),
     ];
+    const expectedRelevant = items.filter((i) => i.title === 'yes');
 
     const result = await filterRelevantItems(logger, items, llm);
 
-    // result
-    const expectedRelevant = items.filter((i) => i.title === 'yes');
     expect(result).toEqual(expectedRelevant);
     expect(isRelevant).toHaveBeenCalledTimes(items.length);
-    // logging
-    expect(logger.child).toHaveBeenCalledWith({
-      module: 'relevance.filter',
-    });
-    expect(childLogger.info).toHaveBeenCalledWith('Start relevance filter', {
-      total: items.length,
-    });
-    expect(childLogger.info).toHaveBeenCalledWith('End relevance filter', {
-      total: items.length,
-      discarded: items.length - expectedRelevant.length,
-      relevant: expectedRelevant.length,
-    });
   });
 
   test('preserves original order of relevant items', async () => {
@@ -133,26 +116,13 @@ describe('filterRelevantItems', () => {
   });
 
   test('returns empty array if input is empty', async () => {
-    const { logger, childLogger } = makeLoggerDouble();
+    const { logger } = makeLoggerDouble();
     const llm = makeLlm();
     const items: Item[] = [];
 
     const result = await filterRelevantItems(logger, items, llm);
 
-    // result
     expect(result).toEqual([]);
     expect(isRelevant).not.toHaveBeenCalled();
-    // logging
-    expect(logger.child).toHaveBeenCalledWith({
-      module: 'relevance.filter',
-    });
-    expect(childLogger.info).toHaveBeenCalledWith('Start relevance filter', {
-      total: items.length,
-    });
-    expect(childLogger.info).toHaveBeenCalledWith('End relevance filter', {
-      total: 0,
-      relevant: 0,
-      discarded: 0,
-    });
   });
 });

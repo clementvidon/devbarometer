@@ -114,6 +114,5 @@ describe('isRelevant', () => {
     expect(result).toBe(DEFAULT_RELEVANCE_ON_ERROR);
     expect(llm.run).toHaveBeenCalledTimes(1);
     expect(llm.run).toHaveBeenCalledWith('model', expect.any(Array), {});
-    expect(logger.warn).toHaveBeenCalledTimes(1);
   });
 });
