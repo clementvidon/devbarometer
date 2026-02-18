@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import { parseRelevanceRaw } from './parseRelevance';
 
 /**
- * Spec: Parse relevant result
+ * Spec: Parse relevance LLM output
  *
  * Inputs:
  * - a raw string
@@ -30,16 +30,16 @@ describe('parseRelevanceRaw', () => {
   test('return false if raw does not parse to RelevanceSchema', () => {
     expect(parseRelevanceRaw('{ "wrong": true }')).toBe(false);
   });
-  test('returns true when relevant is true with code-fences', () => {
+  test('return true when relevant is true with code-fences', () => {
     expect(parseRelevanceRaw('```\n{ "relevant": true }\n```')).toBe(true);
   });
-  test('returns true when relevant is true without code-fences', () => {
+  test('return true when relevant is true without code-fences', () => {
     expect(parseRelevanceRaw('{ "relevant": true }')).toBe(true);
   });
-  test('returns false when relevant is false', () => {
+  test('return false when relevant is false', () => {
     expect(parseRelevanceRaw('{ "relevant": false }')).toBe(false);
   });
-  test('returns false for empty string', () => {
+  test('return false for empty string', () => {
     expect(parseRelevanceRaw('')).toBe(false);
   });
 });
