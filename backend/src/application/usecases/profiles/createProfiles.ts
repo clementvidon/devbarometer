@@ -2,7 +2,7 @@ import pLimit from 'p-limit';
 import type { EmotionProfile, WeightedItem } from '../../../domain/entities';
 import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
-import { makeEmotionMessages, makeTonalityMessages } from './messages';
+import { makeProfileMessages } from './messages';
 import { parseEmotionRaw } from './parseEmotion';
 import { parseTonalityRaw } from './parseTonality';
 import {
@@ -61,8 +61,8 @@ export async function createProfiles(
     limit(async (): Promise<EmotionProfile> => {
       try {
         const [rawEmotion, rawTonality] = await Promise.all([
-          llm.run(model, makeEmotionMessages(item, emotionPrompt), runOpts),
-          llm.run(model, makeTonalityMessages(item, tonalityPrompt), runOpts),
+          llm.run(model, makeProfileMessages(item, emotionPrompt), runOpts),
+          llm.run(model, makeProfileMessages(item, tonalityPrompt), runOpts),
         ]);
 
         const emotions = parseEmotionRaw(rawEmotion);
