@@ -2,7 +2,7 @@ import type { Item } from '../../../domain/entities';
 import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { makeRelevanceMessages } from './messages';
-import { parseRelevanceResult } from './parseResult';
+import { parseRelevanceRaw } from './parseRelevance';
 import { DEFAULT_RELEVANCE_ON_ERROR } from './policy';
 
 export async function isRelevant(
@@ -21,7 +21,7 @@ export async function isRelevant(
       makeRelevanceMessages(item, options.prompt),
       options.runOpts,
     );
-    return parseRelevanceResult(raw);
+    return parseRelevanceRaw(raw);
   } catch (err) {
     logger.warn('Failed to check relevance for item', {
       error: err instanceof Error ? err : String(err),

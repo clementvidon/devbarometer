@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { parseRelevanceResult } from './parseResult';
+import { parseRelevanceRaw } from './parseRelevance';
 
 /**
  * Spec: Parse relevant result
@@ -23,23 +23,23 @@ import { parseRelevanceResult } from './parseResult';
  * - always return a boolean
  */
 
-describe('parseRelevanceResult', () => {
+describe('parseRelevanceRaw', () => {
   test('return false if raw does not parse to JSON', () => {
-    expect(parseRelevanceResult('{ wrong }')).toBe(false);
+    expect(parseRelevanceRaw('{ wrong }')).toBe(false);
   });
   test('return false if raw does not parse to RelevanceSchema', () => {
-    expect(parseRelevanceResult('{ "wrong": true }')).toBe(false);
+    expect(parseRelevanceRaw('{ "wrong": true }')).toBe(false);
   });
   test('returns true when relevant is true with code-fences', () => {
-    expect(parseRelevanceResult('```\n{ "relevant": true }\n```')).toBe(true);
+    expect(parseRelevanceRaw('```\n{ "relevant": true }\n```')).toBe(true);
   });
   test('returns true when relevant is true without code-fences', () => {
-    expect(parseRelevanceResult('{ "relevant": true }')).toBe(true);
+    expect(parseRelevanceRaw('{ "relevant": true }')).toBe(true);
   });
   test('returns false when relevant is false', () => {
-    expect(parseRelevanceResult('{ "relevant": false }')).toBe(false);
+    expect(parseRelevanceRaw('{ "relevant": false }')).toBe(false);
   });
   test('returns false for empty string', () => {
-    expect(parseRelevanceResult('')).toBe(false);
+    expect(parseRelevanceRaw('')).toBe(false);
   });
 });

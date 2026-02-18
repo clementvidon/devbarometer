@@ -3,7 +3,7 @@ import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 
 const RelevanceSchema = z.object({ relevant: z.boolean() });
 
-export function parseRelevanceResult(raw: string): boolean {
+export function parseRelevanceRaw(raw: string): boolean {
   try {
     const cleaned = stripCodeFences(raw);
     const json: unknown = JSON.parse(cleaned);

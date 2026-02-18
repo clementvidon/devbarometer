@@ -29,7 +29,7 @@ import { DEFAULT_RELEVANCE_ON_ERROR } from './policy';
  * Behavior:
  * - builds LLM messages from the item and prompt
  * - calls llm.run with the given model and options
- * - parses the raw LLM response using parseRelevanceResult
+ * - parses the raw LLM response using parseRelevanceRaw
  * - logs a warning if LLM call fails
  * - returns DEFAULT_RELEVANCE_ON_ERROR if an error occurs
  */
