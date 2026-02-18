@@ -2,11 +2,11 @@ import { afterEach, describe, expect, test, vi, type Mocked } from 'vitest';
 import type { Item } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
-import { isRelevant } from './filterRelevantItems';
+import { isRelevant } from './isRelevant';
 import { DEFAULT_RELEVANCE_ON_ERROR } from './policy';
 
 /**
- * Spec: Determine whether a given item is relevant using an LLM.
+ * Spec: Determine whether a given item is relevant using an LLM
  *
  * Inputs:
  * - a logger (LoggerPort)
@@ -21,6 +21,10 @@ import { DEFAULT_RELEVANCE_ON_ERROR } from './policy';
  * - a Promise<boolean>, resolves to:
  *  - the parsed relevance result when LLM call succeeds
  *  - DEFAULT_RELEVANCE_ON_ERROR if an error occurs
+ *
+ * Side effects:
+ * - calls the LLM provider via llm.run
+ * - logs a warning if the LLM call fails
  *
  * Behavior:
  * - builds LLM messages from the item and prompt
@@ -63,9 +67,9 @@ describe('isRelevant', () => {
 
   test('return true when the item is relevant', async () => {
     const logger = makeLogger();
+    const item = makeItem();
     const llm = makeLlm();
     llm.run.mockResolvedValue('{ "relevant": true }');
-    const item = makeItem();
 
     const result = await isRelevant(logger, item, llm, {
       prompt: 'prompt',
@@ -80,9 +84,9 @@ describe('isRelevant', () => {
 
   test('return false when the item is not relevant', async () => {
     const logger = makeLogger();
+    const item = makeItem();
     const llm = makeLlm();
     llm.run.mockResolvedValue('{ "relevant": false }');
-    const item = makeItem();
 
     const result = await isRelevant(logger, item, llm, {
       prompt: 'prompt',
@@ -97,9 +101,9 @@ describe('isRelevant', () => {
 
   test('return false when llm throws an error', async () => {
     const logger = makeLogger();
+    const item = makeItem();
     const llm = makeLlm();
     llm.run.mockRejectedValue(new Error('boom'));
-    const item = makeItem();
 
     const result = await isRelevant(logger, item, llm, {
       prompt: 'prompt',
