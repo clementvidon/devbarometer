@@ -41,7 +41,14 @@ export async function filterRelevantItems(
   });
 
   log.info('Start relevance filter', { total: items.length });
-  if (items.length === 0) return [];
+  if (items.length === 0) {
+    log.info('End relevance filter', {
+      total: 0,
+      relevant: 0,
+      discarded: 0,
+    });
+    return [];
+  }
 
   const { prompt, concurrency, llmOptions } =
     mergeFilterRelevantItemsOptions(opts);
