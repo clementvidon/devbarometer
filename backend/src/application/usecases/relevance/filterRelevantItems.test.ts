@@ -1,4 +1,11 @@
 import { afterEach, describe, expect, test, vi, type Mocked } from 'vitest';
+
+vi.mock('./isRelevant', () => ({
+  isRelevant: vi.fn((_logger, item: Item, _llm, _options) =>
+    Promise.resolve(item.title === 'yes'),
+  ),
+}));
+
 import type { Item } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
@@ -32,12 +39,6 @@ import { isRelevant } from './isRelevant';
  * - preserves original item order
  */
 
-function makeLlm(): Mocked<LlmPort> {
-  return {
-    run: vi.fn(),
-  };
-}
-
 function makeItem(overrides: Partial<Item> = {}): Item {
   return {
     source: 'source',
@@ -45,6 +46,12 @@ function makeItem(overrides: Partial<Item> = {}): Item {
     content: 'content',
     score: 0,
     ...overrides,
+  };
+}
+
+function makeLlm(): Mocked<LlmPort> {
+  return {
+    run: vi.fn(),
   };
 }
 
@@ -70,12 +77,6 @@ function makeLoggerDouble(): LoggerDouble {
   };
   return { logger, childLogger };
 }
-
-vi.mock('./isRelevant', () => ({
-  isRelevant: vi.fn((_logger, item: Item, _llm, _options) =>
-    Promise.resolve(item.title === 'yes'),
-  ),
-}));
 
 describe('filterRelevantItems', () => {
   afterEach(() => {
