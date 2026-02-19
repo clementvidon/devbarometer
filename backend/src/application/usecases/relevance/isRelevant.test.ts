@@ -6,31 +6,31 @@ import { isRelevant } from './isRelevant';
 import { DEFAULT_RELEVANCE_ON_ERROR } from './policy';
 
 /**
- * Spec: Determine whether a given item is relevant using an LLM
+ * Spec: Determine whether a given item is relevant
  *
  * Inputs:
- * - a logger (LoggerPort)
- * - an item (Item)
- * - a LLM provider (LlmPort)
- * - a set of options
- *  - a prompt (string)
- *  - an LLM model (string)
- *  - LLM run options (LlmRunOptions)
+ * - a logger
+ * - an item
+ * - a LLM provider
+ * - a set of options for the LLM
+ *  - a prompt
+ *  - an LLM model
+ *  - LLM run options
  *
  * Output:
- * - a Promise<boolean>, resolves to:
- *  - the parsed relevance result when LLM call succeeds
+ * - the promise of a boolean answer:
+ *  - true if the LLM judged the item as relevant
+ *  - false if the LLM judged the item as irrelevant
  *  - DEFAULT_RELEVANCE_ON_ERROR if an error occurs
  *
  * Side effects:
- * - calls the LLM provider via llm.run
- * - logs a warning if the LLM call fails
+ * - triggers LLM calls
+ * - uses the provided logger
  *
  * Behavior:
- * - builds LLM messages from the item and prompt
- * - calls llm.run with the given model and options
- * - parses the raw LLM response using parseRelevanceRaw
- * - logs a warning if LLM call fails
+ * - builds LLM messages
+ * - calls LLM with messages and options
+ * - parses the raw LLM response
  * - returns DEFAULT_RELEVANCE_ON_ERROR if an error occurs
  */
 

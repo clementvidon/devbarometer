@@ -6,30 +6,28 @@ import { filterRelevantItems } from './filterRelevantItems';
 import { isRelevant } from './isRelevant';
 
 /**
- * Spec: Filters relevant items
+ * Spec: Filters the relevant items from a given list of items
  *
  * Inputs:
- * - a logger (LoggerPort)
- * - an array of items (Item[])
- * - a LLM provider (LlmPort)
- * - optional filter configuration
+ * - a logger
+ * - a list of items
+ * - an LLM provider
+ * - optional configuration
  *
  * Output:
- * - a promise resolving to an array of RelevantItem
+ * - the promise of a list of relevant items
  *
  * Side effects:
- * - creates a child logger
- * - logs start and end of the filtering process
+ * - creates a child logger / uses the provided logger
  * - triggers LLM calls via isRelevant
  *
  * Behavior
  * - returns [] if input is empty
- * - merges default/custom options
+ * - merges default/custom config
  * - calls isRelevant for each item
  * - filters relevant items
  *
  * Invariants:
- * - always returns an array
  * - output length <= input length
  * - preserves original item order
  */
