@@ -30,23 +30,13 @@ export function aggregateProfiles(
     throw new Error('[aggregateProfiles] No profiles provided.');
   }
 
-  const zeroEmotions: EmotionScores = {
-    anger: 0,
-    fear: 0,
-    trust: 0,
-    sadness: 0,
-    joy: 0,
-    disgust: 0,
-  };
+  const zeroEmotions = Object.fromEntries(
+    EMOTION_KEYS.map((k) => [k, 0]),
+  ) as EmotionScores;
 
-  const zeroTonalities: TonalityScores = {
-    positive: 0,
-    negative: 0,
-    optimistic_anticipation: 0,
-    pessimistic_anticipation: 0,
-    positive_surprise: 0,
-    negative_surprise: 0,
-  };
+  const zeroTonalities = Object.fromEntries(
+    TONALITY_KEYS.map((k) => [k, 0]),
+  ) as TonalityScores;
 
   let weightSum = 0;
   const emotionTotals: EmotionScores = { ...zeroEmotions };
@@ -55,13 +45,8 @@ export function aggregateProfiles(
   for (const p of profiles) {
     const w = p.weight;
     weightSum += w;
-
-    for (const k of EMOTION_KEYS) {
-      emotionTotals[k] += p.emotions[k] * w;
-    }
-    for (const k of TONALITY_KEYS) {
-      tonalityTotals[k] += p.tonalities[k] * w;
-    }
+    for (const k of EMOTION_KEYS) emotionTotals[k] += p.emotions[k] * w;
+    for (const k of TONALITY_KEYS) tonalityTotals[k] += p.tonalities[k] * w;
   }
 
   const averagedEmotions: EmotionScores = { ...zeroEmotions };
