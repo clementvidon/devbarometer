@@ -20,7 +20,7 @@ interface CreateReportOptions {
 const DEFAULT_CREATE_REPORT_OPTIONS = {
   reportPrompt: reportPrompt,
   llmOptions: REPORT_LLM_OPTIONS,
-} as const satisfies CreateReportOptions;
+} satisfies CreateReportOptions;
 
 /** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
 function mergeCreateReportOptions(

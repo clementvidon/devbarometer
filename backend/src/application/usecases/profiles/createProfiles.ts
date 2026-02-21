@@ -29,7 +29,7 @@ const DEFAULT_CREATE_PROFILES_OPTIONS = {
   tonalityPrompt: tonalityProfilePrompt,
   concurrency: CONCURRENCY,
   llmOptions: PROFILES_LLM_OPTIONS,
-} as const satisfies CreateProfilesOptions;
+} satisfies CreateProfilesOptions;
 
 /** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
 function mergeCreateProfilesOptions(

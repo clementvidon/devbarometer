@@ -19,7 +19,7 @@ const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS = {
   prompt: relevanceFilterPrompt,
   concurrency: CONCURRENCY,
   llmOptions: RELEVANCE_LLM_OPTIONS,
-} as const satisfies FilterRelevantItemsOptions;
+} satisfies FilterRelevantItemsOptions;
 
 /** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
 function mergeFilterRelevantItemsOptions(

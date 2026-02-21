@@ -16,7 +16,7 @@ export function makeProfileMessages(
       content:
         `Texte : """${weightedItem.title}\n\n${weightedItem.content}"""`.trim(),
     },
-  ] as const;
+  ];
 }
 
 export function makeReportMessages(

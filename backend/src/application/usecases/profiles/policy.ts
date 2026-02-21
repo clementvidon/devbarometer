@@ -13,8 +13,8 @@ export const REPORT_LLM_OPTIONS = {
   maxOutputTokens: 100,
   topP: 0.9,
   frequencyPenalty: 0.2,
-  responseFormat: { type: 'json_object' } as const,
-} as const satisfies LlmRunOptions & { model: string };
+  responseFormat: { type: 'json_object' as const },
+} satisfies LlmRunOptions & { model: string };
 
 export const PROFILES_LLM_OPTIONS = {
   model: 'gpt-5-chat-latest',
@@ -22,8 +22,8 @@ export const PROFILES_LLM_OPTIONS = {
   maxOutputTokens: 300,
   topP: 0.1,
   frequencyPenalty: 0.1,
-  responseFormat: { type: 'json_object' } as const,
-} as const satisfies LlmRunOptions & { model: string };
+  responseFormat: { type: 'json_object' as const },
+} satisfies LlmRunOptions & { model: string };
 
 export const FALLBACK_EMOTIONS = {
   anger: 0,
@@ -32,7 +32,7 @@ export const FALLBACK_EMOTIONS = {
   sadness: 0,
   joy: 0,
   disgust: 0,
-} as const satisfies EmotionScores;
+} satisfies EmotionScores;
 
 export const FALLBACK_TONALITIES = {
   positive: 0,
@@ -41,9 +41,9 @@ export const FALLBACK_TONALITIES = {
   pessimistic_anticipation: 0,
   positive_surprise: 0,
   negative_surprise: 0,
-} as const satisfies TonalityScores;
+} satisfies TonalityScores;
 
 export const FALLBACK_REPORT = {
   text: '',
   emoji: '☁️',
-} as const satisfies Report;
+} satisfies Report;
