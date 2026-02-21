@@ -4,11 +4,11 @@ import { formatFloat } from '../../../lib/number/formatFloat';
 import { nowIso } from '../../../lib/time/nowIso';
 import { withSpan } from '../../observability/withSpan';
 import type { ReportingAgentPort } from '../../ports/input/ReportingAgentPort';
+import type { ComputeWeightsPort } from '../../ports/output/ComputeWeightsPort';
 import type { ItemsProviderPort } from '../../ports/output/ItemsProviderPort';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
-import type { WeightsPort } from '../../ports/output/WeightsPort';
 import { createProfiles } from '../profiles/createProfiles';
 import { createReport } from '../profiles/createReport';
 import { getLastRelevantItemsBefore } from '../queries/getLastRelevantItemsBefore';
@@ -24,7 +24,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     private readonly items: ItemsProviderPort,
     private readonly llm: LlmPort,
     private readonly persistence: PersistencePort,
-    private readonly weights: WeightsPort,
+    private readonly weights: ComputeWeightsPort,
   ) {}
 
   async captureSnapshot(): Promise<void> {

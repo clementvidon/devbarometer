@@ -1,4 +1,4 @@
-import type { WeightsPort } from '../../../application/ports/output/WeightsPort';
+import type { ComputeWeightsPort } from '../../../application/ports/output/ComputeWeightsPort';
 import type { RelevantItem, WeightedItem } from '../../entities';
 import { capByPercentile } from './capByPercentile';
 import { computeMomentum } from './computeMomentum';
@@ -69,7 +69,7 @@ function mergeMomentumWeightsOptions(
   };
 }
 
-export class MomentumWeightsStrategy implements WeightsPort {
+export class MomentumWeightsStrategy implements ComputeWeightsPort {
   private readonly opts: MomentumWeightsOptions;
 
   constructor(opts: Partial<MomentumWeightsOptions> = {}) {
