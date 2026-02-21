@@ -3,10 +3,10 @@ import type { Item, RelevantItem } from '../../../domain/entities';
 import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { isRelevant } from './isRelevant';
-import { CONCURRENCY, DEFAULT_LLM_OPTIONS } from './policy';
+import { CONCURRENCY, RELEVANCE_LLM_OPTIONS } from './policy';
 import { relevanceFilterPrompt } from './prompts';
 
-export interface FilterRelevantItemsOptions {
+interface FilterRelevantItemsOptions {
   /** Prompt système utilisé pour la pertinence */
   prompt: string;
   /** Concurrence p-limit pour les appels LLM */
@@ -15,10 +15,10 @@ export interface FilterRelevantItemsOptions {
   llmOptions: LlmRunOptions & { model: string };
 }
 
-export const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS = {
+const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS = {
   prompt: relevanceFilterPrompt,
   concurrency: CONCURRENCY,
-  llmOptions: DEFAULT_LLM_OPTIONS,
+  llmOptions: RELEVANCE_LLM_OPTIONS,
 } as const satisfies FilterRelevantItemsOptions;
 
 /** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */

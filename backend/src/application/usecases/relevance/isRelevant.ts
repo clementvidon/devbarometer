@@ -1,7 +1,7 @@
 import type { Item } from '../../../domain/entities';
 import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
-import { makeRelevanceMessages } from './messages';
+import { makeRelevanceMessages } from './llmMessages';
 import { parseRelevanceRaw } from './parseRelevance';
 import { DEFAULT_RELEVANCE_ON_ERROR } from './policy';
 

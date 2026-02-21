@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { Item } from '../../../domain/entities';
-import { makeRelevanceMessages } from './messages';
+import { makeRelevanceMessages } from './llmMessages';
 
 /**
  * Spec: Creates ordered LLM messages for the relevance filter

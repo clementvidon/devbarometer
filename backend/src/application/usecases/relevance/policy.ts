@@ -2,7 +2,7 @@ import type { LlmRunOptions } from '../../ports/output/LlmPort';
 
 export const CONCURRENCY = 1;
 
-export const DEFAULT_LLM_OPTIONS = {
+export const RELEVANCE_LLM_OPTIONS = {
   model: 'gpt-5-chat-latest',
   temperature: 0.1,
   maxOutputTokens: 300,
