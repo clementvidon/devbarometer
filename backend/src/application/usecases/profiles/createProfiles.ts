@@ -31,11 +31,18 @@ const DEFAULT_CREATE_PROFILES_OPTIONS = {
   llmOptions: PROFILES_LLM_OPTIONS,
 } satisfies CreateProfilesOptions;
 
-/** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
 function mergeCreateProfilesOptions(
   opts: Partial<CreateProfilesOptions> = {},
 ): CreateProfilesOptions {
-  return { ...DEFAULT_CREATE_PROFILES_OPTIONS, ...opts };
+  const mergedLlmOptions = {
+    ...DEFAULT_CREATE_PROFILES_OPTIONS.llmOptions,
+    ...(opts.llmOptions ?? {}),
+  };
+  return {
+    ...DEFAULT_CREATE_PROFILES_OPTIONS,
+    ...opts,
+    llmOptions: mergedLlmOptions,
+  };
 }
 
 export async function createProfiles(

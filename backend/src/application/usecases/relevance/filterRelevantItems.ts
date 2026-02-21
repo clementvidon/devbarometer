@@ -21,11 +21,18 @@ const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS = {
   llmOptions: RELEVANCE_LLM_OPTIONS,
 } satisfies FilterRelevantItemsOptions;
 
-/** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
 function mergeFilterRelevantItemsOptions(
   opts: Partial<FilterRelevantItemsOptions> = {},
 ): FilterRelevantItemsOptions {
-  return { ...DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS, ...opts };
+  const mergedLlmOptions = {
+    ...DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS.llmOptions,
+    ...(opts.llmOptions ?? {}),
+  };
+  return {
+    ...DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS,
+    ...opts,
+    llmOptions: mergedLlmOptions,
+  };
 }
 
 type LabeledItem = { item: Item; ok: boolean };

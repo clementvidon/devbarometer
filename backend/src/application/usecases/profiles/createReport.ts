@@ -22,11 +22,18 @@ const DEFAULT_CREATE_REPORT_OPTIONS = {
   llmOptions: REPORT_LLM_OPTIONS,
 } satisfies CreateReportOptions;
 
-/** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
 function mergeCreateReportOptions(
   opts: Partial<CreateReportOptions> = {},
 ): CreateReportOptions {
-  return { ...DEFAULT_CREATE_REPORT_OPTIONS, ...opts };
+  const mergedLlmOptions = {
+    ...DEFAULT_CREATE_REPORT_OPTIONS.llmOptions,
+    ...(opts.llmOptions ?? {}),
+  };
+  return {
+    ...DEFAULT_CREATE_REPORT_OPTIONS,
+    ...opts,
+    llmOptions: mergedLlmOptions,
+  };
 }
 
 export async function createReport(
