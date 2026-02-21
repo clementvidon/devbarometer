@@ -23,7 +23,7 @@ const DEFAULT_CREATE_REPORT_OPTIONS = {
 } as const satisfies CreateReportOptions;
 
 /** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
-function mergeProfilesOptions(
+function mergeCreateReportOptions(
   opts: Partial<CreateReportOptions> = {},
 ): CreateReportOptions {
   return { ...DEFAULT_CREATE_REPORT_OPTIONS, ...opts };
@@ -37,7 +37,7 @@ export async function createReport(
 ): Promise<Report> {
   const log = logger.child({ module: 'profiles.report' });
 
-  const { reportPrompt, llmOptions } = mergeProfilesOptions(opts);
+  const { reportPrompt, llmOptions } = mergeCreateReportOptions(opts);
 
   const { model, ...runOpts } = llmOptions;
 

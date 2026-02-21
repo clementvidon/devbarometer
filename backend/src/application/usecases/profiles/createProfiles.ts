@@ -32,7 +32,7 @@ const DEFAULT_CREATE_PROFILES_OPTIONS = {
 } as const satisfies CreateProfilesOptions;
 
 /** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
-function mergeProfilesOptions(
+function mergeCreateProfilesOptions(
   opts: Partial<CreateProfilesOptions> = {},
 ): CreateProfilesOptions {
   return { ...DEFAULT_CREATE_PROFILES_OPTIONS, ...opts };
@@ -52,7 +52,7 @@ export async function createProfiles(
   }
 
   const { emotionPrompt, tonalityPrompt, concurrency, llmOptions } =
-    mergeProfilesOptions(opts);
+    mergeCreateProfilesOptions(opts);
 
   const limit = pLimit(concurrency);
   const { model, ...runOpts } = llmOptions;

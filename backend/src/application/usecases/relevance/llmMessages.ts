@@ -7,16 +7,16 @@ export function makeRelevanceMessages(
 ): readonly LlmMessage[] {
   return [
     {
-      role: 'system' as const,
+      role: 'system',
       content: systemPrompt,
     },
     {
-      role: 'user' as const,
+      role: 'user',
       content: `
 Data to be filtered following the given instructions:
 Item title: ${item.title}
 Item content: ${item.content}
       `.trim(),
     },
-  ] as const satisfies readonly LlmMessage[];
+  ];
 }
