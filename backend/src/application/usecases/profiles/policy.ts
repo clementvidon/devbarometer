@@ -1,9 +1,22 @@
-import type { EmotionScores, TonalityScores } from '../../../domain/entities';
+import type {
+  EmotionScores,
+  Report,
+  TonalityScores,
+} from '../../../domain/entities';
 import type { LlmRunOptions } from '../../ports/output/LlmPort';
 
 export const CONCURRENCY = 1;
 
-export const DEFAULT_LLM_OPTIONS = {
+export const REPORT_LLM_OPTIONS = {
+  model: 'gpt-5-chat-latest',
+  temperature: 0.4,
+  maxOutputTokens: 100,
+  topP: 0.9,
+  frequencyPenalty: 0.2,
+  responseFormat: { type: 'json_object' } as const,
+} as const satisfies LlmRunOptions & { model: string };
+
+export const PROFILES_LLM_OPTIONS = {
   model: 'gpt-5-chat-latest',
   temperature: 0.1,
   maxOutputTokens: 300,
@@ -29,3 +42,8 @@ export const FALLBACK_TONALITIES = {
   positive_surprise: 0,
   negative_surprise: 0,
 } as const satisfies TonalityScores;
+
+export const FALLBACK_REPORT = {
+  text: '',
+  emoji: '☁️',
+} as const satisfies Report;

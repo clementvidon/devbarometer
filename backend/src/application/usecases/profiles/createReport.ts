@@ -1,215 +1,69 @@
-import { z } from 'zod';
 import {
   type AggregatedEmotionProfile,
-  type EmotionScores,
   type Report,
-  WEATHER_EMOJIS,
 } from '../../../domain/entities';
-import { stripCodeFences } from '../../../lib/string/stripCodeFences';
-import type { LlmMessage, LlmPort } from '../../ports/output/LlmPort';
+import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
+import { makeReportMessages } from './llmMessages';
+import { parseReportRaw } from './parseReport';
+import { FALLBACK_REPORT, REPORT_LLM_OPTIONS } from './policy';
+import { reportPrompt } from './prompts';
+import { summarizeProfile } from './summarizeProfile';
 
-/* pickStandoutsByScore */
-
-type Standout = { name: keyof EmotionScores; score: number };
-
-const MIN_STANDOUT = 0.35;
-const MAX_STANDOUTS = 2;
-const REL_GAP = 0.06;
-const EPS = 1e-6;
-
-function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
-  const sorted = (Object.entries(emotions) as [keyof EmotionScores, number][])
-    .sort((a, b) => b[1] - a[1])
-    .map(([name, score]) => ({ name, score }));
-
-  const first = sorted[0];
-  const second = sorted[1];
-
-  const res: Standout[] = [];
-  if (first.score + EPS >= MIN_STANDOUT) res.push(first);
-
-  if (
-    second.score + EPS >= MIN_STANDOUT ||
-    first.score - second.score <= REL_GAP
-  ) {
-    res.push(second);
-  }
-
-  return res.slice(0, MAX_STANDOUTS);
+interface CreateReportOptions {
+  /** System prompt for report generation */
+  reportPrompt: string;
+  /** Standard LLM Options (including the model) */
+  llmOptions: LlmRunOptions & { model: string };
 }
 
-/* evaluateTone */
+const DEFAULT_CREATE_REPORT_OPTIONS = {
+  reportPrompt: reportPrompt,
+  llmOptions: REPORT_LLM_OPTIONS,
+} as const satisfies CreateReportOptions;
 
-type Tone = {
-  value: 'neutral' | 'positive' | 'negative' | 'polarized';
-  strength?: 'very weak' | 'weak' | 'moderate' | 'strong' | 'very strong';
-};
-
-function getStrengthLabel(score: number): Tone['strength'] {
-  return score < 0.2
-    ? 'very weak'
-    : score < 0.4
-      ? 'weak'
-      : score < 0.6
-        ? 'moderate'
-        : score < 0.8
-          ? 'strong'
-          : 'very strong';
-}
-
-const POLARITY_MIN = 0.3;
-const POLARITY_DELTA = 0.06;
-const NEUTRAL_DELTA = 0.06;
-
-function evaluateTone(positive: number, negative: number): Tone {
-  const delta = positive - negative;
-  const absDelta = Math.abs(delta);
-  const max = Math.max(positive, negative);
-  const min = Math.min(positive, negative);
-
-  if (max > POLARITY_MIN && min > POLARITY_MIN && absDelta < POLARITY_DELTA) {
-    return {
-      value: 'polarized',
-      strength: getStrengthLabel(max),
-    };
-  }
-
-  if (absDelta < NEUTRAL_DELTA) {
-    return { value: 'neutral' };
-  }
-
-  return {
-    value: delta > 0 ? 'positive' : 'negative',
-    strength: getStrengthLabel(absDelta),
-  };
-}
-
-/* summarizeEmotionProfile */
-
-type EmotionProfileSummary = {
-  emotions: { name: keyof EmotionScores; strength: Tone['strength'] }[];
-  standoutEmotions: Standout[];
-  polarity: Tone;
-  anticipation: Tone;
-  surprise: Tone;
-};
-
-export function summarizeProfile(
-  profile: AggregatedEmotionProfile,
-): EmotionProfileSummary {
-  const { emotions, tonalities } = profile;
-
-  const summary = (
-    Object.entries(emotions) as [keyof EmotionScores, number][]
-  ).map(([name, score]) => ({
-    name,
-    strength: getStrengthLabel(score),
-  }));
-
-  return {
-    emotions: summary,
-    standoutEmotions: pickStandoutsByScore(profile.emotions),
-    polarity: evaluateTone(tonalities.positive, tonalities.negative),
-    anticipation: evaluateTone(
-      tonalities.optimistic_anticipation,
-      tonalities.pessimistic_anticipation,
-    ),
-    surprise: evaluateTone(
-      tonalities.positive_surprise,
-      tonalities.negative_surprise,
-    ),
-  };
-}
-
-/* createReport */
-
-const LLMOutputSchema = z.object({
-  text: z.string().max(200),
-  emoji: z.enum(WEATHER_EMOJIS),
-});
-
-const FALLBACK = {
-  text: '',
-  emoji: '☁️',
-} satisfies Report;
-
-function makeMessages(summary: EmotionProfileSummary): readonly LlmMessage[] {
-  return [
-    {
-      role: 'system' as const,
-      content: `
-Tu es un expert en analyse émotionnelle qui traduit un profil émotionnel en une **brève description météo**.
-
-Tu recevras un objet JSON contenant :
-- un champ "emotions" : liste des 6 émotions humaines de base avec leur intensité,
-- un champ "standoutEmotions" : liste (éventuellement vide) des émotions dont l'intensité ≥ ${String(MIN_STANDOUT)}, triées par intensité décroissante,
-- trois tonalités globales : "polarité", "anticipation" et "surprise" (avec direction et force).
-
-Ta tâche :
-
-1. Crée une **phrase courte (max 12 mots)** décrivant l'ambiance émotionnelle, en t’inspirant du style météo.
-2. Si toutes les émotions et tonalités sont ≤ "weak" et "standoutEmotions" est vide : décris une atmosphère **neutre, indécise ou calme**.
-3. Sinon, mentionne uniquement ce qui ressort clairement : tonalités ≥ "moderate" et émotions dans "standoutEmotions".
-4. Évite les redondances et n’invente rien qui ne soit pas présent dans les données.
-5. Assure-toi que la phrase ait un sens, soit grammaticalement correcte et pertinente.
-6. Choisis l’emoji météo qui renforce l’ambiance décrite parmi ${WEATHER_EMOJIS.join(' ')} :
-- ☀️ / 🌤️ : très positif, lumineux (“ensoleillé”, “calme”, “léger”)
-- ⛅ : positif modéré, doux
-- 🌥️ / ☁️ : neutre, couvert, indécis
-- 🌦️ : changeant, alternance éclaircies/averses
-- 🌧️ : négatif, pluie, mélancolie
-- ⛈️ : orage, colère, tension
-- ❄️ : froid, distant, glacial
-- 🌩️ : très négatif, éclairs, choc
-Utilise toujours l’emoji qui accentue le ton de la phrase.
-
-Retourne uniquement un JSON brut :
-  {
-  "text": string,
-  "emoji": string
-}
-      `.trim(),
-    },
-    {
-      role: 'user' as const,
-      content: `Voici le profil émotionnel JSON :\n${JSON.stringify(summary)}`,
-    },
-  ];
+/** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */
+function mergeProfilesOptions(
+  opts: Partial<CreateReportOptions> = {},
+): CreateReportOptions {
+  return { ...DEFAULT_CREATE_REPORT_OPTIONS, ...opts };
 }
 
 export async function createReport(
   logger: LoggerPort,
   aggregatedEmotionProfile: AggregatedEmotionProfile,
   llm: LlmPort,
+  opts: Partial<CreateReportOptions> = {},
 ): Promise<Report> {
   const log = logger.child({ module: 'profiles.report' });
+
+  const { reportPrompt, llmOptions } = mergeProfilesOptions(opts);
+
+  const { model, ...runOpts } = llmOptions;
+
   try {
     const summary = summarizeProfile(aggregatedEmotionProfile);
     log.debug('Summarized profile', { summary });
-    const raw = await llm.run('gpt-5-chat-latest', makeMessages(summary), {
-      temperature: 0.4,
-      maxOutputTokens: 100,
-      topP: 0.9,
-      frequencyPenalty: 0.2,
-      responseFormat: { type: 'json_object' },
-    });
+    const raw = await llm.run(
+      model,
+      makeReportMessages(summary, reportPrompt),
+      runOpts,
+    );
+
     log.info('LLM call succeeded', { model: 'gpt-5-chat-latest' });
 
-    const json: unknown = JSON.parse(stripCodeFences(raw));
-    const parsed = LLMOutputSchema.safeParse(json);
+    const report = parseReportRaw(raw);
+    const hasFailed = report === FALLBACK_REPORT;
 
-    if (!parsed.success) {
-      log.warn('LLM output invalid, using fallback', {
-        issues: parsed.error.issues.map((issue) => issue.message),
-      });
-      return FALLBACK;
+    if (hasFailed) {
+      log.warn('LLM output invalid, using fallback');
+      return FALLBACK_REPORT;
     }
 
     log.info('Report parsed successfully');
-    return parsed.data;
+    return report;
   } catch (err) {
     log.error('LLM call failed, using fallback', { error: err });
-    return FALLBACK;
+    return FALLBACK_REPORT;
   }
 }

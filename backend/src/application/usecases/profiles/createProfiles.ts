@@ -2,33 +2,33 @@ import pLimit from 'p-limit';
 import type { EmotionProfile, WeightedItem } from '../../../domain/entities';
 import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
-import { makeProfileMessages } from './messages';
+import { makeProfileMessages } from './llmMessages';
 import { parseEmotionRaw } from './parseEmotion';
 import { parseTonalityRaw } from './parseTonality';
 import {
   CONCURRENCY,
-  DEFAULT_LLM_OPTIONS,
   FALLBACK_EMOTIONS,
   FALLBACK_TONALITIES,
+  PROFILES_LLM_OPTIONS,
 } from './policy';
 import { emotionProfilePrompt, tonalityProfilePrompt } from './prompts';
 
-export interface CreateProfilesOptions {
-  /** Prompt système pour l’analyse des émotions */
+interface CreateProfilesOptions {
+  /** System prompt to evaluate emotions */
   emotionPrompt: string;
-  /** Prompt système pour l’évaluation de la tonalité */
+  /** System prompt to evaluate tonalities */
   tonalityPrompt: string;
-  /** Concurrence p-limit pour les appels LLM */
+  /** LLM calls concurrency limit */
   concurrency: number;
-  /** Options LLM finales (incluant le modèle) */
+  /** Standard LLM Options (including the model) */
   llmOptions: LlmRunOptions & { model: string };
 }
 
-export const DEFAULT_CREATE_PROFILES_OPTIONS = {
+const DEFAULT_CREATE_PROFILES_OPTIONS = {
   emotionPrompt: emotionProfilePrompt,
   tonalityPrompt: tonalityProfilePrompt,
   concurrency: CONCURRENCY,
-  llmOptions: DEFAULT_LLM_OPTIONS,
+  llmOptions: PROFILES_LLM_OPTIONS,
 } as const satisfies CreateProfilesOptions;
 
 /** Note: per‑call partial overrides of llmOptions currently drop defaults (shallow merge). */

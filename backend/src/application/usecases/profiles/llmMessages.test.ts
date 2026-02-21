@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { WeightedItem } from '../../../domain/entities';
-import { makeProfileMessages } from './messages';
+import { makeProfileMessages } from './llmMessages';
 
 /**
  * Spec: Creates ordered LLM messages for the emotion profile creation
@@ -33,7 +33,7 @@ function makeWeightedItem(overrides: Partial<WeightedItem> = {}): WeightedItem {
   };
 }
 
-describe('makeEmotionMessages', () => {
+describe('makeProfileMessages', () => {
   test('creates a system and user message for the emotion profile creation', () => {
     const weightedItem = makeWeightedItem({
       title: 'my-title',
