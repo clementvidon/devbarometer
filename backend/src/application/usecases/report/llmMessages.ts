@@ -1,5 +1,5 @@
 import type { LlmMessage } from '../../ports/output/LlmPort';
-import { type EmotionProfileSummary } from '../reports/summarizeProfile';
+import { type EmotionProfileSummary } from '../report/summarizeProfile';
 
 export function makeReportMessages(
   summary: EmotionProfileSummary,

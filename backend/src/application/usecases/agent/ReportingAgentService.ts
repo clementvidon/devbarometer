@@ -12,7 +12,7 @@ import type { ComputeWeightsPort } from '../../ports/pipeline/ComputeWeightsPort
 import { createProfiles } from '../profiles/createProfiles';
 import { getLastRelevantItemsBefore } from '../queries/getLastRelevantItemsBefore';
 import { filterRelevantItems } from '../relevance/filterRelevantItems';
-import { createReport } from '../reports/createReport';
+import { createReport } from '../report/createReport';
 
 export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
   return items.slice().sort((a, b) => b.weight - a.weight);

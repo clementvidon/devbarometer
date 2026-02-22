@@ -1,5 +1,5 @@
 import { WEATHER_EMOJIS } from '@devbarometer/shared/domain';
-import { MIN_STANDOUT } from '../reports/summarizeProfile';
+import { MIN_STANDOUT } from '../report/summarizeProfile';
 
 export const reportPrompt = `
 Tu es un expert en analyse émotionnelle qui traduit un profil émotionnel en une **brève description météo**.
