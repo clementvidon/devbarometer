@@ -4,3 +4,5 @@ node_modules/
 .coverage
 db.json
 ignore/
+AGENTS.md
+ROADMAP.md
