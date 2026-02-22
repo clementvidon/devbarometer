@@ -1,4 +1,16 @@
 import type { RelevantItem, WeightedItem } from '../../../domain/entities';
+import type { CapOptions } from '../../../domain/services/weights/capByPercentile';
+import type { MomentumOptions } from '../../../domain/services/weights/computeMomentum';
+import type { NormalizeOptions } from '../../../domain/services/weights/normalizeByMean';
+
+export interface MomentumWeightsOptions {
+  /** Momentum computation parameters (baseline weight, etc.) */
+  momentum: MomentumOptions;
+  /** Score capping parameters to limit outliers (percentiles, thresholds, etc.) */
+  cap: CapOptions;
+  /** Normalization parameters to rescale weights (target mean, enable/disable, etc.) */
+  normalize: NormalizeOptions;
+}
 
 /**
  * Compute weights for the given items.
@@ -12,5 +24,6 @@ export interface ComputeWeightsPort {
   computeWeights(
     items: RelevantItem[],
     prevItems: RelevantItem[],
+    opts?: Partial<MomentumWeightsOptions>,
   ): Promise<WeightedItem[]>;
 }
