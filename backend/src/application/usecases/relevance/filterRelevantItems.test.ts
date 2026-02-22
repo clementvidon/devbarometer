@@ -25,7 +25,7 @@ import { isRelevant } from './isRelevant';
  * - the promise of a list of relevant items
  *
  * Side effects:
- * - creates a child logger / uses the provided logger
+ * - uses the provided logger
  * - triggers LLM calls via isRelevant
  *
  * Behavior
@@ -55,27 +55,14 @@ function makeLlm(): Mocked<LlmPort> {
   };
 }
 
-type LoggerDouble = {
-  logger: Mocked<LoggerPort>;
-  childLogger: Mocked<LoggerPort>;
-};
-
-function makeLoggerDouble(): LoggerDouble {
-  const childLogger = {
+function makeLogger(): Mocked<LoggerPort> {
+  return {
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
     child: vi.fn(),
   };
-  const logger = {
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-    child: vi.fn((_context) => childLogger),
-  };
-  return { logger, childLogger };
 }
 
 describe('filterRelevantItems', () => {
@@ -84,7 +71,7 @@ describe('filterRelevantItems', () => {
   });
 
   test('filters relevant items', async () => {
-    const { logger } = makeLoggerDouble();
+    const logger = makeLogger();
     const llm = makeLlm();
     const items = [
       makeItem({ title: 'yes' }),
@@ -101,7 +88,7 @@ describe('filterRelevantItems', () => {
   });
 
   test('preserves original order of relevant items', async () => {
-    const { logger } = makeLoggerDouble();
+    const logger = makeLogger();
     const llm = makeLlm();
     const items = [
       makeItem({ title: 'yes', content: '3' }),
@@ -115,7 +102,7 @@ describe('filterRelevantItems', () => {
   });
 
   test('returns empty array if input is empty', async () => {
-    const { logger } = makeLoggerDouble();
+    const logger = makeLogger();
     const llm = makeLlm();
     const items: Item[] = [];
 

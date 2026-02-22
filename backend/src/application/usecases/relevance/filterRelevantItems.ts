@@ -1,19 +1,11 @@
 import pLimit from 'p-limit';
 import type { Item, RelevantItem } from '../../../domain/entities';
-import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
+import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
+import type { FilterRelevantItemsOptions } from '../../ports/pipeline/FilterRelevantItemsPort';
 import { isRelevant } from './isRelevant';
 import { CONCURRENCY, RELEVANCE_LLM_OPTIONS } from './policy';
 import { relevanceFilterPrompt } from './prompts';
-
-interface FilterRelevantItemsOptions {
-  /** Prompt système utilisé pour la pertinence */
-  prompt: string;
-  /** Concurrence p-limit pour les appels LLM */
-  concurrency: number;
-  /** Options LLM finales (incluant le modèle) */
-  llmOptions: LlmRunOptions & { model: string };
-}
 
 const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS = {
   prompt: relevanceFilterPrompt,
@@ -43,13 +35,9 @@ export async function filterRelevantItems(
   llm: LlmPort,
   opts: Partial<FilterRelevantItemsOptions> = {},
 ): Promise<RelevantItem[]> {
-  const log = logger.child({
-    module: 'relevance.filter',
-  });
-
-  log.info('Start relevance filter', { total: items.length });
+  logger.info('Start relevance filter', { total: items.length });
   if (items.length === 0) {
-    log.info('End relevance filter', {
+    logger.info('End relevance filter', {
       total: 0,
       relevant: 0,
       discarded: 0,
@@ -66,7 +54,11 @@ export async function filterRelevantItems(
   const labeledItems: LabeledItem[] = await Promise.all(
     items.map((item) =>
       limit(async () => {
-        const ok = await isRelevant(log, item, llm, { prompt, model, runOpts });
+        const ok = await isRelevant(logger, item, llm, {
+          prompt,
+          model,
+          runOpts,
+        });
         return { item, ok };
       }),
     ),
@@ -74,7 +66,7 @@ export async function filterRelevantItems(
 
   const relevantItems = labeledItems.filter((r) => r.ok).map((r) => r.item);
 
-  log.info('End relevance filter', {
+  logger.info('End relevance filter', {
     total: items.length,
     relevant: relevantItems.length,
     discarded: items.length - relevantItems.length,
