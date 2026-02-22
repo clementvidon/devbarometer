@@ -13,7 +13,7 @@ export class LlmFilterRelevantItemsStep implements FilterRelevantItemsPort {
   async filterRelevantItems(
     logger: LoggerPort,
     items: Item[],
-    opts?: FilterRelevantItemsOptions,
+    opts?: Partial<FilterRelevantItemsOptions>,
   ): Promise<RelevantItem[]> {
     return await filterRelevantItemsUsecase(
       logger.child({ scope: 'relevance.filter' }),
