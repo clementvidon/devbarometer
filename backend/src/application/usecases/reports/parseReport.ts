@@ -2,7 +2,7 @@ import { WEATHER_EMOJIS } from '@devbarometer/shared';
 import { z } from 'zod';
 import type { Report } from '../../../domain/entities';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
-import { FALLBACK_REPORT } from './policy';
+import { FALLBACK_REPORT } from '../reports/policy';
 
 const LLMOutputSchema = z.object({
   text: z.string().max(200),

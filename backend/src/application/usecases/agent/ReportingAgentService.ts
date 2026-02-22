@@ -10,9 +10,9 @@ import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 import type { ComputeWeightsPort } from '../../ports/pipeline/ComputeWeightsPort';
 import { createProfiles } from '../profiles/createProfiles';
-import { createReport } from '../profiles/createReport';
 import { getLastRelevantItemsBefore } from '../queries/getLastRelevantItemsBefore';
 import { filterRelevantItems } from '../relevance/filterRelevantItems';
+import { createReport } from '../reports/createReport';
 
 export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
   return items.slice().sort((a, b) => b.weight - a.weight);
