@@ -1,5 +1,9 @@
 import type { RelevantItem, WeightedItem } from '../../entities';
-import type { MomentumOptions } from './MomentumWeightsStrategy';
+
+export interface MomentumOptions {
+  /** Weight assigned when item is new or delta <= 0. */
+  baseWeight: number;
+}
 
 function isNew(prevRaw: number | undefined): boolean {
   return prevRaw === undefined;

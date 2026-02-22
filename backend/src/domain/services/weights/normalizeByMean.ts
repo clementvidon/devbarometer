@@ -1,5 +1,11 @@
 import type { WeightedItem } from '../../entities';
-import type { NormalizeOptions } from './MomentumWeightsStrategy';
+
+export interface NormalizeOptions {
+  /** Enable normalization. */
+  enabled: boolean;
+  /** Target mean (or sum, if you later add a sum-strategy). */
+  target: number;
+}
 
 /**
  * Normalize weights so that their mean equals `target`. Input is not mutated.

@@ -1,36 +1,20 @@
-import type { ComputeWeightsPort } from '../../../application/ports/output/ComputeWeightsPort';
-import type { RelevantItem, WeightedItem } from '../../entities';
-import { capByPercentile } from './capByPercentile';
-import { computeMomentum } from './computeMomentum';
-import { normalizeByMean } from './normalizeByMean';
-import { sanitizeScores } from './sanitizeScores';
+import type { RelevantItem, WeightedItem } from '../../../domain/entities';
+import {
+  capByPercentile,
+  type CapOptions,
+} from '../../../domain/services/weights/capByPercentile';
+import {
+  computeMomentum,
+  type MomentumOptions,
+} from '../../../domain/services/weights/computeMomentum';
+import {
+  normalizeByMean,
+  type NormalizeOptions,
+} from '../../../domain/services/weights/normalizeByMean';
+import { sanitizeScores } from '../../../domain/services/weights/sanitizeScores';
+import type { ComputeWeightsPort } from '../../ports/pipeline/ComputeWeightsPort';
 
-export interface MomentumOptions {
-  /** Weight assigned when item is new or delta <= 0. */
-  baseWeight: number;
-}
-
-export interface CapOptions {
-  /** Minimum N to use main percentile; below this we use percentileSmallN. */
-  minN: number;
-  /** Main percentile for excess capping, in [0,1]. */
-  percentile: number;
-  /** Percentile when N < minN. */
-  percentileSmallN: number;
-  /** Baseline weight used to compute "excess" = max(0, weight - baseWeight). */
-  baseWeight: number;
-  /** Concentration threshold in [0,1]; skip cap if topShare < this. */
-  concentrationGate: number;
-}
-
-export interface NormalizeOptions {
-  /** Enable normalization. */
-  enabled: boolean;
-  /** Target mean (or sum, if you later add a sum-strategy). */
-  target: number;
-}
-
-export interface MomentumWeightsOptions {
+interface MomentumWeightsOptions {
   momentum: MomentumOptions;
   cap: CapOptions;
   normalize: NormalizeOptions;
@@ -38,7 +22,7 @@ export interface MomentumWeightsOptions {
 
 export const DEFAULT_MOMENTUM_OPTIONS = {
   baseWeight: 1,
-} as const satisfies MomentumOptions;
+} satisfies MomentumOptions;
 
 export const DEFAULT_CAP_OPTIONS = {
   minN: 10,
@@ -53,7 +37,7 @@ export const DEFAULT_NORMALIZE_OPTIONS = {
   target: 1,
 } as const satisfies NormalizeOptions;
 
-export const DEFAULT_WEIGHTS_OPTIONS = {
+export const DEFAULT_MOMENTUM_COMPUTE_WEIGHTS_OPTIONS = {
   momentum: { ...DEFAULT_MOMENTUM_OPTIONS },
   cap: { ...DEFAULT_CAP_OPTIONS },
   normalize: { ...DEFAULT_NORMALIZE_OPTIONS },
@@ -69,7 +53,7 @@ function mergeMomentumWeightsOptions(
   };
 }
 
-export class MomentumWeightsStrategy implements ComputeWeightsPort {
+export class MomentumComputeWeightsStep implements ComputeWeightsPort {
   private readonly opts: MomentumWeightsOptions;
 
   constructor(opts: Partial<MomentumWeightsOptions> = {}) {

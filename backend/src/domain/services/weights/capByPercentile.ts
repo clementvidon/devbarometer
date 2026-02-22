@@ -1,5 +1,17 @@
 import type { WeightedItem } from '../../entities';
-import type { CapOptions } from './MomentumWeightsStrategy';
+
+export interface CapOptions {
+  /** Minimum N to use main percentile; below this we use percentileSmallN. */
+  minN: number;
+  /** Main percentile for excess capping, in [0,1]. */
+  percentile: number;
+  /** Percentile when N < minN. */
+  percentileSmallN: number;
+  /** Baseline weight used to compute "excess" = max(0, weight - baseWeight). */
+  baseWeight: number;
+  /** Concentration threshold in [0,1]; skip cap if topShare < this. */
+  concentrationGate: number;
+}
 
 export type WeightsCapReason =
   | 'no_excess'
