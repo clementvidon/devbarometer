@@ -24,6 +24,6 @@ export interface FilterRelevantItemsPort {
   filterRelevantItems(
     logger: LoggerPort,
     items: Item[],
-    opts?: FilterRelevantItemsOptions,
+    opts?: Partial<FilterRelevantItemsOptions>,
   ): Promise<RelevantItem[]>;
 }
