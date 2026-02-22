@@ -36,7 +36,7 @@ import { FALLBACK_EMOTIONS, FALLBACK_TONALITIES } from './policy';
  * - emotion profile = emotion scores + tonality scores
  *
  * Side effects:
- * - creates a child logger / uses the provided logger
+ * - uses the provided logger
  * - triggers LLM calls
  *
  * Behavior:
@@ -72,32 +72,19 @@ function makeLlm(raw: string): Mocked<LlmPort> {
   };
 }
 
-type LoggerDouble = {
-  logger: Mocked<LoggerPort>;
-  childLogger: Mocked<LoggerPort>;
-};
-
-function makeLoggerDouble(): LoggerDouble {
-  const childLogger = {
+function makeLogger(): Mocked<LoggerPort> {
+  return {
     debug: vi.fn(),
     info: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
     child: vi.fn(),
   };
-  const logger = {
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-    child: vi.fn((_context) => childLogger),
-  };
-  return { logger, childLogger };
 }
 
 describe('createProfiles', () => {
   test('turn a list of items into emotion profiles', async () => {
-    const { logger } = makeLoggerDouble();
+    const logger = makeLogger();
     const llm = makeLlm(LlmOutput.VALID);
     const items = [makeWeightedItem(), makeWeightedItem(), makeWeightedItem()];
 
@@ -112,7 +99,7 @@ describe('createProfiles', () => {
     });
   });
   test('returns fallback when parsing fails', async () => {
-    const { logger } = makeLoggerDouble();
+    const logger = makeLogger();
     const llm = makeLlm(LlmOutput.INVALID);
     const items = [makeWeightedItem(), makeWeightedItem(), makeWeightedItem()];
 
@@ -127,7 +114,7 @@ describe('createProfiles', () => {
     });
   });
   test('returns empty array if input is empty', async () => {
-    const { logger } = makeLoggerDouble();
+    const logger = makeLogger();
     const llm = makeLlm(LlmOutput.VALID);
     const items: WeightedItem[] = [];
 
@@ -137,7 +124,7 @@ describe('createProfiles', () => {
     expect(result).toHaveLength(0);
   });
   test('return a fallback when llm throws an error', async () => {
-    const { logger } = makeLoggerDouble();
+    const logger = makeLogger();
     const llm = {
       run: vi.fn().mockRejectedValue(new Error('boom')),
     };

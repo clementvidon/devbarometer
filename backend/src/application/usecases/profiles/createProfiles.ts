@@ -1,7 +1,8 @@
 import pLimit from 'p-limit';
 import type { EmotionProfile, WeightedItem } from '../../../domain/entities';
-import type { LlmPort, LlmRunOptions } from '../../ports/output/LlmPort';
+import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
+import type { CreateProfilesOptions } from '../../ports/pipeline/CreateProfilesPort';
 import { makeProfileMessages } from './llmMessages';
 import { parseEmotionRaw } from './parseEmotion';
 import { parseTonalityRaw } from './parseTonality';
@@ -12,17 +13,6 @@ import {
   PROFILES_LLM_OPTIONS,
 } from './policy';
 import { emotionProfilePrompt, tonalityProfilePrompt } from './prompts';
-
-interface CreateProfilesOptions {
-  /** System prompt to evaluate emotions */
-  emotionPrompt: string;
-  /** System prompt to evaluate tonalities */
-  tonalityPrompt: string;
-  /** LLM calls concurrency limit */
-  concurrency: number;
-  /** Standard LLM Options (including the model) */
-  llmOptions: LlmRunOptions & { model: string };
-}
 
 const DEFAULT_CREATE_PROFILES_OPTIONS = {
   emotionPrompt: emotionProfilePrompt,
@@ -51,10 +41,8 @@ export async function createProfiles(
   llm: LlmPort,
   opts: Partial<CreateProfilesOptions> = {},
 ): Promise<EmotionProfile[]> {
-  const log = logger.child({ module: 'profiles.create' });
-
   if (items.length === 0) {
-    log.error('No items to profile.');
+    logger.error('No items to profile.');
     return [];
   }
 
@@ -78,7 +66,7 @@ export async function createProfiles(
           emotions === FALLBACK_EMOTIONS || tonalities === FALLBACK_TONALITIES;
 
         if (hasFailed) {
-          log.warn('LLM fallback', {
+          logger.warn('LLM fallback', {
             source: item.source,
             title: item.title,
           });
@@ -92,7 +80,7 @@ export async function createProfiles(
           tonalities,
         };
       } catch (err) {
-        log.error('LLM error', {
+        logger.error('LLM error', {
           source: item.source,
           title: item.title,
           error: err,
