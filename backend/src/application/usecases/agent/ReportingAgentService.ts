@@ -5,14 +5,13 @@ import { nowIso } from '../../../lib/time/nowIso';
 import { withSpan } from '../../observability/withSpan';
 import type { ReportingAgentPort } from '../../ports/input/ReportingAgentPort';
 import type { ItemsProviderPort } from '../../ports/output/ItemsProviderPort';
-import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 import type { ComputeWeightsPort } from '../../ports/pipeline/ComputeWeightsPort';
-import { createProfiles } from '../profiles/createProfiles';
+import type { CreateProfilesPort } from '../../ports/pipeline/CreateProfilesPort';
+import type { CreateReportPort } from '../../ports/pipeline/CreateReportPort';
+import type { FilterRelevantItemsPort } from '../../ports/pipeline/FilterRelevantItemsPort';
 import { getLastRelevantItemsBefore } from '../queries/getLastRelevantItemsBefore';
-import { filterRelevantItems } from '../relevance/filterRelevantItems';
-import { createReport } from '../report/createReport';
 
 export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
   return items.slice().sort((a, b) => b.weight - a.weight);
@@ -22,9 +21,11 @@ export class ReportingAgentService implements ReportingAgentPort {
   constructor(
     private readonly logger: LoggerPort,
     private readonly items: ItemsProviderPort,
-    private readonly llm: LlmPort,
     private readonly persistence: PersistencePort,
+    private readonly relevance: FilterRelevantItemsPort,
     private readonly weights: ComputeWeightsPort,
+    private readonly profiles: CreateProfilesPort,
+    private readonly report: CreateReportPort,
   ) {}
 
   async captureSnapshot(): Promise<void> {
@@ -45,7 +46,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     log.info('Previous items fetched', { count: previous.length });
 
     const relevant = await withSpan(log, 'filterRelevantItems', () =>
-      filterRelevantItems(log, items, this.llm),
+      this.relevance.filterRelevantItems(log, items),
     );
     log.info('Items filtered', { relevant: relevant.length });
 
@@ -55,7 +56,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     log.info('Weights computed', { count: weighted.length });
 
     const profiles = await withSpan(log, 'createProfiles', () =>
-      createProfiles(log, weighted, this.llm),
+      this.profiles.createProfiles(log, weighted),
     );
     log.info('Profiles created', { count: profiles.length });
 
@@ -65,7 +66,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     log.info('Profiles aggregated');
 
     const report = await withSpan(log, 'createReport', () =>
-      createReport(log, aggregated, this.llm),
+      this.report.createReport(log, aggregated),
     );
     log.info('Report created');
 
