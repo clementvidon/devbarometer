@@ -12,7 +12,7 @@ const EmotionSchema = z.object({
   disgust: z.number().min(0).max(1),
 });
 
-export function parseEmotionRaw(raw: string): EmotionScores {
+export function parseEmotion(raw: string): EmotionScores {
   try {
     const cleaned = stripCodeFences(raw);
     const json: unknown = JSON.parse(cleaned);

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { parseRelevanceRaw } from './parseRelevance';
+import { parseRelevance } from './parseRelevance';
 
 /**
  * Spec: Parse relevance LLM output
@@ -23,23 +23,23 @@ import { parseRelevanceRaw } from './parseRelevance';
  * - always return a boolean
  */
 
-describe('parseRelevanceRaw', () => {
+describe('parseRelevance', () => {
   test('return false if raw does not parse to JSON', () => {
-    expect(parseRelevanceRaw('{ wrong }')).toBe(false);
+    expect(parseRelevance('{ wrong }')).toBe(false);
   });
   test('return false if raw does not parse to RelevanceSchema', () => {
-    expect(parseRelevanceRaw('{ "wrong": true }')).toBe(false);
+    expect(parseRelevance('{ "wrong": true }')).toBe(false);
   });
   test('return true when relevant is true with code-fences', () => {
-    expect(parseRelevanceRaw('```\n{ "relevant": true }\n```')).toBe(true);
+    expect(parseRelevance('```\n{ "relevant": true }\n```')).toBe(true);
   });
   test('return true when relevant is true without code-fences', () => {
-    expect(parseRelevanceRaw('{ "relevant": true }')).toBe(true);
+    expect(parseRelevance('{ "relevant": true }')).toBe(true);
   });
   test('return false when relevant is false', () => {
-    expect(parseRelevanceRaw('{ "relevant": false }')).toBe(false);
+    expect(parseRelevance('{ "relevant": false }')).toBe(false);
   });
   test('return false for empty string', () => {
-    expect(parseRelevanceRaw('')).toBe(false);
+    expect(parseRelevance('')).toBe(false);
   });
 });

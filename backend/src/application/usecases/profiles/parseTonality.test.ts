@@ -1,6 +1,6 @@
 import type { TonalityScores } from '@devbarometer/shared';
 import { describe, expect, test } from 'vitest';
-import { parseTonalityRaw } from './parseTonality';
+import { parseTonality } from './parseTonality';
 import { FALLBACK_TONALITIES } from './policy';
 
 /**
@@ -36,18 +36,18 @@ function makeTonalityScores(
   };
 }
 
-describe('parseTonalityRaw', () => {
+describe('parseTonality', () => {
   test('return fallback if raw does not parse to JSON', () => {
-    expect(parseTonalityRaw('{ wrong }')).toBe(FALLBACK_TONALITIES);
+    expect(parseTonality('{ wrong }')).toBe(FALLBACK_TONALITIES);
   });
   test('return fallback if raw does not parse to TonalityScores', () => {
-    expect(parseTonalityRaw('{ "wrong": true }')).toBe(FALLBACK_TONALITIES);
+    expect(parseTonality('{ "wrong": true }')).toBe(FALLBACK_TONALITIES);
   });
   test('return raw as an TonalityScores if it is valid, with code-fences', () => {
     const obj = makeTonalityScores({ positive: 0.42 });
     const raw = '```\n' + JSON.stringify(obj) + '\n```';
 
-    const result = parseTonalityRaw(raw);
+    const result = parseTonality(raw);
 
     expect(result).toStrictEqual(obj);
     expect(result).not.toStrictEqual(FALLBACK_TONALITIES);
@@ -56,12 +56,12 @@ describe('parseTonalityRaw', () => {
     const obj = makeTonalityScores({ negative: 0.24 });
     const raw = JSON.stringify(obj);
 
-    const result = parseTonalityRaw(raw);
+    const result = parseTonality(raw);
 
     expect(result).toStrictEqual(obj);
     expect(result).not.toStrictEqual(FALLBACK_TONALITIES);
   });
   test('return fallback for empty string', () => {
-    expect(parseTonalityRaw('')).toBe(FALLBACK_TONALITIES);
+    expect(parseTonality('')).toBe(FALLBACK_TONALITIES);
   });
 });

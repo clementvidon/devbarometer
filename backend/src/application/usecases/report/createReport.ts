@@ -6,7 +6,7 @@ import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { CreateReportOptions } from '../../ports/pipeline/CreateReportPort';
 import { makeReportMessages } from './llmMessages';
-import { parseReportRaw } from './parseReport';
+import { parseReport } from './parseReport';
 import { FALLBACK_REPORT, REPORT_LLM_OPTIONS } from './policy';
 import { reportPrompt } from './prompts';
 import { summarizeProfile } from './summarizeProfile';
@@ -51,7 +51,7 @@ export async function createReport(
 
     logger.info('LLM call succeeded', { model: 'gpt-5-chat-latest' });
 
-    const report = parseReportRaw(raw);
+    const report = parseReport(raw);
     const hasFailed = report === FALLBACK_REPORT;
 
     if (hasFailed) {

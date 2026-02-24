@@ -1,6 +1,6 @@
 import type { EmotionScores } from '@devbarometer/shared';
 import { describe, expect, test } from 'vitest';
-import { parseEmotionRaw } from './parseEmotion';
+import { parseEmotion } from './parseEmotion';
 import { FALLBACK_EMOTIONS } from './policy';
 
 /**
@@ -36,18 +36,18 @@ function makeEmotionScores(
   };
 }
 
-describe('parseEmotionRaw', () => {
+describe('parseEmotion', () => {
   test('return fallback if raw does not parse to JSON', () => {
-    expect(parseEmotionRaw('{ wrong }')).toBe(FALLBACK_EMOTIONS);
+    expect(parseEmotion('{ wrong }')).toBe(FALLBACK_EMOTIONS);
   });
   test('return fallback if raw does not parse to EmotionScores', () => {
-    expect(parseEmotionRaw('{ "wrong": true }')).toBe(FALLBACK_EMOTIONS);
+    expect(parseEmotion('{ "wrong": true }')).toBe(FALLBACK_EMOTIONS);
   });
   test('return raw as an EmotionScores if it is valid, with code-fences', () => {
     const obj = makeEmotionScores({ trust: 0.42 });
     const raw = '```\n' + JSON.stringify(obj) + '\n```';
 
-    const result = parseEmotionRaw(raw);
+    const result = parseEmotion(raw);
 
     expect(result).toStrictEqual(obj);
     expect(result).not.toStrictEqual(FALLBACK_EMOTIONS);
@@ -56,12 +56,12 @@ describe('parseEmotionRaw', () => {
     const obj = makeEmotionScores({ fear: 0.24 });
     const raw = JSON.stringify(obj);
 
-    const result = parseEmotionRaw(raw);
+    const result = parseEmotion(raw);
 
     expect(result).toStrictEqual(obj);
     expect(result).not.toStrictEqual(FALLBACK_EMOTIONS);
   });
   test('return fallback for empty string', () => {
-    expect(parseEmotionRaw('')).toBe(FALLBACK_EMOTIONS);
+    expect(parseEmotion('')).toBe(FALLBACK_EMOTIONS);
   });
 });

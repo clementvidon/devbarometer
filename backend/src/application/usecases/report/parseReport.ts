@@ -9,7 +9,7 @@ const LLMOutputSchema = z.object({
   emoji: z.enum(WEATHER_EMOJIS),
 });
 
-export function parseReportRaw(raw: string): Report {
+export function parseReport(raw: string): Report {
   try {
     const cleaned = stripCodeFences(raw);
     const json: unknown = JSON.parse(cleaned);

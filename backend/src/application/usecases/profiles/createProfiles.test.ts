@@ -1,7 +1,7 @@
 import { describe, expect, test, vi, type Mocked } from 'vitest';
 
 vi.mock('./parseEmotion', () => ({
-  parseEmotionRaw: vi.fn((raw) => {
+  parseEmotion: vi.fn((raw) => {
     return raw === LlmOutput.VALID
       ? { ...FALLBACK_EMOTIONS, joy: 0.42 }
       : FALLBACK_EMOTIONS;
@@ -9,7 +9,7 @@ vi.mock('./parseEmotion', () => ({
 }));
 
 vi.mock('./parseTonality', () => ({
-  parseTonalityRaw: vi.fn((raw) => {
+  parseTonality: vi.fn((raw) => {
     return raw === LlmOutput.VALID
       ? { ...FALLBACK_TONALITIES, positive: 0.42 }
       : FALLBACK_TONALITIES;

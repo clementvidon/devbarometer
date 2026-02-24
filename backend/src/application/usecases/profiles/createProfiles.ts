@@ -4,8 +4,8 @@ import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { CreateProfilesOptions } from '../../ports/pipeline/CreateProfilesPort';
 import { makeProfileMessages } from './llmMessages';
-import { parseEmotionRaw } from './parseEmotion';
-import { parseTonalityRaw } from './parseTonality';
+import { parseEmotion } from './parseEmotion';
+import { parseTonality } from './parseTonality';
 import {
   CONCURRENCY,
   FALLBACK_EMOTIONS,
@@ -60,8 +60,8 @@ export async function createProfiles(
           llm.run(model, makeProfileMessages(item, tonalityPrompt), runOpts),
         ]);
 
-        const emotions = parseEmotionRaw(rawEmotion);
-        const tonalities = parseTonalityRaw(rawTonality);
+        const emotions = parseEmotion(rawEmotion);
+        const tonalities = parseTonality(rawTonality);
         const hasFailed =
           emotions === FALLBACK_EMOTIONS || tonalities === FALLBACK_TONALITIES;
 

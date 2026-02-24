@@ -12,7 +12,7 @@ const TonalitySchema = z.object({
   pessimistic_anticipation: z.number().min(0).max(1),
 });
 
-export function parseTonalityRaw(raw: string): TonalityScores {
+export function parseTonality(raw: string): TonalityScores {
   try {
     const cleaned = stripCodeFences(raw);
     const json: unknown = JSON.parse(cleaned);
