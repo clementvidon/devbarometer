@@ -1,5 +1,6 @@
 import type { FetchPort } from '../../application/ports/output/FetchPort';
 import type { LoggerPort } from '../../application/ports/output/LoggerPort';
+import { fetchWithRetry } from '../../lib/http/fetchWithRetry';
 
 type RedditTokenResponse = {
   access_token: string;
@@ -14,6 +15,12 @@ export type RedditCredentials = {
   username: string;
   password: string;
 };
+
+export const DEFAULT_REDDIT_USER_AGENT =
+  'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)';
+
+const TOKEN_FETCH_MAX_ATTEMPTS = 3;
+const TOKEN_FETCH_TIMEOUT_MS = 15_000;
 
 export async function getRedditAccessToken(
   fetcher: FetchPort,
@@ -34,29 +41,48 @@ export async function getRedditAccessToken(
     password,
   });
 
-  log?.debug('Requesting Reddit access token');
-  const response = await fetcher.fetch(
+  log?.debug('Requesting Reddit access token', {
+    maxRetries: TOKEN_FETCH_MAX_ATTEMPTS,
+    timeoutMs: TOKEN_FETCH_TIMEOUT_MS,
+  });
+
+  const result = await fetchWithRetry(
+    fetcher,
     'https://www.reddit.com/api/v1/access_token',
     {
       method: 'POST',
       headers: {
         Authorization: `Basic ${auth}`,
         'Content-Type': 'application/x-www-form-urlencoded',
-        'User-Agent':
-          'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)',
+        'User-Agent': DEFAULT_REDDIT_USER_AGENT,
       },
       body,
     },
+    {
+      maxRetries: TOKEN_FETCH_MAX_ATTEMPTS,
+      timeoutMs: TOKEN_FETCH_TIMEOUT_MS,
+    },
   );
 
-  if (!('ok' in response) || !response.ok) {
-    const msg = 'text' in response ? await response.text() : '<no text>';
-    const status = 'status' in response ? response.status : '???';
-    log?.debug('Reddit token fetch failed', { status, msg });
-    throw new Error(`Reddit token fetch failed (${String(status)}): ${msg}`);
+  if (!result.ok) {
+    log?.debug('Reddit token fetch failed', {
+      code: result.code,
+      status: result.status ?? null,
+      retryable: result.retryable,
+      retryAfterMs: result.retryAfterMs ?? null,
+      error: result.error,
+    });
+    throw new Error(
+      `Reddit token fetch failed: ${JSON.stringify({
+        code: result.code,
+        status: result.status ?? null,
+        retryable: result.retryable,
+        retryAfterMs: result.retryAfterMs ?? null,
+      })}`,
+    );
   }
 
-  const data = (await response.json()) as Partial<RedditTokenResponse>;
+  const data = (await result.res.json()) as Partial<RedditTokenResponse>;
 
   if (!data.access_token) {
     log?.debug('No access_token in Reddit response', { data });

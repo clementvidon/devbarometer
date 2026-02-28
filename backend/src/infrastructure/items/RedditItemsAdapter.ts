@@ -6,7 +6,11 @@ import type { Item } from '../../domain/entities';
 import { filterByScore } from '../../domain/services/items/filterByScore';
 import { fetchWithRetry } from '../../lib/http/fetchWithRetry';
 import { normalizeWhitespace } from '../../lib/string/normalizeWhitespace';
-import { getRedditAccessToken, type RedditCredentials } from './redditAuth';
+import {
+  DEFAULT_REDDIT_USER_AGENT,
+  getRedditAccessToken,
+  type RedditCredentials,
+} from './redditAuth';
 
 export const RedditChildSchema = z.object({
   data: z.object({
@@ -34,8 +38,7 @@ export interface RedditItemsOptions {
 
 const DEFAULT_REDDIT_ITEMS_OPTIONS = {
   minScore: 5,
-  userAgentSuffix:
-    'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)',
+  userAgentSuffix: DEFAULT_REDDIT_USER_AGENT,
   baseBackoffMs: 100,
 } as const satisfies RedditItemsOptions;
 
