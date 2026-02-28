@@ -7,6 +7,7 @@
     "export": "tsx src/cli/export.ts",
     "replay": "tsx src/cli/replay.ts",
     "generate-static": "tsx src/cli/generate-static.ts",
+    "backfill": "tsx src/tools/backfillFutureTopics/index.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
