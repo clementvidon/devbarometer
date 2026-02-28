@@ -5,9 +5,16 @@ on:
     - cron: '0 10 * * *'
   workflow_dispatch:
 
+concurrency:
+  group: daily-deploy
+  cancel-in-progress: true
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
+    env:
+      CI: true
 
     steps:
       - name: Checkout repo
@@ -22,9 +29,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
-        env:
-          CI: true
+        run: npm ci
 
       - name: Build shared package
         run: npm run build-shared
@@ -55,7 +60,6 @@ jobs:
 
       - name: Authenticate with GitHub token
         run: git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/clementvidon/devbarometer.git
-
 
       - name: Deploy to GitHub Pages
         run: npm --workspace frontend run deploy
