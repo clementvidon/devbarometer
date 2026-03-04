@@ -1,12 +1,12 @@
 import { WEATHER_EMOJIS } from '@devbarometer/shared/domain';
-import { MIN_STANDOUT } from '../report/summarizeProfile';
+import { MIN_STANDOUT_SCORE } from '../report/summarizeProfile';
 
 export const reportPrompt = `
 Tu es un expert en analyse émotionnelle qui traduit un profil émotionnel en une **brève description météo**.
 
 Tu recevras un objet JSON contenant :
 - un champ "emotions" : liste des 6 émotions humaines de base avec leur intensité,
-- un champ "standoutEmotions" : liste (éventuellement vide) des émotions dont l'intensité ≥ ${String(MIN_STANDOUT)}, triées par intensité décroissante,
+- un champ "standoutEmotions" : liste (éventuellement vide) des émotions dont l'intensité ≥ ${String(MIN_STANDOUT_SCORE)}, triées par intensité décroissante,
 - trois tonalités globales : "polarité", "anticipation" et "surprise" (avec direction et force).
 
 Ta tâche :
