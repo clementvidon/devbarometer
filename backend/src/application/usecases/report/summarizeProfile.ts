@@ -49,32 +49,38 @@ export function getStrengthLabel(score: number): Tone['strength'] {
           : 'very strong';
 }
 
-const POLARITY_MIN = 0.3;
-const POLARITY_DELTA = 0.06;
-const NEUTRAL_DELTA = 0.06;
+const MIN_LEVEL_FOR_POLARIZED = 0.3;
+const MAX_DISTANCE_FOR_POLARIZED = 0.06;
+const MAX_DISTANCE_FOR_NEUTRAL = MAX_DISTANCE_FOR_POLARIZED;
 
-function evaluateTone(positive: number, negative: number): Tone {
-  const delta = positive - negative;
-  const absDelta = Math.abs(delta);
-  const max = Math.max(positive, negative);
-  const min = Math.min(positive, negative);
+// Levels are independent intensities (not probabilities; they don't sum to 1).
+// "polarized" = both sides high and close to each other.
 
-  if (max > POLARITY_MIN && min > POLARITY_MIN && absDelta < POLARITY_DELTA) {
+export function evaluateTone(posLevel: number, negLevel: number): Tone {
+  const delta = posLevel - negLevel;
+  const distance = Math.abs(delta);
+  const hi = Math.max(posLevel, negLevel);
+  const lo = Math.min(posLevel, negLevel);
+
+  if (
+    hi > MIN_LEVEL_FOR_POLARIZED &&
+    lo > MIN_LEVEL_FOR_POLARIZED &&
+    distance < MAX_DISTANCE_FOR_POLARIZED
+  ) {
     return {
       value: 'polarized',
-      strength: getStrengthLabel(max),
+      strength: getStrengthLabel(hi),
+    };
+  } else if (distance < MAX_DISTANCE_FOR_NEUTRAL) {
+    return { value: 'neutral' };
+  } else {
+    return {
+      value: delta > 0 ? 'positive' : 'negative',
+      strength: getStrengthLabel(distance),
     };
   }
-
-  if (absDelta < NEUTRAL_DELTA) {
-    return { value: 'neutral' };
-  }
-
-  return {
-    value: delta > 0 ? 'positive' : 'negative',
-    strength: getStrengthLabel(absDelta),
-  };
 }
+
 export type EmotionProfileSummary = {
   emotions: { name: keyof EmotionScores; strength: Tone['strength'] }[];
   standoutEmotions: Standout[];
