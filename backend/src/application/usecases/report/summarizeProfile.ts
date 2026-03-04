@@ -6,10 +6,10 @@ import type { AggregatedEmotionProfile } from '../../../domain/entities';
 type Standout = { name: keyof EmotionScores; score: number };
 
 export const MIN_STANDOUT_SCORE = 0.35;
-const MAX_STANDOUT_COUNT = 2;
-const RELATIVE_GAP = 0.06;
+export const MAX_STANDOUT_COUNT = 2;
+export const RELATIVE_GAP = 0.06;
 
-function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
+export function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
   const sorted = (Object.entries(emotions) as [keyof EmotionScores, number][])
     .sort((a, b) => b[1] - a[1])
     .map(([name, score]) => ({ name, score }));

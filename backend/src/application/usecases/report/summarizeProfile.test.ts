@@ -1,10 +1,19 @@
+import type { EmotionScores } from '@devbarometer/shared';
 import { describe, expect, test } from 'vitest';
-import { getStrengthLabel, type Tone } from './summarizeProfile';
+import {
+  getStrengthLabel,
+  MIN_STANDOUT_SCORE,
+  pickStandoutsByScore,
+  RELATIVE_GAP,
+  type Tone,
+} from './summarizeProfile';
+
+const justBelow = (t: number) =>
+  t - 10 * Number.EPSILON * Math.max(1, Math.abs(t));
+const justAbove = (t: number) =>
+  t + 10 * Number.EPSILON * Math.max(1, Math.abs(t));
 
 describe(getStrengthLabel.name, () => {
-  const justBelow = (t: number) =>
-    t - 10 * Number.EPSILON * Math.max(1, Math.abs(t));
-
   const cases = [
     { score: -10, expected: 'very weak' },
     { score: 10, expected: 'very strong' },
@@ -23,42 +32,97 @@ describe(getStrengthLabel.name, () => {
   });
 });
 
-// function makeEmotionScores(
-//   overrides: Partial<EmotionScores> = {},
-// ): EmotionScores {
-//   return {
-//     joy: 0,
-//     trust: 0,
-//     anger: 0,
-//     fear: 0,
-//     sadness: 0,
-//     disgust: 0,
-//     ...overrides,
-//   };
-// }
+function makeEmotionScores(
+  overrides: Partial<EmotionScores> = {},
+): EmotionScores {
+  return {
+    joy: 0,
+    trust: 0,
+    anger: 0,
+    fear: 0,
+    sadness: 0,
+    disgust: 0,
+    ...overrides,
+  };
+}
 
-// describe(pickStandoutsByScore.name, () => {
-//   const cases = [
-//     {
-//       name: 'first standout',
-//       emotions: makeEmotionScores({ joy: 0.5 }),
-//       expected: { name: 'joy', score: 0.5 },
-//     },
-//     // {
-//     //   emotions: makeEmotionScores({ joy: 0.5, trust: 0.5 }),
-//     //   expected: { name: '', score: 0 },
-//     // },
-//     // {
-//     //   emotions: makeEmotionScores({ joy: 0.5, trust: 0.5, fear: 0.5 }),
-//     //   expected: { name: '', score: 0 },
-//     // },
-//     // {
-//     //   emotions: makeEmotionScores({ joy: 0.5, trust: 0.75, fear: 0.5 }),
-//     //   expected: { name: '', score: 0 },
-//     // },
-//   ];
+describe(pickStandoutsByScore.name, () => {
+  const cases = [
+    {
+      name: 'no standouts',
+      emotions: makeEmotionScores({ joy: justBelow(MIN_STANDOUT_SCORE) }),
+      expected: [],
+    },
+    {
+      name: 'only first standout',
+      emotions: makeEmotionScores({
+        joy: MIN_STANDOUT_SCORE,
+      }),
+      expected: [{ name: 'joy', score: MIN_STANDOUT_SCORE }],
+    },
+    {
+      name: 'both standouts (second by score)',
+      emotions: makeEmotionScores({
+        joy: justAbove(MIN_STANDOUT_SCORE),
+        trust: MIN_STANDOUT_SCORE,
+      }),
+      expected: [
+        { name: 'joy', score: justAbove(MIN_STANDOUT_SCORE) },
+        {
+          name: 'trust',
+          score: MIN_STANDOUT_SCORE,
+        },
+      ],
+    },
+    {
+      name: 'second excluded (gap too large)',
+      emotions: makeEmotionScores({
+        joy: MIN_STANDOUT_SCORE,
+        trust: MIN_STANDOUT_SCORE - justAbove(RELATIVE_GAP),
+      }),
+      expected: [{ name: 'joy', score: MIN_STANDOUT_SCORE }],
+    },
+    {
+      name: 'second included (by gap)',
+      emotions: makeEmotionScores({
+        joy: MIN_STANDOUT_SCORE,
+        trust: MIN_STANDOUT_SCORE - justBelow(RELATIVE_GAP),
+      }),
+      expected: [
+        { name: 'joy', score: MIN_STANDOUT_SCORE },
+        { name: 'trust', score: MIN_STANDOUT_SCORE - justBelow(RELATIVE_GAP) },
+      ],
+    },
+    {
+      name: 'sorts by score descending',
+      emotions: makeEmotionScores({
+        joy: MIN_STANDOUT_SCORE,
+        trust: justAbove(MIN_STANDOUT_SCORE),
+      }),
+      expected: [
+        {
+          name: 'trust',
+          score: justAbove(MIN_STANDOUT_SCORE),
+        },
+        { name: 'joy', score: MIN_STANDOUT_SCORE },
+      ],
+    },
+    {
+      name: 'ties resolved by object key order',
+      emotions: makeEmotionScores({
+        joy: MIN_STANDOUT_SCORE,
+        trust: MIN_STANDOUT_SCORE,
+        anger: MIN_STANDOUT_SCORE,
+      }),
+      expected: [
+        { name: 'joy', score: MIN_STANDOUT_SCORE },
+        { name: 'trust', score: MIN_STANDOUT_SCORE },
+      ],
+    },
+  ];
 
-//   test.each(cases)('gives $emotions, wants $expected', (c) => {
-//     expect(pickStandoutsByScore(c.emotions)[0]).toStrictEqual(c.expected);
-//   });
-// });
+  test.each(cases)('$name', (c) => {
+    const standout = pickStandoutsByScore(c.emotions);
+    expect(standout).toStrictEqual(c.expected);
+  });
+});
