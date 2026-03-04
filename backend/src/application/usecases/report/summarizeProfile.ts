@@ -6,28 +6,28 @@ import type { AggregatedEmotionProfile } from '../../../domain/entities';
 type Standout = { name: keyof EmotionScores; score: number };
 
 export const MIN_STANDOUT_SCORE = 0.35;
-const MAX_STANDOUTS = 2;
-const REL_GAP = 0.06;
+const MAX_STANDOUT_COUNT = 2;
+const RELATIVE_GAP = 0.06;
 
 function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
   const sorted = (Object.entries(emotions) as [keyof EmotionScores, number][])
     .sort((a, b) => b[1] - a[1])
     .map(([name, score]) => ({ name, score }));
 
-  const first = sorted[0];
-  const second = sorted[1];
+  const [first, second] = sorted;
 
   const res: Standout[] = [];
-  if (first.score >= MIN_STANDOUT_SCORE) res.push(first);
+  if (first.score < MIN_STANDOUT_SCORE) return [];
+  else res.push(first);
 
   if (
     second.score >= MIN_STANDOUT_SCORE ||
-    first.score - second.score <= REL_GAP
+    first.score - second.score <= RELATIVE_GAP
   ) {
     res.push(second);
   }
 
-  return res.slice(0, MAX_STANDOUTS);
+  return res.slice(0, MAX_STANDOUT_COUNT);
 }
 
 /* evaluateTone */
