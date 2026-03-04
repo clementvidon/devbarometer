@@ -33,12 +33,12 @@ function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
 
 /* evaluateTone */
 
-type Tone = {
+export type Tone = {
   value: 'neutral' | 'positive' | 'negative' | 'polarized';
   strength?: 'very weak' | 'weak' | 'moderate' | 'strong' | 'very strong';
 };
 
-function getStrengthLabel(score: number): Tone['strength'] {
+export function getStrengthLabel(score: number): Tone['strength'] {
   return score < 0.2
     ? 'very weak'
     : score < 0.4
