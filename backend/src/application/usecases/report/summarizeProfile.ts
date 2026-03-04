@@ -8,7 +8,6 @@ type Standout = { name: keyof EmotionScores; score: number };
 export const MIN_STANDOUT = 0.35;
 const MAX_STANDOUTS = 2;
 const REL_GAP = 0.06;
-const EPS = 1e-6;
 
 function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
   const sorted = (Object.entries(emotions) as [keyof EmotionScores, number][])
@@ -19,12 +18,9 @@ function pickStandoutsByScore(emotions: EmotionScores): Standout[] {
   const second = sorted[1];
 
   const res: Standout[] = [];
-  if (first.score + EPS >= MIN_STANDOUT) res.push(first);
+  if (first.score >= MIN_STANDOUT) res.push(first);
 
-  if (
-    second.score + EPS >= MIN_STANDOUT ||
-    first.score - second.score <= REL_GAP
-  ) {
+  if (second.score >= MIN_STANDOUT || first.score - second.score <= REL_GAP) {
     res.push(second);
   }
 
