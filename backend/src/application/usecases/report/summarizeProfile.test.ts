@@ -1,7 +1,10 @@
 import type { EmotionScores } from '@devbarometer/shared';
 import { describe, expect, test } from 'vitest';
 import {
+  evaluateTone,
   getStrengthLabel,
+  MAX_DISTANCE_FOR_POLARIZED,
+  MIN_SCORE_FOR_POLARIZED,
   MIN_STANDOUT_SCORE,
   pickStandoutsByScore,
   RELATIVE_GAP,
@@ -13,10 +16,13 @@ const justBelow = (t: number) =>
 const justAbove = (t: number) =>
   t + 10 * Number.EPSILON * Math.max(1, Math.abs(t));
 
+const MAX_SCORE = 1;
+const MIN_SCORE = 0;
+
 describe(getStrengthLabel.name, () => {
   const cases = [
-    { score: -10, expected: 'very weak' },
-    { score: 10, expected: 'very strong' },
+    { score: MIN_SCORE, expected: 'very weak' },
+    { score: MAX_SCORE, expected: 'very strong' },
     { score: justBelow(0.2), expected: 'very weak' },
     { score: justBelow(0.4), expected: 'weak' },
     { score: justBelow(0.6), expected: 'moderate' },
@@ -49,19 +55,19 @@ function makeEmotionScores(
 describe(pickStandoutsByScore.name, () => {
   const cases = [
     {
-      name: 'no standouts',
+      testName: 'no standouts',
       emotions: makeEmotionScores({ joy: justBelow(MIN_STANDOUT_SCORE) }),
       expected: [],
     },
     {
-      name: 'only first standout',
+      testName: 'only first standout',
       emotions: makeEmotionScores({
         joy: MIN_STANDOUT_SCORE,
       }),
       expected: [{ name: 'joy', score: MIN_STANDOUT_SCORE }],
     },
     {
-      name: 'both standouts (second by score)',
+      testName: 'both standouts (second by score)',
       emotions: makeEmotionScores({
         joy: justAbove(MIN_STANDOUT_SCORE),
         trust: MIN_STANDOUT_SCORE,
@@ -75,7 +81,7 @@ describe(pickStandoutsByScore.name, () => {
       ],
     },
     {
-      name: 'second excluded (gap too large)',
+      testName: 'second excluded (gap too large)',
       emotions: makeEmotionScores({
         joy: MIN_STANDOUT_SCORE,
         trust: MIN_STANDOUT_SCORE - justAbove(RELATIVE_GAP),
@@ -83,7 +89,7 @@ describe(pickStandoutsByScore.name, () => {
       expected: [{ name: 'joy', score: MIN_STANDOUT_SCORE }],
     },
     {
-      name: 'second included (by gap)',
+      testName: 'second included (by gap)',
       emotions: makeEmotionScores({
         joy: MIN_STANDOUT_SCORE,
         trust: MIN_STANDOUT_SCORE - justBelow(RELATIVE_GAP),
@@ -94,7 +100,7 @@ describe(pickStandoutsByScore.name, () => {
       ],
     },
     {
-      name: 'sorts by score descending',
+      testName: 'sorts by score descending',
       emotions: makeEmotionScores({
         joy: MIN_STANDOUT_SCORE,
         trust: justAbove(MIN_STANDOUT_SCORE),
@@ -108,7 +114,7 @@ describe(pickStandoutsByScore.name, () => {
       ],
     },
     {
-      name: 'ties resolved by object key order',
+      testName: 'ties resolved by object key order',
       emotions: makeEmotionScores({
         joy: MIN_STANDOUT_SCORE,
         trust: MIN_STANDOUT_SCORE,
@@ -121,8 +127,65 @@ describe(pickStandoutsByScore.name, () => {
     },
   ];
 
-  test.each(cases)('$name', (c) => {
+  test.each(cases)('$testName', (c) => {
     const standout = pickStandoutsByScore(c.emotions);
     expect(standout).toStrictEqual(c.expected);
+  });
+});
+
+describe(evaluateTone.name, () => {
+  const cases = [
+    {
+      name: 'neutral: close but low',
+      posScore: justBelow(MIN_SCORE_FOR_POLARIZED),
+      negScore: justBelow(MIN_SCORE_FOR_POLARIZED),
+      expected: { value: 'neutral' },
+    },
+    {
+      name: 'polarized: close and too high for neutral (weak)',
+      posScore: MIN_SCORE_FOR_POLARIZED,
+      negScore: MIN_SCORE_FOR_POLARIZED,
+      expected: { value: 'polarized', strength: 'weak' },
+    },
+    {
+      name: 'polarized: close and very high',
+      posScore: MAX_SCORE,
+      negScore: MAX_SCORE,
+      expected: { value: 'polarized', strength: 'very strong' },
+    },
+    {
+      name: 'polarized: distance is just below max',
+      posScore: MAX_SCORE,
+      negScore: MAX_SCORE - justBelow(MAX_DISTANCE_FOR_POLARIZED),
+      expected: { value: 'polarized', strength: 'very strong' },
+    },
+    {
+      name: 'not polarized: distance is just above max',
+      posScore: MAX_SCORE,
+      negScore: MAX_SCORE - justAbove(MAX_DISTANCE_FOR_POLARIZED),
+      expected: { value: 'positive', strength: 'very weak' },
+    },
+    {
+      name: 'negative: distance just above max',
+      posScore: MAX_SCORE,
+      negScore: MAX_SCORE + justAbove(MAX_DISTANCE_FOR_POLARIZED),
+      expected: { value: 'negative', strength: 'very weak' },
+    },
+    {
+      name: 'positive: strength uses distance',
+      posScore: MIN_SCORE_FOR_POLARIZED,
+      negScore: -MAX_SCORE,
+      expected: { value: 'positive', strength: 'very strong' },
+    },
+    {
+      name: 'negative: large distance',
+      posScore: MIN_SCORE_FOR_POLARIZED,
+      negScore: MAX_SCORE,
+      expected: { value: 'negative', strength: 'strong' },
+    },
+  ];
+
+  test.each(cases)('$name', (c) => {
+    expect(evaluateTone(c.posScore, c.negScore)).toStrictEqual(c.expected);
   });
 });
