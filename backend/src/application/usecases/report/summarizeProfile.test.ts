@@ -17,42 +17,21 @@ const justAbove = (t: number) =>
   t + 10 * Number.EPSILON * Math.max(1, Math.abs(t));
 
 const MAX_SCORE = 1;
-const MIN_SCORE = 0;
-
-describe(getStrengthLabel.name, () => {
-  const cases = [
-    { score: MIN_SCORE, expected: 'very weak' },
-    { score: MAX_SCORE, expected: 'very strong' },
-    { score: justBelow(0.2), expected: 'very weak' },
-    { score: justBelow(0.4), expected: 'weak' },
-    { score: justBelow(0.6), expected: 'moderate' },
-    { score: justBelow(0.8), expected: 'strong' },
-    { score: 0.2, expected: 'weak' },
-    { score: 0.4, expected: 'moderate' },
-    { score: 0.6, expected: 'strong' },
-    { score: 0.8, expected: 'very strong' },
-  ] satisfies Array<{ score: number; expected: Tone['strength'] }>;
-
-  test.each(cases)('gives $score, wants $expected', (c) => {
-    expect(getStrengthLabel(c.score)).toBe(c.expected);
-  });
-});
-
-function makeEmotionScores(
-  overrides: Partial<EmotionScores> = {},
-): EmotionScores {
-  return {
-    joy: 0,
-    trust: 0,
-    anger: 0,
-    fear: 0,
-    sadness: 0,
-    disgust: 0,
-    ...overrides,
-  };
-}
 
 describe(pickStandoutsByScore.name, () => {
+  function makeEmotionScores(
+    overrides: Partial<EmotionScores> = {},
+  ): EmotionScores {
+    return {
+      joy: 0,
+      trust: 0,
+      anger: 0,
+      fear: 0,
+      sadness: 0,
+      disgust: 0,
+      ...overrides,
+    };
+  }
   const cases = [
     {
       testName: 'no standouts',
@@ -187,5 +166,25 @@ describe(evaluateTone.name, () => {
 
   test.each(cases)('$name', (c) => {
     expect(evaluateTone(c.posScore, c.negScore)).toStrictEqual(c.expected);
+  });
+});
+
+describe(getStrengthLabel.name, () => {
+  const MIN_SCORE = 0;
+  const cases = [
+    { score: MIN_SCORE, expected: 'very weak' },
+    { score: MAX_SCORE, expected: 'very strong' },
+    { score: justBelow(0.2), expected: 'very weak' },
+    { score: justBelow(0.4), expected: 'weak' },
+    { score: justBelow(0.6), expected: 'moderate' },
+    { score: justBelow(0.8), expected: 'strong' },
+    { score: 0.2, expected: 'weak' },
+    { score: 0.4, expected: 'moderate' },
+    { score: 0.6, expected: 'strong' },
+    { score: 0.8, expected: 'very strong' },
+  ] satisfies Array<{ score: number; expected: Tone['strength'] }>;
+
+  test.each(cases)('gives $score, wants $expected', (c) => {
+    expect(getStrengthLabel(c.score)).toBe(c.expected);
   });
 });
