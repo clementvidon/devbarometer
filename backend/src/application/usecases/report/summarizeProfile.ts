@@ -49,22 +49,22 @@ export function getStrengthLabel(score: number): Tone['strength'] {
           : 'very strong';
 }
 
-const MIN_LEVEL_FOR_POLARIZED = 0.3;
-const MAX_DISTANCE_FOR_POLARIZED = 0.06;
-const MAX_DISTANCE_FOR_NEUTRAL = MAX_DISTANCE_FOR_POLARIZED;
+export const MIN_SCORE_FOR_POLARIZED = 0.3;
+export const MAX_DISTANCE_FOR_POLARIZED = 0.06;
+export const MAX_DISTANCE_FOR_NEUTRAL = MAX_DISTANCE_FOR_POLARIZED;
 
-// Levels are independent intensities (not probabilities; they don't sum to 1).
+// Scores are independent intensities (not probabilities; they don't sum to 1).
 // "polarized" = both sides high and close to each other.
 
-export function evaluateTone(posLevel: number, negLevel: number): Tone {
-  const delta = posLevel - negLevel;
+export function evaluateTone(posScore: number, negScore: number): Tone {
+  const delta = posScore - negScore;
   const distance = Math.abs(delta);
-  const hi = Math.max(posLevel, negLevel);
-  const lo = Math.min(posLevel, negLevel);
+  const hi = Math.max(posScore, negScore);
+  const lo = Math.min(posScore, negScore);
 
   if (
-    hi > MIN_LEVEL_FOR_POLARIZED &&
-    lo > MIN_LEVEL_FOR_POLARIZED &&
+    hi > MIN_SCORE_FOR_POLARIZED &&
+    lo > MIN_SCORE_FOR_POLARIZED &&
     distance < MAX_DISTANCE_FOR_POLARIZED
   ) {
     return {
