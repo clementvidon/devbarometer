@@ -8,7 +8,7 @@ import {
   MIN_STANDOUT_SCORE,
   pickStandoutsByScore,
   RELATIVE_GAP,
-  type Tone,
+  type StrengthLabel,
 } from './summarizeProfile';
 
 const justBelow = (t: number) =>
@@ -182,7 +182,7 @@ describe(getStrengthLabel.name, () => {
     { score: 0.4, expected: 'moderate' },
     { score: 0.6, expected: 'strong' },
     { score: 0.8, expected: 'very strong' },
-  ] satisfies Array<{ score: number; expected: Tone['strength'] }>;
+  ] satisfies Array<{ score: number; expected: StrengthLabel }>;
 
   test.each(cases)('gives $score, wants $expected', (c) => {
     expect(getStrengthLabel(c.score)).toBe(c.expected);
