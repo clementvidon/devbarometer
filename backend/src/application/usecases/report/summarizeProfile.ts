@@ -63,15 +63,15 @@ export function evaluateTone(posScore: number, negScore: number): Tone {
   const lo = Math.min(posScore, negScore);
 
   if (
-    hi > MIN_SCORE_FOR_POLARIZED &&
-    lo > MIN_SCORE_FOR_POLARIZED &&
-    distance < MAX_DISTANCE_FOR_POLARIZED
+    hi >= MIN_SCORE_FOR_POLARIZED &&
+    lo >= MIN_SCORE_FOR_POLARIZED &&
+    distance <= MAX_DISTANCE_FOR_POLARIZED
   ) {
     return {
       value: 'polarized',
       strength: getStrengthLabel(hi),
     };
-  } else if (distance < MAX_DISTANCE_FOR_NEUTRAL) {
+  } else if (distance <= MAX_DISTANCE_FOR_NEUTRAL) {
     return { value: 'neutral' };
   } else {
     return {
