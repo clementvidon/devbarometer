@@ -60,10 +60,9 @@ export async function createProfiles(
           llm.run(model, makeProfileMessages(item, tonalityPrompt), runOpts),
         ]);
 
-        const emotions = parseEmotion(rawEmotion);
-        const tonalities = parseTonality(rawTonality);
-        const hasFailed =
-          emotions === FALLBACK_EMOTIONS || tonalities === FALLBACK_TONALITIES;
+        const emotionsRes = parseEmotion(rawEmotion);
+        const tonalitiesRes = parseTonality(rawTonality);
+        const hasFailed = !emotionsRes.ok || !tonalitiesRes.ok;
 
         if (hasFailed) {
           logger.warn('LLM fallback', {
@@ -76,8 +75,8 @@ export async function createProfiles(
           title: item.title,
           source: item.source,
           weight: hasFailed ? 0 : item.weight,
-          emotions,
-          tonalities,
+          emotions: emotionsRes.value,
+          tonalities: tonalitiesRes.value,
         };
       } catch (err) {
         logger.error('LLM error', {

@@ -1,26 +1,67 @@
 import { describe, expect, test, vi, type Mocked } from 'vitest';
 
 vi.mock('./parseEmotion', () => ({
-  parseEmotion: vi.fn((raw) => {
-    return raw === LlmOutput.VALID
-      ? { ...FALLBACK_EMOTIONS, joy: 0.42 }
-      : FALLBACK_EMOTIONS;
-  }),
+  parseEmotion: vi.fn((raw: string) =>
+    raw === 'valid'
+      ? {
+          ok: true,
+          value: {
+            joy: 0.42,
+            trust: 0,
+            anger: 0,
+            fear: 0,
+            sadness: 0,
+            disgust: 0,
+          },
+        }
+      : {
+          ok: false,
+          reason: 'invalid_schema',
+          value: {
+            joy: 0,
+            trust: 0,
+            anger: 0,
+            fear: 0,
+            sadness: 0,
+            disgust: 0,
+          },
+        },
+  ),
 }));
 
 vi.mock('./parseTonality', () => ({
-  parseTonality: vi.fn((raw) => {
-    return raw === LlmOutput.VALID
-      ? { ...FALLBACK_TONALITIES, positive: 0.42 }
-      : FALLBACK_TONALITIES;
-  }),
+  parseTonality: vi.fn((raw: string) =>
+    raw === 'valid'
+      ? {
+          ok: true,
+          value: {
+            positive: 0.42,
+            negative: 0,
+            positive_surprise: 0,
+            negative_surprise: 0,
+            optimistic_anticipation: 0,
+            pessimistic_anticipation: 0,
+          },
+        }
+      : {
+          ok: false,
+          reason: 'invalid_schema',
+          value: {
+            positive: 0,
+            negative: 0,
+            positive_surprise: 0,
+            negative_surprise: 0,
+            optimistic_anticipation: 0,
+            pessimistic_anticipation: 0,
+          },
+        },
+  ),
 }));
 
 import type { WeightedItem } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { createProfiles } from './createProfiles';
-import { FALLBACK_EMOTIONS, FALLBACK_TONALITIES } from './policy';
 
 function makeWeightedItem(overrides: Partial<WeightedItem> = {}): WeightedItem {
   return {
@@ -73,9 +114,9 @@ describe(createProfiles.name, () => {
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
     result.forEach((profile) => {
-      expect(profile.emotions.joy).toBe(0.42);
-      expect(profile.tonalities.positive).toBe(0.42);
-      expect(profile.weight).toBe(1);
+      expect(profile.emotions.joy).toStrictEqual(0.42);
+      expect(profile.tonalities.positive).toStrictEqual(0.42);
+      expect(profile.weight).toStrictEqual(1);
     });
   });
   test('returns fallback when parsing fails', async () => {
@@ -88,9 +129,9 @@ describe(createProfiles.name, () => {
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
     result.forEach((profile) => {
-      expect(profile.emotions.joy).toBe(0);
-      expect(profile.tonalities.positive).toBe(0);
-      expect(profile.weight).toBe(0);
+      expect(profile.emotions.joy).toStrictEqual(0);
+      expect(profile.tonalities.positive).toStrictEqual(0);
+      expect(profile.weight).toStrictEqual(0);
     });
   });
   test('returns empty array if input is empty', async () => {
@@ -115,9 +156,9 @@ describe(createProfiles.name, () => {
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
     result.forEach((profile) => {
-      expect(profile.emotions.joy).toBe(0);
-      expect(profile.tonalities.positive).toBe(0);
-      expect(profile.weight).toBe(0);
+      expect(profile.emotions.joy).toStrictEqual(0);
+      expect(profile.tonalities.positive).toStrictEqual(0);
+      expect(profile.weight).toStrictEqual(0);
     });
   });
 });
