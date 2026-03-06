@@ -107,7 +107,7 @@ export function evaluateTone(
 type TonalityScoreKey = keyof TonalityScores;
 type TonalityAxisFields = { pos: TonalityScoreKey; neg: TonalityScoreKey };
 
-const TONALITY_AXES = {
+export const TONALITY_AXES = {
   polarity: { pos: 'positive', neg: 'negative' },
   anticipation: {
     pos: 'optimistic_anticipation',
