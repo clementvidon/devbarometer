@@ -31,64 +31,56 @@ import { aggregateProfiles } from './aggregateProfiles';
  * - weight >= 0
  */
 
-type EmotionProfileOverrides = {
-  title: string;
-  source: string;
-  weight: number;
-  emotions: Partial<EmotionScores>;
-  tonalities: Partial<TonalityScores>;
-};
-
-function makeEmotionProfile(
-  overrides: Partial<EmotionProfileOverrides> = {},
-): EmotionProfile {
-  const defaults: EmotionProfile = {
-    title: 'title',
-    source: 'source',
-    weight: 0,
-    emotions: {
-      joy: 1,
-      trust: 1,
-      anger: 1,
-      fear: 1,
-      sadness: 1,
-      disgust: 1,
-    },
-    tonalities: {
+describe('aggregateProfiles', () => {
+  function makeEmotionScores(
+    overrides: Partial<EmotionScores> = {},
+  ): EmotionScores {
+    return {
+      joy: 0,
+      trust: 0,
+      anger: 0,
+      fear: 0,
+      sadness: 0,
+      disgust: 0,
+      ...overrides,
+    };
+  }
+  function makeTonalityScores(
+    overrides: Partial<TonalityScores> = {},
+  ): TonalityScores {
+    return {
       positive: 1,
       negative: 1,
       positive_surprise: 1,
       negative_surprise: 1,
       optimistic_anticipation: 1,
       pessimistic_anticipation: 1,
-    },
-  };
-  return {
-    ...defaults,
-    ...overrides,
-    emotions: {
-      ...defaults.emotions,
-      ...overrides.emotions,
-    },
-    tonalities: {
-      ...defaults.tonalities,
-      ...overrides.tonalities,
-    },
-  };
-}
-
-describe('aggregateProfiles', () => {
+      ...overrides,
+    };
+  }
+  function makeEmotionProfile(
+    overrides: Partial<EmotionProfile> = {},
+  ): EmotionProfile {
+    return {
+      title: 'title',
+      source: 'source',
+      weight: 0,
+      emotions: makeEmotionScores(),
+      tonalities: makeTonalityScores(),
+      ...overrides,
+    };
+  }
   test('aggregate a list of emotion profiles whose total weight is > 0', () => {
     const profiles: EmotionProfile[] = [
       makeEmotionProfile({
         weight: 3,
-        emotions: { joy: 0 },
-        tonalities: { positive_surprise: 0.5 },
+        emotions: makeEmotionScores({ joy: 0 }),
+        tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
       }),
       makeEmotionProfile({
         weight: 1,
-        emotions: { joy: 1 },
-        tonalities: { positive_surprise: 0.5 },
+        emotions: makeEmotionScores({ joy: 1 }),
+        tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
       }),
     ];
 
@@ -103,13 +95,13 @@ describe('aggregateProfiles', () => {
     const profiles: EmotionProfile[] = [
       makeEmotionProfile({
         weight: 0,
-        emotions: { joy: 0 },
-        tonalities: { positive_surprise: 0.5 },
+        emotions: makeEmotionScores({ joy: 0 }),
+        tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
       }),
       makeEmotionProfile({
         weight: 0,
-        emotions: { joy: 1 },
-        tonalities: { positive_surprise: 0.5 },
+        emotions: makeEmotionScores({ joy: 1 }),
+        tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
       }),
     ];
 
