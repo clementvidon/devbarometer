@@ -25,31 +25,43 @@ function makeTonalityScores(
  */
 
 describe(parseTonality.name, () => {
-  test('return fallback if raw does not parse to JSON', () => {
-    expect(parseTonality('{ wrong }')).toBe(FALLBACK_TONALITIES);
+  test('returns FALLBACK on invalid JSON', () => {
+    expect(parseTonality('{ wrong }')).toMatchObject({
+      ok: false,
+      reason: 'invalid_json',
+      value: FALLBACK_TONALITIES,
+    });
   });
-  test('return fallback if raw does not parse to TonalityScores', () => {
-    expect(parseTonality('{ "wrong": true }')).toBe(FALLBACK_TONALITIES);
+  test('returns FALLBACK on invalid schema', () => {
+    expect(parseTonality('{ "wrong": true }')).toMatchObject({
+      ok: false,
+      reason: 'invalid_schema',
+      value: FALLBACK_TONALITIES,
+    });
   });
-  test('return raw as an TonalityScores if it is valid, with code-fences', () => {
+  test('returns raw if valid (with code-fences)', () => {
     const obj = makeTonalityScores({ positive: 0.42 });
     const raw = '```\n' + JSON.stringify(obj) + '\n```';
 
-    const result = parseTonality(raw);
-
-    expect(result).toStrictEqual(obj);
-    expect(result).not.toStrictEqual(FALLBACK_TONALITIES);
+    expect(parseTonality(raw)).toMatchObject({
+      ok: true,
+      value: obj,
+    });
   });
-  test('return raw as an TonalityScores if it is valid, without code-fences', () => {
+  test('returns raw if valid (with no code-fences)', () => {
     const obj = makeTonalityScores({ negative: 0.24 });
     const raw = JSON.stringify(obj);
 
-    const result = parseTonality(raw);
-
-    expect(result).toStrictEqual(obj);
-    expect(result).not.toStrictEqual(FALLBACK_TONALITIES);
+    expect(parseTonality(raw)).toMatchObject({
+      ok: true,
+      value: obj,
+    });
   });
-  test('return fallback for empty string', () => {
-    expect(parseTonality('')).toBe(FALLBACK_TONALITIES);
+  test('returns FALLBACK on empty string', () => {
+    expect(parseTonality('')).toMatchObject({
+      ok: false,
+      reason: 'invalid_json',
+      value: FALLBACK_TONALITIES,
+    });
   });
 });

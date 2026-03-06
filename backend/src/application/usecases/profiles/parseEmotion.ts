@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { EmotionScores } from '../../../domain/entities';
+import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 import { FALLBACK_EMOTIONS } from './policy';
 
@@ -12,13 +13,16 @@ const EmotionSchema = z.object({
   disgust: z.number().min(0).max(1),
 });
 
-export function parseEmotion(raw: string): EmotionScores {
+export function parseEmotion(raw: string): ParseResult<EmotionScores> {
+  const cleaned = stripCodeFences(raw);
+  let json: unknown;
   try {
-    const cleaned = stripCodeFences(raw);
-    const json: unknown = JSON.parse(cleaned);
-    const parsed = EmotionSchema.safeParse(json);
-    return parsed.success ? parsed.data : FALLBACK_EMOTIONS;
+    json = JSON.parse(cleaned);
   } catch {
-    return FALLBACK_EMOTIONS;
+    return fail(FALLBACK_EMOTIONS, 'invalid_json');
   }
+  const parsed = EmotionSchema.safeParse(json);
+  return parsed.success
+    ? ok(parsed.data)
+    : fail(FALLBACK_EMOTIONS, 'invalid_schema');
 }

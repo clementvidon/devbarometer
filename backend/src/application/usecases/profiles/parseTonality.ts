@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { TonalityScores } from '../../../domain/entities';
+import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 import { FALLBACK_TONALITIES } from './policy';
 
@@ -12,13 +13,16 @@ const TonalitySchema = z.object({
   pessimistic_anticipation: z.number().min(0).max(1),
 });
 
-export function parseTonality(raw: string): TonalityScores {
+export function parseTonality(raw: string): ParseResult<TonalityScores> {
+  const cleaned = stripCodeFences(raw);
+  let json: unknown;
   try {
-    const cleaned = stripCodeFences(raw);
-    const json: unknown = JSON.parse(cleaned);
-    const parsed = TonalitySchema.safeParse(json);
-    return parsed.success ? parsed.data : FALLBACK_TONALITIES;
+    json = JSON.parse(cleaned);
   } catch {
-    return FALLBACK_TONALITIES;
+    return fail(FALLBACK_TONALITIES, 'invalid_json');
   }
+  const parsed = TonalitySchema.safeParse(json);
+  return parsed.success
+    ? ok(parsed.data)
+    : fail(FALLBACK_TONALITIES, 'invalid_schema');
 }

@@ -1,5 +1,5 @@
-import type { EmotionScores } from '@devbarometer/shared';
 import { describe, expect, test } from 'vitest';
+import type { EmotionScores } from '../../../domain/entities';
 import { parseEmotion } from './parseEmotion';
 import { FALLBACK_EMOTIONS } from './policy';
 
@@ -25,31 +25,43 @@ function makeEmotionScores(
  */
 
 describe(parseEmotion.name, () => {
-  test('return fallback if raw does not parse to JSON', () => {
-    expect(parseEmotion('{ wrong }')).toBe(FALLBACK_EMOTIONS);
+  test('returns FALLBACK on invalid JSON', () => {
+    expect(parseEmotion('{ wrong }')).toMatchObject({
+      ok: false,
+      reason: 'invalid_json',
+      value: FALLBACK_EMOTIONS,
+    });
   });
-  test('return fallback if raw does not parse to EmotionScores', () => {
-    expect(parseEmotion('{ "wrong": true }')).toBe(FALLBACK_EMOTIONS);
+  test('returns FALLBACK on invalid schema', () => {
+    expect(parseEmotion('{ "wrong": true }')).toMatchObject({
+      ok: false,
+      reason: 'invalid_schema',
+      value: FALLBACK_EMOTIONS,
+    });
   });
-  test('return raw as an EmotionScores if it is valid, with code-fences', () => {
+  test('returns raw if valid (with code-fences)', () => {
     const obj = makeEmotionScores({ trust: 0.42 });
     const raw = '```\n' + JSON.stringify(obj) + '\n```';
 
-    const result = parseEmotion(raw);
-
-    expect(result).toStrictEqual(obj);
-    expect(result).not.toStrictEqual(FALLBACK_EMOTIONS);
+    expect(parseEmotion(raw)).toMatchObject({
+      ok: true,
+      value: obj,
+    });
   });
-  test('return raw as an EmotionScores if it is valid, without code-fences', () => {
+  test('returns raw if valid (with no code-fences)', () => {
     const obj = makeEmotionScores({ fear: 0.24 });
     const raw = JSON.stringify(obj);
 
-    const result = parseEmotion(raw);
-
-    expect(result).toStrictEqual(obj);
-    expect(result).not.toStrictEqual(FALLBACK_EMOTIONS);
+    expect(parseEmotion(raw)).toMatchObject({
+      ok: true,
+      value: obj,
+    });
   });
-  test('return fallback for empty string', () => {
-    expect(parseEmotion('')).toBe(FALLBACK_EMOTIONS);
+  test('returns FALLBACK on empty string', () => {
+    expect(parseEmotion('')).toMatchObject({
+      ok: false,
+      reason: 'invalid_json',
+      value: FALLBACK_EMOTIONS,
+    });
   });
 });
