@@ -60,7 +60,7 @@ function makeItem(overrides: Partial<Item> = {}): Item {
   };
 }
 
-describe('isRelevant', () => {
+describe(isRelevant.name, () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });

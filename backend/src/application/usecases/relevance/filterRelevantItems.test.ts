@@ -65,7 +65,7 @@ function makeLogger(): Mocked<LoggerPort> {
   };
 }
 
-describe('filterRelevantItems', () => {
+describe(filterRelevantItems.name, () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

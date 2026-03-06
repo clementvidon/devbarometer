@@ -23,7 +23,7 @@ import { parseRelevance } from './parseRelevance';
  * - always return a boolean
  */
 
-describe('parseRelevance', () => {
+describe(parseRelevance.name, () => {
   test('return false if raw does not parse to JSON', () => {
     expect(parseRelevance('{ wrong }')).toBe(false);
   });

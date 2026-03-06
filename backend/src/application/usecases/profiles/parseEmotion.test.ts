@@ -36,7 +36,7 @@ function makeEmotionScores(
   };
 }
 
-describe('parseEmotion', () => {
+describe(parseEmotion.name, () => {
   test('return fallback if raw does not parse to JSON', () => {
     expect(parseEmotion('{ wrong }')).toBe(FALLBACK_EMOTIONS);
   });

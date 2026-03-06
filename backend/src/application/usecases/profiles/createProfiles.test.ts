@@ -82,7 +82,7 @@ function makeLogger(): Mocked<LoggerPort> {
   };
 }
 
-describe('createProfiles', () => {
+describe(createProfiles.name, () => {
   test('turn a list of items into emotion profiles', async () => {
     const logger = makeLogger();
     const llm = makeLlm(LlmOutput.VALID);

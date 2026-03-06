@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
 
-describe('App', () => {
+describe(App.name, () => {
   beforeEach(() => {
     global.fetch = vi.fn(() =>
       Promise.resolve({

@@ -108,7 +108,7 @@ function makePersistence(): PersistencePort {
   return persistence;
 }
 
-describe('getLastRelevantItemsBefore', () => {
+describe(getLastRelevantItemsBefore.name, () => {
   test('returns relevant items from the closest snapshot before the given date', async () => {
     const createdAtISO = '2026-02-03';
     const persistence = makePersistence();

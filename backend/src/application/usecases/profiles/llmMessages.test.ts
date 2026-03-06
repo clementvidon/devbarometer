@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import type { WeightedItem } from '../../../domain/entities';
 import { makeProfileMessages } from './llmMessages';
 
-describe('makeProfileMessages', () => {
+describe(makeProfileMessages.name, () => {
   test('creates a system and user message for the emotion profile creation', () => {
     const weightedItem = {
       title: 'my-title',

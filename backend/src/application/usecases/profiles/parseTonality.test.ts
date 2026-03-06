@@ -36,7 +36,7 @@ function makeTonalityScores(
   };
 }
 
-describe('parseTonality', () => {
+describe(parseTonality.name, () => {
   test('return fallback if raw does not parse to JSON', () => {
     expect(parseTonality('{ wrong }')).toBe(FALLBACK_TONALITIES);
   });

@@ -58,7 +58,7 @@ function makeLoggerDouble(): LoggerDouble {
   return { logger, childLogger };
 }
 
-describe('withSpan', () => {
+describe(withSpan.name, () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });

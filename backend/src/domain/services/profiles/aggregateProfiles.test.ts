@@ -31,7 +31,7 @@ import { aggregateProfiles } from './aggregateProfiles';
  * - weight >= 0
  */
 
-describe('aggregateProfiles', () => {
+describe(aggregateProfiles.name, () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
   ): EmotionScores {

@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'vitest';
 import { stripCodeFences } from './stripCodeFences';
 
-describe('stripCodeFences', () => {
+describe(stripCodeFences.name, () => {
   test('removes code fence lines', () => {
     expect(stripCodeFences('```\ncode\n```')).toBe('code');
   });

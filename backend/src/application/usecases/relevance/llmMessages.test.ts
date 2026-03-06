@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 import type { Item } from '../../../domain/entities';
 import { makeRelevanceMessages } from './llmMessages';
 
-describe('makeRelevanceMessages', () => {
+describe(makeRelevanceMessages.name, () => {
   test('creates a system and user message for the relevance filter', () => {
     const item = {
       title: 'my-title',
