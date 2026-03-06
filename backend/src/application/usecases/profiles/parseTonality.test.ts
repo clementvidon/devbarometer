@@ -4,22 +4,10 @@ import { parseTonality } from './parseTonality';
 import { FALLBACK_TONALITIES } from './policy';
 
 /**
- * Spec: Parse tonality LLM output
- *
- * Inputs:
- * - a raw string
- *
- * Output:
- * - an object: TonalityScores if valid, otherwise a FALLBACK_TONALITIES
- *
- * Behavior:
- * - validate parsed JSON against TonalityScores
- * - if validation succeeds, return the TonalityScores object
- * - if JSON parsing fails, return the FALLBACK_TONALITIES object
- * - if schema validation fails, return FALLBACK_TONALITIES
- *
- * Invariants:
- * - always return a TonalityScores object
+ * Spec: Parse tonality scores from an LLM raw string.
+ * - Accepts JSON with or without ``` fences.
+ * - Returns validated TonalityScores, otherwise FALLBACK_TONALITIES.
+ * - Never throws.
  */
 
 function makeTonalityScores(

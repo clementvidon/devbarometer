@@ -4,22 +4,10 @@ import { parseEmotion } from './parseEmotion';
 import { FALLBACK_EMOTIONS } from './policy';
 
 /**
- * Spec: Parse emotion LLM output
- *
- * Inputs:
- * - a raw string
- *
- * Output:
- * - an object: EmotionScores if valid, otherwise a FALLBACK_EMOTIONS
- *
- * Behavior:
- * - validate parsed JSON against EmotionScores
- * - if validation succeeds, return the EmotionScores object
- * - if JSON parsing fails, return the FALLBACK_EMOTIONS object
- * - if schema validation fails, return FALLBACK_EMOTIONS
- *
- * Invariants:
- * - always return a EmotionScores object
+ * Spec: Parse emotion scores from an LLM raw string.
+ * - Accepts JSON with or without ``` fences.
+ * - Returns validated EmotionScores, otherwise FALLBACK_EMOTIONS.
+ * - Never throws.
  */
 
 function makeEmotionScores(

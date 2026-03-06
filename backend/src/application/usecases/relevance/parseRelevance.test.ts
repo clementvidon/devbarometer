@@ -2,25 +2,10 @@ import { describe, expect, test } from 'vitest';
 import { parseRelevance } from './parseRelevance';
 
 /**
- * Spec: Parse relevance LLM output
- *
- * Inputs:
- * - a raw string
- *
- * Output:
- * - true only if raw contains valid JSON matching RelevanceSchema with relevant: true
- * - otherwise false
- *
- * Behavior:
- * - remove code-fences from the raw string
- * - parse cleaned string as JSON
- * - validate parsed JSON against RelevanceSchema
- * - if validation succeeds, return the value of relevant
- * - if JSON parsing fails, return false
- * - if schema validation fails, return false
- *
- * Invariants:
- * - always return a boolean
+ * Spec: Parse relevance from an LLM raw string.
+ * - Accepts JSON with or without ``` fences.
+ * - Returns true only for `{ relevant: true }`, otherwise false.
+ * - Never throws.
  */
 
 describe(parseRelevance.name, () => {
