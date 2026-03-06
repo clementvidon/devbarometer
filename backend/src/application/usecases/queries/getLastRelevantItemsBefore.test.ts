@@ -4,34 +4,6 @@ import type { PipelineSnapshot } from '../../../domain/value-objects/PipelineSna
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 import { getLastRelevantItemsBefore } from './getLastRelevantItemsBefore';
 
-/**
- * Spec: Returns relevant items from the closest snapshot strictly before a given date.
- *
- * Inputs:
- * - a reference ISO date (string)
- * - a persistence port providing snapshots
- *
- * Output:
- * - RelevantItem[] from the most recent snapshot with createdAt < reference date
- * - [] if no such snapshot exists
- *
- * Side effects:
- * - reads snapshots from persistence
- *
- * Throws:
- * - if snapshot retrieval fails
- *
- * Behavior:
- * - fetches all snapshots from persistence
- * - ignores snapshots with createdAt >= reference date
- * - selects the snapshot with the greatest createdAt strictly before the reference date
- * - returns its relevantItems
- *
- * Invariants:
- * - always return an array
- * - selection is strictly before (not equal)
- */
-
 function makeRelevantItem(overrides: Partial<RelevantItem> = {}): RelevantItem {
   return {
     source: 'source',
@@ -107,6 +79,12 @@ function makePersistence(): PersistencePort {
   };
   return persistence;
 }
+
+/**
+ * Spec: Return relevant items from the closest snapshot strictly before a reference date.
+ * - Selects the snapshot with the greatest `createdAt` such that `createdAt < referenceDate`.
+ * - Returns that snapshot’s `relevantItems`, or `[]` if no snapshot matches.
+ */
 
 describe(getLastRelevantItemsBefore.name, () => {
   test('returns relevant items from the closest snapshot before the given date', async () => {

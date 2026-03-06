@@ -2,9 +2,9 @@ import { describe, expect, test } from 'vitest';
 import { parseRelevance } from './parseRelevance';
 
 /**
- * Spec: Parse relevance from an LLM raw string.
+ * Spec: Parse relevance from LLM output.
  * - Accepts JSON with or without ``` fences.
- * - Returns true only for `{ relevant: true }`, otherwise false.
+ * - Returns true only for valid `{ relevant: true }`, otherwise false.
  * - Never throws.
  */
 

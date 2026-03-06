@@ -5,35 +5,6 @@ import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { isRelevant } from './isRelevant';
 import { DEFAULT_RELEVANCE_ON_ERROR } from './policy';
 
-/**
- * Spec: Determine whether a given item is relevant
- *
- * Inputs:
- * - a logger
- * - an item
- * - a LLM provider
- * - a set of options for the LLM
- *  - a prompt
- *  - an LLM model
- *  - LLM run options
- *
- * Output:
- * - the promise of a boolean answer:
- *  - true if the LLM judged the item as relevant
- *  - false if the LLM judged the item as irrelevant
- *  - DEFAULT_RELEVANCE_ON_ERROR if an error occurs
- *
- * Side effects:
- * - triggers LLM calls
- * - uses the provided logger
- *
- * Behavior:
- * - builds LLM messages
- * - calls LLM with messages and options
- * - parses the raw LLM response
- * - returns DEFAULT_RELEVANCE_ON_ERROR if an error occurs
- */
-
 function makeLogger(): Mocked<LoggerPort> {
   return {
     debug: vi.fn(),
@@ -59,6 +30,13 @@ function makeItem(overrides: Partial<Item> = {}): Item {
     ...overrides,
   };
 }
+
+/**
+ * Spec: Determine whether a given item is relevant using the LLM.
+ * - Calls the LLM once with the configured model/prompt/run options.
+ * - Returns the parsed relevance boolean on success.
+ * - Returns DEFAULT_RELEVANCE_ON_ERROR if the LLM call fails.
+ */
 
 describe(isRelevant.name, () => {
   afterEach(() => {

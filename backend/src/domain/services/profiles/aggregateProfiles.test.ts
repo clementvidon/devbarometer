@@ -7,28 +7,11 @@ import type {
 import { aggregateProfiles } from './aggregateProfiles';
 
 /**
- * Spec: Aggregate a list of emotion profiles into a single averaged profile
- *
- * Inputs:
- * - a list of emotion profiles
- *
- * Output:
- * - an aggregated emotion profile containing:
- *  - the number of profiles it aggregated
- *  - the average emotions and tonalities
- *  - the total weight across all profiles
- *
- * Throws:
- * - if input is empty
- *
- * Behavior:
- * - compute total weight of all input profiles
- * - compute weighted average emotions
- * - compute weighted average tonalities
- * - return the aggregate emotion profile
- *
- * Invariants:
- * - weight >= 0
+ * Spec: Aggregate a list of emotion profiles into a weighted-average aggregated profile.
+ * - Computes `count` and `totalWeight`.
+ * - Computes weighted averages for emotions and tonalities when `totalWeight > 0`.
+ * - Returns all-zero scores when `totalWeight === 0`.
+ * - Throws on empty input.
  */
 
 describe(aggregateProfiles.name, () => {

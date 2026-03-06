@@ -3,13 +3,6 @@ import { describe, expect, test } from 'vitest';
 import { parseTonality } from './parseTonality';
 import { FALLBACK_TONALITIES } from './policy';
 
-/**
- * Spec: Parse tonality scores from an LLM raw string.
- * - Accepts JSON with or without ``` fences.
- * - Returns validated TonalityScores, otherwise FALLBACK_TONALITIES.
- * - Never throws.
- */
-
 function makeTonalityScores(
   overrides: Partial<TonalityScores> = {},
 ): TonalityScores {
@@ -23,6 +16,13 @@ function makeTonalityScores(
     ...overrides,
   };
 }
+
+/**
+ * Spec: Parse TonalityScores from LLM output.
+ * - Accepts JSON with or without ``` fences.
+ * - Returns validated TonalityScores, otherwise FALLBACK_TONALITIES.
+ * - Never throws.
+ */
 
 describe(parseTonality.name, () => {
   test('return fallback if raw does not parse to JSON', () => {

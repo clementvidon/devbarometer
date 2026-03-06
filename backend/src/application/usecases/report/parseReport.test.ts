@@ -3,13 +3,6 @@ import type { Report } from '../../../domain/entities';
 import { parseReport } from './parseReport';
 import { FALLBACK_REPORT } from './policy';
 
-/**
- * Spec: Parse report from an LLM raw string.
- * - Accepts JSON with or without ``` fences.
- * - Returns validated Report, otherwise FALLBACK_REPORT.
- * - Never throws.
- */
-
 function makeReport(overrides: Partial<Report> = {}): Report {
   return {
     text: 'text',
@@ -17,6 +10,13 @@ function makeReport(overrides: Partial<Report> = {}): Report {
     ...overrides,
   };
 }
+
+/**
+ * Spec: Parse Report from LLM output.
+ * - Accepts JSON with or without ``` fences.
+ * - Returns a validated Report, otherwise FALLBACK_REPORT.
+ * - Never throws.
+ */
 
 describe(parseReport.name, () => {
   test('return fallback if raw does not parse to JSON', () => {

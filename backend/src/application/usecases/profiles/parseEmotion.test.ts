@@ -3,13 +3,6 @@ import { describe, expect, test } from 'vitest';
 import { parseEmotion } from './parseEmotion';
 import { FALLBACK_EMOTIONS } from './policy';
 
-/**
- * Spec: Parse emotion scores from an LLM raw string.
- * - Accepts JSON with or without ``` fences.
- * - Returns validated EmotionScores, otherwise FALLBACK_EMOTIONS.
- * - Never throws.
- */
-
 function makeEmotionScores(
   overrides: Partial<EmotionScores> = {},
 ): EmotionScores {
@@ -23,6 +16,13 @@ function makeEmotionScores(
     ...overrides,
   };
 }
+
+/**
+ * Spec: Parse EmotionScores from LLM output.
+ * - Accepts JSON with or without ``` fences.
+ * - Returns validated EmotionScores, otherwise FALLBACK_EMOTIONS.
+ * - Never throws.
+ */
 
 describe(parseEmotion.name, () => {
   test('return fallback if raw does not parse to JSON', () => {

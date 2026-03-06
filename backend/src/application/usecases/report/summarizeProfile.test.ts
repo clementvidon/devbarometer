@@ -16,30 +16,20 @@ import {
   type StrengthLabel,
 } from './summarizeProfile';
 
-/**
- * Spec: Summarize the given aggregated emotion profile
- *
- * Inputs:
- * - an aggregated emotion profile (emotions + tonalities scores)
- *
- * Output:
- * - an EmotionProfileSummary where:
- *  - emotionsStrength: each emotion score mapped to a StrengthLabel
- *  - standoutEmotions: selected standouts mapped to StrengthLabel (order preserved)
- *  - tonalitiesStrength: polarity/anticipation/surprise mapped to { value, strength? }
- *
- * Behavior:
- * - turns each emotion score into a StrengthLabel
- * - evaluates the 3 tonalities (polarity, anticipation, surprise) into labeled tonalities
- * - picks standout emotions by score and turns their scores into StrengthLabels
- */
-
 const justBelow = (t: number) =>
   t - 10 * Number.EPSILON * Math.max(1, Math.abs(t));
 const justAbove = (t: number) =>
   t + 10 * Number.EPSILON * Math.max(1, Math.abs(t));
 
 const MAX_SCORE = 1;
+
+/**
+ * Spec: Summarize an aggregated emotion profile into labels usable by the report prompt.
+ * - Maps each emotion score to a StrengthLabel.
+ * - Computes labeled tonalities (polarity/anticipation/surprise) via TONALITY_AXES.
+ * - Selects standout emotions and maps their scores to StrengthLabels.
+ * - Returns empty `standoutEmotions` when no standout exists.
+ */
 
 describe(summarizeProfile.name, () => {
   function makeEmotionScores(
@@ -145,6 +135,13 @@ describe(summarizeProfile.name, () => {
   });
 });
 
+/**
+ * Spec: Select up to MAX_STANDOUT_COUNT standout emotions by score.
+ * - Returns [] if top score < MIN_STANDOUT_SCORE.
+ * - Includes 2nd if it meets MIN_STANDOUT_SCORE or is within RELATIVE_GAP of the 1st.
+ * - Results are sorted by score (ties follow object key order).
+ */
+
 describe(pickStandoutsByScore.name, () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
@@ -239,6 +236,13 @@ describe(pickStandoutsByScore.name, () => {
   });
 });
 
+/**
+ * Spec: Classify tone from positive/negative intensity scores.
+ * - Returns polarized when both sides are high and close (strength based on hi).
+ * - Returns neutral when scores are close (no strength).
+ * - Otherwise returns positive/negative (strength based on distance).
+ */
+
 describe(evaluateTone.name, () => {
   const cases = [
     {
@@ -295,6 +299,10 @@ describe(evaluateTone.name, () => {
     expect(evaluateTone(c.posScore, c.negScore)).toStrictEqual(c.expected);
   });
 });
+
+/**
+ * Spec: Map a numeric score to a StrengthLabel using fixed thresholds.
+ */
 
 describe(getStrengthLabel.name, () => {
   const MIN_SCORE = 0;

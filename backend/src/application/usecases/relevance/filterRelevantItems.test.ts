@@ -12,33 +12,6 @@ import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { filterRelevantItems } from './filterRelevantItems';
 import { isRelevant } from './isRelevant';
 
-/**
- * Spec: Filters the relevant items from a given list of items
- *
- * Inputs:
- * - a logger
- * - a list of items
- * - an LLM provider
- * - optional configuration
- *
- * Output:
- * - the promise of a list of relevant items
- *
- * Side effects:
- * - uses the provided logger
- * - triggers LLM calls via isRelevant
- *
- * Behavior
- * - returns [] if input is empty
- * - merges default/custom config
- * - calls isRelevant for each item
- * - filters relevant items
- *
- * Invariants:
- * - output length <= input length
- * - preserves original item order
- */
-
 function makeItem(overrides: Partial<Item> = {}): Item {
   return {
     source: 'source',
@@ -64,6 +37,13 @@ function makeLogger(): Mocked<LoggerPort> {
     child: vi.fn(),
   };
 }
+
+/**
+ * Spec: Filter relevant items from a list.
+ * - Returns `[]` when input is empty (does not call `isRelevant`).
+ * - Calls `isRelevant` once per item otherwise.
+ * - Preserves original order of items that are kept.
+ */
 
 describe(filterRelevantItems.name, () => {
   afterEach(() => {

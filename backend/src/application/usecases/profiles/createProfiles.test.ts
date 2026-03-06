@@ -22,34 +22,6 @@ import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { createProfiles } from './createProfiles';
 import { FALLBACK_EMOTIONS, FALLBACK_TONALITIES } from './policy';
 
-/**
- * Spec: Turn a list of items into emotion profiles
- *
- * Inputs:
- * - a logger
- * - a list of items
- * - an LLM provider
- * - optional configuration
- *
- * Output:
- * - the promise of a list of emotion profiles
- * - emotion profile = emotion scores + tonality scores
- *
- * Side effects:
- * - uses the provided logger
- * - triggers LLM calls
- *
- * Behavior:
- * - for each item
- *  - builds LLM messages (for emotions and tonalities)
- *  - calls LLM with messages and options (for emotions and tonalities)
- *  - parses the raw LLM response (for emotions and tonalities)
- *  - uses fallback if parsing fails (for emotions and tonalities)
- *  - creates an emotion profile (emotions + tonalities)
- * - returns a list of emotion profiles
- * - returns [] if input is empty
- */
-
 function makeWeightedItem(overrides: Partial<WeightedItem> = {}): WeightedItem {
   return {
     source: 'source',
@@ -81,6 +53,14 @@ function makeLogger(): Mocked<LoggerPort> {
     child: vi.fn(),
   };
 }
+
+/**
+ * Spec: Create emotion+tonality profiles for a list of weighted items using the LLM.
+ * - Returns `[]` when input is empty (no LLM calls).
+ * - For each item, performs 2 LLM calls (emotions + tonalities).
+ * - Uses parsed outputs when valid; uses fallbacks when parsing fails.
+ * - If the LLM call fails, returns a fallback profile for that item.
+ */
 
 describe(createProfiles.name, () => {
   test('turn a list of items into emotion profiles', async () => {

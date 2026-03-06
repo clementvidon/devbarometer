@@ -2,6 +2,13 @@ import { describe, expect, test } from 'vitest';
 import type { Item } from '../../../domain/entities';
 import { makeRelevanceMessages } from './llmMessages';
 
+/**
+ * Spec: Build ordered LLM messages to classify an item as relevant or not.
+ * - Returns exactly 2 messages: system first, user second.
+ * - Injects the system prompt as the system message content.
+ * - Injects item title+content into the user message.
+ */
+
 describe(makeRelevanceMessages.name, () => {
   test('creates a system and user message for the relevance filter', () => {
     const item = {
