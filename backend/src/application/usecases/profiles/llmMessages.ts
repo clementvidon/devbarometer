@@ -12,8 +12,7 @@ export function makeProfileMessages(
     },
     {
       role: 'user',
-      content:
-        `Texte : """${weightedItem.title}\n\n${weightedItem.content}"""`.trim(),
+      content: `Texte : """${weightedItem.title}\n\n${weightedItem.content}"""`,
     },
   ];
 }
