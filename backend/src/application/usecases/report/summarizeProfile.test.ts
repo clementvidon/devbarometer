@@ -76,7 +76,6 @@ describe(summarizeProfile.name, () => {
     };
     const profile = makeAggregatedEmotionProfile({
       emotions: makeEmotionScores(overrides),
-      tonalities: makeTonalityScores(),
     });
 
     const result = summarizeProfile(profile);
