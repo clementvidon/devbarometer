@@ -30,18 +30,27 @@ export type WeightsCapMeta = {
 
 const sortAsc = (arr: number[]) => [...arr].sort((a, b) => a - b);
 
-function percentileInterpolated(values: number[], p: number): number {
+function percentileInterpolated(values: number[], percentile: number): number {
   if (!Array.isArray(values) || values.length === 0) return NaN;
-  const s = sortAsc(values.filter((v) => Number.isFinite(v)));
-  if (s.length === 0) return NaN;
-  if (s.length === 1) return s[0];
 
-  const pct = Number.isFinite(p) ? Math.max(0, Math.min(1, p)) : 0;
-  const h = (s.length - 1) * pct;
-  const i = Math.floor(h);
-  const j = Math.min(i + 1, s.length - 1);
-  const w = h - i;
-  return s[i] + w * (s[j] - s[i]);
+  const sortedFinite = sortAsc(values.filter(Number.isFinite));
+  if (sortedFinite.length === 0) return NaN;
+  if (sortedFinite.length === 1) return sortedFinite[0];
+
+  const clampedPercentile = Number.isFinite(percentile)
+    ? Math.max(0, Math.min(1, percentile))
+    : 0;
+
+  const lastIndex = sortedFinite.length - 1;
+  const position = lastIndex * clampedPercentile;
+  const lowerIndex = Math.floor(position);
+  const upperIndex = Math.min(lowerIndex + 1, lastIndex);
+  const fraction = position - lowerIndex;
+
+  const lowerValue = sortedFinite[lowerIndex];
+  const upperValue = sortedFinite[upperIndex];
+
+  return lowerValue + fraction * (upperValue - lowerValue);
 }
 
 function computeExcess(items: WeightedItem[], base: number) {
@@ -67,15 +76,6 @@ function applyCap(
   }));
 }
 
-/**
- * Cap excessive weights based on percentile of excess over a base.
- * Returns capped items and metadata explaining whether and why capping happened.
- * Input arrays are not mutated.
- *
- * Fallback policy:
- * - If percentile interpolation cannot produce a finite value (edge cases),
- *   we fallback to using the largest observed excess (i.e. max(excess)).
- */
 export function capByPercentile(
   items: WeightedItem[],
   opts: CapOptions,
@@ -86,7 +86,6 @@ export function capByPercentile(
   const N = items.length;
   const { excess, sumExcess } = computeExcess(items, baseWeight);
 
-  // Small tolerance to treat sums extremely close to zero as zero.
   const EPS = Number.EPSILON * 100;
   if (sumExcess <= EPS) {
     return {
@@ -108,7 +107,6 @@ export function capByPercentile(
   const usedPercentile = isSmallN ? percentileSmallN : percentile;
   const reason = isSmallN ? 'p90_cap_smallN' : 'p95_cap';
 
-  // Invariant: sumExcess > EPS ⇒ nonZero.length > 0
   let cap = percentileInterpolated(nonZero, usedPercentile);
   if (!Number.isFinite(cap)) cap = Math.max(...nonZero);
 
