@@ -1,21 +1,19 @@
-import { WEATHER_EMOJIS } from '@devbarometer/shared';
-import { z } from 'zod';
+import { ReportSchema } from '@devbarometer/shared/domain';
 import type { Report } from '../../../domain/entities';
+import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 import { FALLBACK_REPORT } from '../report/policy';
 
-const LLMOutputSchema = z.object({
-  text: z.string().max(200),
-  emoji: z.enum(WEATHER_EMOJIS),
-});
-
-export function parseReport(raw: string): Report {
+export function parseReport(raw: string): ParseResult<Report> {
+  const cleaned = stripCodeFences(raw);
+  let json: unknown;
   try {
-    const cleaned = stripCodeFences(raw);
-    const json: unknown = JSON.parse(cleaned);
-    const parsed = LLMOutputSchema.safeParse(json);
-    return parsed.success ? parsed.data : FALLBACK_REPORT;
+    json = JSON.parse(cleaned);
   } catch {
-    return FALLBACK_REPORT;
+    return fail(FALLBACK_REPORT, 'invalid_json');
   }
+  const parsed = ReportSchema.safeParse(json);
+  return parsed.success
+    ? ok(parsed.data)
+    : fail(FALLBACK_REPORT, 'invalid_schema');
 }

@@ -19,31 +19,43 @@ function makeReport(overrides: Partial<Report> = {}): Report {
  */
 
 describe(parseReport.name, () => {
-  test('return fallback if raw does not parse to JSON', () => {
-    expect(parseReport('{ wrong }')).toBe(FALLBACK_REPORT);
+  test('returns FALLBACK on invalid JSON', () => {
+    expect(parseReport('{ wrong }')).toMatchObject({
+      ok: false,
+      reason: 'invalid_json',
+      value: FALLBACK_REPORT,
+    });
   });
-  test('return fallback if raw does not parse to Report', () => {
-    expect(parseReport('{ "wrong": true }')).toBe(FALLBACK_REPORT);
+  test('returns FALLBACK on invalid schema', () => {
+    expect(parseReport('{ "wrong": true }')).toMatchObject({
+      ok: false,
+      reason: 'invalid_schema',
+      value: FALLBACK_REPORT,
+    });
   });
-  test('return raw as a Report if it is valid, with code-fences', () => {
-    const obj = makeReport({ text: 'hello' });
+  test('returns raw if valid (with code-fences)', () => {
+    const obj = makeReport({ text: 'my-report' });
     const raw = '```\n' + JSON.stringify(obj) + '\n```';
 
-    const result = parseReport(raw);
-
-    expect(result).toStrictEqual(obj);
-    expect(result).not.toStrictEqual(FALLBACK_REPORT);
+    expect(parseReport(raw)).toMatchObject({
+      ok: true,
+      value: obj,
+    });
   });
-  test('return raw as Report if it is valid, without code-fences', () => {
-    const obj = makeReport({ text: 'hello' });
+  test('returns raw if valid (with no code-fences)', () => {
+    const obj = makeReport({ text: 'my-report' });
     const raw = JSON.stringify(obj);
 
-    const result = parseReport(raw);
-
-    expect(result).toStrictEqual(obj);
-    expect(result).not.toStrictEqual(FALLBACK_REPORT);
+    expect(parseReport(raw)).toMatchObject({
+      ok: true,
+      value: obj,
+    });
   });
-  test('return fallback for empty string', () => {
-    expect(parseReport('')).toBe(FALLBACK_REPORT);
+  test('returns FALLBACK on empty string', () => {
+    expect(parseReport('')).toMatchObject({
+      ok: false,
+      reason: 'invalid_json',
+      value: FALLBACK_REPORT,
+    });
   });
 });

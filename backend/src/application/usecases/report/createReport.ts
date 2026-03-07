@@ -51,8 +51,8 @@ export async function createReport(
 
     logger.info('LLM call succeeded', { model: 'gpt-5-chat-latest' });
 
-    const report = parseReport(raw);
-    const hasFailed = report === FALLBACK_REPORT;
+    const reportRes = parseReport(raw);
+    const hasFailed = !reportRes.ok;
 
     if (hasFailed) {
       logger.warn('LLM output invalid, using fallback');
@@ -60,7 +60,7 @@ export async function createReport(
     }
 
     logger.info('Report parsed successfully');
-    return report;
+    return reportRes.value;
   } catch (err) {
     logger.error('LLM call failed, using fallback', { error: err });
     return FALLBACK_REPORT;
