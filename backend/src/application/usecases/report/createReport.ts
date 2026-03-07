@@ -12,7 +12,7 @@ import { reportPrompt } from './prompts';
 import { summarizeProfile } from './summarizeProfile';
 
 const DEFAULT_CREATE_REPORT_OPTIONS = {
-  reportPrompt: reportPrompt,
+  reportPrompt,
   llmOptions: REPORT_LLM_OPTIONS,
 } satisfies CreateReportOptions;
 
@@ -32,16 +32,21 @@ function mergeCreateReportOptions(
 
 export async function createReport(
   logger: LoggerPort,
-  aggregatedEmotionProfile: AggregatedEmotionProfile,
+  aggregatedProfile: AggregatedEmotionProfile,
   llm: LlmPort,
   opts: Partial<CreateReportOptions> = {},
 ): Promise<Report> {
+  if (aggregatedProfile.count === 0) {
+    logger.error('No aggregated profiles to report.');
+    return FALLBACK_REPORT;
+  }
+
   const { reportPrompt, llmOptions } = mergeCreateReportOptions(opts);
 
   const { model, ...runOpts } = llmOptions;
 
   try {
-    const summary = summarizeProfile(aggregatedEmotionProfile);
+    const summary = summarizeProfile(aggregatedProfile);
     logger.debug('Summarized profile', { summary });
     const raw = await llm.run(
       model,
@@ -49,17 +54,13 @@ export async function createReport(
       runOpts,
     );
 
-    logger.info('LLM call succeeded', { model: 'gpt-5-chat-latest' });
-
     const res = parseReport(raw);
-    const hasFailed = !res.ok;
 
-    if (hasFailed) {
-      logger.warn('LLM output invalid, using fallback');
+    if (!res.ok) {
+      logger.warn('LLM output invalid, using fallback', { reason: res.reason });
       return FALLBACK_REPORT;
     }
 
-    logger.info('Report parsed successfully');
     return res.value;
   } catch (err) {
     logger.error('LLM call failed, using fallback', { error: err });
