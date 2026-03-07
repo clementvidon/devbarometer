@@ -1,7 +1,6 @@
 import type { RelevantItem, WeightedItem } from '../../entities';
 
 export interface MomentumOptions {
-  /** Weight assigned when item is new or delta <= 0. */
   baseWeight: number;
 }
 
@@ -13,34 +12,30 @@ function noPositiveDelta(todayRaw: number, prevRaw: number): boolean {
   return todayRaw <= prevRaw;
 }
 
-/**
- * Compute momentum weights:
- * - new item or non-positive delta -> baseWeight
- * - positive delta -> baseWeight + log1p(delta)
- * Input arrays are not mutated.
- */
 export function computeMomentum(
   today: RelevantItem[],
   prev: RelevantItem[] = [],
   opts: MomentumOptions,
 ): WeightedItem[] {
-  const prevMap = new Map<string, number>(prev.map((i) => [i.source, i.score]));
+  const prevMap = new Map<string, number>(
+    prev.map((item) => [item.source, item.score]),
+  );
   const { baseWeight } = opts;
 
-  return today.map((it) => {
-    const todayRaw = it.score;
-    const prevRaw = prevMap.get(it.source);
+  return today.map((item) => {
+    const todayRaw = item.score;
+    const prevRaw = prevMap.get(item.source);
 
     if (isNew(prevRaw)) {
-      return { ...it, weight: baseWeight };
+      return { ...item, weight: baseWeight };
     }
 
     if (noPositiveDelta(todayRaw, prevRaw as number)) {
-      return { ...it, weight: baseWeight };
+      return { ...item, weight: baseWeight };
     }
 
     const delta = todayRaw - (prevRaw as number);
     const momentum = baseWeight + Math.log1p(delta);
-    return { ...it, weight: momentum };
+    return { ...item, weight: momentum };
   });
 }
