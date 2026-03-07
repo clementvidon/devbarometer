@@ -104,7 +104,7 @@ function makeLogger(): Mocked<LoggerPort> {
  */
 
 describe(createProfiles.name, () => {
-  test('turn a list of items into emotion profiles', async () => {
+  test('turns a list of items into emotion profiles', async () => {
     const logger = makeLogger();
     const llm = makeLlm(LlmOutput.VALID);
     const items = [makeWeightedItem(), makeWeightedItem(), makeWeightedItem()];
@@ -144,7 +144,7 @@ describe(createProfiles.name, () => {
     expect(llm.run).toHaveBeenCalledTimes(0);
     expect(result).toHaveLength(0);
   });
-  test('return a fallback when llm throws an error', async () => {
+  test('returns a fallback when llm throws an error', async () => {
     const logger = makeLogger();
     const llm = {
       run: vi.fn().mockRejectedValue(new Error('boom')),
