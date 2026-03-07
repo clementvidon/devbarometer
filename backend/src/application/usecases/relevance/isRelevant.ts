@@ -21,7 +21,14 @@ export async function isRelevant(
       makeRelevanceMessages(item, options.prompt),
       options.runOpts,
     );
-    return parseRelevance(raw);
+    const res = parseRelevance(raw);
+    if (res.ok) return res.value;
+    logger.warn('Invalid LLM relevance output, using default', {
+      reason: res.reason,
+      itemTitle: item.title,
+      itemSource: item.source,
+    });
+    return DEFAULT_RELEVANCE_ON_ERROR;
   } catch (err) {
     logger.warn('Failed to check relevance for item', {
       error: err instanceof Error ? err : String(err),

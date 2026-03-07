@@ -9,22 +9,43 @@ import { parseRelevance } from './parseRelevance';
  */
 
 describe(parseRelevance.name, () => {
-  test('return false if raw does not parse to JSON', () => {
-    expect(parseRelevance('{ wrong }')).toBe(false);
+  test('returns FALLBACK on invalid JSON', () => {
+    expect(parseRelevance('{ wrong }')).toMatchObject({
+      ok: false,
+      reason: 'invalid_json',
+      value: false,
+    });
   });
-  test('return false if raw does not parse to RelevanceSchema', () => {
-    expect(parseRelevance('{ "wrong": true }')).toBe(false);
+  test('returns FALLBACK on invalid schema', () => {
+    expect(parseRelevance('{ "wrong": true }')).toMatchObject({
+      ok: false,
+      reason: 'invalid_schema',
+      value: false,
+    });
   });
-  test('return true when relevant is true with code-fences', () => {
-    expect(parseRelevance('```\n{ "relevant": true }\n```')).toBe(true);
+  test('returns raw if valid (with code-fences)', () => {
+    const obj = { relevant: true };
+    const raw = '```\n' + JSON.stringify(obj) + '\n```';
+
+    expect(parseRelevance(raw)).toMatchObject({
+      ok: true,
+      value: obj.relevant,
+    });
   });
-  test('return true when relevant is true without code-fences', () => {
-    expect(parseRelevance('{ "relevant": true }')).toBe(true);
+  test('returns raw if valid (with no code-fences)', () => {
+    const obj = { relevant: false };
+    const raw = JSON.stringify(obj);
+
+    expect(parseRelevance(raw)).toMatchObject({
+      ok: true,
+      value: obj.relevant,
+    });
   });
-  test('return false when relevant is false', () => {
-    expect(parseRelevance('{ "relevant": false }')).toBe(false);
-  });
-  test('return false for empty string', () => {
-    expect(parseRelevance('')).toBe(false);
+  test('returns FALLBACK on empty string', () => {
+    expect(parseRelevance('')).toMatchObject({
+      ok: false,
+      reason: 'invalid_json',
+      value: false,
+    });
   });
 });
