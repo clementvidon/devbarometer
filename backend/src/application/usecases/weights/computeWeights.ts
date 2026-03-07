@@ -11,7 +11,7 @@ import {
   normalizeByMean,
   type NormalizeOptions,
 } from '../../../domain/services/weights/normalizeByMean';
-import { sanitizeScores } from '../../../domain/services/weights/sanitizeScores';
+import { sanitizeMomentumInputs } from '../../../domain/services/weights/sanitizeMomentumInputs';
 import type { MomentumWeightsOptions } from '../../ports/pipeline/ComputeWeightsPort';
 
 export const DEFAULT_MOMENTUM_OPTIONS = {
@@ -54,7 +54,7 @@ export function computeWeights(
 ): Promise<WeightedItem[]> {
   const { momentum, cap, normalize } = mergeMomentumWeightsOptions(opts);
 
-  const { safeItems, safePrevItems } = sanitizeScores(items, prevItems);
+  const { safeItems, safePrevItems } = sanitizeMomentumInputs(items, prevItems);
   const momentumItems = computeMomentum(safeItems, safePrevItems, momentum);
   const capResult = capByPercentile(momentumItems, cap);
   const cappedItems = capResult.cappedItems;

@@ -1,12 +1,12 @@
 import type { RelevantItem } from '../../entities';
 
 /**
- * Sanitize `score` fields in current and previous RelevantItems.
+ * Sanitize `score` fields in the given items.
  *
  * - Replaces non-finite values (`NaN`, `Infinity`, `-Infinity`) with `0`.
  * - Returns sanitized copies of both arrays. No logging in domain layer.
  */
-export function sanitizeScores(
+export function sanitizeMomentumInputs(
   items: RelevantItem[],
   prevItems: RelevantItem[],
 ) {
