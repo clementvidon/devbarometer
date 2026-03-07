@@ -1,4 +1,4 @@
-import { ReportSchema } from '@devbarometer/shared/domain';
+import { ReportSchema as ReportOutputSchema } from '@devbarometer/shared/domain';
 import type { Report } from '../../../domain/entities';
 import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
@@ -12,7 +12,7 @@ export function parseReport(raw: string): ParseResult<Report> {
   } catch {
     return fail(FALLBACK_REPORT, 'invalid_json');
   }
-  const parsed = ReportSchema.safeParse(json);
+  const parsed = ReportOutputSchema.safeParse(json);
   return parsed.success
     ? ok(parsed.data)
     : fail(FALLBACK_REPORT, 'invalid_schema');

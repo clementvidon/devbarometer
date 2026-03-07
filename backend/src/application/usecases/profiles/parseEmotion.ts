@@ -4,7 +4,7 @@ import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 import { FALLBACK_EMOTIONS } from './policy';
 
-const EmotionSchema = z.object({
+const EmotionOutputSchema = z.object({
   joy: z.number().min(0).max(1),
   trust: z.number().min(0).max(1),
   anger: z.number().min(0).max(1),
@@ -21,7 +21,7 @@ export function parseEmotion(raw: string): ParseResult<EmotionScores> {
   } catch {
     return fail(FALLBACK_EMOTIONS, 'invalid_json');
   }
-  const parsed = EmotionSchema.safeParse(json);
+  const parsed = EmotionOutputSchema.safeParse(json);
   return parsed.success
     ? ok(parsed.data)
     : fail(FALLBACK_EMOTIONS, 'invalid_schema');
