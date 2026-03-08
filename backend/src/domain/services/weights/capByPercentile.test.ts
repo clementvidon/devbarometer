@@ -10,7 +10,7 @@ import { capByPercentile, type CapParams } from './capByPercentile';
  */
 
 describe(capByPercentile.name, () => {
-  const CAP_OPTS: CapParams = {
+  const CAP_PARAMS: CapParams = {
     minN: 5,
     percentile: 0.95,
     percentileSmallN: 0.9,
@@ -41,7 +41,7 @@ describe(capByPercentile.name, () => {
         makeWeightedItem({ weight: 10 }),
       ];
 
-      const result = capByPercentile(items, CAP_OPTS);
+      const result = capByPercentile(items, CAP_PARAMS);
 
       expect(result.meta.capped).toStrictEqual(true);
       expect(result.meta.reason).toStrictEqual('p95_cap');
@@ -63,7 +63,7 @@ describe(capByPercentile.name, () => {
         makeWeightedItem({ weight: 10 }),
       ];
 
-      const result = capByPercentile(items, CAP_OPTS);
+      const result = capByPercentile(items, CAP_PARAMS);
 
       expect(result.meta.capped).toStrictEqual(true);
       expect(result.meta.reason).toStrictEqual('p90_cap_smallN');
@@ -87,7 +87,7 @@ describe(capByPercentile.name, () => {
         makeWeightedItem({ weight: 0 }),
       ];
 
-      const result = capByPercentile(items, CAP_OPTS);
+      const result = capByPercentile(items, CAP_PARAMS);
 
       expect(result.meta.capped).toStrictEqual(false);
       expect(result.meta.reason).toStrictEqual('no_excess');
@@ -109,12 +109,12 @@ describe(capByPercentile.name, () => {
         makeWeightedItem({ weight: 2 }),
       ];
 
-      const result = capByPercentile(items, CAP_OPTS);
+      const result = capByPercentile(items, CAP_PARAMS);
 
       expect(result.meta.capped).toStrictEqual(false);
       expect(result.meta.reason).toStrictEqual('low_concentration');
       expect(result.meta).not.toHaveProperty('usedPercentile');
-      expect(result.meta.topShare).toBeLessThan(CAP_OPTS.concentrationGate);
+      expect(result.meta.topShare).toBeLessThan(CAP_PARAMS.concentrationGate);
       result.cappedItems.forEach((it, i) => {
         expect(it.weight).toBeLessThanOrEqual(items[i].weight);
       });
@@ -131,13 +131,13 @@ describe(capByPercentile.name, () => {
         makeWeightedItem({ weight: Number.POSITIVE_INFINITY }),
         makeWeightedItem({ weight: 10 }),
       ];
-      const opts = {
-        ...CAP_OPTS,
+      const params = {
+        ...CAP_PARAMS,
         minN: 1,
         concentrationGate: 0,
       };
 
-      const result = capByPercentile(items, opts);
+      const result = capByPercentile(items, params);
 
       expect(result.meta.capped).toStrictEqual(true);
       expect(result.meta.reason).toStrictEqual('p95_cap');
@@ -160,14 +160,14 @@ describe(capByPercentile.name, () => {
         makeWeightedItem({ weight: 10 }),
       ];
 
-      const opts: CapParams = {
-        ...CAP_OPTS,
+      const params: CapParams = {
+        ...CAP_PARAMS,
         minN: 1,
         percentile: Number.NaN,
         concentrationGate: 0,
       };
 
-      const result = capByPercentile(items, opts);
+      const result = capByPercentile(items, params);
 
       expect(result.meta.capped).toBe(true);
       expect(result.meta.reason).toBe('p95_cap');

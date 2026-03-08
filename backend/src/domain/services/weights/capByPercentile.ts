@@ -78,10 +78,10 @@ function applyCap(
 
 export function capByPercentile(
   items: WeightedItem[],
-  opts: CapParams,
+  params: CapParams,
 ): { cappedItems: WeightedItem[]; meta: WeightsCapMeta } {
   const { minN, percentile, percentileSmallN, baseWeight, concentrationGate } =
-    opts;
+    params;
 
   const N = items.length;
   const { excess, sumExcess } = computeExcess(items, baseWeight);
