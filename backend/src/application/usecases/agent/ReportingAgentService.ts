@@ -40,37 +40,43 @@ export class ReportingAgentService implements ReportingAgentPort {
     log.info('Items fetched', { count: items.length, fetchLabel: label });
 
     const createdAt = this.items.getCreatedAt() ?? nowIso();
-    const previous = await withSpan(log, 'getRelevantItemsBefore', () =>
+    const previous = await withSpan(log, getLastRelevantItemsBefore.name, () =>
       getLastRelevantItemsBefore(createdAt, this.persistence),
     );
     log.info('Previous items fetched', { count: previous.length });
 
-    const relevant = await withSpan(log, 'filterRelevantItems', () =>
-      this.relevance.filterRelevantItems(log, items),
+    const relevant = await withSpan(
+      log,
+      this.relevance.filterRelevantItems.name,
+      () => this.relevance.filterRelevantItems(log, items),
     );
     log.info('Items filtered', { relevant: relevant.length });
 
-    const weighted = await withSpan(log, 'computeMomentumWeights', () =>
-      this.weights.computeMomentumWeights(relevant, previous),
+    const weighted = await withSpan(
+      log,
+      this.weights.computeMomentumWeights.name,
+      () => this.weights.computeMomentumWeights(relevant, previous),
     );
     log.info('Weights computed', { count: weighted.length });
 
-    const profiles = await withSpan(log, 'createProfiles', () =>
-      this.profiles.createProfiles(log, weighted),
+    const profiles = await withSpan(
+      log,
+      this.profiles.createProfiles.name,
+      () => this.profiles.createProfiles(log, weighted),
     );
     log.info('Profiles created', { count: profiles.length });
 
-    const aggregated = await withSpan(log, 'aggregateProfiles', () =>
+    const aggregated = await withSpan(log, aggregateProfiles.name, () =>
       aggregateProfiles(profiles),
     );
     log.info('Profiles aggregated');
 
-    const report = await withSpan(log, 'createReport', () =>
+    const report = await withSpan(log, this.report.createReport.name, () =>
       this.report.createReport(log, aggregated),
     );
     log.info('Report created');
 
-    await withSpan(log, 'storeSnapshotAt', () =>
+    await withSpan(log, this.persistence.storeSnapshotAt.name, () =>
       this.persistence.storeSnapshotAt(createdAt, {
         fetchLabel: label,
         items,
