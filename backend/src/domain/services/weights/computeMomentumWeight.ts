@@ -12,7 +12,7 @@ function noPositiveDelta(todayRaw: number, prevRaw: number): boolean {
   return todayRaw <= prevRaw;
 }
 
-export function computeMomentum(
+export function computeMomentumWeight(
   today: RelevantItem[],
   prev: RelevantItem[] = [],
   params: MomentumParams,

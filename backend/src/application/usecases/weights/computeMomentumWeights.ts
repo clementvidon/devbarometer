@@ -1,6 +1,6 @@
 import type { RelevantItem, WeightedItem } from '../../../domain/entities';
 import { capByPercentile } from '../../../domain/services/weights/capByPercentile';
-import { computeMomentum } from '../../../domain/services/weights/computeMomentum';
+import { computeMomentumWeight } from '../../../domain/services/weights/computeMomentumWeight';
 import { normalizeByMean } from '../../../domain/services/weights/normalizeByMean';
 import { sanitizeMomentumInputs } from '../../../domain/services/weights/sanitizeMomentumInputs';
 import type {
@@ -55,7 +55,7 @@ export function computeMomentumWeights(
   const { safeItems, safePrevItems } = sanitizeMomentumInputs(items, prevItems);
 
   const baseWeightedItems = momentum.enabled
-    ? computeMomentum(safeItems, safePrevItems, momentum)
+    ? computeMomentumWeight(safeItems, safePrevItems, momentum)
     : safeItems.map((it) => ({ ...it, weight: momentum.baseWeight }));
 
   const cappedItems = cap.enabled

@@ -1,6 +1,6 @@
 import type { RelevantItem, WeightedItem } from '../../../domain/entities';
 import type { CapParams } from '../../../domain/services/weights/capByPercentile';
-import type { MomentumParams } from '../../../domain/services/weights/computeMomentum';
+import type { MomentumParams } from '../../../domain/services/weights/computeMomentumWeight';
 import type { NormalizeByMeanParams } from '../../../domain/services/weights/normalizeByMean';
 
 export type MomentumStepOptions = { enabled: boolean } & MomentumParams;

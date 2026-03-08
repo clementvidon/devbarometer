@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { RelevantItem } from '../../entities/Item';
-import { computeMomentum } from './computeMomentum';
+import { computeMomentumWeight } from './computeMomentumWeight';
 
 /**
  * Spec: Compute momentum weights between today and yesterday items
@@ -9,7 +9,7 @@ import { computeMomentum } from './computeMomentum';
  * - no prev items -> all are treated as new
  */
 
-describe(computeMomentum.name, () => {
+describe(computeMomentumWeight.name, () => {
   const BASE_WEIGHT = 10;
   function makeRelevantItem(
     overrides: Partial<RelevantItem> = {},
@@ -34,7 +34,7 @@ describe(computeMomentum.name, () => {
     ];
     const params = { baseWeight: BASE_WEIGHT };
 
-    const result = computeMomentum(today, prev, params);
+    const result = computeMomentumWeight(today, prev, params);
 
     expect(result).toHaveLength(today.length);
     result.forEach((item) => {
@@ -47,7 +47,7 @@ describe(computeMomentum.name, () => {
     const params = { baseWeight: BASE_WEIGHT };
     const delta = today[0].score - prev[0].score;
 
-    const result = computeMomentum(today, prev, params);
+    const result = computeMomentumWeight(today, prev, params);
 
     result.forEach((item) => {
       expect(item.weight).toBeCloseTo(BASE_WEIGHT + Math.log1p(delta));
@@ -57,7 +57,7 @@ describe(computeMomentum.name, () => {
     const today = [makeRelevantItem({ source: 'a', score: 5 })];
     const params = { baseWeight: BASE_WEIGHT };
 
-    const result = computeMomentum(today, [], params);
+    const result = computeMomentumWeight(today, [], params);
 
     expect(result[0].weight).toBe(BASE_WEIGHT);
   });
