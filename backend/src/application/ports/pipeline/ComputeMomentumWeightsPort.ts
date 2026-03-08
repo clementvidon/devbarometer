@@ -23,9 +23,9 @@ export interface MomentumWeightsOptions {
  * - Inputs are read-only; `items` may be empty; order preserved in output.
  * - Deterministic for identical inputs; may use `source`-based matching.
  */
-export interface ComputeWeightsPort {
+export interface ComputeMomentumWeightsPort {
   /** Returns new WeightedItems for `items` using `prevItems` as context. */
-  computeWeights(
+  computeMomentumWeights(
     items: RelevantItem[],
     prevItems: RelevantItem[],
     opts?: Partial<MomentumWeightsOptions>,

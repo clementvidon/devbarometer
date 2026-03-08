@@ -7,7 +7,7 @@ import type { ReportingAgentPort } from '../../ports/input/ReportingAgentPort';
 import type { ItemsProviderPort } from '../../ports/output/ItemsProviderPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
-import type { ComputeWeightsPort } from '../../ports/pipeline/ComputeWeightsPort';
+import type { ComputeMomentumWeightsPort } from '../../ports/pipeline/ComputeMomentumWeightsPort';
 import type { CreateProfilesPort } from '../../ports/pipeline/CreateProfilesPort';
 import type { CreateReportPort } from '../../ports/pipeline/CreateReportPort';
 import type { FilterRelevantItemsPort } from '../../ports/pipeline/FilterRelevantItemsPort';
@@ -23,7 +23,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     private readonly items: ItemsProviderPort,
     private readonly persistence: PersistencePort,
     private readonly relevance: FilterRelevantItemsPort,
-    private readonly weights: ComputeWeightsPort,
+    private readonly weights: ComputeMomentumWeightsPort,
     private readonly profiles: CreateProfilesPort,
     private readonly report: CreateReportPort,
   ) {}
@@ -50,8 +50,8 @@ export class ReportingAgentService implements ReportingAgentPort {
     );
     log.info('Items filtered', { relevant: relevant.length });
 
-    const weighted = await withSpan(log, 'computeWeights', () =>
-      this.weights.computeWeights(relevant, previous),
+    const weighted = await withSpan(log, 'computeMomentumWeights', () =>
+      this.weights.computeMomentumWeights(relevant, previous),
     );
     log.info('Weights computed', { count: weighted.length });
 

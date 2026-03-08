@@ -8,7 +8,7 @@ import type {
   MomentumStepOptions,
   MomentumWeightsOptions,
   NormalizeStepOptions,
-} from '../../ports/pipeline/ComputeWeightsPort';
+} from '../../ports/pipeline/ComputeMomentumWeightsPort';
 
 export const DEFAULT_MOMENTUM_OPTIONS = {
   enabled: true,
@@ -29,7 +29,7 @@ export const DEFAULT_NORMALIZE_OPTIONS = {
   target: 1,
 } as const satisfies NormalizeStepOptions;
 
-export const DEFAULT_MOMENTUM_COMPUTE_WEIGHTS_OPTIONS = {
+export const DEFAULT_COMPUTE_MOMENTUM_WEIGHTS_OPTIONS = {
   momentum: { ...DEFAULT_MOMENTUM_OPTIONS },
   cap: { ...DEFAULT_CAP_OPTIONS },
   normalize: { ...DEFAULT_NORMALIZE_OPTIONS },
@@ -45,7 +45,7 @@ function mergeMomentumWeightsOptions(
   };
 }
 
-export function computeWeights(
+export function computeMomentumWeights(
   items: RelevantItem[],
   prevItems: RelevantItem[],
   opts: Partial<MomentumWeightsOptions> = {},
