@@ -1,30 +1,28 @@
 import type { RelevantItem, WeightedItem } from '../../../domain/entities';
-import {
-  capByPercentile,
-  type CapParams,
-} from '../../../domain/services/weights/capByPercentile';
-import {
-  computeMomentum,
-  type MomentumParams,
-} from '../../../domain/services/weights/computeMomentum';
+import { capByPercentile } from '../../../domain/services/weights/capByPercentile';
+import { computeMomentum } from '../../../domain/services/weights/computeMomentum';
 import { normalizeByMean } from '../../../domain/services/weights/normalizeByMean';
 import { sanitizeMomentumInputs } from '../../../domain/services/weights/sanitizeMomentumInputs';
 import type {
+  CapStepOptions,
+  MomentumStepOptions,
   MomentumWeightsOptions,
   NormalizeStepOptions,
 } from '../../ports/pipeline/ComputeWeightsPort';
 
 export const DEFAULT_MOMENTUM_OPTIONS = {
+  enabled: true,
   baseWeight: 1,
-} satisfies MomentumParams;
+} satisfies MomentumStepOptions;
 
 export const DEFAULT_CAP_OPTIONS = {
+  enabled: true,
   minN: 10,
   percentile: 0.95,
   percentileSmallN: 0.9,
   baseWeight: 1,
   concentrationGate: 0.35,
-} as const satisfies CapParams;
+} as const satisfies CapStepOptions;
 
 export const DEFAULT_NORMALIZE_OPTIONS = {
   enabled: true,
@@ -55,12 +53,18 @@ export function computeWeights(
   const { momentum, cap, normalize } = mergeMomentumWeightsOptions(opts);
 
   const { safeItems, safePrevItems } = sanitizeMomentumInputs(items, prevItems);
-  const momentumItems = computeMomentum(safeItems, safePrevItems, momentum);
-  const capResult = capByPercentile(momentumItems, cap);
-  const cappedItems = capResult.cappedItems;
+
+  const baseWeightedItems = momentum.enabled
+    ? computeMomentum(safeItems, safePrevItems, momentum)
+    : safeItems.map((it) => ({ ...it, weight: momentum.baseWeight }));
+
+  const cappedItems = cap.enabled
+    ? capByPercentile(baseWeightedItems, cap).cappedItems
+    : baseWeightedItems.slice();
 
   const weightedItems = normalize.enabled
     ? normalizeByMean(cappedItems, { target: normalize.target })
     : cappedItems.slice();
+
   return Promise.resolve(weightedItems);
 }
