@@ -1,7 +1,9 @@
 import type { RelevantItem, WeightedItem } from '../../../domain/entities';
 import type { CapOptions } from '../../../domain/services/weights/capByPercentile';
 import type { MomentumOptions } from '../../../domain/services/weights/computeMomentum';
-import type { NormalizeOptions } from '../../../domain/services/weights/normalizeByMean';
+import type { NormalizeByMeanParams } from '../../../domain/services/weights/normalizeByMean';
+
+export type NormalizeStepOptions = { enabled: boolean } & NormalizeByMeanParams;
 
 export interface MomentumWeightsOptions {
   /** Momentum computation parameters (baseline weight, etc.) */
@@ -9,7 +11,7 @@ export interface MomentumWeightsOptions {
   /** Score capping parameters to limit outliers (percentiles, thresholds, etc.) */
   cap: CapOptions;
   /** Normalization parameters to rescale weights (target mean, enable/disable, etc.) */
-  normalize: NormalizeOptions;
+  normalize: NormalizeStepOptions;
 }
 
 /**

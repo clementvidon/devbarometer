@@ -7,12 +7,12 @@ import {
   computeMomentum,
   type MomentumOptions,
 } from '../../../domain/services/weights/computeMomentum';
-import {
-  normalizeByMean,
-  type NormalizeOptions,
-} from '../../../domain/services/weights/normalizeByMean';
+import { normalizeByMean } from '../../../domain/services/weights/normalizeByMean';
 import { sanitizeMomentumInputs } from '../../../domain/services/weights/sanitizeMomentumInputs';
-import type { MomentumWeightsOptions } from '../../ports/pipeline/ComputeWeightsPort';
+import type {
+  MomentumWeightsOptions,
+  NormalizeStepOptions,
+} from '../../ports/pipeline/ComputeWeightsPort';
 
 export const DEFAULT_MOMENTUM_OPTIONS = {
   baseWeight: 1,
@@ -29,7 +29,7 @@ export const DEFAULT_CAP_OPTIONS = {
 export const DEFAULT_NORMALIZE_OPTIONS = {
   enabled: true,
   target: 1,
-} as const satisfies NormalizeOptions;
+} as const satisfies NormalizeStepOptions;
 
 export const DEFAULT_MOMENTUM_COMPUTE_WEIGHTS_OPTIONS = {
   momentum: { ...DEFAULT_MOMENTUM_OPTIONS },
@@ -60,7 +60,7 @@ export function computeWeights(
   const cappedItems = capResult.cappedItems;
 
   const weightedItems = normalize.enabled
-    ? normalizeByMean(cappedItems, normalize)
+    ? normalizeByMean(cappedItems, { target: normalize.target })
     : cappedItems.slice();
   return Promise.resolve(weightedItems);
 }

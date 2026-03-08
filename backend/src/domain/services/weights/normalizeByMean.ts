@@ -1,18 +1,13 @@
 import type { WeightedItem } from '../../entities';
 
-export interface NormalizeOptions {
-  /** Enable normalization. */
-  enabled: boolean;
+export interface NormalizeByMeanParams {
   /** Target mean (or sum, if you later add a sum-strategy). */
   target: number;
 }
 
-/**
- * Normalize weights so that their mean equals `target`. Input is not mutated.
- */
 export function normalizeByMean(
   items: WeightedItem[],
-  opts: NormalizeOptions,
+  opts: NormalizeByMeanParams,
 ): WeightedItem[] {
   const { target } = opts;
 
