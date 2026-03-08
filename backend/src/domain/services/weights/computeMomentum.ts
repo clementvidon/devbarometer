@@ -1,6 +1,6 @@
 import type { RelevantItem, WeightedItem } from '../../entities';
 
-export interface MomentumOptions {
+export interface MomentumParams {
   baseWeight: number;
 }
 
@@ -15,12 +15,12 @@ function noPositiveDelta(todayRaw: number, prevRaw: number): boolean {
 export function computeMomentum(
   today: RelevantItem[],
   prev: RelevantItem[] = [],
-  opts: MomentumOptions,
+  params: MomentumParams,
 ): WeightedItem[] {
   const prevMap = new Map<string, number>(
     prev.map((item) => [item.source, item.score]),
   );
-  const { baseWeight } = opts;
+  const { baseWeight } = params;
 
   return today.map((item) => {
     const todayRaw = item.score;

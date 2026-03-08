@@ -32,9 +32,9 @@ describe(computeMomentum.name, () => {
       makeRelevantItem({ source: 'stable', score: 2 }),
       makeRelevantItem({ source: 'new', score: 10 }),
     ];
-    const opts = { baseWeight: BASE_WEIGHT };
+    const params = { baseWeight: BASE_WEIGHT };
 
-    const result = computeMomentum(today, prev, opts);
+    const result = computeMomentum(today, prev, params);
 
     expect(result).toHaveLength(today.length);
     result.forEach((item) => {
@@ -44,10 +44,10 @@ describe(computeMomentum.name, () => {
   test('positive delta -> baseWeight + log1p(delta)', () => {
     const prev = [makeRelevantItem({ source: 'increase', score: 2 })];
     const today = [makeRelevantItem({ source: 'increase', score: 20 })];
-    const opts = { baseWeight: BASE_WEIGHT };
+    const params = { baseWeight: BASE_WEIGHT };
     const delta = today[0].score - prev[0].score;
 
-    const result = computeMomentum(today, prev, opts);
+    const result = computeMomentum(today, prev, params);
 
     result.forEach((item) => {
       expect(item.weight).toBeCloseTo(BASE_WEIGHT + Math.log1p(delta));
@@ -55,9 +55,9 @@ describe(computeMomentum.name, () => {
   });
   test('no prev items -> all are treated as new', () => {
     const today = [makeRelevantItem({ source: 'a', score: 5 })];
-    const opts = { baseWeight: BASE_WEIGHT };
+    const params = { baseWeight: BASE_WEIGHT };
 
-    const result = computeMomentum(today, [], opts);
+    const result = computeMomentum(today, [], params);
 
     expect(result[0].weight).toBe(BASE_WEIGHT);
   });

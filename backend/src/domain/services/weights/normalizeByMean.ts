@@ -7,9 +7,9 @@ export interface NormalizeByMeanParams {
 
 export function normalizeByMean(
   items: WeightedItem[],
-  opts: NormalizeByMeanParams,
+  params: NormalizeByMeanParams,
 ): WeightedItem[] {
-  const { target } = opts;
+  const { target } = params;
 
   if (items.length === 0) return [];
   const sum = items.reduce((s, i) => s + i.weight, 0);

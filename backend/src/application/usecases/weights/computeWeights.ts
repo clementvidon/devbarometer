@@ -1,11 +1,11 @@
 import type { RelevantItem, WeightedItem } from '../../../domain/entities';
 import {
   capByPercentile,
-  type CapOptions,
+  type CapParams,
 } from '../../../domain/services/weights/capByPercentile';
 import {
   computeMomentum,
-  type MomentumOptions,
+  type MomentumParams,
 } from '../../../domain/services/weights/computeMomentum';
 import { normalizeByMean } from '../../../domain/services/weights/normalizeByMean';
 import { sanitizeMomentumInputs } from '../../../domain/services/weights/sanitizeMomentumInputs';
@@ -16,7 +16,7 @@ import type {
 
 export const DEFAULT_MOMENTUM_OPTIONS = {
   baseWeight: 1,
-} satisfies MomentumOptions;
+} satisfies MomentumParams;
 
 export const DEFAULT_CAP_OPTIONS = {
   minN: 10,
@@ -24,7 +24,7 @@ export const DEFAULT_CAP_OPTIONS = {
   percentileSmallN: 0.9,
   baseWeight: 1,
   concentrationGate: 0.35,
-} as const satisfies CapOptions;
+} as const satisfies CapParams;
 
 export const DEFAULT_NORMALIZE_OPTIONS = {
   enabled: true,

@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import type { WeightedItem } from '../../entities';
-import { capByPercentile, type CapOptions } from './capByPercentile';
+import { capByPercentile, type CapParams } from './capByPercentile';
 
 /**
  * Cap excessive weights based on percentile of excess over a base.
@@ -10,7 +10,7 @@ import { capByPercentile, type CapOptions } from './capByPercentile';
  */
 
 describe(capByPercentile.name, () => {
-  const CAP_OPTS: CapOptions = {
+  const CAP_OPTS: CapParams = {
     minN: 5,
     percentile: 0.95,
     percentileSmallN: 0.9,
@@ -160,7 +160,7 @@ describe(capByPercentile.name, () => {
         makeWeightedItem({ weight: 10 }),
       ];
 
-      const opts: CapOptions = {
+      const opts: CapParams = {
         ...CAP_OPTS,
         minN: 1,
         percentile: Number.NaN,

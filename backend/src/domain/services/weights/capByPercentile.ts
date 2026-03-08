@@ -1,6 +1,6 @@
 import type { WeightedItem } from '../../entities';
 
-export interface CapOptions {
+export interface CapParams {
   /** Minimum N to use main percentile; below this we use percentileSmallN. */
   minN: number;
   /** Main percentile for excess capping, in [0,1]. */
@@ -78,7 +78,7 @@ function applyCap(
 
 export function capByPercentile(
   items: WeightedItem[],
-  opts: CapOptions,
+  opts: CapParams,
 ): { cappedItems: WeightedItem[]; meta: WeightsCapMeta } {
   const { minN, percentile, percentileSmallN, baseWeight, concentrationGate } =
     opts;
