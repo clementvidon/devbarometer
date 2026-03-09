@@ -12,7 +12,6 @@ export interface EmotionProfile {
   status: 'ok' | 'fallback';
 }
 
-export interface WeightedEmotionProfile {
-  profile: EmotionProfile;
+export interface WeightedEmotionProfile extends EmotionProfile {
   weight: number;
 }

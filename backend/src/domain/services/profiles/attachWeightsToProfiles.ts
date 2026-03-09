@@ -24,7 +24,10 @@ export function attachWeightsToProfiles(
     }
 
     return {
-      profile,
+      itemRef: profile.itemRef,
+      status: profile.status,
+      emotions: profile.emotions,
+      tonalities: profile.tonalities,
       weight: profile.status === 'fallback' ? 0 : weightedItem.weight,
     };
   });

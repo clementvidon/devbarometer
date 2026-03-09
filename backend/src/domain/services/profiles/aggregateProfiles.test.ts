@@ -1,6 +1,5 @@
 import { describe, expect, test } from 'vitest';
 import type {
-  EmotionProfile,
   EmotionScores,
   TonalityScores,
   WeightedEmotionProfile,
@@ -42,22 +41,14 @@ describe(aggregateProfiles.name, () => {
       ...overrides,
     };
   }
-  function makeEmotionProfile(
-    overrides: Partial<EmotionProfile> = {},
-  ): EmotionProfile {
+  function makeWeightedEmotionProfile(
+    overrides: Partial<WeightedEmotionProfile> = {},
+  ): WeightedEmotionProfile {
     return {
       itemRef: 'itemRef',
       emotions: makeEmotionScores(),
       tonalities: makeTonalityScores(),
       status: 'ok',
-      ...overrides,
-    };
-  }
-  function makeWeightedEmotionProfile(
-    overrides: Partial<WeightedEmotionProfile> = {},
-  ): WeightedEmotionProfile {
-    return {
-      profile: makeEmotionProfile(),
       weight: 0,
       ...overrides,
     };
@@ -65,17 +56,13 @@ describe(aggregateProfiles.name, () => {
   test('aggregate a list of emotion profiles whose total weight is > 0', () => {
     const profiles: WeightedEmotionProfile[] = [
       makeWeightedEmotionProfile({
-        profile: makeEmotionProfile({
-          emotions: makeEmotionScores({ joy: 0 }),
-          tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
-        }),
+        emotions: makeEmotionScores({ joy: 0 }),
+        tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
         weight: 3,
       }),
       makeWeightedEmotionProfile({
-        profile: makeEmotionProfile({
-          emotions: makeEmotionScores({ joy: 1 }),
-          tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
-        }),
+        emotions: makeEmotionScores({ joy: 1 }),
+        tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
         weight: 1,
       }),
     ];
@@ -90,17 +77,13 @@ describe(aggregateProfiles.name, () => {
   test('aggregate a list of emotion profiles whose total weight is 0', () => {
     const profiles: WeightedEmotionProfile[] = [
       makeWeightedEmotionProfile({
-        profile: makeEmotionProfile({
-          emotions: makeEmotionScores({ joy: 0 }),
-          tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
-        }),
+        emotions: makeEmotionScores({ joy: 0 }),
+        tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
         weight: 0,
       }),
       makeWeightedEmotionProfile({
-        profile: makeEmotionProfile({
-          emotions: makeEmotionScores({ joy: 1 }),
-          tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
-        }),
+        emotions: makeEmotionScores({ joy: 1 }),
+        tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
         weight: 0,
       }),
     ];

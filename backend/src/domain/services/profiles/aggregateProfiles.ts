@@ -45,9 +45,8 @@ export function aggregateProfiles(
   for (const p of profiles) {
     const w = p.weight;
     weightSum += w;
-    for (const k of EMOTION_KEYS) emotionTotals[k] += p.profile.emotions[k] * w;
-    for (const k of TONALITY_KEYS)
-      tonalityTotals[k] += p.profile.tonalities[k] * w;
+    for (const k of EMOTION_KEYS) emotionTotals[k] += p.emotions[k] * w;
+    for (const k of TONALITY_KEYS) tonalityTotals[k] += p.tonalities[k] * w;
   }
 
   const averagedEmotions: EmotionScores = { ...zeroEmotions };

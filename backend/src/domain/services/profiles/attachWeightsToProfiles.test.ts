@@ -74,9 +74,15 @@ describe(attachWeightsToProfiles.name, () => {
 
     const result = attachWeightsToProfiles(profiles, weightedItems);
 
-    expect(result[0].weight).toBe(1);
-    expect(result[1].weight).toBe(3);
-    expect(result[2].weight).toBe(2);
+    result.forEach((profile, i) => {
+      expect(profile).toStrictEqual({
+        weight: weightedItems[i].weight,
+        itemRef: profiles[i].itemRef,
+        emotions: makeEmotionScores(),
+        tonalities: makeTonalityScores(),
+        status: profiles[i].status,
+      });
+    });
   });
   test('throw if profiles and weightedItems length mismatch', () => {
     const profiles = [
@@ -119,8 +125,14 @@ describe(attachWeightsToProfiles.name, () => {
 
     const result = attachWeightsToProfiles(profiles, weightedItems);
 
-    expect(result[0].weight).toBe(1);
-    expect(result[1].weight).toBe(0);
-    expect(result[2].weight).toBe(2);
+    result.forEach((profile, i) => {
+      expect(profile).toStrictEqual({
+        weight: profiles[i].status == 'ok' ? weightedItems[i].weight : 0,
+        itemRef: profiles[i].itemRef,
+        emotions: makeEmotionScores(),
+        tonalities: makeTonalityScores(),
+        status: profiles[i].status,
+      });
+    });
   });
 });
