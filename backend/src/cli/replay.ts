@@ -50,7 +50,7 @@ function getItems(row: AnyRow): Item[] {
   return 'data' in row ? row.data.items : row.items;
 }
 
-function getLabel(row: AnyRow, createdAt: string): string {
+function getFetchRef(row: AnyRow, createdAt: string): string {
   return `replay:${row.id ?? createdAt}`;
 }
 
@@ -62,11 +62,11 @@ type Deps = {
 
 export function buildReplayAgent(
   items: Item[],
-  label: string,
+  fetchRef: string,
   createdAt: string,
   deps: Deps,
 ): ReportingAgentPort {
-  const itemsProvider = new JsonSnapshotAdapter(items, label, createdAt);
+  const itemsProvider = new JsonSnapshotAdapter(items, fetchRef, createdAt);
   return makeReportingAgentService(
     deps.logger.child({ scope: 'agent' }),
     itemsProvider,
@@ -117,7 +117,7 @@ export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
   let ok = 0;
   for (const [rIndex, r] of rows.entries()) {
     const createdAt = getCreatedAtISO(r);
-    const label = getLabel(r, createdAt);
+    const fetchRef = getFetchRef(r, createdAt);
     const items = getItems(r);
 
     if (!items.length) {
@@ -125,11 +125,11 @@ export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
         reason: 'no_items',
         rIndex,
         createdAt,
-        label,
+        fetchRef,
       });
       continue;
     }
-    const agent = buildReplayAgent(items, label, createdAt, deps);
+    const agent = buildReplayAgent(items, fetchRef, createdAt, deps);
     await agent.captureSnapshot();
     ok++;
   }

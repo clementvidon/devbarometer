@@ -10,7 +10,7 @@ import type {
 export type PipelineSnapshot = {
   id: string;
   createdAt: string;
-  fetchLabel: string;
+  fetchRef: string;
   items: Item[];
   relevantItems: RelevantItem[];
   weightedItems: WeightedItem[];

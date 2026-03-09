@@ -20,7 +20,7 @@ function makeSnapshot(
   return {
     id: 'id',
     createdAt: '2001-01-01',
-    fetchLabel: 'label',
+    fetchRef: 'fetchRef',
     items: [],
     relevantItems: [],
     weightedItems: [],

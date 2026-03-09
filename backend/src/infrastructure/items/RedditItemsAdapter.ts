@@ -169,7 +169,7 @@ export class RedditItemsAdapter implements ItemsProviderPort {
     );
   }
 
-  getLabel(): string {
+  getFetchRef(): string {
     return this.url;
   }
 
