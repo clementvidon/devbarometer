@@ -1,4 +1,4 @@
-import type { WeightedItem } from '../../../domain/entities';
+import type { RelevantItem } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type {
@@ -12,7 +12,7 @@ export class LlmCreateProfilesStep implements CreateProfilesPort {
 
   async createProfiles(
     logger: LoggerPort,
-    items: WeightedItem[],
+    items: RelevantItem[],
     opts?: Partial<CreateProfilesOptions>,
   ) {
     return await createProfilesUsecase(

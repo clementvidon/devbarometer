@@ -8,7 +8,6 @@ export type { EmotionScores, TonalityScores };
 export interface EmotionProfile {
   title: string;
   itemRef: string;
-  weight: number;
   emotions: EmotionScores;
   tonalities: TonalityScores;
   status: 'ok' | 'fallback';

@@ -1,8 +1,8 @@
-import type { WeightedItem } from '../../../domain/entities';
+import type { RelevantItem } from '../../../domain/entities';
 import type { LlmMessage } from '../../ports/output/LlmPort';
 
 export function makeProfileMessages(
-  weightedItem: WeightedItem,
+  weightedItem: RelevantItem,
   systemPrompt: string,
 ): readonly LlmMessage[] {
   return [

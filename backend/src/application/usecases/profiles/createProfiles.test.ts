@@ -117,7 +117,6 @@ describe(createProfiles.name, () => {
       expect(profile.status).toStrictEqual('ok');
       expect(profile.emotions.joy).toStrictEqual(0.42);
       expect(profile.tonalities.positive).toStrictEqual(0.42);
-      expect(profile.weight).toStrictEqual(1);
     });
   });
   test('returns fallback when parsing fails', async () => {
@@ -133,7 +132,6 @@ describe(createProfiles.name, () => {
       expect(profile.status).toStrictEqual('fallback');
       expect(profile.emotions.joy).toStrictEqual(0);
       expect(profile.tonalities.positive).toStrictEqual(0);
-      expect(profile.weight).toStrictEqual(0);
     });
   });
   test('returns empty array if input is empty', async () => {
@@ -161,7 +159,6 @@ describe(createProfiles.name, () => {
       expect(profile.status).toStrictEqual('fallback');
       expect(profile.emotions.joy).toStrictEqual(0);
       expect(profile.tonalities.positive).toStrictEqual(0);
-      expect(profile.weight).toStrictEqual(0);
     });
   });
 });

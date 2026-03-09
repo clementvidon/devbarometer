@@ -48,7 +48,6 @@ describe(aggregateProfiles.name, () => {
     return {
       title: 'title',
       itemRef: 'itemRef',
-      weight: 0,
       emotions: makeEmotionScores(),
       tonalities: makeTonalityScores(),
       status: 'ok',

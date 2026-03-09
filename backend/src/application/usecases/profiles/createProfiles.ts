@@ -1,5 +1,5 @@
 import pLimit from 'p-limit';
-import type { EmotionProfile, WeightedItem } from '../../../domain/entities';
+import type { EmotionProfile, RelevantItem } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { CreateProfilesOptions } from '../../ports/pipeline/CreateProfilesPort';
@@ -37,7 +37,7 @@ function mergeCreateProfilesOptions(
 
 export async function createProfiles(
   logger: LoggerPort,
-  items: WeightedItem[],
+  items: RelevantItem[],
   llm: LlmPort,
   opts: Partial<CreateProfilesOptions> = {},
 ): Promise<EmotionProfile[]> {
@@ -74,7 +74,6 @@ export async function createProfiles(
         return {
           title: item.title,
           itemRef: item.itemRef,
-          weight: hasFailed ? 0 : item.weight,
           emotions: emotionsRes.value,
           tonalities: tonalitiesRes.value,
           status: hasFailed ? 'fallback' : 'ok',
@@ -88,7 +87,6 @@ export async function createProfiles(
         return {
           title: item.title,
           itemRef: item.itemRef,
-          weight: 0,
           emotions: FALLBACK_EMOTIONS,
           tonalities: FALLBACK_TONALITIES,
           status: 'fallback',
