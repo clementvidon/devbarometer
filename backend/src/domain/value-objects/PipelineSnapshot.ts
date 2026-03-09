@@ -1,9 +1,9 @@
 import type {
   AggregatedEmotionProfile,
-  EmotionProfile,
   Item,
   RelevantItem,
   Report,
+  WeightedEmotionProfile,
   WeightedItem,
 } from '../entities';
 
@@ -14,7 +14,7 @@ export type PipelineSnapshot = {
   items: Item[];
   relevantItems: RelevantItem[];
   weightedItems: WeightedItem[];
-  emotionProfilePerItem: EmotionProfile[];
+  weightedEmotionProfiles: WeightedEmotionProfile[];
   aggregatedEmotionProfile: AggregatedEmotionProfile;
   report: Report;
 };

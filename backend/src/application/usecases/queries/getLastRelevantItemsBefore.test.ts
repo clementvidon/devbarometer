@@ -24,7 +24,7 @@ function makeSnapshot(
     items: [],
     relevantItems: [],
     weightedItems: [],
-    emotionProfilePerItem: [],
+    weightedEmotionProfiles: [],
     aggregatedEmotionProfile: {
       count: 0,
       totalWeight: 0,

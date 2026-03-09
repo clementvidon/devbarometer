@@ -93,7 +93,7 @@ export class ReportingAgentService implements ReportingAgentPort {
         items,
         relevantItems: relevant,
         weightedItems: weightedItems,
-        emotionProfilePerItem: presentProfiles,
+        weightedEmotionProfiles: weightedEmotionProfiles,
         aggregatedEmotionProfile: aggregated,
         report,
       }),
