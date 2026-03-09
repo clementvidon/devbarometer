@@ -1,8 +1,8 @@
 import type {
   AggregatedEmotionProfile,
-  EmotionProfile,
   EmotionScores,
   TonalityScores,
+  WeightedEmotionProfile,
 } from '../../entities';
 
 const EMOTION_KEYS = [
@@ -24,7 +24,7 @@ const TONALITY_KEYS = [
 ] as const;
 
 export function aggregateProfiles(
-  profiles: EmotionProfile[],
+  profiles: WeightedEmotionProfile[],
 ): AggregatedEmotionProfile {
   if (profiles.length === 0) {
     throw new Error('[aggregateProfiles] No profiles provided.');
@@ -45,8 +45,9 @@ export function aggregateProfiles(
   for (const p of profiles) {
     const w = p.weight;
     weightSum += w;
-    for (const k of EMOTION_KEYS) emotionTotals[k] += p.emotions[k] * w;
-    for (const k of TONALITY_KEYS) tonalityTotals[k] += p.tonalities[k] * w;
+    for (const k of EMOTION_KEYS) emotionTotals[k] += p.profile.emotions[k] * w;
+    for (const k of TONALITY_KEYS)
+      tonalityTotals[k] += p.profile.tonalities[k] * w;
   }
 
   const averagedEmotions: EmotionScores = { ...zeroEmotions };

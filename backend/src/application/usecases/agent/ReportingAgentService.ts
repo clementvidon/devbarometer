@@ -1,5 +1,6 @@
 import type { WeightedItem } from '../../../domain/entities';
 import { aggregateProfiles } from '../../../domain/services/profiles/aggregateProfiles';
+import { attachWeightsToProfiles } from '../../../domain/services/profiles/attachWeightsToProfiles';
 import { formatFloat } from '../../../lib/number/formatFloat';
 import { nowIso } from '../../../lib/time/nowIso';
 import { withSpan } from '../../observability/withSpan';
@@ -52,22 +53,31 @@ export class ReportingAgentService implements ReportingAgentPort {
     );
     log.info('Items filtered', { relevant: relevant.length });
 
-    const weighted = await withSpan(
+    const weightedItems = await withSpan(
       log,
       this.weights.computeMomentumWeights.name,
       () => this.weights.computeMomentumWeights(relevant, previous),
     );
-    log.info('Weights computed', { count: weighted.length });
+    log.info('Weights computed', { count: weightedItems.length });
 
     const profiles = await withSpan(
       log,
       this.profiles.createProfiles.name,
-      () => this.profiles.createProfiles(log, weighted),
+      () => this.profiles.createProfiles(log, weightedItems),
     );
     log.info('Profiles created', { count: profiles.length });
 
+    const weightedEmotionProfiles = await withSpan(
+      log,
+      attachWeightsToProfiles.name,
+      () => attachWeightsToProfiles(profiles, weightedItems),
+    );
+    log.info('Weights attached to profiles', {
+      count: weightedEmotionProfiles.length,
+    });
+
     const aggregated = await withSpan(log, aggregateProfiles.name, () =>
-      aggregateProfiles(profiles),
+      aggregateProfiles(weightedEmotionProfiles),
     );
     log.info('Profiles aggregated');
 
@@ -81,7 +91,7 @@ export class ReportingAgentService implements ReportingAgentPort {
         fetchRef,
         items,
         relevantItems: relevant,
-        weightedItems: weighted,
+        weightedItems: weightedItems,
         emotionProfilePerItem: profiles,
         aggregatedEmotionProfile: aggregated,
         report,
@@ -105,17 +115,17 @@ export class ReportingAgentService implements ReportingAgentPort {
       })),
     });
     log.debug('Weighted items', {
-      items: sortByWeightDesc(weighted).map((it) => ({
+      items: sortByWeightDesc(weightedItems).map((it) => ({
         title: it.title,
         weight: formatFloat(it.weight),
       })),
     });
-    if (weighted.length > 0) {
-      const total = weighted.reduce((s, it) => s + it.weight, 0);
-      const top = sortByWeightDesc(weighted)[0];
+    if (weightedItems.length > 0) {
+      const total = weightedItems.reduce((s, it) => s + it.weight, 0);
+      const top = sortByWeightDesc(weightedItems)[0];
       const topShare = total > 0 ? top.weight / total : 0;
       log.info('Weights summary', {
-        N: weighted.length,
+        N: weightedItems.length,
         totalWeight: Number.isFinite(total) ? total : 0,
         topWeight: top.weight,
         topShare,
