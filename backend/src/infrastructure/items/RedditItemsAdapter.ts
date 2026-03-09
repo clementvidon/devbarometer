@@ -51,7 +51,7 @@ function mergeRedditItemsOptions(
 function mapRedditChildToItem(child: z.infer<typeof RedditChildSchema>): Item {
   const d = child.data;
   return {
-    source: `https://reddit.com/comments/${d.id}`,
+    itemRef: `https://reddit.com/comments/${d.id}`,
     title: normalizeWhitespace(d.title),
     content: normalizeWhitespace(d.selftext),
     score: d.ups,

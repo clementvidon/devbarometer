@@ -7,7 +7,7 @@ export type { EmotionScores, TonalityScores };
 
 export interface EmotionProfile {
   title: string;
-  source: string;
+  itemRef: string;
   weight: number;
   emotions: EmotionScores;
   tonalities: TonalityScores;

@@ -71,10 +71,10 @@ export function Ticker() {
           ref={rowRef}
           className={`${styles.row} ${paused ? styles.paused : ''}`}
         >
-          {looped.map(({ title, source }, i) => (
+          {looped.map(({ title, itemRef }, i) => (
             <a
               key={i}
-              href={source}
+              href={itemRef}
               target="_blank"
               rel="noopener noreferrer"
               className={styles.item}

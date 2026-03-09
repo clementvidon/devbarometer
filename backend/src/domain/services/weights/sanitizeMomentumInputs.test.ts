@@ -13,7 +13,7 @@ describe(sanitizeMomentumInputs.name, () => {
     overrides: Partial<RelevantItem> = {},
   ): RelevantItem {
     return {
-      source: 'source',
+      itemRef: 'itemRef',
       title: 'title',
       content: 'content',
       score: 1,

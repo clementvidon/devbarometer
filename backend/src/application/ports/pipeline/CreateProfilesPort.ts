@@ -19,7 +19,7 @@ export interface CreateProfilesOptions {
  * Contract (interface-wide):
  * - Inputs are read-only; `items` may be empty; output order is preserved.
  * - Output has one profile per input item (same ordering).
- * - Each profile is derived from the corresponding item (e.g., keeps `source`/`title`).
+ * - Each profile is derived from the corresponding item (e.g., keeps `itemRef`/`title`).
  * - May perform external I/O (e.g. LLM calls) and log via the provided logger.
  * - On per-item failures, implementations may return fallback profiles (e.g., weight forced to 0).
  */

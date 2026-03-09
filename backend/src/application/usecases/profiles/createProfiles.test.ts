@@ -65,7 +65,7 @@ import { createProfiles } from './createProfiles';
 
 function makeWeightedItem(overrides: Partial<WeightedItem> = {}): WeightedItem {
   return {
-    source: 'source',
+    itemRef: 'itemRef',
     title: 'title',
     content: 'content',
     score: 1,

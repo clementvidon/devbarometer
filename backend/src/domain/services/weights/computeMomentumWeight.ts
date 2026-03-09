@@ -18,13 +18,13 @@ export function computeMomentumWeight(
   params: MomentumParams,
 ): WeightedItem[] {
   const prevMap = new Map<string, number>(
-    prev.map((item) => [item.source, item.score]),
+    prev.map((item) => [item.itemRef, item.score]),
   );
   const { baseWeight } = params;
 
   return today.map((item) => {
     const todayRaw = item.score;
-    const prevRaw = prevMap.get(item.source);
+    const prevRaw = prevMap.get(item.itemRef);
 
     if (isNew(prevRaw)) {
       return { ...item, weight: baseWeight };

@@ -5,12 +5,12 @@ import type { PersistencePort } from '../../ports/output/PersistencePort';
 function mapHeadlineToDto(raw: {
   title: string;
   weight: number;
-  source: string;
+  itemRef: string;
 }): HeadlineDto {
   return HeadlineDtoSchema.parse({
     title: raw.title,
     weight: formatFloat(raw.weight, 0),
-    source: raw.source,
+    itemRef: raw.itemRef,
   });
 }
 

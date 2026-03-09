@@ -66,27 +66,27 @@ export async function createProfiles(
 
         if (hasFailed) {
           logger.warn('LLM fallback', {
-            source: item.source,
+            itemRef: item.itemRef,
             title: item.title,
           });
         }
 
         return {
           title: item.title,
-          source: item.source,
+          itemRef: item.itemRef,
           weight: hasFailed ? 0 : item.weight,
           emotions: emotionsRes.value,
           tonalities: tonalitiesRes.value,
         };
       } catch (err) {
         logger.error('LLM error', {
-          source: item.source,
+          itemRef: item.itemRef,
           title: item.title,
           error: err,
         });
         return {
           title: item.title,
-          source: item.source,
+          itemRef: item.itemRef,
           weight: 0,
           emotions: FALLBACK_EMOTIONS,
           tonalities: FALLBACK_TONALITIES,

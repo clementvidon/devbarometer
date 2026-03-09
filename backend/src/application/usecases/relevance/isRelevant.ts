@@ -26,14 +26,14 @@ export async function isRelevant(
     logger.warn('Invalid LLM relevance output, using default', {
       reason: res.reason,
       itemTitle: item.title,
-      itemSource: item.source,
+      itemRef: item.itemRef,
     });
     return DEFAULT_RELEVANCE_ON_ERROR;
   } catch (err) {
     logger.warn('Failed to check relevance for item', {
       error: err instanceof Error ? err : String(err),
       itemTitle: item.title,
-      itemSource: item.source,
+      itemRef: item.itemRef,
     });
     return DEFAULT_RELEVANCE_ON_ERROR;
   }

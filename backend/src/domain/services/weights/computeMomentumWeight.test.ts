@@ -15,7 +15,7 @@ describe(computeMomentumWeight.name, () => {
     overrides: Partial<RelevantItem> = {},
   ): RelevantItem {
     return {
-      source: 'source',
+      itemRef: 'itemRef',
       title: 'title',
       content: 'content',
       score: 0,
@@ -24,13 +24,13 @@ describe(computeMomentumWeight.name, () => {
   }
   test('new item or non-positive delta -> baseWeight', () => {
     const prev = [
-      makeRelevantItem({ source: 'decrease', score: 4 }),
-      makeRelevantItem({ source: 'stable', score: 2 }),
+      makeRelevantItem({ itemRef: 'decrease', score: 4 }),
+      makeRelevantItem({ itemRef: 'stable', score: 2 }),
     ];
     const today = [
-      makeRelevantItem({ source: 'decrease', score: 2 }),
-      makeRelevantItem({ source: 'stable', score: 2 }),
-      makeRelevantItem({ source: 'new', score: 10 }),
+      makeRelevantItem({ itemRef: 'decrease', score: 2 }),
+      makeRelevantItem({ itemRef: 'stable', score: 2 }),
+      makeRelevantItem({ itemRef: 'new', score: 10 }),
     ];
     const params = { baseWeight: BASE_WEIGHT };
 
@@ -42,8 +42,8 @@ describe(computeMomentumWeight.name, () => {
     });
   });
   test('positive delta -> baseWeight + log1p(delta)', () => {
-    const prev = [makeRelevantItem({ source: 'increase', score: 2 })];
-    const today = [makeRelevantItem({ source: 'increase', score: 20 })];
+    const prev = [makeRelevantItem({ itemRef: 'increase', score: 2 })];
+    const today = [makeRelevantItem({ itemRef: 'increase', score: 20 })];
     const params = { baseWeight: BASE_WEIGHT };
     const delta = today[0].score - prev[0].score;
 
@@ -54,7 +54,7 @@ describe(computeMomentumWeight.name, () => {
     });
   });
   test('no prev items -> all are treated as new', () => {
-    const today = [makeRelevantItem({ source: 'a', score: 5 })];
+    const today = [makeRelevantItem({ itemRef: 'a', score: 5 })];
     const params = { baseWeight: BASE_WEIGHT };
 
     const result = computeMomentumWeight(today, [], params);

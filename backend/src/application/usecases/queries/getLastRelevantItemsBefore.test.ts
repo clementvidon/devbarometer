@@ -6,7 +6,7 @@ import { getLastRelevantItemsBefore } from './getLastRelevantItemsBefore';
 
 function makeRelevantItem(overrides: Partial<RelevantItem> = {}): RelevantItem {
   return {
-    source: 'source',
+    itemRef: 'itemRef',
     title: 'title',
     content: 'content',
     score: 1,

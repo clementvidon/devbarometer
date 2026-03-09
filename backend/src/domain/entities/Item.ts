@@ -1,5 +1,5 @@
 export interface Item {
-  source: string;
+  itemRef: string;
   title: string;
   content: string;
   score: number;

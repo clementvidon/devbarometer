@@ -13,7 +13,7 @@ describe(normalizeByMean.name, () => {
     overrides: Partial<WeightedItem> = {},
   ): WeightedItem {
     return {
-      source: 'source',
+      itemRef: 'itemRef',
       title: 'title',
       content: 'content',
       score: 0,

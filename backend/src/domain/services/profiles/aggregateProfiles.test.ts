@@ -46,7 +46,7 @@ describe(aggregateProfiles.name, () => {
   ): EmotionProfile {
     return {
       title: 'title',
-      source: 'source',
+      itemRef: 'itemRef',
       weight: 0,
       emotions: makeEmotionScores(),
       tonalities: makeTonalityScores(),

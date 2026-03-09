@@ -20,7 +20,7 @@ describe(computeMomentumWeights.name, () => {
     overrides: Partial<RelevantItem> = {},
   ): RelevantItem {
     return {
-      source: 'source',
+      itemRef: 'itemRef',
       title: 'title',
       content: 'content',
       score: 0,
@@ -29,15 +29,15 @@ describe(computeMomentumWeights.name, () => {
   }
   test('momentum enabled, cap/normalize disabled', async () => {
     const prev = [
-      makeRelevantItem({ source: 'increase', score: 2 }),
-      makeRelevantItem({ source: 'decrease', score: 10 }),
-      makeRelevantItem({ source: 'stable', score: 10 }),
+      makeRelevantItem({ itemRef: 'increase', score: 2 }),
+      makeRelevantItem({ itemRef: 'decrease', score: 10 }),
+      makeRelevantItem({ itemRef: 'stable', score: 10 }),
     ];
     const items = [
-      makeRelevantItem({ source: 'increase', score: 10 }),
-      makeRelevantItem({ source: 'decrease', score: 2 }),
-      makeRelevantItem({ source: 'stable', score: 10 }),
-      makeRelevantItem({ source: 'new', score: 42 }),
+      makeRelevantItem({ itemRef: 'increase', score: 10 }),
+      makeRelevantItem({ itemRef: 'decrease', score: 2 }),
+      makeRelevantItem({ itemRef: 'stable', score: 10 }),
+      makeRelevantItem({ itemRef: 'new', score: 42 }),
     ];
     const opts = {
       momentum: { ...DEFAULT_MOMENTUM_OPTIONS, enabled: true },
@@ -51,21 +51,21 @@ describe(computeMomentumWeights.name, () => {
     expect(result[1].weight).toBe(BASE);
     expect(result[2].weight).toBe(BASE);
     expect(result[3].weight).toBe(BASE);
-    expect(result.map((it) => it.source)).toStrictEqual(
-      items.map((it) => it.source),
+    expect(result.map((it) => it.itemRef)).toStrictEqual(
+      items.map((it) => it.itemRef),
     );
   });
   test('momentum disabled assigns baseWeight', async () => {
     const prev = [
-      makeRelevantItem({ source: 'increase', score: 2 }),
-      makeRelevantItem({ source: 'decrease', score: 10 }),
-      makeRelevantItem({ source: 'stable', score: 10 }),
+      makeRelevantItem({ itemRef: 'increase', score: 2 }),
+      makeRelevantItem({ itemRef: 'decrease', score: 10 }),
+      makeRelevantItem({ itemRef: 'stable', score: 10 }),
     ];
     const items = [
-      makeRelevantItem({ source: 'increase', score: 10 }),
-      makeRelevantItem({ source: 'decrease', score: 2 }),
-      makeRelevantItem({ source: 'stable', score: 10 }),
-      makeRelevantItem({ source: 'new', score: 42 }),
+      makeRelevantItem({ itemRef: 'increase', score: 10 }),
+      makeRelevantItem({ itemRef: 'decrease', score: 2 }),
+      makeRelevantItem({ itemRef: 'stable', score: 10 }),
+      makeRelevantItem({ itemRef: 'new', score: 42 }),
     ];
     const opts = {
       momentum: { ...DEFAULT_MOMENTUM_OPTIONS, enabled: false },
@@ -76,19 +76,19 @@ describe(computeMomentumWeights.name, () => {
     const result = await computeMomentumWeights(items, prev, opts);
 
     expect(result.every((item) => item.weight === BASE)).toBe(true);
-    expect(result.map((it) => it.source)).toStrictEqual(
-      items.map((it) => it.source),
+    expect(result.map((it) => it.itemRef)).toStrictEqual(
+      items.map((it) => it.itemRef),
     );
   });
   test('all steps enabled: sanitizes non-finite scores', async () => {
     const prev = [
-      makeRelevantItem({ source: 'increase', score: 2 }),
-      makeRelevantItem({ source: 'stable', score: 10 }),
+      makeRelevantItem({ itemRef: 'increase', score: 2 }),
+      makeRelevantItem({ itemRef: 'stable', score: 10 }),
     ];
     const items = [
-      makeRelevantItem({ source: 'increase', score: 10 }),
-      makeRelevantItem({ source: 'stable', score: Number.NaN }),
-      makeRelevantItem({ source: 'new', score: 42 }),
+      makeRelevantItem({ itemRef: 'increase', score: 10 }),
+      makeRelevantItem({ itemRef: 'stable', score: Number.NaN }),
+      makeRelevantItem({ itemRef: 'new', score: 42 }),
     ];
 
     const opts = {
@@ -102,8 +102,8 @@ describe(computeMomentumWeights.name, () => {
 
     const result = await computeMomentumWeights(items, prev, opts);
 
-    expect(result.map((it) => it.source)).toStrictEqual(
-      items.map((it) => it.source),
+    expect(result.map((it) => it.itemRef)).toStrictEqual(
+      items.map((it) => it.itemRef),
     );
     expect(result.every((it) => Number.isFinite(it.weight))).toBe(true);
     expect(items).toStrictEqual(itemsBefore);
