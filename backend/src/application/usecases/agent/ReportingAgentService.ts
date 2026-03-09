@@ -24,8 +24,8 @@ export class ReportingAgentService implements ReportingAgentPort {
     private readonly items: ItemsProviderPort,
     private readonly persistence: PersistencePort,
     private readonly relevance: FilterRelevantItemsPort,
-    private readonly weights: ComputeMomentumWeightsPort,
     private readonly profiles: CreateProfilesPort,
+    private readonly weights: ComputeMomentumWeightsPort,
     private readonly report: CreateReportPort,
   ) {}
 
@@ -41,10 +41,6 @@ export class ReportingAgentService implements ReportingAgentPort {
     log.info('Items fetched', { count: items.length, fetchRef });
 
     const createdAt = this.items.getCreatedAt() ?? nowIso();
-    const previous = await withSpan(log, getLastRelevantItemsBefore.name, () =>
-      getLastRelevantItemsBefore(createdAt, this.persistence),
-    );
-    log.info('Previous items fetched', { count: previous.length });
 
     const relevant = await withSpan(
       log,
@@ -53,24 +49,29 @@ export class ReportingAgentService implements ReportingAgentPort {
     );
     log.info('Items filtered', { relevant: relevant.length });
 
+    const [presentProfiles, previousRelevantItems] = await Promise.all([
+      withSpan(log, this.profiles.createProfiles.name, () =>
+        this.profiles.createProfiles(log, relevant),
+      ),
+      withSpan(log, getLastRelevantItemsBefore.name, () =>
+        getLastRelevantItemsBefore(createdAt, this.persistence),
+      ),
+    ]);
+    log.info('Previous items fetched', { count: previousRelevantItems.length });
+    log.info('Profiles created', { count: presentProfiles.length });
+
     const weightedItems = await withSpan(
       log,
       this.weights.computeMomentumWeights.name,
-      () => this.weights.computeMomentumWeights(relevant, previous),
+      () =>
+        this.weights.computeMomentumWeights(relevant, previousRelevantItems),
     );
     log.info('Weights computed', { count: weightedItems.length });
-
-    const profiles = await withSpan(
-      log,
-      this.profiles.createProfiles.name,
-      () => this.profiles.createProfiles(log, weightedItems),
-    );
-    log.info('Profiles created', { count: profiles.length });
 
     const weightedEmotionProfiles = await withSpan(
       log,
       attachWeightsToProfiles.name,
-      () => attachWeightsToProfiles(profiles, weightedItems),
+      () => attachWeightsToProfiles(presentProfiles, weightedItems),
     );
     log.info('Weights attached to profiles', {
       count: weightedEmotionProfiles.length,
@@ -92,7 +93,7 @@ export class ReportingAgentService implements ReportingAgentPort {
         items,
         relevantItems: relevant,
         weightedItems: weightedItems,
-        emotionProfilePerItem: profiles,
+        emotionProfilePerItem: presentProfiles,
         aggregatedEmotionProfile: aggregated,
         report,
       }),
@@ -103,7 +104,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     log.info('Pipeline finished', { ms });
 
     log.debug('Previous items', {
-      items: previous.map((it) => ({
+      items: previousRelevantItems.map((it) => ({
         title: it.title,
         score: formatFloat(it.score),
       })),

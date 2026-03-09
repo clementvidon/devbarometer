@@ -30,8 +30,8 @@ export function makeReportingAgentService(
   overrides: PipelineOverrides = {},
 ): ReportingAgentPort {
   const relevance = overrides.relevance ?? new LlmFilterRelevantItemsStep(llm);
-  const weights = overrides.weights ?? new LocalComputeMomentumWeightsStep();
   const profiles = overrides.profiles ?? new LlmCreateProfilesStep(llm);
+  const weights = overrides.weights ?? new LocalComputeMomentumWeightsStep();
   const report = overrides.report ?? new LlmCreateReportStep(llm);
 
   return new ReportingAgentService(
@@ -39,8 +39,8 @@ export function makeReportingAgentService(
     items,
     persistence,
     relevance,
-    weights,
     profiles,
+    weights,
     report,
   );
 }
