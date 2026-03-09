@@ -13,5 +13,5 @@ export async function getLastRelevantItemsBefore(
     .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
     .at(0);
 
-  return prev?.relevantItems ?? [];
+  return prev?.weightedItems.map(({ weight: _weight, ...item }) => item) ?? [];
 }

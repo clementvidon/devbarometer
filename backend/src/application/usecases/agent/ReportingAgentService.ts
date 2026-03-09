@@ -91,7 +91,6 @@ export class ReportingAgentService implements ReportingAgentPort {
       this.persistence.storeSnapshotAt(createdAt, {
         fetchRef,
         inputItems: items,
-        relevantItems: relevant,
         weightedItems: weightedItems,
         weightedEmotionProfiles: weightedEmotionProfiles,
         aggregatedEmotionProfile: aggregated,

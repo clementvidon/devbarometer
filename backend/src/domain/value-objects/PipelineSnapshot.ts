@@ -1,7 +1,6 @@
 import type {
   AggregatedEmotionProfile,
   Item,
-  RelevantItem,
   Report,
   WeightedEmotionProfile,
   WeightedItem,
@@ -12,7 +11,6 @@ export type PipelineSnapshot = {
   createdAt: string;
   fetchRef: string;
   inputItems: Item[];
-  relevantItems: RelevantItem[];
   weightedItems: WeightedItem[];
   weightedEmotionProfiles: WeightedEmotionProfile[];
   aggregatedEmotionProfile: AggregatedEmotionProfile;
