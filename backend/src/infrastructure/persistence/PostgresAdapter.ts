@@ -4,9 +4,11 @@ import type { Sql } from 'postgres';
 import postgres from 'postgres';
 import { v4 as uuidv4 } from 'uuid';
 import type { PersistencePort } from '../../application/ports/output/PersistencePort';
-import type {
-  PipelineSnapshot,
-  SnapshotData,
+import {
+  PipelineSnapshotSchema,
+  SnapshotDataSchema,
+  type PipelineSnapshot,
+  type SnapshotData,
 } from '../../domain/value-objects/PipelineSnapshot';
 import { snapshotsTable } from './schema';
 
@@ -24,9 +26,10 @@ export class PostgresAdapter implements PersistencePort {
     createdAtISO: string,
     snapshot: SnapshotData,
   ): Promise<void> {
+    const parsedSnapshot = SnapshotDataSchema.parse(snapshot);
     await this.db.insert(snapshotsTable).values({
       id: uuidv4(),
-      data: snapshot,
+      data: parsedSnapshot,
       date_created: new Date(createdAtISO),
     });
   }
@@ -41,12 +44,16 @@ export class PostgresAdapter implements PersistencePort {
       .from(snapshotsTable)
       .orderBy(desc(snapshotsTable.date_created));
 
-    return rows.map((row) => ({
-      id: row.id,
-      createdAt: row.createdAt
-        ? row.createdAt.toISOString()
-        : new Date().toISOString(),
-      ...(row.data as SnapshotData),
-    }));
+    return rows.map((row) => {
+      if (!row.createdAt) {
+        throw new Error('[PostgresAdapter.getSnapshots] Missing date_created.');
+      }
+
+      return PipelineSnapshotSchema.parse({
+        id: row.id,
+        createdAt: row.createdAt.toISOString(),
+        ...SnapshotDataSchema.parse(row.data),
+      });
+    });
   }
 }

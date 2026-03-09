@@ -1,20 +1,60 @@
-import type {
-  AggregatedEmotionProfile,
-  Item,
-  Report,
-  WeightedEmotionProfile,
-  WeightedItem,
-} from '../entities';
+import {
+  EmotionScoresSchema,
+  IsoDateStringSchema,
+  ReportSchema,
+  TonalityScoresSchema,
+} from '@devbarometer/shared';
+import z from 'zod';
 
-export type PipelineSnapshot = {
-  id: string;
-  createdAt: string;
-  fetchRef: string;
-  inputItems: Item[];
-  weightedItems: WeightedItem[];
-  weightedEmotionProfiles: WeightedEmotionProfile[];
-  aggregatedEmotionProfile: AggregatedEmotionProfile;
-  report: Report;
-};
+export const ItemSchema = z
+  .object({
+    itemRef: z.string(),
+    title: z.string(),
+    content: z.string(),
+    score: z.number(),
+  })
+  .strict();
 
-export type SnapshotData = Omit<PipelineSnapshot, 'id' | 'createdAt'>;
+export const WeightedItemSchema = ItemSchema.extend({
+  weight: z.number().finite(),
+}).strict();
+
+export const EmotionProfileSchema = z
+  .object({
+    itemRef: z.string(),
+    status: z.enum(['ok', 'fallback']),
+    emotions: EmotionScoresSchema,
+    tonalities: TonalityScoresSchema,
+  })
+  .strict();
+
+export const WeightedEmotionProfileSchema = EmotionProfileSchema.extend({
+  weight: z.number().finite(),
+}).strict();
+
+export const AggregatedEmotionProfileSchema = z
+  .object({
+    count: z.number().int().nonnegative(),
+    totalWeight: z.number().finite(),
+    emotions: EmotionScoresSchema,
+    tonalities: TonalityScoresSchema,
+  })
+  .strict();
+
+export const SnapshotDataSchema = z
+  .object({
+    fetchRef: z.string(),
+    inputItems: z.array(ItemSchema),
+    weightedItems: z.array(WeightedItemSchema),
+    weightedEmotionProfiles: z.array(WeightedEmotionProfileSchema),
+    aggregatedEmotionProfile: AggregatedEmotionProfileSchema,
+    report: ReportSchema,
+  })
+  .strict();
+export type SnapshotData = z.infer<typeof SnapshotDataSchema>;
+
+export const PipelineSnapshotSchema = SnapshotDataSchema.extend({
+  id: z.string().uuid(),
+  createdAt: IsoDateStringSchema,
+}).strict();
+export type PipelineSnapshot = z.infer<typeof PipelineSnapshotSchema>;
