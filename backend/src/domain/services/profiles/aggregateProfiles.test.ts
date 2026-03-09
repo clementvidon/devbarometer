@@ -46,7 +46,6 @@ describe(aggregateProfiles.name, () => {
     overrides: Partial<EmotionProfile> = {},
   ): EmotionProfile {
     return {
-      title: 'title',
       itemRef: 'itemRef',
       emotions: makeEmotionScores(),
       tonalities: makeTonalityScores(),

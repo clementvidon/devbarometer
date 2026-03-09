@@ -6,7 +6,6 @@ import type {
 export type { EmotionScores, TonalityScores };
 
 export interface EmotionProfile {
-  title: string;
   itemRef: string;
   emotions: EmotionScores;
   tonalities: TonalityScores;

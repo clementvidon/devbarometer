@@ -58,42 +58,14 @@ vi.mock('./parseTonality', () => ({
   ),
 }));
 
-import type { WeightedItem } from '../../../domain/entities';
+import type {
+  EmotionScores,
+  TonalityScores,
+  WeightedItem,
+} from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { createProfiles } from './createProfiles';
-
-function makeWeightedItem(overrides: Partial<WeightedItem> = {}): WeightedItem {
-  return {
-    itemRef: 'itemRef',
-    title: 'title',
-    content: 'content',
-    score: 1,
-    weight: 1,
-    ...overrides,
-  };
-}
-
-enum LlmOutput {
-  VALID = 'valid',
-  INVALID = 'invalid',
-}
-
-function makeLlm(raw: string): Mocked<LlmPort> {
-  return {
-    run: vi.fn().mockResolvedValue(raw),
-  };
-}
-
-function makeLogger(): Mocked<LoggerPort> {
-  return {
-    debug: vi.fn(),
-    info: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-    child: vi.fn(),
-  };
-}
 
 /**
  * Spec: Create emotion+tonality profiles for a list of weighted items using the LLM.
@@ -104,39 +76,97 @@ function makeLogger(): Mocked<LoggerPort> {
  */
 
 describe(createProfiles.name, () => {
+  function makeEmotionScores(
+    overrides: Partial<EmotionScores> = {},
+  ): EmotionScores {
+    return {
+      joy: 0,
+      trust: 0,
+      anger: 0,
+      fear: 0,
+      sadness: 0,
+      disgust: 0,
+      ...overrides,
+    };
+  }
+  function makeTonalityScores(
+    overrides: Partial<TonalityScores> = {},
+  ): TonalityScores {
+    return {
+      positive: 0,
+      negative: 0,
+      positive_surprise: 0,
+      negative_surprise: 0,
+      optimistic_anticipation: 0,
+      pessimistic_anticipation: 0,
+      ...overrides,
+    };
+  }
+  function makeWeightedItem(
+    overrides: Partial<WeightedItem> = {},
+  ): WeightedItem {
+    return {
+      itemRef: 'itemRef',
+      title: 'title',
+      content: 'content',
+      score: 1,
+      weight: 1,
+      ...overrides,
+    };
+  }
+  function makeLlm(raw: string): Mocked<LlmPort> {
+    return {
+      run: vi.fn().mockResolvedValue(raw),
+    };
+  }
+  function makeLogger(): Mocked<LoggerPort> {
+    return {
+      debug: vi.fn(),
+      info: vi.fn(),
+      warn: vi.fn(),
+      error: vi.fn(),
+      child: vi.fn(),
+    };
+  }
   test('turns a list of items into emotion profiles', async () => {
     const logger = makeLogger();
-    const llm = makeLlm(LlmOutput.VALID);
+    const llm = makeLlm('valid');
     const items = [makeWeightedItem(), makeWeightedItem(), makeWeightedItem()];
 
     const result = await createProfiles(logger, items, llm);
 
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
-    result.forEach((profile) => {
-      expect(profile.status).toStrictEqual('ok');
-      expect(profile.emotions.joy).toStrictEqual(0.42);
-      expect(profile.tonalities.positive).toStrictEqual(0.42);
+    result.forEach((profile, i) => {
+      expect(profile).toStrictEqual({
+        itemRef: items[i].itemRef,
+        emotions: makeEmotionScores({ joy: 0.42 }),
+        tonalities: makeTonalityScores({ positive: 0.42 }),
+        status: 'ok',
+      });
     });
   });
   test('returns fallback when parsing fails', async () => {
     const logger = makeLogger();
-    const llm = makeLlm(LlmOutput.INVALID);
+    const llm = makeLlm('invalid');
     const items = [makeWeightedItem(), makeWeightedItem(), makeWeightedItem()];
 
     const result = await createProfiles(logger, items, llm);
 
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
-    result.forEach((profile) => {
-      expect(profile.status).toStrictEqual('fallback');
-      expect(profile.emotions.joy).toStrictEqual(0);
-      expect(profile.tonalities.positive).toStrictEqual(0);
+    result.forEach((profile, i) => {
+      expect(profile).toStrictEqual({
+        itemRef: items[i].itemRef,
+        emotions: makeEmotionScores({ joy: 0 }),
+        tonalities: makeTonalityScores({ positive: 0 }),
+        status: 'fallback',
+      });
     });
   });
   test('returns empty array if input is empty', async () => {
     const logger = makeLogger();
-    const llm = makeLlm(LlmOutput.VALID);
+    const llm = makeLlm('valid');
     const items: WeightedItem[] = [];
 
     const result = await createProfiles(logger, items, llm);
@@ -155,10 +185,13 @@ describe(createProfiles.name, () => {
 
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
-    result.forEach((profile) => {
-      expect(profile.status).toStrictEqual('fallback');
-      expect(profile.emotions.joy).toStrictEqual(0);
-      expect(profile.tonalities.positive).toStrictEqual(0);
+    result.forEach((profile, i) => {
+      expect(profile).toStrictEqual({
+        itemRef: items[i].itemRef,
+        emotions: makeEmotionScores({ joy: 0 }),
+        tonalities: makeTonalityScores({ positive: 0 }),
+        status: 'fallback',
+      });
     });
   });
 });

@@ -72,7 +72,6 @@ export async function createProfiles(
         }
 
         return {
-          title: item.title,
           itemRef: item.itemRef,
           emotions: emotionsRes.value,
           tonalities: tonalitiesRes.value,
@@ -85,7 +84,6 @@ export async function createProfiles(
           error: err,
         });
         return {
-          title: item.title,
           itemRef: item.itemRef,
           emotions: FALLBACK_EMOTIONS,
           tonalities: FALLBACK_TONALITIES,
