@@ -23,8 +23,12 @@ const rootLogger = makeLogger();
 
 // - Dump Neon UI: { id?, date_created: "YYYY-MM-DD HH:mm:ss.SSS", data: { items: Item[] } }
 // - Export Script: { id?, createdAt: "YYYY-MM-DDTHH:mm:ss.SSSZ", items: Item[] }
-type RawRow = { id?: string; date_created: string; data: { items: Item[] } };
-type SnapRow = { id?: string; createdAt: string; items: Item[] };
+type RawRow = {
+  id?: string;
+  date_created: string;
+  data: { inputItems: Item[] };
+};
+type SnapRow = { id?: string; createdAt: string; inputItems: Item[] };
 type AnyRow = RawRow | SnapRow;
 
 const USAGE = 'Usage: tsx src/cli/replay <input.json>';
@@ -46,8 +50,8 @@ function getCreatedAtISO(row: AnyRow): string {
   return 'date_created' in row ? toISO(row.date_created) : toISO(row.createdAt);
 }
 
-function getItems(row: AnyRow): Item[] {
-  return 'data' in row ? row.data.items : row.items;
+function getInputItems(row: AnyRow): Item[] {
+  return 'data' in row ? row.data.inputItems : row.inputItems;
 }
 
 function getFetchRef(row: AnyRow, createdAt: string): string {
@@ -118,7 +122,7 @@ export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
   for (const [rIndex, r] of rows.entries()) {
     const createdAt = getCreatedAtISO(r);
     const fetchRef = getFetchRef(r, createdAt);
-    const items = getItems(r);
+    const items = getInputItems(r);
 
     if (!items.length) {
       log.debug('Skip empty row', {

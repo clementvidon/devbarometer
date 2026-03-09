@@ -21,7 +21,7 @@ function makeSnapshot(
     id: 'id',
     createdAt: '2001-01-01',
     fetchRef: 'fetchRef',
-    items: [],
+    inputItems: [],
     relevantItems: [],
     weightedItems: [],
     weightedEmotionProfiles: [],

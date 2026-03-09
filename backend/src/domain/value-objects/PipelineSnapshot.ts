@@ -11,7 +11,7 @@ export type PipelineSnapshot = {
   id: string;
   createdAt: string;
   fetchRef: string;
-  items: Item[];
+  inputItems: Item[];
   relevantItems: RelevantItem[];
   weightedItems: WeightedItem[];
   weightedEmotionProfiles: WeightedEmotionProfile[];
