@@ -11,4 +11,10 @@ export interface EmotionProfile {
   weight: number;
   emotions: EmotionScores;
   tonalities: TonalityScores;
+  status: 'ok' | 'fallback';
+}
+
+export interface WeightedEmotionProfile {
+  profile: EmotionProfile;
+  weight: number;
 }

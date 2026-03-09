@@ -77,6 +77,7 @@ export async function createProfiles(
           weight: hasFailed ? 0 : item.weight,
           emotions: emotionsRes.value,
           tonalities: tonalitiesRes.value,
+          status: hasFailed ? 'fallback' : 'ok',
         };
       } catch (err) {
         logger.error('LLM error', {
@@ -90,6 +91,7 @@ export async function createProfiles(
           weight: 0,
           emotions: FALLBACK_EMOTIONS,
           tonalities: FALLBACK_TONALITIES,
+          status: 'fallback',
         };
       }
     }),

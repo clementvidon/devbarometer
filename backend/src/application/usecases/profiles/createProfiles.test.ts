@@ -114,6 +114,7 @@ describe(createProfiles.name, () => {
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
     result.forEach((profile) => {
+      expect(profile.status).toStrictEqual('ok');
       expect(profile.emotions.joy).toStrictEqual(0.42);
       expect(profile.tonalities.positive).toStrictEqual(0.42);
       expect(profile.weight).toStrictEqual(1);
@@ -129,6 +130,7 @@ describe(createProfiles.name, () => {
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
     result.forEach((profile) => {
+      expect(profile.status).toStrictEqual('fallback');
       expect(profile.emotions.joy).toStrictEqual(0);
       expect(profile.tonalities.positive).toStrictEqual(0);
       expect(profile.weight).toStrictEqual(0);
@@ -156,6 +158,7 @@ describe(createProfiles.name, () => {
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
     result.forEach((profile) => {
+      expect(profile.status).toStrictEqual('fallback');
       expect(profile.emotions.joy).toStrictEqual(0);
       expect(profile.tonalities.positive).toStrictEqual(0);
       expect(profile.weight).toStrictEqual(0);

@@ -50,6 +50,7 @@ describe(aggregateProfiles.name, () => {
       weight: 0,
       emotions: makeEmotionScores(),
       tonalities: makeTonalityScores(),
+      status: 'ok',
       ...overrides,
     };
   }
