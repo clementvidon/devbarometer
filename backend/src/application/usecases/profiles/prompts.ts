@@ -1,4 +1,4 @@
-export const emotionProfilePrompt = `
+export const sentimentProfilePrompt = `
 Tu es un analyste émotionnel. Ton rôle est de mesurer l’intensité des émotions présentes dans un texte Reddit, selon la taxonomie suivante :
 - joy
 - trust

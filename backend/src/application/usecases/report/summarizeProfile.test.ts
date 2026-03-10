@@ -1,7 +1,7 @@
 import type { EmotionScores } from '@devbarometer/shared';
 import { describe, expect, test } from 'vitest';
 import type {
-  AggregatedEmotionProfile,
+  AggregatedSentimentProfile,
   TonalityScores,
 } from '../../../domain/entities';
 import {
@@ -24,7 +24,7 @@ const justAbove = (t: number) =>
 const MAX_SCORE = 1;
 
 /**
- * Spec: Summarize an aggregated emotion profile into labels usable by the report prompt.
+ * Spec: Summarize an aggregated sentiment profile into labels usable by the report prompt.
  * - Maps each emotion score to a StrengthLabel.
  * - Computes labeled tonalities (polarity/anticipation/surprise) via TONALITY_AXES.
  * - Selects standout emotions and maps their scores to StrengthLabels.
@@ -58,9 +58,9 @@ describe(summarizeProfile.name, () => {
       ...overrides,
     };
   }
-  function makeAggregatedEmotionProfile(
-    overrides: Partial<AggregatedEmotionProfile> = {},
-  ): AggregatedEmotionProfile {
+  function makeAggregatedSentimentProfile(
+    overrides: Partial<AggregatedSentimentProfile> = {},
+  ): AggregatedSentimentProfile {
     return {
       count: 0,
       totalWeight: 0,
@@ -74,7 +74,7 @@ describe(summarizeProfile.name, () => {
       joy: MIN_STANDOUT_SCORE,
       fear: MAX_SCORE,
     };
-    const profile = makeAggregatedEmotionProfile({
+    const profile = makeAggregatedSentimentProfile({
       emotions: makeEmotionScores(overrides),
     });
 
@@ -126,7 +126,7 @@ describe(summarizeProfile.name, () => {
     expect(result.standoutEmotions).toStrictEqual(standoutEmotions);
   });
   test('no standout emotions', () => {
-    const profile = makeAggregatedEmotionProfile();
+    const profile = makeAggregatedSentimentProfile();
 
     const result = summarizeProfile(profile);
 

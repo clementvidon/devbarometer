@@ -1,8 +1,8 @@
 import type { LlmMessage } from '../../ports/output/LlmPort';
-import { type EmotionProfileSummary } from '../report/summarizeProfile';
+import { type SentimentProfileSummary } from '../report/summarizeProfile';
 
 export function makeReportMessages(
-  summary: EmotionProfileSummary,
+  summary: SentimentProfileSummary,
   systemPrompt: string,
 ): readonly LlmMessage[] {
   return [

@@ -5,13 +5,13 @@ import type {
 
 export type { EmotionScores, TonalityScores };
 
-export interface EmotionProfile {
+export interface SentimentProfile {
   itemRef: string;
   emotions: EmotionScores;
   tonalities: TonalityScores;
   status: 'ok' | 'fallback';
 }
 
-export interface WeightedEmotionProfile extends EmotionProfile {
+export interface WeightedSentimentProfile extends SentimentProfile {
   weight: number;
 }

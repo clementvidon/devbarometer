@@ -65,7 +65,7 @@ import type {
 } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
-import { createProfiles } from './createProfiles';
+import { createSentimentProfiles } from './createSentimentProfiles';
 
 /**
  * Spec: Create emotion+tonality profiles for a list of weighted items using the LLM.
@@ -75,7 +75,7 @@ import { createProfiles } from './createProfiles';
  * - If the LLM call fails, returns a fallback profile for that item.
  */
 
-describe(createProfiles.name, () => {
+describe(createSentimentProfiles.name, () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
   ): EmotionScores {
@@ -128,12 +128,12 @@ describe(createProfiles.name, () => {
       child: vi.fn(),
     };
   }
-  test('turns a list of items into emotion profiles', async () => {
+  test('turns a list of items into sentiment profiles', async () => {
     const logger = makeLogger();
     const llm = makeLlm('valid');
     const items = [makeWeightedItem(), makeWeightedItem(), makeWeightedItem()];
 
-    const result = await createProfiles(logger, items, llm);
+    const result = await createSentimentProfiles(logger, items, llm);
 
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
@@ -151,7 +151,7 @@ describe(createProfiles.name, () => {
     const llm = makeLlm('invalid');
     const items = [makeWeightedItem(), makeWeightedItem(), makeWeightedItem()];
 
-    const result = await createProfiles(logger, items, llm);
+    const result = await createSentimentProfiles(logger, items, llm);
 
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);
@@ -169,7 +169,7 @@ describe(createProfiles.name, () => {
     const llm = makeLlm('valid');
     const items: WeightedItem[] = [];
 
-    const result = await createProfiles(logger, items, llm);
+    const result = await createSentimentProfiles(logger, items, llm);
 
     expect(llm.run).toHaveBeenCalledTimes(0);
     expect(result).toHaveLength(0);
@@ -181,7 +181,7 @@ describe(createProfiles.name, () => {
     };
     const items = [makeWeightedItem(), makeWeightedItem(), makeWeightedItem()];
 
-    const result = await createProfiles(logger, items, llm);
+    const result = await createSentimentProfiles(logger, items, llm);
 
     expect(llm.run).toHaveBeenCalledTimes(items.length * 2);
     expect(result).toHaveLength(items.length);

@@ -2,19 +2,19 @@ import { describe, expect, test } from 'vitest';
 import type {
   EmotionScores,
   TonalityScores,
-  WeightedEmotionProfile,
+  WeightedSentimentProfile,
 } from '../../entities';
-import { aggregateProfiles } from './aggregateProfiles';
+import { aggregateSentimentProfiles } from './aggregateSentimentProfiles';
 
 /**
- * Spec: Aggregate a list of emotion profiles into a weighted-average aggregated profile.
+ * Spec: Aggregate a list of sentiment profiles into a weighted-average aggregated profile.
  * - Computes `count` and `totalWeight`.
  * - Computes weighted averages for emotions and tonalities when `totalWeight > 0`.
  * - Returns all-zero scores when `totalWeight === 0`.
  * - Throws on empty input.
  */
 
-describe(aggregateProfiles.name, () => {
+describe(aggregateSentimentProfiles.name, () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
   ): EmotionScores {
@@ -41,9 +41,9 @@ describe(aggregateProfiles.name, () => {
       ...overrides,
     };
   }
-  function makeWeightedEmotionProfile(
-    overrides: Partial<WeightedEmotionProfile> = {},
-  ): WeightedEmotionProfile {
+  function makeWeightedSentimentProfile(
+    overrides: Partial<WeightedSentimentProfile> = {},
+  ): WeightedSentimentProfile {
     return {
       itemRef: 'itemRef',
       emotions: makeEmotionScores(),
@@ -53,42 +53,42 @@ describe(aggregateProfiles.name, () => {
       ...overrides,
     };
   }
-  test('aggregate a list of emotion profiles whose total weight is > 0', () => {
-    const profiles: WeightedEmotionProfile[] = [
-      makeWeightedEmotionProfile({
+  test('aggregate a list of sentiment profiles whose total weight is > 0', () => {
+    const profiles: WeightedSentimentProfile[] = [
+      makeWeightedSentimentProfile({
         emotions: makeEmotionScores({ joy: 0 }),
         tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
         weight: 3,
       }),
-      makeWeightedEmotionProfile({
+      makeWeightedSentimentProfile({
         emotions: makeEmotionScores({ joy: 1 }),
         tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
         weight: 1,
       }),
     ];
 
-    const result = aggregateProfiles(profiles);
+    const result = aggregateSentimentProfiles(profiles);
 
     expect(result.count).toBe(2);
     expect(result.totalWeight).toBe(4);
     expect(result.emotions.joy).toBeCloseTo(0.25);
     expect(result.tonalities.positive_surprise).toBeCloseTo(0.5);
   });
-  test('aggregate a list of emotion profiles whose total weight is 0', () => {
-    const profiles: WeightedEmotionProfile[] = [
-      makeWeightedEmotionProfile({
+  test('aggregate a list of sentiment profiles whose total weight is 0', () => {
+    const profiles: WeightedSentimentProfile[] = [
+      makeWeightedSentimentProfile({
         emotions: makeEmotionScores({ joy: 0 }),
         tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
         weight: 0,
       }),
-      makeWeightedEmotionProfile({
+      makeWeightedSentimentProfile({
         emotions: makeEmotionScores({ joy: 1 }),
         tonalities: makeTonalityScores({ positive_surprise: 0.5 }),
         weight: 0,
       }),
     ];
 
-    const result = aggregateProfiles(profiles);
+    const result = aggregateSentimentProfiles(profiles);
 
     expect(result.count).toBe(2);
     expect(result.totalWeight).toBe(0);
@@ -96,10 +96,10 @@ describe(aggregateProfiles.name, () => {
     expect(result.tonalities.positive_surprise).toBe(0);
   });
   test('throw if input is empty', () => {
-    const profiles: WeightedEmotionProfile[] = [];
+    const profiles: WeightedSentimentProfile[] = [];
 
     expect(() => {
-      aggregateProfiles(profiles);
+      aggregateSentimentProfiles(profiles);
     }).toThrow();
   });
 });

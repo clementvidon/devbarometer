@@ -1,5 +1,5 @@
 import {
-  type AggregatedEmotionProfile,
+  type AggregatedSentimentProfile,
   type Report,
 } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
@@ -32,7 +32,7 @@ function mergeCreateReportOptions(
 
 export async function createReport(
   logger: LoggerPort,
-  aggregatedProfile: AggregatedEmotionProfile,
+  aggregatedProfile: AggregatedSentimentProfile,
   llm: LlmPort,
   opts: Partial<CreateReportOptions> = {},
 ): Promise<Report> {

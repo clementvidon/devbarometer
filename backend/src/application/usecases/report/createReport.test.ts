@@ -23,7 +23,7 @@ vi.mock('./parseReport', () => ({
 
 import type { WeatherEmoji } from '@devbarometer/shared/domain';
 import type {
-  AggregatedEmotionProfile,
+  AggregatedSentimentProfile,
   EmotionScores,
   Report,
   TonalityScores,
@@ -59,9 +59,9 @@ function makeTonalityScores(
     ...overrides,
   };
 }
-function makeAggregatedEmotionProfile(
-  overrides: Partial<AggregatedEmotionProfile> = {},
-): AggregatedEmotionProfile {
+function makeAggregatedSentimentProfile(
+  overrides: Partial<AggregatedSentimentProfile> = {},
+): AggregatedSentimentProfile {
   return {
     count: 0,
     totalWeight: 0,
@@ -93,7 +93,7 @@ function makeLogger(): Mocked<LoggerPort> {
 }
 
 /**
- * Spec: Create a human-readable report from an aggregated emotion profile.
+ * Spec: Create a human-readable report from an aggregated sentiment profile.
  * - If `profile.count === 0`, returns FALLBACK_REPORT (no LLM call).
  * - Otherwise calls the LLM with the configured prompt/options and built messages.
  * - Returns a validated Report, or FALLBACK_REPORT on invalid output or errors.
@@ -105,10 +105,10 @@ describe(createReport.name, () => {
     emoji: '☀️' satisfies WeatherEmoji,
     text: 'my-report',
   };
-  test('turns an aggregated emotion profile into a report', async () => {
+  test('turns an aggregated sentiment profile into a report', async () => {
     const logger = makeLogger();
     const llm = makeLlm(LlmOutput.VALID);
-    const profile = makeAggregatedEmotionProfile({ count: 1 });
+    const profile = makeAggregatedSentimentProfile({ count: 1 });
 
     const result = await createReport(logger, profile, llm);
 
@@ -117,7 +117,7 @@ describe(createReport.name, () => {
   test('returns fallback when parsing fails', async () => {
     const logger = makeLogger();
     const llm = makeLlm(LlmOutput.INVALID);
-    const profile = makeAggregatedEmotionProfile({ count: 1 });
+    const profile = makeAggregatedSentimentProfile({ count: 1 });
 
     const result = await createReport(logger, profile, llm);
 
@@ -126,7 +126,7 @@ describe(createReport.name, () => {
   test('returns fallback if aggregated profile count is 0', async () => {
     const logger = makeLogger();
     const llm = makeLlm(LlmOutput.VALID);
-    const profile = makeAggregatedEmotionProfile({ count: 0 });
+    const profile = makeAggregatedSentimentProfile({ count: 0 });
 
     const result = await createReport(logger, profile, llm);
 
@@ -138,7 +138,7 @@ describe(createReport.name, () => {
     const llm = {
       run: vi.fn().mockRejectedValue(new Error('boom')),
     };
-    const profile = makeAggregatedEmotionProfile({ count: 1 });
+    const profile = makeAggregatedSentimentProfile({ count: 1 });
 
     const result = await createReport(logger, profile, llm);
 

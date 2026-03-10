@@ -1,8 +1,8 @@
 import type {
-  AggregatedEmotionProfile,
+  AggregatedSentimentProfile,
   EmotionScores,
   TonalityScores,
-  WeightedEmotionProfile,
+  WeightedSentimentProfile,
 } from '../../entities';
 
 const EMOTION_KEYS = [
@@ -23,11 +23,11 @@ const TONALITY_KEYS = [
   'negative_surprise',
 ] as const;
 
-export function aggregateProfiles(
-  profiles: WeightedEmotionProfile[],
-): AggregatedEmotionProfile {
+export function aggregateSentimentProfiles(
+  profiles: WeightedSentimentProfile[],
+): AggregatedSentimentProfile {
   if (profiles.length === 0) {
-    throw new Error('[aggregateProfiles] No profiles provided.');
+    throw new Error('[aggregateSentimentProfiles] No profiles provided.');
   }
 
   const zeroEmotions = Object.fromEntries(

@@ -1,5 +1,5 @@
 import type { EmotionScores, TonalityScores } from '@devbarometer/shared';
-import type { AggregatedEmotionProfile } from '../../../domain/entities';
+import type { AggregatedSentimentProfile } from '../../../domain/entities';
 
 export type StrengthLabel =
   | 'very weak'
@@ -21,7 +21,7 @@ export type TonalityLabels = {
   strength?: StrengthLabel;
 };
 
-export type EmotionProfileSummary = {
+export type SentimentProfileSummary = {
   emotionsStrength: EmotionLabels[];
   tonalitiesStrength: TonalityLabels[];
   standoutEmotions: EmotionLabels[];
@@ -117,8 +117,8 @@ export const TONALITY_AXES = {
 } as const satisfies Record<TonalityKey, TonalityAxisFields>;
 
 export function summarizeProfile(
-  profile: AggregatedEmotionProfile,
-): EmotionProfileSummary {
+  profile: AggregatedSentimentProfile,
+): SentimentProfileSummary {
   const { emotions, tonalities } = profile;
 
   const emotionsStrength = (

@@ -1,16 +1,16 @@
 import type { EmotionScores, TonalityScores } from '@devbarometer/shared';
 import { describe, expect, test } from 'vitest';
-import type { EmotionProfile, WeightedItem } from '../../entities';
-import { attachWeightsToProfiles } from './attachWeightsToProfiles';
+import type { SentimentProfile, WeightedItem } from '../../entities';
+import { attachWeightsToSentimentProfiles } from './attachWeightsToSentimentProfiles';
 
 /**
- * Spec: Attach weights from items to their corresponding emotion profiles
+ * Spec: Attach weights from items to their corresponding sentiment profiles
  * - Throws if profiles and weightedItems length mismatch
  * - Throws if profiles and weightedItems order mismatch
  * - Fallbacks forces weight = 0
  */
 
-describe(attachWeightsToProfiles.name, () => {
+describe(attachWeightsToSentimentProfiles.name, () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
   ): EmotionScores {
@@ -37,9 +37,9 @@ describe(attachWeightsToProfiles.name, () => {
       ...overrides,
     };
   }
-  function makeEmotionProfile(
-    overrides: Partial<EmotionProfile> = {},
-  ): EmotionProfile {
+  function makeSentimentProfile(
+    overrides: Partial<SentimentProfile> = {},
+  ): SentimentProfile {
     return {
       itemRef: 'itemRef',
       emotions: makeEmotionScores(),
@@ -60,11 +60,11 @@ describe(attachWeightsToProfiles.name, () => {
       ...overrides,
     };
   }
-  test('attach weights from items to their corresponding emotion profiles', () => {
+  test('attach weights from items to their corresponding sentiment profiles', () => {
     const profiles = [
-      makeEmotionProfile({ itemRef: 'a' }),
-      makeEmotionProfile({ itemRef: 'b' }),
-      makeEmotionProfile({ itemRef: 'c' }),
+      makeSentimentProfile({ itemRef: 'a' }),
+      makeSentimentProfile({ itemRef: 'b' }),
+      makeSentimentProfile({ itemRef: 'c' }),
     ];
     const weightedItems = [
       makeWeightedItem({ itemRef: 'a', weight: 1 }),
@@ -72,7 +72,7 @@ describe(attachWeightsToProfiles.name, () => {
       makeWeightedItem({ itemRef: 'c', weight: 2 }),
     ];
 
-    const result = attachWeightsToProfiles(profiles, weightedItems);
+    const result = attachWeightsToSentimentProfiles(profiles, weightedItems);
 
     result.forEach((profile, i) => {
       expect(profile).toStrictEqual({
@@ -86,22 +86,24 @@ describe(attachWeightsToProfiles.name, () => {
   });
   test('throw if profiles and weightedItems length mismatch', () => {
     const profiles = [
-      makeEmotionProfile({ itemRef: 'a' }),
-      makeEmotionProfile({ itemRef: 'b' }),
-      makeEmotionProfile({ itemRef: 'c' }),
+      makeSentimentProfile({ itemRef: 'a' }),
+      makeSentimentProfile({ itemRef: 'b' }),
+      makeSentimentProfile({ itemRef: 'c' }),
     ];
     const weightedItems = [
       makeWeightedItem({ itemRef: 'a', weight: 1 }),
       makeWeightedItem({ itemRef: 'b', weight: 3 }),
     ];
 
-    expect(() => attachWeightsToProfiles(profiles, weightedItems)).toThrow();
+    expect(() =>
+      attachWeightsToSentimentProfiles(profiles, weightedItems),
+    ).toThrow();
   });
   test('throws if profiles and weightedItems order mismatch', () => {
     const profiles = [
-      makeEmotionProfile({ itemRef: 'a' }),
-      makeEmotionProfile({ itemRef: 'b' }),
-      makeEmotionProfile({ itemRef: 'c' }),
+      makeSentimentProfile({ itemRef: 'a' }),
+      makeSentimentProfile({ itemRef: 'b' }),
+      makeSentimentProfile({ itemRef: 'c' }),
     ];
     const weightedItems = [
       makeWeightedItem({ itemRef: 'c', weight: 2 }),
@@ -109,13 +111,15 @@ describe(attachWeightsToProfiles.name, () => {
       makeWeightedItem({ itemRef: 'a', weight: 1 }),
     ];
 
-    expect(() => attachWeightsToProfiles(profiles, weightedItems)).toThrow();
+    expect(() =>
+      attachWeightsToSentimentProfiles(profiles, weightedItems),
+    ).toThrow();
   });
   test('fallbacks forces weight = 0', () => {
     const profiles = [
-      makeEmotionProfile({ itemRef: 'a', status: 'ok' }),
-      makeEmotionProfile({ itemRef: 'b', status: 'fallback' }),
-      makeEmotionProfile({ itemRef: 'c', status: 'ok' }),
+      makeSentimentProfile({ itemRef: 'a', status: 'ok' }),
+      makeSentimentProfile({ itemRef: 'b', status: 'fallback' }),
+      makeSentimentProfile({ itemRef: 'c', status: 'ok' }),
     ];
     const weightedItems = [
       makeWeightedItem({ itemRef: 'a', weight: 1 }),
@@ -123,7 +127,7 @@ describe(attachWeightsToProfiles.name, () => {
       makeWeightedItem({ itemRef: 'c', weight: 2 }),
     ];
 
-    const result = attachWeightsToProfiles(profiles, weightedItems);
+    const result = attachWeightsToSentimentProfiles(profiles, weightedItems);
 
     result.forEach((profile, i) => {
       expect(profile).toStrictEqual({

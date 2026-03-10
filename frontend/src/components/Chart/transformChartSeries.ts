@@ -1,4 +1,4 @@
-import type { AggregatedEmotionProfileDto } from '@devbarometer/shared';
+import type { AggregatedSentimentProfileDto } from '@devbarometer/shared';
 import { EMOTION_COLORS } from './config';
 import { dateFmtTooltip } from './formatters';
 
@@ -8,7 +8,7 @@ export type EmotionSeriesPoint = {
 } & Record<keyof typeof EMOTION_COLORS, number>;
 
 export function buildEmotionSeries(
-  profiles: AggregatedEmotionProfileDto[],
+  profiles: AggregatedSentimentProfileDto[],
 ): EmotionSeriesPoint[] {
   const keys = Object.keys(EMOTION_COLORS) as (keyof typeof EMOTION_COLORS)[];
   return profiles
@@ -33,7 +33,7 @@ export type TonalitySeriesPoint = {
 };
 
 export function buildTonalitySeries(
-  profiles: AggregatedEmotionProfileDto[],
+  profiles: AggregatedSentimentProfileDto[],
 ): TonalitySeriesPoint[] {
   return profiles
     .slice()

@@ -1,8 +1,8 @@
-import type { EmotionProfile, RelevantItem } from '../../../domain/entities';
+import type { RelevantItem, SentimentProfile } from '../../../domain/entities';
 import type { LlmRunOptions } from '../output/LlmPort';
 import type { LoggerPort } from '../output/LoggerPort';
 
-export interface CreateProfilesOptions {
+export interface CreateSentimentProfilesOptions {
   /** System prompt to evaluate emotions */
   emotionPrompt: string;
   /** System prompt to evaluate tonalities */
@@ -23,11 +23,11 @@ export interface CreateProfilesOptions {
  * - May perform external I/O (e.g. LLM calls) and log via the provided logger.
  * - On per-item failures, implementations may return fallback profiles.
  */
-export interface CreateProfilesPort {
-  /** Returns one EmotionProfile per input item (order preserved). */
-  createProfiles(
+export interface CreateSentimentProfilesPort {
+  /** Returns one SentimentProfile per input item (order preserved). */
+  createSentimentProfiles(
     logger: LoggerPort,
     items: RelevantItem[],
-    opts?: Partial<CreateProfilesOptions>,
-  ): Promise<EmotionProfile[]>;
+    opts?: Partial<CreateSentimentProfilesOptions>,
+  ): Promise<SentimentProfile[]>;
 }

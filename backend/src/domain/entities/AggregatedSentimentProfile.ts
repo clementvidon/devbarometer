@@ -5,7 +5,7 @@ import type {
 
 export type { EmotionScores, TonalityScores };
 
-export interface AggregatedEmotionProfile {
+export interface AggregatedSentimentProfile {
   count: number;
   totalWeight: number;
   emotions: EmotionScores;

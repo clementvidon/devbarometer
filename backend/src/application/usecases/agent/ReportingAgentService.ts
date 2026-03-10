@@ -1,6 +1,6 @@
 import type { WeightedItem } from '../../../domain/entities';
-import { aggregateProfiles } from '../../../domain/services/profiles/aggregateProfiles';
-import { attachWeightsToProfiles } from '../../../domain/services/profiles/attachWeightsToProfiles';
+import { aggregateSentimentProfiles } from '../../../domain/services/profiles/aggregateSentimentProfiles';
+import { attachWeightsToSentimentProfiles } from '../../../domain/services/profiles/attachWeightsToSentimentProfiles';
 import { formatFloat } from '../../../lib/number/formatFloat';
 import { nowIso } from '../../../lib/time/nowIso';
 import { withSpan } from '../../observability/withSpan';
@@ -9,8 +9,8 @@ import type { ItemsProviderPort } from '../../ports/output/ItemsProviderPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 import type { ComputeMomentumWeightsPort } from '../../ports/pipeline/ComputeMomentumWeightsPort';
-import type { CreateProfilesPort } from '../../ports/pipeline/CreateProfilesPort';
 import type { CreateReportPort } from '../../ports/pipeline/CreateReportPort';
+import type { CreateSentimentProfilesPort } from '../../ports/pipeline/CreateSentimentProfilesPort';
 import type { FilterRelevantItemsPort } from '../../ports/pipeline/FilterRelevantItemsPort';
 import { getLastRelevantItemsBefore } from '../queries/getLastRelevantItemsBefore';
 
@@ -24,7 +24,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     private readonly items: ItemsProviderPort,
     private readonly persistence: PersistencePort,
     private readonly relevance: FilterRelevantItemsPort,
-    private readonly profiles: CreateProfilesPort,
+    private readonly profiles: CreateSentimentProfilesPort,
     private readonly weights: ComputeMomentumWeightsPort,
     private readonly report: CreateReportPort,
   ) {}
@@ -50,8 +50,8 @@ export class ReportingAgentService implements ReportingAgentPort {
     log.info('Items filtered', { relevant: relevant.length });
 
     const [presentProfiles, previousRelevantItems] = await Promise.all([
-      withSpan(log, this.profiles.createProfiles.name, () =>
-        this.profiles.createProfiles(log, relevant),
+      withSpan(log, this.profiles.createSentimentProfiles.name, () =>
+        this.profiles.createSentimentProfiles(log, relevant),
       ),
       withSpan(log, getLastRelevantItemsBefore.name, () =>
         getLastRelevantItemsBefore(createdAt, this.persistence),
@@ -68,17 +68,19 @@ export class ReportingAgentService implements ReportingAgentPort {
     );
     log.info('Weights computed', { count: weightedItems.length });
 
-    const weightedEmotionProfiles = await withSpan(
+    const weightedProfiles = await withSpan(
       log,
-      attachWeightsToProfiles.name,
-      () => attachWeightsToProfiles(presentProfiles, weightedItems),
+      attachWeightsToSentimentProfiles.name,
+      () => attachWeightsToSentimentProfiles(presentProfiles, weightedItems),
     );
     log.info('Weights attached to profiles', {
-      count: weightedEmotionProfiles.length,
+      count: weightedProfiles.length,
     });
 
-    const aggregated = await withSpan(log, aggregateProfiles.name, () =>
-      aggregateProfiles(weightedEmotionProfiles),
+    const aggregated = await withSpan(
+      log,
+      aggregateSentimentProfiles.name,
+      () => aggregateSentimentProfiles(weightedProfiles),
     );
     log.info('Profiles aggregated');
 
@@ -92,8 +94,8 @@ export class ReportingAgentService implements ReportingAgentPort {
         fetchRef,
         inputItems: items,
         weightedItems: weightedItems,
-        weightedEmotionProfiles: weightedEmotionProfiles,
-        aggregatedEmotionProfile: aggregated,
+        weightedSentimentProfiles: weightedProfiles,
+        aggregatedSentimentProfile: aggregated,
         report,
       }),
     );

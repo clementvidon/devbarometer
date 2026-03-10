@@ -1,8 +1,8 @@
 import pLimit from 'p-limit';
-import type { EmotionProfile, RelevantItem } from '../../../domain/entities';
+import type { RelevantItem, SentimentProfile } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
-import type { CreateProfilesOptions } from '../../ports/pipeline/CreateProfilesPort';
+import type { CreateSentimentProfilesOptions } from '../../ports/pipeline/CreateSentimentProfilesPort';
 import { makeProfileMessages } from './llmMessages';
 import { parseEmotion } from './parseEmotion';
 import { parseTonality } from './parseTonality';
@@ -12,18 +12,18 @@ import {
   FALLBACK_TONALITIES,
   PROFILES_LLM_OPTIONS,
 } from './policy';
-import { emotionProfilePrompt, tonalityProfilePrompt } from './prompts';
+import { sentimentProfilePrompt, tonalityProfilePrompt } from './prompts';
 
 const DEFAULT_CREATE_PROFILES_OPTIONS = {
-  emotionPrompt: emotionProfilePrompt,
+  emotionPrompt: sentimentProfilePrompt,
   tonalityPrompt: tonalityProfilePrompt,
   concurrency: CONCURRENCY,
   llmOptions: PROFILES_LLM_OPTIONS,
-} satisfies CreateProfilesOptions;
+} satisfies CreateSentimentProfilesOptions;
 
-function mergeCreateProfilesOptions(
-  opts: Partial<CreateProfilesOptions> = {},
-): CreateProfilesOptions {
+function mergeCreateSentimentProfilesOptions(
+  opts: Partial<CreateSentimentProfilesOptions> = {},
+): CreateSentimentProfilesOptions {
   const mergedLlmOptions = {
     ...DEFAULT_CREATE_PROFILES_OPTIONS.llmOptions,
     ...(opts.llmOptions ?? {}),
@@ -35,25 +35,25 @@ function mergeCreateProfilesOptions(
   };
 }
 
-export async function createProfiles(
+export async function createSentimentProfiles(
   logger: LoggerPort,
   items: RelevantItem[],
   llm: LlmPort,
-  opts: Partial<CreateProfilesOptions> = {},
-): Promise<EmotionProfile[]> {
+  opts: Partial<CreateSentimentProfilesOptions> = {},
+): Promise<SentimentProfile[]> {
   if (items.length === 0) {
     logger.error('No items to profile.');
     return [];
   }
 
   const { emotionPrompt, tonalityPrompt, concurrency, llmOptions } =
-    mergeCreateProfilesOptions(opts);
+    mergeCreateSentimentProfilesOptions(opts);
 
   const limit = pLimit(concurrency);
   const { model, ...runOpts } = llmOptions;
 
   const jobs = items.map((item) =>
-    limit(async (): Promise<EmotionProfile> => {
+    limit(async (): Promise<SentimentProfile> => {
       try {
         const [rawEmotion, rawTonality] = await Promise.all([
           llm.run(model, makeProfileMessages(item, emotionPrompt), runOpts),

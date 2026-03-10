@@ -43,8 +43,8 @@ describe(getLastRelevantItemsBefore.name, () => {
       fetchRef: 'fetchRef',
       inputItems: [],
       weightedItems: [],
-      weightedEmotionProfiles: [],
-      aggregatedEmotionProfile: {
+      weightedSentimentProfiles: [],
+      aggregatedSentimentProfile: {
         count: 0,
         totalWeight: 0,
         emotions: {

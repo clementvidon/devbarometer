@@ -1,16 +1,16 @@
 import type {
-  EmotionProfile,
-  WeightedEmotionProfile,
+  SentimentProfile,
   WeightedItem,
+  WeightedSentimentProfile,
 } from '../../entities';
 
-export function attachWeightsToProfiles(
-  profiles: EmotionProfile[],
+export function attachWeightsToSentimentProfiles(
+  profiles: SentimentProfile[],
   weightedItems: WeightedItem[],
-): WeightedEmotionProfile[] {
+): WeightedSentimentProfile[] {
   if (profiles.length !== weightedItems.length) {
     throw new Error(
-      `[${attachWeightsToProfiles.name}] Profiles/items length mismatch.`,
+      `[${attachWeightsToSentimentProfiles.name}] Profiles/items length mismatch.`,
     );
   }
 
@@ -19,7 +19,7 @@ export function attachWeightsToProfiles(
 
     if (profile.itemRef !== weightedItem.itemRef) {
       throw new Error(
-        `[${attachWeightsToProfiles.name}] Item/profile mismatch.`,
+        `[${attachWeightsToSentimentProfiles.name}] Item/profile mismatch.`,
       );
     }
 

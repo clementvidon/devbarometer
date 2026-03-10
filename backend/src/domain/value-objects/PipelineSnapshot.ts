@@ -19,7 +19,7 @@ export const WeightedItemSchema = ItemSchema.extend({
   weight: z.number().finite(),
 }).strict();
 
-export const EmotionProfileSchema = z
+export const SentimentProfileSchema = z
   .object({
     itemRef: z.string(),
     status: z.enum(['ok', 'fallback']),
@@ -28,11 +28,11 @@ export const EmotionProfileSchema = z
   })
   .strict();
 
-export const WeightedEmotionProfileSchema = EmotionProfileSchema.extend({
+export const WeightedSentimentProfileSchema = SentimentProfileSchema.extend({
   weight: z.number().finite(),
 }).strict();
 
-export const AggregatedEmotionProfileSchema = z
+export const AggregatedSentimentProfileSchema = z
   .object({
     count: z.number().int().nonnegative(),
     totalWeight: z.number().finite(),
@@ -46,8 +46,8 @@ export const SnapshotDataSchema = z
     fetchRef: z.string(),
     inputItems: z.array(ItemSchema),
     weightedItems: z.array(WeightedItemSchema),
-    weightedEmotionProfiles: z.array(WeightedEmotionProfileSchema),
-    aggregatedEmotionProfile: AggregatedEmotionProfileSchema,
+    weightedSentimentProfiles: z.array(WeightedSentimentProfileSchema),
+    aggregatedSentimentProfile: AggregatedSentimentProfileSchema,
     report: ReportSchema,
   })
   .strict();

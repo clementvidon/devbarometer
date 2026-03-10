@@ -1,4 +1,4 @@
-export * from './AggregatedEmotionProfile';
-export * from './EmotionProfile';
+export * from './AggregatedSentimentProfile';
 export * from './Item';
 export * from './Report';
+export * from './SentimentProfile';

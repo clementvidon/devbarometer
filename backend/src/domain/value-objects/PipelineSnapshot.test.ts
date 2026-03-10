@@ -29,7 +29,7 @@ function makeSnapshotData(): SnapshotData {
         weight: 1.5,
       },
     ],
-    weightedEmotionProfiles: [
+    weightedSentimentProfiles: [
       {
         itemRef: 'item',
         status: 'ok',
@@ -52,7 +52,7 @@ function makeSnapshotData(): SnapshotData {
         weight: 1.5,
       },
     ],
-    aggregatedEmotionProfile: {
+    aggregatedSentimentProfile: {
       count: 1,
       totalWeight: 1.5,
       emotions: {
@@ -89,10 +89,10 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects former weightedEmotionProfiles with nested profile', () => {
+  test('rejects former weightedSentimentProfiles with nested profile', () => {
     const invalid = {
       ...makeSnapshotData(),
-      weightedEmotionProfiles: [
+      weightedSentimentProfiles: [
         {
           profile: {
             itemRef: 'item',
@@ -121,10 +121,10 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects former emotion profiles with title', () => {
+  test('rejects former sentiment profiles with title', () => {
     const invalid = {
       ...makeSnapshotData(),
-      weightedEmotionProfiles: [
+      weightedSentimentProfiles: [
         {
           itemRef: 'item',
           title: 'title',

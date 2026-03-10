@@ -3,14 +3,14 @@ import type { RelevantItem } from '../../../domain/entities';
 import { makeProfileMessages } from './llmMessages';
 
 /**
- * Spec: Build ordered LLM messages to extract an emotion profile from a relevant item.
+ * Spec: Build ordered LLM messages to extract an sentiment profile from a relevant item.
  * - Returns exactly 2 messages: system first, user second.
  * - Injects the system prompt as the system message content.
  * - Injects item title+content into the user message.
  */
 
 describe(makeProfileMessages.name, () => {
-  test('creates a system and user message for the emotion profile creation', () => {
+  test('creates a system and user message for the sentiment profile creation', () => {
     const item = {
       title: 'my-title',
       content: 'my-content',

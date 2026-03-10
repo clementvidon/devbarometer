@@ -1,4 +1,4 @@
-import { AggregatedEmotionProfileDtoSchema } from '@devbarometer/shared';
+import { AggregatedSentimentProfileDtoSchema } from '@devbarometer/shared';
 import { useEffect, useState } from 'react';
 import { EMOTION_KEYS, TONALITY_KEYS } from './config';
 import { smoothUX } from './smoothing';
@@ -23,7 +23,7 @@ export function useChartData() {
       try {
         const baseUrl = import.meta.env.BASE_URL;
         const res = await fetch(baseUrl + 'chart.json');
-        const profiles = AggregatedEmotionProfileDtoSchema.array().parse(
+        const profiles = AggregatedSentimentProfileDtoSchema.array().parse(
           await res.json(),
         );
         setEmotionData(

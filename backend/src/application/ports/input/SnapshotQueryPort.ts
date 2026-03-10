@@ -1,5 +1,5 @@
 import type {
-  AggregatedEmotionProfileDto,
+  AggregatedSentimentProfileDto,
   HeadlineDto,
   ReportDto,
 } from '@devbarometer/shared/dtos';
@@ -15,7 +15,7 @@ export interface SnapshotQueryPort {
   /** Returns the latest report or null if none. */
   getLastReport(): Promise<ReportDto | null>;
   /** Returns aggregated profiles for all snapshots (newest-first source). */
-  getAggregatedProfiles(): Promise<AggregatedEmotionProfileDto[]>;
+  getAggregatedProfiles(): Promise<AggregatedSentimentProfileDto[]>;
   /** Returns top headlines from the latest snapshot; `limit` defaults are impl-specific. */
   getTopHeadlines(limit?: number): Promise<HeadlineDto[]>;
 }

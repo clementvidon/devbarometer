@@ -1,5 +1,5 @@
 import type {
-  AggregatedEmotionProfileDto,
+  AggregatedSentimentProfileDto,
   HeadlineDto,
   ReportDto,
 } from '@devbarometer/shared/dtos';
@@ -15,7 +15,7 @@ export class SnapshotQueryService implements SnapshotQueryPort {
   async getLastReport(): Promise<ReportDto | null> {
     return getLastReport(this.persistence);
   }
-  getAggregatedProfiles(): Promise<AggregatedEmotionProfileDto[]> {
+  getAggregatedProfiles(): Promise<AggregatedSentimentProfileDto[]> {
     return getAggregatedProfiles(this.persistence);
   }
   getTopHeadlines(limit?: number): Promise<HeadlineDto[]> {

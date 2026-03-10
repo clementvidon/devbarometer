@@ -1,9 +1,9 @@
 import { describe, expect, test } from 'vitest';
 import { makeReportMessages } from './llmMessages';
-import type { EmotionProfileSummary } from './summarizeProfile';
+import type { SentimentProfileSummary } from './summarizeProfile';
 
 /**
- * Spec: Build ordered LLM messages to generate a report from an emotion profile summary.
+ * Spec: Build ordered LLM messages to generate a report from an sentiment profile summary.
  * - Returns exactly 2 messages: system first, user second.
  * - Injects the system prompt as the system message content.
  * - Injects the JSON summary into the user message content.
@@ -15,7 +15,7 @@ describe(makeReportMessages.name, () => {
       emotionsStrength: [],
       tonalitiesStrength: [],
       standoutEmotions: [],
-    } as EmotionProfileSummary;
+    } as SentimentProfileSummary;
     const systemPrompt = 'my-system-prompt';
 
     const result = makeReportMessages(summary, systemPrompt);

@@ -1,4 +1,4 @@
-import type { AggregatedEmotionProfile } from '../../../domain/entities';
+import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type {
@@ -12,12 +12,12 @@ export class LlmCreateReportStep implements CreateReportPort {
 
   async createReport(
     logger: LoggerPort,
-    aggregatedEmotionProfile: AggregatedEmotionProfile,
+    aggregatedSentimentProfile: AggregatedSentimentProfile,
     opts?: Partial<CreateReportOptions>,
   ) {
     return await createReportUsecase(
       logger.child({ scope: 'report.create' }),
-      aggregatedEmotionProfile,
+      aggregatedSentimentProfile,
       this.llm,
       opts,
     );
