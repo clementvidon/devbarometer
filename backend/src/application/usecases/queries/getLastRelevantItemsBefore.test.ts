@@ -34,7 +34,7 @@ describe(getLastRelevantItemsBefore.name, () => {
       ...overrides,
     };
   }
-  function makeSnapshot(
+  function makePipelineSnapshot(
     overrides: Partial<PipelineSnapshot> = {},
   ): PipelineSnapshot {
     return {
@@ -73,19 +73,19 @@ describe(getLastRelevantItemsBefore.name, () => {
   }
   function makePersistence(): PersistencePort {
     const snapshots: PipelineSnapshot[] = [
-      makeSnapshot({
+      makePipelineSnapshot({
         createdAt: '2026-02-01',
         weightedItems: [makeWeightedItem({ title: 'A', weight: 3 })],
       }),
-      makeSnapshot({
+      makePipelineSnapshot({
         createdAt: '2026-02-02',
         weightedItems: [makeWeightedItem({ title: 'B', weight: 3 })],
       }),
-      makeSnapshot({
+      makePipelineSnapshot({
         createdAt: '2026-02-03',
         weightedItems: [makeWeightedItem({ title: 'C', weight: 3 })],
       }),
-      makeSnapshot({
+      makePipelineSnapshot({
         createdAt: '2026-02-04',
         weightedItems: [makeWeightedItem({ title: 'D', weight: 3 })],
       }),
