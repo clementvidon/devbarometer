@@ -16,8 +16,10 @@ export const WEATHER_EMOJIS = [
 export const WeatherEmojiSchema = z.enum(WEATHER_EMOJIS);
 export type WeatherEmoji = z.infer<typeof WeatherEmojiSchema>;
 
-export const ReportSchema = z.object({
-  text: z.string().max(200),
-  emoji: WeatherEmojiSchema,
-});
+export const ReportSchema = z
+  .object({
+    text: z.string().max(200),
+    emoji: WeatherEmojiSchema,
+  })
+  .strict();
 export type Report = z.infer<typeof ReportSchema>;

@@ -1,7 +1,7 @@
+import type { Report } from '@devbarometer/shared';
 import type {
   AggregatedSentimentProfileDto,
   HeadlineDto,
-  ReportDto,
 } from '@devbarometer/shared/dtos';
 import type { SnapshotQueryPort } from '../../ports/input/SnapshotQueryPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
@@ -12,7 +12,7 @@ import { getTopHeadlines } from './getTopHeadlines';
 export class SnapshotQueryService implements SnapshotQueryPort {
   constructor(private readonly persistence: PersistencePort) {}
 
-  async getLastReport(): Promise<ReportDto | null> {
+  async getLastReport(): Promise<Report | null> {
     return getLastReport(this.persistence);
   }
   getAggregatedProfiles(): Promise<AggregatedSentimentProfileDto[]> {
