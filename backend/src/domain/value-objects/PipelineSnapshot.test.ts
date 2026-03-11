@@ -12,7 +12,7 @@ import {
 function makeSnapshotData(): SnapshotData {
   return {
     fetchRef: 'fetch-ref',
-    inputItems: [
+    fetchedItems: [
       {
         itemRef: 'item',
         title: 'title',
@@ -83,9 +83,9 @@ describe('SnapshotDataSchema', () => {
   test('parses correct snapshot', () => {
     expect(() => SnapshotDataSchema.parse(makeSnapshotData())).not.toThrow();
   });
-  test('rejects snapshots missing inputItems', () => {
+  test('rejects snapshots missing fetchedItems', () => {
     const snapshot = makeSnapshotData();
-    const { inputItems: _inputItems, ...invalid } = snapshot;
+    const { fetchedItems: _fetchedItems, ...invalid } = snapshot;
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
@@ -216,13 +216,13 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects NaN score in inputItems', () => {
+  test('rejects NaN score in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
       ...snapshot,
-      inputItems: [
+      fetchedItems: [
         {
-          ...snapshot.inputItems[0],
+          ...snapshot.fetchedItems[0],
           score: NaN,
         },
       ],
@@ -230,13 +230,13 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects Infinity score in inputItems', () => {
+  test('rejects Infinity score in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
       ...snapshot,
-      inputItems: [
+      fetchedItems: [
         {
-          ...snapshot.inputItems[0],
+          ...snapshot.fetchedItems[0],
           score: Infinity,
         },
       ],
@@ -272,13 +272,13 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('accepts negative score in inputItems and weightedItems', () => {
+  test('accepts negative score in fetchedItems and weightedItems', () => {
     const snapshot = makeSnapshotData();
     const valid = {
       ...snapshot,
-      inputItems: [
+      fetchedItems: [
         {
-          ...snapshot.inputItems[0],
+          ...snapshot.fetchedItems[0],
           score: -42,
         },
       ],
@@ -292,13 +292,13 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(valid)).not.toThrow();
   });
-  test('rejects blank itemRef in inputItems', () => {
+  test('rejects blank itemRef in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
       ...snapshot,
-      inputItems: [
+      fetchedItems: [
         {
-          ...snapshot.inputItems[0],
+          ...snapshot.fetchedItems[0],
           itemRef: '   ',
         },
       ],
@@ -306,13 +306,13 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects blank title in inputItems', () => {
+  test('rejects blank title in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
       ...snapshot,
-      inputItems: [
+      fetchedItems: [
         {
-          ...snapshot.inputItems[0],
+          ...snapshot.fetchedItems[0],
           title: '   ',
         },
       ],

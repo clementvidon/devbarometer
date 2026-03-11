@@ -26,9 +26,9 @@ const rootLogger = makeLogger();
 type RawRow = {
   id?: string;
   date_created: string;
-  data: { inputItems: Item[] };
+  data: { fetchedItems: Item[] };
 };
-type SnapRow = { id?: string; createdAt: string; inputItems: Item[] };
+type SnapRow = { id?: string; createdAt: string; fetchedItems: Item[] };
 type AnyRow = RawRow | SnapRow;
 
 const USAGE = 'Usage: tsx src/cli/replay <input.json>';
@@ -50,8 +50,8 @@ function getCreatedAtISO(row: AnyRow): string {
   return 'date_created' in row ? toISO(row.date_created) : toISO(row.createdAt);
 }
 
-function getInputItems(row: AnyRow): Item[] {
-  return 'data' in row ? row.data.inputItems : row.inputItems;
+function getFetchedItems(row: AnyRow): Item[] {
+  return 'data' in row ? row.data.fetchedItems : row.fetchedItems;
 }
 
 function getFetchRef(row: AnyRow, createdAt: string): string {
@@ -122,7 +122,7 @@ export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
   for (const [rIndex, r] of rows.entries()) {
     const createdAt = getCreatedAtISO(r);
     const fetchRef = getFetchRef(r, createdAt);
-    const items = getInputItems(r);
+    const items = getFetchedItems(r);
 
     if (!items.length) {
       log.debug('Skip empty row', {

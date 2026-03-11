@@ -92,7 +92,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     await withSpan(log, this.persistence.storeSnapshotAt.name, () =>
       this.persistence.storeSnapshotAt(createdAt, {
         fetchRef,
-        inputItems: items,
+        fetchedItems: items,
         weightedItems: weightedItems,
         weightedSentimentProfiles: weightedProfiles,
         aggregatedSentimentProfile: aggregated,
