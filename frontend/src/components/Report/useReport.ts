@@ -1,25 +1,32 @@
-import type { Report } from '@devbarometer/shared';
+import { ReportSchema, type Report } from '@devbarometer/shared';
 import { useEffect, useState } from 'react';
+
+function parseReportJson(data: unknown): Report {
+  const parsed = ReportSchema.safeParse(data);
+  if (!parsed.success) {
+    throw new Error('Format de données invalide');
+  }
+  return parsed.data;
+}
 
 export function useReport() {
   const [report, setReport] = useState<Report | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const baseUrl: string = import.meta.env.BASE_URL;
-    void fetch(baseUrl + 'report.json')
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data: unknown) => {
-        if (data && typeof data === 'object') {
-          setReport(data as Report);
-        } else {
-          throw new Error('Format de données invalide');
-        }
-      })
-      .catch((err: unknown) => {
+    async function loadReport() {
+      try {
+        const baseUrl: string = import.meta.env.BASE_URL;
+        const response = await fetch(baseUrl + 'report.json');
+        const data: unknown = response.ok ? await response.json() : null;
+        setReport(parseReportJson(data));
+      } catch (err: unknown) {
         setError(err instanceof Error ? err : new Error('Erreur inconnue'));
         setReport(null);
-      });
+      }
+    }
+
+    void loadReport();
   }, []);
 
   return {
