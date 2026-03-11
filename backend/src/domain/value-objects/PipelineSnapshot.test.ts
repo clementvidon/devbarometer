@@ -80,16 +80,16 @@ function makeSnapshotData(): SnapshotData {
 }
 
 describe('SnapshotDataSchema', () => {
-  test('parses the final persisted shape', () => {
+  test('parses correct snapshot', () => {
     expect(() => SnapshotDataSchema.parse(makeSnapshotData())).not.toThrow();
   });
-  test('rejects if inputItems is missing', () => {
+  test('rejects snapshots missing inputItems', () => {
     const snapshot = makeSnapshotData();
     const { inputItems: _inputItems, ...invalid } = snapshot;
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects former weightedSentimentProfiles with nested profile', () => {
+  test('rejects legacy weighted sentiment profiles nested under profile', () => {
     const invalid = {
       ...makeSnapshotData(),
       weightedSentimentProfiles: [
@@ -121,7 +121,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects former sentiment profiles with title', () => {
+  test('rejects legacy sentiment profiles containing title', () => {
     const invalid = {
       ...makeSnapshotData(),
       weightedSentimentProfiles: [
@@ -152,10 +152,252 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects former snapshots with relevantItems', () => {
+  test('rejects legacy snapshots containing relevant items', () => {
     const invalid = {
       ...makeSnapshotData(),
       relevantItems: [],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects NaN weight in weighted items', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedItems: [
+        {
+          ...snapshot.weightedItems[0],
+          weight: NaN,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects Infinity weight in weightedItems', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedItems: [
+        {
+          ...snapshot.weightedItems[0],
+          weight: Infinity,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects negative weight in weightedItems', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedItems: [
+        {
+          ...snapshot.weightedItems[0],
+          weight: -1,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects negative weight in weightedSentimentProfiles', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedSentimentProfiles: [
+        {
+          ...snapshot.weightedSentimentProfiles[0],
+          weight: -1,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects NaN score in inputItems', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      inputItems: [
+        {
+          ...snapshot.inputItems[0],
+          score: NaN,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects Infinity score in inputItems', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      inputItems: [
+        {
+          ...snapshot.inputItems[0],
+          score: Infinity,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects NaN score in weightedItems', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedItems: [
+        {
+          ...snapshot.weightedItems[0],
+          score: NaN,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects Infinity score in weightedItems', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedItems: [
+        {
+          ...snapshot.weightedItems[0],
+          score: Infinity,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('accepts negative score in inputItems and weightedItems', () => {
+    const snapshot = makeSnapshotData();
+    const valid = {
+      ...snapshot,
+      inputItems: [
+        {
+          ...snapshot.inputItems[0],
+          score: -42,
+        },
+      ],
+      weightedItems: [
+        {
+          ...snapshot.weightedItems[0],
+          score: -42,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(valid)).not.toThrow();
+  });
+  test('rejects blank itemRef in inputItems', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      inputItems: [
+        {
+          ...snapshot.inputItems[0],
+          itemRef: '   ',
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects blank title in inputItems', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      inputItems: [
+        {
+          ...snapshot.inputItems[0],
+          title: '   ',
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects blank fetchRef', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      fetchRef: '   ',
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects snapshots when weightedItems and weightedSentimentProfiles lengths differ', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedSentimentProfiles: [],
+      aggregatedSentimentProfile: {
+        ...makeSnapshotData().aggregatedSentimentProfile,
+        count: 0,
+        totalWeight: 0,
+      },
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects snapshots when weightedItems and weightedSentimentProfiles are not aligned', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedItems: [
+        {
+          ...snapshot.weightedItems[0],
+          itemRef: 'item-a',
+        },
+      ],
+      weightedSentimentProfiles: [
+        {
+          ...snapshot.weightedSentimentProfiles[0],
+          itemRef: 'item-b',
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects fallback weighted sentiment profiles with non-zero weight', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedSentimentProfiles: [
+        {
+          ...snapshot.weightedSentimentProfiles[0],
+          status: 'fallback',
+          weight: 1.5,
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects snapshots with inconsistent aggregatedSentimentProfile.count', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      aggregatedSentimentProfile: {
+        ...snapshot.aggregatedSentimentProfile,
+        count: 999,
+      },
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects snapshots with inconsistent aggregatedSentimentProfile.totalWeight', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      aggregatedSentimentProfile: {
+        ...snapshot.aggregatedSentimentProfile,
+        totalWeight: 999,
+      },
     };
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
@@ -171,5 +413,28 @@ describe('PipelineSnapshotSchema', () => {
     };
 
     expect(() => PipelineSnapshotSchema.parse(snapshot)).not.toThrow();
+  });
+  test('rejects a persisted snapshot with inconsistent aggregated totalWeight', () => {
+    const profileWeight = 1.5;
+    const inconsistentTotalWeight = 999;
+    const snapshot = makeSnapshotData();
+
+    const invalid = {
+      id: '550e8400-e29b-41d4-a716-446655440000',
+      createdAt: '2026-03-09T12:00:00.000Z',
+      ...snapshot,
+      weightedSentimentProfiles: [
+        {
+          ...makeSnapshotData().weightedSentimentProfiles[0],
+          weight: profileWeight,
+        },
+      ],
+      aggregatedSentimentProfile: {
+        ...makeSnapshotData().aggregatedSentimentProfile,
+        totalWeight: inconsistentTotalWeight,
+      },
+    };
+
+    expect(() => PipelineSnapshotSchema.parse(invalid)).toThrow();
   });
 });
