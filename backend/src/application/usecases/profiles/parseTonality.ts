@@ -1,4 +1,4 @@
-import type { TonalityScores } from '@devbarometer/shared';
+import type { TonalityScores } from '@devbarometer/shared/domain';
 import { z } from 'zod';
 import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';

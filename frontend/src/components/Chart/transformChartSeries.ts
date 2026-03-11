@@ -1,4 +1,4 @@
-import type { AggregatedSentimentProfileDto } from '@devbarometer/shared';
+import type { AggregatedSentimentProfileDto } from '@devbarometer/shared/dtos';
 import { EMOTION_COLORS } from './config';
 import { dateFmtTooltip } from './formatters';
 

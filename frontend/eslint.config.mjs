@@ -15,7 +15,7 @@ export default defineConfig([
   },
   sharedConfig,
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['src/**/*.{ts,tsx}'],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
@@ -39,6 +39,36 @@ export default defineConfig([
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
+        },
+      ],
+    },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'zod',
+              importNames: ['default'],
+              message:
+                'Use `import { z } from "zod"` instead of the default import.',
+            },
+            {
+              name: '@devbarometer/shared',
+              message:
+                'Use explicit shared subpath imports: "@devbarometer/shared/domain", "@devbarometer/shared/dtos", or "@devbarometer/shared/primitives".',
+            },
+          ],
+          patterns: [
+            {
+              group: ['@devbarometer/shared/*/*'],
+              message:
+                'Use only published shared subpath barrels, not deep internal shared paths.',
+            },
+          ],
         },
       ],
     },

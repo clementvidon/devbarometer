@@ -1,4 +1,4 @@
-import { AggregatedSentimentProfileDtoSchema } from '@devbarometer/shared';
+import { AggregatedSentimentProfileDtoSchema } from '@devbarometer/shared/dtos';
 import { useEffect, useState } from 'react';
 import { EMOTION_KEYS, TONALITY_KEYS } from './config';
 import { smoothUX } from './smoothing';

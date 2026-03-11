@@ -1,4 +1,4 @@
-import type { TonalityScores } from '@devbarometer/shared';
+import type { TonalityScores } from '@devbarometer/shared/domain';
 import { describe, expect, test } from 'vitest';
 import { parseTonality } from './parseTonality';
 import { FALLBACK_TONALITIES } from './policy';

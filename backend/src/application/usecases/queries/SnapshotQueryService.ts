@@ -1,4 +1,4 @@
-import type { Report } from '@devbarometer/shared';
+import type { Report } from '@devbarometer/shared/domain';
 import type {
   AggregatedSentimentProfileDto,
   HeadlineDto,

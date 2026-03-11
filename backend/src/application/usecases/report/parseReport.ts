@@ -1,5 +1,7 @@
-import { ReportSchema as ReportOutputSchema } from '@devbarometer/shared/domain';
-import type { Report } from '../../../domain/entities';
+import {
+  ReportSchema as ReportOutputSchema,
+  type Report,
+} from '@devbarometer/shared/domain';
 import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 import { FALLBACK_REPORT } from '../report/policy';

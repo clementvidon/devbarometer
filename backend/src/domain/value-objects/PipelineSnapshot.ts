@@ -1,5 +1,6 @@
-import { IsoDateStringSchema, ReportSchema } from '@devbarometer/shared';
-import z from 'zod';
+import { ReportSchema } from '@devbarometer/shared/domain';
+import { IsoDateStringSchema } from '@devbarometer/shared/primitives';
+import { z } from 'zod';
 import {
   AggregatedSentimentProfileSchema,
   ItemSchema,

@@ -1,7 +1,5 @@
-import type {
-  AggregatedSentimentProfile,
-  Report,
-} from '../../../domain/entities';
+import type { Report } from '@devbarometer/shared/domain';
+import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import type { LlmRunOptions } from '../output/LlmPort';
 import type { LoggerPort } from '../output/LoggerPort';
 

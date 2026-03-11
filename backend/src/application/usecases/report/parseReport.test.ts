@@ -1,5 +1,5 @@
+import type { Report } from '@devbarometer/shared/domain';
 import { describe, expect, test } from 'vitest';
-import type { Report } from '../../../domain/entities';
 import { parseReport } from './parseReport';
 import { FALLBACK_REPORT } from './policy';
 

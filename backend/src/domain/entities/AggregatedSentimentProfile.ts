@@ -2,7 +2,7 @@ import {
   EmotionScoresSchema,
   TonalityScoresSchema,
 } from '@devbarometer/shared/domain';
-import z from 'zod';
+import { z } from 'zod';
 
 export const AggregatedSentimentProfileSchema = z
   .object({

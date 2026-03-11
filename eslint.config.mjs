@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import importPlugin from 'eslint-plugin-import';
 import vitest from 'eslint-plugin-vitest';
@@ -37,7 +38,11 @@ export default defineConfig([
         ...globals.browser,
       },
     },
-    plugins: { js, import: importPlugin },
+    plugins: {
+      js,
+      import: importPlugin,
+      '@typescript-eslint': tseslint,
+    },
     settings: {
       'import/resolver': {
         node: { extensions: ['.ts', '.tsx', '.js', '.jsx'] },
@@ -49,6 +54,14 @@ export default defineConfig([
         'error',
         'ignorePackages',
         { js: 'always', ts: 'never', tsx: 'never' },
+      ],
+      'import/no-duplicates': 'error',
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
+        {
+          prefer: 'type-imports',
+          fixStyle: 'separate-type-imports',
+        },
       ],
     },
   },
@@ -75,23 +88,6 @@ export default defineConfig([
         afterEach: true,
         it: true,
       },
-    },
-  },
-  {
-    files: ['frontend/src/**/*.{ts,tsx}', 'backend/src/**/*.{ts,tsx}'],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['@devbarometer/shared/*/*'],
-              message:
-                'Use the published barrels (e.g. "@devbarometer/shared") instead of deep internal paths.',
-            },
-          ],
-        },
-      ],
     },
   },
 ]);

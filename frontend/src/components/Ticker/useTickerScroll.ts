@@ -1,4 +1,5 @@
-import React, { useCallback, useRef } from 'react';
+import type React from 'react';
+import { useCallback, useRef } from 'react';
 import styles from './Ticker.module.css';
 
 type UseTickerScrollOptions = {

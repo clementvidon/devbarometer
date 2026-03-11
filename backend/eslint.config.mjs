@@ -15,11 +15,24 @@ export default defineConfig([
   },
   sharedConfig,
   {
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['src/**/*.ts'],
     rules: {
       'no-restricted-imports': [
         'error',
         {
+          paths: [
+            {
+              name: 'zod',
+              importNames: ['default'],
+              message:
+                'Use `import { z } from "zod"` instead of the default import.',
+            },
+            {
+              name: '@devbarometer/shared',
+              message:
+                'Use explicit shared subpath imports: "@devbarometer/shared/domain", "@devbarometer/shared/dtos", or "@devbarometer/shared/primitives".',
+            },
+          ],
           patterns: [
             {
               group: [
@@ -32,13 +45,18 @@ export default defineConfig([
               message:
                 'Import backend entities via the barrel (e.g. "../entity" or "../domain/entity").',
             },
+            {
+              group: ['@devbarometer/shared/*/*'],
+              message:
+                'Use only published shared subpath barrels, not deep internal shared paths.',
+            },
           ],
         },
       ],
     },
   },
   {
-    files: ['**/*.ts'],
+    files: ['src/**/*.ts'],
     languageOptions: {
       parser: tsparser,
       parserOptions: {
@@ -68,7 +86,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.test.ts', '**/*.spec.ts'],
+    files: ['src/**/*.test.ts', 'src/**/*.spec.ts'],
     rules: {
       '@typescript-eslint/unbound-method': 'off',
     },

@@ -23,13 +23,11 @@ vi.mock('./parseReport', () => ({
 
 import type {
   EmotionScores,
+  Report,
   TonalityScores,
   WeatherEmoji,
 } from '@devbarometer/shared/domain';
-import type {
-  AggregatedSentimentProfile,
-  Report,
-} from '../../../domain/entities';
+import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { createReport } from './createReport';
