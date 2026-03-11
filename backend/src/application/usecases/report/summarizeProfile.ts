@@ -14,19 +14,19 @@ export type StrengthLabel =
   | 'very strong';
 
 export type EmotionKey = keyof EmotionScores;
-export type EmotionLabels = { name: EmotionKey; strength: StrengthLabel };
+export type EmotionAssessment = { name: EmotionKey; strength: StrengthLabel };
 
 export type TonalityValue = 'neutral' | 'positive' | 'negative' | 'polarized';
-export type TonalityLabels = {
+export type TonalityAssessment = {
   name: TonalityAxisKey;
   value: TonalityValue;
   strength?: StrengthLabel;
 };
 
 export type SentimentProfileSummary = {
-  emotionsStrength: EmotionLabels[];
-  tonalitiesStrength: TonalityLabels[];
-  standoutEmotions: EmotionLabels[];
+  emotionsStrength: EmotionAssessment[];
+  tonalitiesStrength: TonalityAssessment[];
+  standoutEmotions: EmotionAssessment[];
 };
 
 export const MIN_STANDOUT_SCORE = 0.35;
