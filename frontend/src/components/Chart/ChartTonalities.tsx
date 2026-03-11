@@ -1,5 +1,6 @@
+import { TONALITY_AXIS_KEYS } from '@devbarometer/shared/domain';
 import { ChartCanvas } from './ChartCanvas';
-import { TONALITY_COLORS, TONALITY_KEYS, TONALITY_LABELS } from './config';
+import { TONALITY_COLORS, TONALITY_LABELS } from './config';
 import type { TonalitySeriesPoint } from './transformChartSeries';
 
 type Props = {
@@ -10,7 +11,7 @@ type Props = {
 };
 
 export function ChartTonalities(props: Props) {
-  const series = TONALITY_KEYS.map((k) => ({
+  const series = TONALITY_AXIS_KEYS.map((k) => ({
     key: k,
     color: TONALITY_COLORS[k],
     label: TONALITY_LABELS[k],

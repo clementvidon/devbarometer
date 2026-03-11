@@ -26,7 +26,7 @@ const MAX_SCORE = 1;
 /**
  * Spec: Summarize an aggregated sentiment profile into labels usable by the report prompt.
  * - Maps each emotion score to a StrengthLabel.
- * - Computes labeled tonalities (polarity/anticipation/surprise) via TONALITY_AXES.
+ * - Computes labeled tonalities (polarity/anticipation/surprise) via TONALITY_AXIS_FIELDS.
  * - Selects standout emotions and maps their scores to StrengthLabels.
  * - Returns empty `standoutEmotions` when no standout exists.
  */

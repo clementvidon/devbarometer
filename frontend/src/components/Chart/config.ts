@@ -1,3 +1,8 @@
+import type {
+  EmotionScoreField,
+  TonalityAxisKey,
+} from '@devbarometer/shared/domain';
+
 export const THEME = {
   axisText: '#9ec3ff',
   axisLine: '#6b93c9',
@@ -16,10 +21,7 @@ export const EMOTION_COLORS = {
   sadness: '#8B1F4D',
 } as const;
 
-export type EmotionKey = keyof typeof EMOTION_COLORS;
-export const EMOTION_KEYS = Object.keys(EMOTION_COLORS) as EmotionKey[];
-
-export const EMOTION_LABELS: Record<EmotionKey, string> = {
+export const EMOTION_LABELS: Record<EmotionScoreField, string> = {
   joy: 'Joie',
   trust: 'Confiance',
   fear: 'Peur',
@@ -34,10 +36,7 @@ export const TONALITY_COLORS = {
   anticipation: '#7728FF',
 } as const;
 
-export type TonalityKey = keyof typeof TONALITY_COLORS;
-export const TONALITY_KEYS = Object.keys(TONALITY_COLORS) as TonalityKey[];
-
-export const TONALITY_LABELS: Record<TonalityKey, string> = {
+export const TONALITY_LABELS: Record<TonalityAxisKey, string> = {
   polarity: 'Valence',
   surprise: 'Surprise',
   anticipation: 'Anticipation',

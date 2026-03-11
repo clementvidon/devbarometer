@@ -1,6 +1,9 @@
+import {
+  EMOTION_SCORE_FIELDS,
+  TONALITY_AXIS_KEYS,
+} from '@devbarometer/shared/domain';
 import { AggregatedSentimentProfileDtoSchema } from '@devbarometer/shared/dtos';
 import { useEffect, useState } from 'react';
-import { EMOTION_KEYS, TONALITY_KEYS } from './config';
 import { smoothUX } from './smoothing';
 import {
   buildEmotionSeries,
@@ -27,10 +30,14 @@ export function useChartData() {
           await res.json(),
         );
         setEmotionData(
-          smoothUX(buildEmotionSeries(profiles), EMOTION_KEYS, 'custom'),
+          smoothUX(
+            buildEmotionSeries(profiles),
+            EMOTION_SCORE_FIELDS,
+            'custom',
+          ),
         );
         setTonalityData(
-          smoothUX(buildTonalitySeries(profiles), TONALITY_KEYS, 'custom'),
+          smoothUX(buildTonalitySeries(profiles), TONALITY_AXIS_KEYS, 'custom'),
         );
       } catch (e) {
         setError(e instanceof Error ? e : new Error('Erreur inconnue'));

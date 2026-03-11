@@ -1,6 +1,8 @@
-import type {
-  EmotionScores,
-  TonalityScores,
+import {
+  TONALITY_AXIS_FIELDS,
+  TONALITY_AXIS_KEYS,
+  type EmotionScores,
+  type TonalityAxisKey,
 } from '@devbarometer/shared/domain';
 import type { AggregatedSentimentProfile } from '../../../domain/entities';
 
@@ -14,12 +16,9 @@ export type StrengthLabel =
 export type EmotionKey = keyof EmotionScores;
 export type EmotionLabels = { name: EmotionKey; strength: StrengthLabel };
 
-export const TONALITY_KEYS = ['polarity', 'anticipation', 'surprise'] as const;
-export type TonalityKey = (typeof TONALITY_KEYS)[number];
-
 export type TonalityValue = 'neutral' | 'positive' | 'negative' | 'polarized';
 export type TonalityLabels = {
-  name: TonalityKey;
+  name: TonalityAxisKey;
   value: TonalityValue;
   strength?: StrengthLabel;
 };
@@ -107,18 +106,6 @@ export function evaluateTone(
   };
 }
 
-type TonalityScoreKey = keyof TonalityScores;
-type TonalityAxisFields = { pos: TonalityScoreKey; neg: TonalityScoreKey };
-
-export const TONALITY_AXES = {
-  polarity: { pos: 'positive', neg: 'negative' },
-  anticipation: {
-    pos: 'optimistic_anticipation',
-    neg: 'pessimistic_anticipation',
-  },
-  surprise: { pos: 'positive_surprise', neg: 'negative_surprise' },
-} as const satisfies Record<TonalityKey, TonalityAxisFields>;
-
 export function summarizeProfile(
   profile: AggregatedSentimentProfile,
 ): SentimentProfileSummary {
@@ -128,8 +115,8 @@ export function summarizeProfile(
     Object.entries(emotions) as [EmotionKey, number][]
   ).map(([name, score]) => ({ name, strength: getStrengthLabel(score) }));
 
-  const tonalitiesStrength = TONALITY_KEYS.map((name) => {
-    const { pos, neg } = TONALITY_AXES[name];
+  const tonalitiesStrength = TONALITY_AXIS_KEYS.map((name) => {
+    const { pos, neg } = TONALITY_AXIS_FIELDS[name];
     const tone = evaluateTone(tonalities[pos], tonalities[neg]);
     return { name, value: tone.value, strength: tone.strength };
   });

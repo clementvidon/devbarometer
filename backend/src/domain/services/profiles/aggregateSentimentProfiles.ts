@@ -1,29 +1,13 @@
-import type {
-  EmotionScores,
-  TonalityScores,
+import {
+  EMOTION_SCORE_FIELDS,
+  TONALITY_SCORE_FIELDS,
+  type EmotionScores,
+  type TonalityScores,
 } from '@devbarometer/shared/domain';
 import type {
   AggregatedSentimentProfile,
   WeightedSentimentProfile,
 } from '../../entities';
-
-const EMOTION_KEYS = [
-  'anger',
-  'fear',
-  'trust',
-  'sadness',
-  'joy',
-  'disgust',
-] as const;
-
-const TONALITY_KEYS = [
-  'positive',
-  'negative',
-  'optimistic_anticipation',
-  'pessimistic_anticipation',
-  'positive_surprise',
-  'negative_surprise',
-] as const;
 
 export function aggregateSentimentProfiles(
   profiles: WeightedSentimentProfile[],
@@ -33,11 +17,11 @@ export function aggregateSentimentProfiles(
   }
 
   const zeroEmotions = Object.fromEntries(
-    EMOTION_KEYS.map((k) => [k, 0]),
+    EMOTION_SCORE_FIELDS.map((k) => [k, 0]),
   ) as EmotionScores;
 
   const zeroTonalities = Object.fromEntries(
-    TONALITY_KEYS.map((k) => [k, 0]),
+    TONALITY_SCORE_FIELDS.map((k) => [k, 0]),
   ) as TonalityScores;
 
   let weightSum = 0;
@@ -47,17 +31,18 @@ export function aggregateSentimentProfiles(
   for (const p of profiles) {
     const w = p.weight;
     weightSum += w;
-    for (const k of EMOTION_KEYS) emotionTotals[k] += p.emotions[k] * w;
-    for (const k of TONALITY_KEYS) tonalityTotals[k] += p.tonalities[k] * w;
+    for (const k of EMOTION_SCORE_FIELDS) emotionTotals[k] += p.emotions[k] * w;
+    for (const k of TONALITY_SCORE_FIELDS)
+      tonalityTotals[k] += p.tonalities[k] * w;
   }
 
   const averagedEmotions: EmotionScores = { ...zeroEmotions };
-  for (const k of EMOTION_KEYS) {
+  for (const k of EMOTION_SCORE_FIELDS) {
     averagedEmotions[k] = weightSum > 0 ? emotionTotals[k] / weightSum : 0;
   }
 
   const averagedTonalities: TonalityScores = { ...zeroTonalities };
-  for (const k of TONALITY_KEYS) {
+  for (const k of TONALITY_SCORE_FIELDS) {
     averagedTonalities[k] = weightSum > 0 ? tonalityTotals[k] / weightSum : 0;
   }
 
