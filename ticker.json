@@ -1,27 +1,27 @@
 [
   {
-    "title": "Je suis sous l'eau !",
+    "title": "Quel est le bon salaire ?",
     "weight": "2",
-    "source": "https://reddit.com/comments/1rnf487"
+    "source": "https://reddit.com/comments/1rov74k"
   },
   {
-    "title": "Conseils pour un futur freelance : quelle est la température du bain ?",
+    "title": "Étude d'Anthropic IA et Secteur",
     "weight": "2",
-    "source": "https://reddit.com/comments/1rmau0w"
-  },
-  {
-    "title": "J'ai testé pour vous : se reconvertir en Product Builder (noCode) plutôt que Dev",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1rlhvm8"
-  },
-  {
-    "title": "Avez-vous l'impression que le marché s'améliore ?",
-    "weight": "1",
-    "source": "https://reddit.com/comments/1rni95y"
+    "source": "https://reddit.com/comments/1rp2xe0"
   },
   {
     "title": "Mon PO et PM veulent vibecoder dans notre App",
     "weight": "1",
     "source": "https://reddit.com/comments/1rmb454"
+  },
+  {
+    "title": "4 entretiens et un mail automatique de refus",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1rkq9dm"
+  },
+  {
+    "title": "Avez-vous l'impression que le marché s'améliore ?",
+    "weight": "1",
+    "source": "https://reddit.com/comments/1rni95y"
   }
 ]
