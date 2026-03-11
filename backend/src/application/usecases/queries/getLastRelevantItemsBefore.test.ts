@@ -15,6 +15,7 @@ describe(getLastRelevantItemsBefore.name, () => {
     overrides: Partial<RelevantItem> = {},
   ): RelevantItem {
     return {
+      sourceFetchRef: 'sourceFetchRef',
       itemRef: 'itemRef',
       title: 'title',
       content: 'content',
@@ -26,6 +27,7 @@ describe(getLastRelevantItemsBefore.name, () => {
     overrides: Partial<WeightedItem> = {},
   ): WeightedItem {
     return {
+      sourceFetchRef: 'sourceFetchRef',
       itemRef: 'itemRef',
       title: 'title',
       content: 'content',
@@ -40,7 +42,6 @@ describe(getLastRelevantItemsBefore.name, () => {
     return {
       id: 'id',
       createdAt: '2001-01-01',
-      fetchRef: 'fetchRef',
       fetchedItems: [],
       weightedItems: [],
       weightedSentimentProfiles: [],

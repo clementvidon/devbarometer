@@ -15,6 +15,7 @@ describe(computeMomentumWeight.name, () => {
     overrides: Partial<RelevantItem> = {},
   ): RelevantItem {
     return {
+      sourceFetchRef: 'sourceFetchRef',
       itemRef: 'itemRef',
       title: 'title',
       content: 'content',

@@ -48,9 +48,13 @@ function mergeRedditItemsOptions(
   return { ...DEFAULT_REDDIT_ITEMS_OPTIONS, ...opts };
 }
 
-function mapRedditChildToItem(child: z.infer<typeof RedditChildSchema>): Item {
+function mapRedditChildToItem(
+  child: z.infer<typeof RedditChildSchema>,
+  sourceFetchRef: string,
+): Item {
   const d = child.data;
   return {
+    sourceFetchRef,
     itemRef: `https://reddit.com/comments/${d.id}`,
     title: normalizeWhitespace(d.title),
     content: normalizeWhitespace(d.selftext),
@@ -139,7 +143,9 @@ export async function fetchRedditItems(
   }
 
   const children = parsed.data.data.children;
-  const items: Item[] = children.map(mapRedditChildToItem);
+  const items: Item[] = children.map((child) =>
+    mapRedditChildToItem(child, url),
+  );
   const filtered = filterByScore(items, minScore);
   return filtered;
 }
@@ -167,10 +173,6 @@ export class RedditItemsAdapter implements ItemsProviderPort {
       this.creds,
       this.opts,
     );
-  }
-
-  getFetchRef(): string {
-    return this.url;
   }
 
   getCreatedAt(): string | null {

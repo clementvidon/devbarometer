@@ -15,7 +15,6 @@ function approxEqual(a: number, b: number, epsilon = EPSILON): boolean {
 
 export const SnapshotDataShape = z
   .object({
-    fetchRef: z.string().trim().min(1),
     fetchedItems: z.array(ItemSchema),
     weightedItems: z.array(WeightedItemSchema),
     weightedSentimentProfiles: z.array(WeightedSentimentProfileSchema),

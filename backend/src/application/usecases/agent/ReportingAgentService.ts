@@ -35,10 +35,8 @@ export class ReportingAgentService implements ReportingAgentPort {
 
     log.info('Pipeline start');
 
-    const fetchRef = this.items.getFetchRef();
-
     const items = await withSpan(log, 'getItems', () => this.items.getItems());
-    log.info('Items fetched', { count: items.length, fetchRef });
+    log.info('Items fetched', { count: items.length });
 
     const createdAt = this.items.getCreatedAt() ?? nowIso();
 
@@ -91,7 +89,6 @@ export class ReportingAgentService implements ReportingAgentPort {
 
     await withSpan(log, this.persistence.storeSnapshotAt.name, () =>
       this.persistence.storeSnapshotAt(createdAt, {
-        fetchRef,
         fetchedItems: items,
         weightedItems: weightedItems,
         weightedSentimentProfiles: weightedProfiles,

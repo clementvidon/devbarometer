@@ -23,6 +23,7 @@ function makeLlm(): Mocked<LlmPort> {
 
 function makeItem(overrides: Partial<Item> = {}): Item {
   return {
+    sourceFetchRef: 'sourceFetchRef',
     itemRef: 'itemRef',
     title: 'title',
     content: 'content',

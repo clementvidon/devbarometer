@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const ItemSchema = z
   .object({
+    sourceFetchRef: z.string().trim().min(1),
     itemRef: z.string().trim().min(1),
     title: z.string().trim().min(1),
     content: z.string(),

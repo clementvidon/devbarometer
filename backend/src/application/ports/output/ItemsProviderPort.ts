@@ -11,8 +11,6 @@ import type { Item } from '../../../domain/entities';
 export interface ItemsProviderPort {
   /** Finite list of Items (non-negative `score`; no side effects). */
   getItems(): Promise<Item[]>;
-  /** Stable reference for the fetch that produced this batch (often the source API URL). */
-  getFetchRef(): string;
   /** ISO 8601 string or null to defer to the agent timestamp. */
   getCreatedAt(): string | null;
 }

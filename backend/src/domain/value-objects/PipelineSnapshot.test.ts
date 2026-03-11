@@ -11,9 +11,9 @@ import {
 
 function makeSnapshotData(): SnapshotData {
   return {
-    fetchRef: 'fetch-ref',
     fetchedItems: [
       {
+        sourceFetchRef: 'sourceFetchRef',
         itemRef: 'item',
         title: 'title',
         content: 'Content 1',
@@ -22,6 +22,7 @@ function makeSnapshotData(): SnapshotData {
     ],
     weightedItems: [
       {
+        sourceFetchRef: 'sourceFetchRef',
         itemRef: 'item',
         title: 'title',
         content: 'Content 1',
@@ -95,6 +96,7 @@ describe('SnapshotDataSchema', () => {
       weightedSentimentProfiles: [
         {
           profile: {
+            sourceFetchRef: 'sourceFetchRef',
             itemRef: 'item',
             status: 'ok',
             emotions: {
@@ -320,11 +322,30 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects blank fetchRef', () => {
+  test('rejects blank sourceFetchRef in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
       ...snapshot,
-      fetchRef: '   ',
+      fetchedItems: [
+        {
+          ...snapshot.fetchedItems[0],
+          sourceFetchRef: '   ',
+        },
+      ],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects blank sourceFetchRef in weightedItems', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      weightedItems: [
+        {
+          ...snapshot.weightedItems[0],
+          sourceFetchRef: '   ',
+        },
+      ],
     };
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();

@@ -14,6 +14,7 @@ import { isRelevant } from './isRelevant';
 
 function makeItem(overrides: Partial<Item> = {}): Item {
   return {
+    sourceFetchRef: 'sourceFetchRef',
     itemRef: 'itemRef',
     title: 'title',
     content: 'content',

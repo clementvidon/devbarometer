@@ -22,6 +22,7 @@ describe(capByPercentile.name, () => {
     overrides: Partial<WeightedItem> = {},
   ): WeightedItem {
     return {
+      sourceFetchRef: 'sourceFetchRef',
       itemRef: 'itemRef',
       title: 'title',
       content: 'content',
