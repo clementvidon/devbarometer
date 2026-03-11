@@ -1,13 +1,18 @@
-import type {
-  EmotionScores,
-  TonalityScores,
+import {
+  EmotionScoresSchema,
+  TonalityScoresSchema,
 } from '@devbarometer/shared/domain';
+import z from 'zod';
 
-export type { EmotionScores, TonalityScores };
+export const AggregatedSentimentProfileSchema = z
+  .object({
+    count: z.number().int().nonnegative(),
+    totalWeight: z.number().finite().nonnegative(),
+    emotions: EmotionScoresSchema,
+    tonalities: TonalityScoresSchema,
+  })
+  .strict();
 
-export interface AggregatedSentimentProfile {
-  count: number;
-  totalWeight: number;
-  emotions: EmotionScores;
-  tonalities: TonalityScores;
-}
+export type AggregatedSentimentProfile = z.infer<
+  typeof AggregatedSentimentProfileSchema
+>;

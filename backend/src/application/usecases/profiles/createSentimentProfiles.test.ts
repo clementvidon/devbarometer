@@ -58,11 +58,8 @@ vi.mock('./parseTonality', () => ({
   ),
 }));
 
-import type {
-  EmotionScores,
-  TonalityScores,
-  WeightedItem,
-} from '../../../domain/entities';
+import type { EmotionScores, TonalityScores } from '@devbarometer/shared';
+import type { WeightedItem } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import { createSentimentProfiles } from './createSentimentProfiles';

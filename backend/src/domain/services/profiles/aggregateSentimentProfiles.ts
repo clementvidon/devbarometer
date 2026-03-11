@@ -1,7 +1,6 @@
+import type { EmotionScores, TonalityScores } from '@devbarometer/shared';
 import type {
   AggregatedSentimentProfile,
-  EmotionScores,
-  TonalityScores,
   WeightedSentimentProfile,
 } from '../../entities';
 

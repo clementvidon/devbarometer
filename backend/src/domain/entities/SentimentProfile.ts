@@ -1,17 +1,23 @@
-import type {
-  EmotionScores,
-  TonalityScores,
+import {
+  EmotionScoresSchema,
+  TonalityScoresSchema,
 } from '@devbarometer/shared/domain';
+import z from 'zod';
 
-export type { EmotionScores, TonalityScores };
+export const SentimentProfileSchema = z
+  .object({
+    itemRef: z.string().trim().min(1),
+    status: z.enum(['ok', 'fallback']),
+    emotions: EmotionScoresSchema,
+    tonalities: TonalityScoresSchema,
+  })
+  .strict();
 
-export interface SentimentProfile {
-  itemRef: string;
-  emotions: EmotionScores;
-  tonalities: TonalityScores;
-  status: 'ok' | 'fallback';
-}
+export const WeightedSentimentProfileSchema = SentimentProfileSchema.extend({
+  weight: z.number().finite().nonnegative(),
+}).strict();
 
-export interface WeightedSentimentProfile extends SentimentProfile {
-  weight: number;
-}
+export type SentimentProfile = z.infer<typeof SentimentProfileSchema>;
+export type WeightedSentimentProfile = z.infer<
+  typeof WeightedSentimentProfileSchema
+>;

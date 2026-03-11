@@ -1,5 +1,5 @@
+import type { EmotionScores } from '@devbarometer/shared';
 import { z } from 'zod';
-import type { EmotionScores } from '../../../domain/entities';
 import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 import { FALLBACK_EMOTIONS } from './policy';

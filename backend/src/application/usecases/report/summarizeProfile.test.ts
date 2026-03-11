@@ -1,9 +1,6 @@
-import type { EmotionScores } from '@devbarometer/shared';
+import type { EmotionScores, TonalityScores } from '@devbarometer/shared';
 import { describe, expect, test } from 'vitest';
-import type {
-  AggregatedSentimentProfile,
-  TonalityScores,
-} from '../../../domain/entities';
+import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import {
   evaluateTone,
   getStrengthLabel,

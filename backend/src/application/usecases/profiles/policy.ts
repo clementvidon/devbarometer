@@ -1,4 +1,4 @@
-import type { EmotionScores, TonalityScores } from '../../../domain/entities';
+import type { EmotionScores, TonalityScores } from '@devbarometer/shared';
 import type { LlmRunOptions } from '../../ports/output/LlmPort';
 
 export const CONCURRENCY = 1;
