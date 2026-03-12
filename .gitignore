@@ -6,3 +6,4 @@ db.json
 ignore/
 AGENTS.md
 ROADMAP.md
+backend/tmp/
