@@ -2,6 +2,7 @@ import type { WeightedItem } from '../../../domain/entities';
 import { aggregateSentimentProfiles } from '../../../domain/services/profiles/aggregateSentimentProfiles';
 import { attachWeightsToSentimentProfiles } from '../../../domain/services/profiles/attachWeightsToSentimentProfiles';
 import { formatFloat } from '../../../lib/number/formatFloat';
+import { roundNumber } from '../../../lib/number/roundNumber';
 import { nowIso } from '../../../lib/time/nowIso';
 import { withSpan } from '../../observability/withSpan';
 import type { ReportingAgentPort } from '../../ports/input/ReportingAgentPort';
@@ -87,15 +88,43 @@ export class ReportingAgentService implements ReportingAgentPort {
     );
     log.info('Report created');
 
+    const persistedWeightedItems = weightedItems.map((item) => ({
+      ...item,
+      weight: roundNumber(item.weight),
+    }));
+
+    const persistedWeightedProfiles = weightedProfiles.map((profile) => ({
+      ...profile,
+      weight: roundNumber(profile.weight),
+    }));
+
+    const persistedAggregated = {
+      ...aggregated,
+      totalWeight: roundNumber(aggregated.totalWeight),
+      emotions: Object.fromEntries(
+        Object.entries(aggregated.emotions).map(([key, value]) => [
+          key,
+          roundNumber(value),
+        ]),
+      ) as typeof aggregated.emotions,
+      tonalities: Object.fromEntries(
+        Object.entries(aggregated.tonalities).map(([key, value]) => [
+          key,
+          roundNumber(value),
+        ]),
+      ) as typeof aggregated.tonalities,
+    };
+
     await withSpan(log, this.persistence.storeSnapshotAt.name, () =>
       this.persistence.storeSnapshotAt(createdAt, {
         fetchedItems: items,
-        weightedItems: weightedItems,
-        weightedSentimentProfiles: weightedProfiles,
-        aggregatedSentimentProfile: aggregated,
+        weightedItems: persistedWeightedItems,
+        weightedSentimentProfiles: persistedWeightedProfiles,
+        aggregatedSentimentProfile: persistedAggregated,
         report,
       }),
     );
+
     log.info('Snapshot persisted', { createdAt });
 
     const ms = Math.round(performance.now() - startedAt);
