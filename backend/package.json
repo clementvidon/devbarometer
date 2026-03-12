@@ -8,7 +8,7 @@
     "replay": "tsx src/cli/replay.ts",
     "generate-static": "tsx src/cli/generate-static.ts",
     "backfill": "tsx src/tools/backfill-future-topics/index.ts",
-    "export-replay-input": "tsx src/tools/replay/export-replay-input/index.ts",
+    "export-replay-input": "tsx src/tools/export-replay-input/index.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
