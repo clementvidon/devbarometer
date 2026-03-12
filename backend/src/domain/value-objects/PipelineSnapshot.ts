@@ -8,6 +8,16 @@ import {
   WeightedSentimentProfileSchema,
 } from '../entities';
 
+/**
+ * Backend-owned persisted snapshot contract.
+ *
+ * This schema intentionally serves two roles:
+ * - historical aggregate of one pipeline execution
+ * - validated storage contract for persistence adapters
+ *
+ * It is not a shared cross-workspace domain contract.
+ */
+
 const EPSILON = 1e-9;
 function approxEqual(a: number, b: number, epsilon = EPSILON): boolean {
   return Math.abs(a - b) <= epsilon;
