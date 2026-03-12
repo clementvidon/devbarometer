@@ -100,9 +100,11 @@ export class ReportingAgentService implements ReportingAgentPort {
       weight: roundNumber(profile.weight),
     }));
 
-    const persistedTotalWeight = persistedWeightedProfiles.reduce(
-      (sum, profile) => sum + profile.weight,
-      0,
+    const persistedTotalWeight = roundNumber(
+      persistedWeightedProfiles.reduce(
+        (sum, profile) => sum + profile.weight,
+        0,
+      ),
     );
 
     const persistedAggregated = {

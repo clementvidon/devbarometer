@@ -2,6 +2,7 @@ import { ReportSchema } from '@devbarometer/shared/domain';
 import { IsoDateStringSchema } from '@devbarometer/shared/primitives';
 import { z } from 'zod';
 
+import { roundNumber } from '../../lib/number/roundNumber';
 import {
   AggregatedSentimentProfileSchema,
   ItemSchema,
@@ -19,9 +20,8 @@ import {
  * It is not a shared cross-workspace domain contract.
  */
 
-const EPSILON = 1e-9;
-function approxEqual(a: number, b: number, epsilon = EPSILON): boolean {
-  return Math.abs(a - b) <= epsilon;
+function equalRounded(a: number, b: number): boolean {
+  return roundNumber(a) === roundNumber(b);
 }
 
 export const SnapshotDataShape = z
@@ -95,7 +95,7 @@ function validateSnapshotConsistency(
     0,
   );
 
-  if (!approxEqual(aggregatedSentimentProfile.totalWeight, totalWeight)) {
+  if (!equalRounded(aggregatedSentimentProfile.totalWeight, totalWeight)) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
       path: ['aggregatedSentimentProfile', 'totalWeight'],
