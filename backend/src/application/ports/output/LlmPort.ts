@@ -11,6 +11,7 @@ export type LlmRunOptions = {
   topP?: number;
   presencePenalty?: number;
   frequencyPenalty?: number;
+  reasoningEffort?: 'low' | 'medium' | 'high';
   stop?: string | string[];
   seed?: number;
   responseFormat?: { type: 'text' } | { type: 'json_object' };
