@@ -68,9 +68,6 @@ function pickFetchedItems(data: Record<string, unknown>): unknown[] {
 
 export async function runExportReplayInput(outArg?: string) {
   const outPath = outArg ?? (process.argv[2] || './tmp/replay-input.json');
-  const absPath = path.isAbsolute(outPath)
-    ? outPath
-    : path.resolve(process.cwd(), outPath);
 
   if (!process.env.DATABASE_URL) {
     throw new Error('DATABASE_URL missing');
@@ -104,6 +101,9 @@ export async function runExportReplayInput(outArg?: string) {
       };
     });
 
+    const absPath = path.isAbsolute(outPath)
+      ? outPath
+      : path.resolve(process.cwd(), outPath);
     fs.mkdirSync(path.dirname(absPath), { recursive: true });
     fs.writeFileSync(absPath, JSON.stringify(output, null, 2), 'utf-8');
 

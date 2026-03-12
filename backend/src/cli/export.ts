@@ -16,7 +16,7 @@ const rootLogger = makeLogger();
 export async function runExport(logger: LoggerPort, outArg?: string) {
   const log = logger.child({ module: 'cli' });
   log.info('Snapshots export start');
-  const outPath = outArg ?? process.argv.at(2) ?? './snapshots-export.json';
+  const outPath = outArg ?? (process.argv[2] || './tmp/snapshots-export.json');
 
   const { databaseUrl } = loadCoreConfig();
   const persistence = new PostgresAdapter(databaseUrl);
