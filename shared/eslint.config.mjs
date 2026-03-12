@@ -1,5 +1,6 @@
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import sharedConfig from '../eslint.config.mjs';
@@ -27,6 +28,7 @@ export default defineConfig([
     },
     plugins: {
       '@typescript-eslint': tseslint,
+      'simple-import-sort': simpleImportSort,
     },
     rules: {
       ...tseslint.configs.recommended.rules,
@@ -38,6 +40,8 @@ export default defineConfig([
           varsIgnorePattern: '^_',
         },
       ],
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
     },
   },
   {

@@ -1,5 +1,6 @@
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import sharedConfig from '../eslint.config.mjs';
@@ -16,7 +17,12 @@ export default defineConfig([
   sharedConfig,
   {
     files: ['src/**/*.ts'],
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
     rules: {
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
       'no-restricted-imports': [
         'error',
         {
@@ -34,17 +40,6 @@ export default defineConfig([
             },
           ],
           patterns: [
-            {
-              group: [
-                './entities/*',
-                '../entities/*',
-                '../domain/entities/*',
-                '../../domain/entities/*',
-                '@/domain/entities/*',
-              ],
-              message:
-                'Import backend entities via the barrel (e.g. "../entity" or "../domain/entity").',
-            },
             {
               group: ['@devbarometer/shared/*/*'],
               message:
