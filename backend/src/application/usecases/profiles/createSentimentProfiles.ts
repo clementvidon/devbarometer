@@ -13,10 +13,10 @@ import {
   FALLBACK_TONALITIES,
   PROFILES_LLM_OPTIONS,
 } from './policy';
-import { sentimentProfilePrompt, tonalityProfilePrompt } from './prompts';
+import { emotionProfilePrompt, tonalityProfilePrompt } from './prompts';
 
 const DEFAULT_CREATE_PROFILES_OPTIONS = {
-  emotionPrompt: sentimentProfilePrompt,
+  emotionPrompt: emotionProfilePrompt,
   tonalityPrompt: tonalityProfilePrompt,
   concurrency: CONCURRENCY,
   llmOptions: PROFILES_LLM_OPTIONS,

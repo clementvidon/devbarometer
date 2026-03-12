@@ -1,30 +1,36 @@
 import { WEATHER_EMOJIS } from '@devbarometer/shared/domain';
 
 export const reportPrompt = `
-Tu es un expert en analyse émotionnelle qui traduit un profil émotionnel en une **brève description météo**.
+Tu transformes un profil agrégé en une brève description de la santé actuelle du marché de l'emploi tech.
 
 Tu recevras un objet JSON contenant :
-- un champ "emotionsStrength" : liste des 6 émotions humaines de base avec leur force (label de "very weak" à "very strong"),
-- un champ "standoutEmotions" : liste (éventuellement vide) des émotions qui ressortent selon les règles de sélection backend, triées par importance décroissante (ordre fourni),
+- un champ "emotionsStrength" : liste des émotions avec leur force,
+- un champ "standoutEmotions" : émotions saillantes triées par importance décroissante,
 - un champ "tonalitiesStrength" : liste de 3 tonalités ("polarity", "anticipation", "surprise") avec :
   - "value" ∈ ["neutral","positive","negative","polarized"]
   - "strength" (optionnel) ∈ ["very weak","weak","moderate","strong","very strong"].
 
 Ta tâche :
 
-1. Crée une **phrase courte (max 12 mots)** décrivant l'ambiance émotionnelle, en t’inspirant du style météo.
-2. Si "standoutEmotions" est vide et que toutes les forces ("strength") présentes sont "very weak" ou "weak" : décris une atmosphère **neutre, indécise ou calme**.
-3. Sinon, mentionne uniquement ce qui ressort clairement : tonalités dont "strength" est présent et ≥ "moderate", et émotions dans "standoutEmotions".
-4. Évite les redondances et n’invente rien qui ne soit pas présent dans les données.
-5. Assure-toi que la phrase ait un sens, soit grammaticalement correcte et pertinente.
-6. Choisis l’emoji météo qui renforce l’ambiance décrite parmi ${WEATHER_EMOJIS.join(' ')} :
+1. Produis une phrase courte, naturelle, max 12 mots.
+2. Décris l'état du marché, pas l'humeur brute des auteurs.
+3. Fais ressortir la direction générale du marché : favorable, prudent, tendu, dégradé, contrasté ou peu lisible.
+4. Si le négatif domine, la phrase doit le refléter clairement.
+5. Si les signaux sont proches, reflète l'ambivalence avec un vocabulaire comme prudent, mitigé, contrasté ou surveillé.
+6. N'utilise calme, peu lisible ou signaux faibles que si le profil est réellement proche du neutre.
+7. N'invente aucun signal absent des données.
+8. Choisis l'emoji météo qui renforce la phrase parmi ${WEATHER_EMOJIS.join(' ')} :
 - ☀️  : très positif, dynamique, opportunités nettes (“marché porteur”, “élan”, “confiant”)
-- ⛅  : plutôt positif, stable, optimisme prudent (“ça s’améliore”, “encourageant”, “en progression”)
+- ⛅  : plutôt positif, prudent, amélioration fragile
 - ☁️  : neutre, attentiste, peu lisible (“stable”, “mitigé”, “sans signal fort”)
 - 🌦️  : volatil, contrasté, incertitude (“inégal”, “ça dépend des stacks”, “alternance de bonnes et mauvaises nouvelles”)
 - 🌧️  : négatif, difficile, pression (“ralentissement”, “tendu”, “peu d’ouvertures”)
 - 🌩️  : très négatif, choc, rupture (“coup dur”, “forte dégradation”, “stress/colère”)
-Utilise toujours l’emoji qui accentue le ton de la phrase.
+
+Important :
+- Utilise ⛅ seulement si le positif domine réellement.
+- Utilise ☁️ seulement si le profil est peu tranché.
+- Utilise 🌦️ si le profil est vraiment partagé ou ambivalent.
 
 Retourne uniquement un JSON brut :
   {

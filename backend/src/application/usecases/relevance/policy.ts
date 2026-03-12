@@ -3,9 +3,10 @@ import type { LlmRunOptions } from '../../ports/output/LlmPort';
 export const CONCURRENCY = 1;
 
 export const RELEVANCE_LLM_OPTIONS = {
-  model: 'gpt-5-mini',
-  maxOutputTokens: 1000,
-  reasoningEffort: 'minimal',
+  model: 'gpt-5-chat-latest',
+  temperature: 0.1,
+  topP: 0.1,
+  maxOutputTokens: 80,
   responseFormat: { type: 'json_object' as const },
 } satisfies LlmRunOptions & { model: string };
 

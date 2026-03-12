@@ -30,13 +30,13 @@ export type SentimentProfileSummary = {
   standoutEmotions: EmotionAssessment[];
 };
 
-export const MIN_STANDOUT_SCORE = 0.35;
+export const MIN_STANDOUT_SCORE = 0.3;
 export const MAX_STANDOUT_COUNT = 2;
-export const RELATIVE_GAP = 0.06;
+export const RELATIVE_GAP = 0.08;
 
 export const MIN_SCORE_FOR_POLARIZED = 0.3;
 export const MAX_DISTANCE_FOR_POLARIZED = 0.06;
-export const MAX_DISTANCE_FOR_NEUTRAL = MAX_DISTANCE_FOR_POLARIZED;
+export const MAX_DISTANCE_FOR_NEUTRAL = 0.04;
 
 export function getStrengthLabel(score: number): StrengthLabel {
   return score < 0.2
