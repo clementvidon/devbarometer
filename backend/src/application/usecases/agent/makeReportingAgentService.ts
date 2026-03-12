@@ -4,12 +4,12 @@ import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 import type { ComputeMomentumWeightsPort } from '../../ports/pipeline/ComputeMomentumWeightsPort';
-import type { CreateReportPort } from '../../ports/pipeline/CreateReportPort';
 import type { CreateSentimentProfilesPort } from '../../ports/pipeline/CreateSentimentProfilesPort';
 import type { FilterRelevantItemsPort } from '../../ports/pipeline/FilterRelevantItemsPort';
+import type { GenerateReportPort } from '../../ports/pipeline/GenerateReportPort';
 import { LlmCreateSentimentProfilesStep } from '../profiles/LlmCreateSentimentProfilesStep';
 import { LlmFilterRelevantItemsStep } from '../relevance/LlmFilterRelevantItemsStep';
-import { LlmCreateReportStep } from '../report/LlmCreateReportStep';
+import { LlmGenerateReportStep } from '../report/LlmGenerateReportStep';
 import { LocalComputeMomentumWeightsStep } from '../weights/LocalComputeMomentumWeightsStep';
 import { ReportingAgentService } from './ReportingAgentService';
 
@@ -17,7 +17,7 @@ type PipelineOverrides = Partial<{
   relevance: FilterRelevantItemsPort;
   weights: ComputeMomentumWeightsPort;
   profiles: CreateSentimentProfilesPort;
-  report: CreateReportPort;
+  report: GenerateReportPort;
 }>;
 
 export function makeReportingAgentService(
@@ -31,7 +31,7 @@ export function makeReportingAgentService(
   const profiles =
     overrides.profiles ?? new LlmCreateSentimentProfilesStep(llm);
   const weights = overrides.weights ?? new LocalComputeMomentumWeightsStep();
-  const report = overrides.report ?? new LlmCreateReportStep(llm);
+  const report = overrides.report ?? new LlmGenerateReportStep(llm);
 
   return new ReportingAgentService(
     logger,

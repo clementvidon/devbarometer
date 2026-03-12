@@ -2,21 +2,21 @@ import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type {
-  CreateReportOptions,
-  CreateReportPort,
-} from '../../ports/pipeline/CreateReportPort';
-import { createReport as createReportUsecase } from './createReport';
+  GenerateReportOptions,
+  GenerateReportPort,
+} from '../../ports/pipeline/GenerateReportPort';
+import { generateReport as generateReportUsecase } from './generateReport';
 
-export class LlmCreateReportStep implements CreateReportPort {
+export class LlmGenerateReportStep implements GenerateReportPort {
   constructor(private readonly llm: LlmPort) {}
 
-  async createReport(
+  async generateReport(
     logger: LoggerPort,
     aggregatedSentimentProfile: AggregatedSentimentProfile,
-    opts?: Partial<CreateReportOptions>,
+    opts?: Partial<GenerateReportOptions>,
   ) {
-    return await createReportUsecase(
-      logger.child({ scope: 'report.create' }),
+    return await generateReportUsecase(
+      logger.child({ scope: 'report.generate' }),
       aggregatedSentimentProfile,
       this.llm,
       opts,

@@ -4,7 +4,7 @@ import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import type { LlmRunOptions } from '../output/LlmPort';
 import type { LoggerPort } from '../output/LoggerPort';
 
-export interface CreateReportOptions {
+export interface GenerateReportOptions {
   /** System prompt for report generation */
   reportPrompt: string;
   /** Standard LLM Options (including the model) */
@@ -12,7 +12,7 @@ export interface CreateReportOptions {
 }
 
 /**
- * Create a short “weather-style” report from an aggregated Sentiment profile.
+ * Generate a short “weather-style” report from an aggregated Sentiment profile.
  *
  * Contract (interface-wide):
  * - Inputs are read-only; `aggregatedSentimentProfile` is treated as immutable.
@@ -20,11 +20,11 @@ export interface CreateReportOptions {
  * - May perform external I/O (e.g. LLM calls) and log via the provided logger.
  * - Implementations may return a fallback Report when the LLM fails or output is invalid.
  */
-export interface CreateReportPort {
+export interface GenerateReportPort {
   /** Returns a single Report for the given aggregated sentiment profile. */
-  createReport(
+  generateReport(
     logger: LoggerPort,
     aggregatedSentimentProfile: AggregatedSentimentProfile,
-    opts?: Partial<CreateReportOptions>,
+    opts?: Partial<GenerateReportOptions>,
   ): Promise<Report>;
 }

@@ -3,44 +3,44 @@ import type { Report } from '@devbarometer/shared/domain';
 import { type AggregatedSentimentProfile } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
-import type { CreateReportOptions } from '../../ports/pipeline/CreateReportPort';
+import type { GenerateReportOptions } from '../../ports/pipeline/GenerateReportPort';
 import { makeReportMessages } from './llmMessages';
 import { parseReport } from './parseReport';
 import { FALLBACK_REPORT, REPORT_LLM_OPTIONS } from './policy';
 import { reportPrompt } from './prompts';
 import { summarizeProfile } from './summarizeProfile';
 
-const DEFAULT_CREATE_REPORT_OPTIONS = {
+const DEFAULT_GENERATE_REPORT_OPTIONS = {
   reportPrompt,
   llmOptions: REPORT_LLM_OPTIONS,
-} satisfies CreateReportOptions;
+} satisfies GenerateReportOptions;
 
-function mergeCreateReportOptions(
-  opts: Partial<CreateReportOptions> = {},
-): CreateReportOptions {
+function mergeGenerateReportOptions(
+  opts: Partial<GenerateReportOptions> = {},
+): GenerateReportOptions {
   const mergedLlmOptions = {
-    ...DEFAULT_CREATE_REPORT_OPTIONS.llmOptions,
+    ...DEFAULT_GENERATE_REPORT_OPTIONS.llmOptions,
     ...(opts.llmOptions ?? {}),
   };
   return {
-    ...DEFAULT_CREATE_REPORT_OPTIONS,
+    ...DEFAULT_GENERATE_REPORT_OPTIONS,
     ...opts,
     llmOptions: mergedLlmOptions,
   };
 }
 
-export async function createReport(
+export async function generateReport(
   logger: LoggerPort,
   aggregatedProfile: AggregatedSentimentProfile,
   llm: LlmPort,
-  opts: Partial<CreateReportOptions> = {},
+  opts: Partial<GenerateReportOptions> = {},
 ): Promise<Report> {
   if (aggregatedProfile.count === 0) {
     logger.error('No aggregated profiles to report.');
     return FALLBACK_REPORT;
   }
 
-  const { reportPrompt, llmOptions } = mergeCreateReportOptions(opts);
+  const { reportPrompt, llmOptions } = mergeGenerateReportOptions(opts);
 
   const { model, ...runOpts } = llmOptions;
 

@@ -10,9 +10,9 @@ import type { ItemsProviderPort } from '../../ports/output/ItemsProviderPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 import type { ComputeMomentumWeightsPort } from '../../ports/pipeline/ComputeMomentumWeightsPort';
-import type { CreateReportPort } from '../../ports/pipeline/CreateReportPort';
 import type { CreateSentimentProfilesPort } from '../../ports/pipeline/CreateSentimentProfilesPort';
 import type { FilterRelevantItemsPort } from '../../ports/pipeline/FilterRelevantItemsPort';
+import type { GenerateReportPort } from '../../ports/pipeline/GenerateReportPort';
 import { getLastRelevantItemsBefore } from '../queries/getLastRelevantItemsBefore';
 
 export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
@@ -27,7 +27,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     private readonly relevance: FilterRelevantItemsPort,
     private readonly profiles: CreateSentimentProfilesPort,
     private readonly weights: ComputeMomentumWeightsPort,
-    private readonly report: CreateReportPort,
+    private readonly report: GenerateReportPort,
   ) {}
 
   async captureSnapshot(): Promise<void> {
@@ -85,10 +85,10 @@ export class ReportingAgentService implements ReportingAgentPort {
     );
     log.info('Sentiment profiles aggregated');
 
-    const report = await withSpan(log, this.report.createReport.name, () =>
-      this.report.createReport(log, aggregated),
+    const report = await withSpan(log, this.report.generateReport.name, () =>
+      this.report.generateReport(log, aggregated),
     );
-    log.info('Report created');
+    log.info('Report generated');
 
     const persistedWeightedItems = weightedItems.map((item) => ({
       ...item,

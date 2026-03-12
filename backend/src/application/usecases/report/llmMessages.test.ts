@@ -11,7 +11,7 @@ import type { SentimentProfileSummary } from './summarizeProfile';
  */
 
 describe(makeReportMessages.name, () => {
-  test('create a system and user message for the report creation', () => {
+  test('create a system and user message for the report generation', () => {
     const summary = {
       emotionsStrength: [],
       tonalitiesStrength: [],

@@ -31,7 +31,7 @@ import type {
 import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
-import { createReport } from './createReport';
+import { generateReport } from './generateReport';
 import { FALLBACK_REPORT } from './policy';
 
 function makeEmotionScores(
@@ -94,14 +94,14 @@ function makeLogger(): Mocked<LoggerPort> {
 }
 
 /**
- * Spec: Create a human-readable report from an aggregated sentiment profile.
+ * Spec: Generate a human-readable report from an aggregated sentiment profile.
  * - If `profile.count === 0`, returns FALLBACK_REPORT (no LLM call).
  * - Otherwise calls the LLM with the configured prompt/options and built messages.
  * - Returns a validated Report, or FALLBACK_REPORT on invalid output or errors.
  * - Logs key steps and failures via the provided logger.
  */
 
-describe(createReport.name, () => {
+describe(generateReport.name, () => {
   const VALID_REPORT: Report = {
     emoji: '☀️' satisfies WeatherEmoji,
     text: 'my-report',
@@ -111,7 +111,7 @@ describe(createReport.name, () => {
     const llm = makeLlm(LlmOutput.VALID);
     const profile = makeAggregatedSentimentProfile({ count: 1 });
 
-    const result = await createReport(logger, profile, llm);
+    const result = await generateReport(logger, profile, llm);
 
     expect(result).toMatchObject(VALID_REPORT);
   });
@@ -120,7 +120,7 @@ describe(createReport.name, () => {
     const llm = makeLlm(LlmOutput.INVALID);
     const profile = makeAggregatedSentimentProfile({ count: 1 });
 
-    const result = await createReport(logger, profile, llm);
+    const result = await generateReport(logger, profile, llm);
 
     expect(result).toMatchObject(FALLBACK_REPORT);
   });
@@ -129,7 +129,7 @@ describe(createReport.name, () => {
     const llm = makeLlm(LlmOutput.VALID);
     const profile = makeAggregatedSentimentProfile({ count: 0 });
 
-    const result = await createReport(logger, profile, llm);
+    const result = await generateReport(logger, profile, llm);
 
     expect(result).toMatchObject(FALLBACK_REPORT);
     expect(llm.run).not.toHaveBeenCalled();
@@ -141,7 +141,7 @@ describe(createReport.name, () => {
     };
     const profile = makeAggregatedSentimentProfile({ count: 1 });
 
-    const result = await createReport(logger, profile, llm);
+    const result = await generateReport(logger, profile, llm);
 
     expect(result).toMatchObject(FALLBACK_REPORT);
   });
