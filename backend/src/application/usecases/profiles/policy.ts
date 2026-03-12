@@ -10,7 +10,7 @@ export const CONCURRENCY = 1;
 export const PROFILES_LLM_OPTIONS = {
   model: 'gpt-5-mini',
   maxOutputTokens: 1000,
-  reasoningEffort: 'low',
+  reasoningEffort: 'minimal',
   responseFormat: { type: 'json_object' as const },
 } satisfies LlmRunOptions & { model: string };
 

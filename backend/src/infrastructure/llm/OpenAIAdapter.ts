@@ -87,6 +87,22 @@ export function extractOpenAIMessageContent(
   return res.choices[0]?.message.content?.trim() ?? null;
 }
 
+export function summarizeOpenAIEmptyContent(res: ChatCompletion) {
+  const choice = res.choices[0];
+  return {
+    finishReason: choice.finish_reason,
+    refusal: choice.message.refusal,
+    hasToolCalls: (choice.message.tool_calls?.length ?? 0) > 0,
+    usage: res.usage
+      ? {
+          promptTokens: res.usage.prompt_tokens,
+          completionTokens: res.usage.completion_tokens,
+          totalTokens: res.usage.total_tokens,
+        }
+      : null,
+  };
+}
+
 export function buildOpenAIRequestPayload(
   model: string,
   messages: readonly LlmMessage[],
@@ -100,6 +116,7 @@ export function buildOpenAIRequestPayload(
     top_p: options?.topP,
     presence_penalty: options?.presencePenalty,
     frequency_penalty: options?.frequencyPenalty,
+    reasoning_effort: options?.reasoningEffort,
     stop: options?.stop,
     seed: options?.seed,
     response_format: options?.responseFormat,
@@ -139,6 +156,7 @@ export class OpenAIAdapter implements LlmPort {
           this.logger.debug('No content returned from OpenAI API', {
             model,
             messageCount: messages.length,
+            ...summarizeOpenAIEmptyContent(res),
           });
           throw new Error('Empty content from OpenAI');
         }

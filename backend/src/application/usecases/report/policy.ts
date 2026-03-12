@@ -5,7 +5,7 @@ import type { LlmRunOptions } from '../../ports/output/LlmPort';
 export const REPORT_LLM_OPTIONS = {
   model: 'gpt-5-mini',
   maxOutputTokens: 1000,
-  reasoningEffort: 'low',
+  reasoningEffort: 'minimal',
   responseFormat: { type: 'json_object' as const },
 } satisfies LlmRunOptions & { model: string };
 

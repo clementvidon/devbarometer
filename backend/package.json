@@ -30,7 +30,7 @@
     "drizzle-orm": "^0.43.1",
     "express": "^5.1.0",
     "lowdb": "^7.0.1",
-    "openai": "^4.95.0",
+    "openai": "^6.27.0",
     "p-limit": "^5.0.0",
     "postgres": "^3.4.7",
     "uuid": "^11.1.0",
