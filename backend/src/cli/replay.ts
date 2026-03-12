@@ -1,15 +1,17 @@
+import { IsoDateStringSchema } from '@devbarometer/shared/primitives';
 import 'dotenv/config';
 import fs from 'fs';
 import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 import OpenAI from 'openai';
 import path from 'path';
+import { z } from 'zod';
 import type { ReportingAgentPort } from '../application/ports/input/ReportingAgentPort';
 import type { LlmPort } from '../application/ports/output/LlmPort';
 import type { LoggerPort } from '../application/ports/output/LoggerPort';
 import type { PersistencePort } from '../application/ports/output/PersistencePort';
 import { makeReportingAgentService } from '../application/usecases/agent/makeReportingAgentService';
-import type { Item } from '../domain/entities';
+import { ItemSchema, type Item } from '../domain/entities';
 import {
   loadReplayConfig,
   type ReplayConfig,
@@ -21,17 +23,18 @@ import { PostgresAdapter } from '../infrastructure/persistence/PostgresAdapter';
 
 const rootLogger = makeLogger();
 
-// - Dump Neon UI: { id?, date_created: "YYYY-MM-DD HH:mm:ss.SSS", data: { items: Item[] } }
-// - Export Script: { id?, createdAt: "YYYY-MM-DDTHH:mm:ss.SSSZ", items: Item[] }
-type RawRow = {
-  id?: string;
-  date_created: string;
-  data: { fetchedItems: Item[] };
-};
-type SnapRow = { id?: string; createdAt: string; fetchedItems: Item[] };
-type AnyRow = RawRow | SnapRow;
+const ReplayExportRowSchema = z.object({
+  id: z.string().optional(),
+  createdAt: IsoDateStringSchema,
+  fetchedItems: z.array(ItemSchema),
+});
 
-const USAGE = 'Usage: tsx src/cli/replay <input.json>';
+// Replay only accepts the normalized export shape:
+// { id?, createdAt, fetchedItems }
+const ReplayInputSchema = z.array(ReplayExportRowSchema);
+type SnapRow = z.infer<typeof ReplayExportRowSchema>;
+
+const USAGE = 'Usage: tsx src/cli/replay.ts <input.json>';
 
 class ReplayUsageError extends Error {
   constructor(message: string) {
@@ -40,22 +43,24 @@ class ReplayUsageError extends Error {
   }
 }
 
-function toISO(s: string): string {
-  const looksISO = s.includes('T') || /z$/i.test(s);
-  const normalized = looksISO ? s : s.replace(' ', 'T') + 'Z';
-  return new Date(normalized).toISOString();
+function getCreatedAtISO(row: SnapRow): string {
+  return row.createdAt;
 }
 
-function getCreatedAtISO(row: AnyRow): string {
-  return 'date_created' in row ? toISO(row.date_created) : toISO(row.createdAt);
-}
+function formatReplayValidationIssues(error: z.ZodError): string {
+  return error.issues
+    .slice(0, 20)
+    .map((issue) => {
+      const pathLabel = issue.path
+        .map((segment) =>
+          typeof segment === 'number' ? '[' + String(segment) + ']' : segment,
+        )
+        .join('.')
+        .replace('.[', '[');
 
-function getFetchedItems(row: AnyRow): Item[] {
-  return 'data' in row ? row.data.fetchedItems : row.fetchedItems;
-}
-
-function getSourceFetchRef(row: AnyRow, createdAt: string): string {
-  return `replay:${row.id ?? createdAt}`;
+      return pathLabel + ': ' + issue.message;
+    })
+    .join(' | ');
 }
 
 type Deps = {
@@ -93,16 +98,21 @@ export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
 
   const abs = path.resolve(process.cwd(), fileArg);
 
-  let rows: AnyRow[];
+  let rows: SnapRow[];
   try {
     const raw = fs.readFileSync(abs, 'utf-8');
     const parsed: unknown = JSON.parse(raw);
 
-    if (!Array.isArray(parsed)) {
-      throw new Error('Input must be a JSON array');
+    const result = ReplayInputSchema.safeParse(parsed);
+
+    if (!result.success) {
+      throw new Error(
+        'Replay input validation failed: ' +
+          formatReplayValidationIssues(result.error),
+      );
     }
 
-    rows = parsed as AnyRow[];
+    rows = result.data;
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error';
     throw new ReplayUsageError(`Invalid input file "${abs}": ${msg}`);
@@ -120,15 +130,13 @@ export async function runReplay(logger: LoggerPort, fileArg = process.argv[2]) {
   let ok = 0;
   for (const [rIndex, r] of rows.entries()) {
     const createdAt = getCreatedAtISO(r);
-    const sourceFetchRef = getSourceFetchRef(r, createdAt);
-    const items = getFetchedItems(r);
+    const items = r.fetchedItems;
 
     if (!items.length) {
       log.debug('Skip empty row', {
         reason: 'no_items',
         rIndex,
         createdAt,
-        sourceFetchRef,
       });
       continue;
     }
