@@ -1,7 +1,10 @@
 import 'dotenv/config';
+
 import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
+
 import OpenAI from 'openai';
+
 import type { ReportingAgentPort } from '../application/ports/input/ReportingAgentPort';
 import type { FetchPort } from '../application/ports/output/FetchPort';
 import type { LlmPort } from '../application/ports/output/LlmPort';

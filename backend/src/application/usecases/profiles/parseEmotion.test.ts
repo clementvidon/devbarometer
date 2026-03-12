@@ -1,5 +1,6 @@
 import type { EmotionScores } from '@devbarometer/shared/domain';
 import { describe, expect, test } from 'vitest';
+
 import { parseEmotion } from './parseEmotion';
 import { FALLBACK_EMOTIONS } from './policy';
 

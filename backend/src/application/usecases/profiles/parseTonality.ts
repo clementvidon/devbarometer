@@ -1,7 +1,8 @@
 import {
-  TonalityScoresSchema,
   type TonalityScores,
+  TonalityScoresSchema,
 } from '@devbarometer/shared/domain';
+
 import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 import { FALLBACK_TONALITIES } from './policy';

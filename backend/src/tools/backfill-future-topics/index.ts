@@ -1,5 +1,7 @@
 import 'dotenv/config';
+
 import { pathToFileURL } from 'node:url';
+
 import { runBackfillFutureTopics } from './run';
 
 /**

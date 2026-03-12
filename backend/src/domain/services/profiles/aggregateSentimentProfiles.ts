@@ -1,9 +1,10 @@
 import {
   EMOTION_SCORE_FIELDS,
-  TONALITY_SCORE_FIELDS,
   type EmotionScores,
+  TONALITY_SCORE_FIELDS,
   type TonalityScores,
 } from '@devbarometer/shared/domain';
+
 import type {
   AggregatedSentimentProfile,
   WeightedSentimentProfile,

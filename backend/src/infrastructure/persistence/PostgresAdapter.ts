@@ -3,12 +3,13 @@ import { drizzle, type PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import type { Sql } from 'postgres';
 import postgres from 'postgres';
 import { v4 as uuidv4 } from 'uuid';
+
 import type { PersistencePort } from '../../application/ports/output/PersistencePort';
 import {
-  PipelineSnapshotSchema,
-  SnapshotDataSchema,
   type PipelineSnapshot,
+  PipelineSnapshotSchema,
   type SnapshotData,
+  SnapshotDataSchema,
 } from '../../domain/value-objects/PipelineSnapshot';
 import { snapshotsTable } from './schema';
 

@@ -1,8 +1,9 @@
 import { describe, expect, test } from 'vitest';
+
 import {
   PipelineSnapshotSchema,
-  SnapshotDataSchema,
   type SnapshotData,
+  SnapshotDataSchema,
 } from './PipelineSnapshot';
 
 /**

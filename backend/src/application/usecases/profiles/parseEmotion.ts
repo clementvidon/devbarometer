@@ -1,7 +1,8 @@
 import {
-  EmotionScoresSchema,
   type EmotionScores,
+  EmotionScoresSchema,
 } from '@devbarometer/shared/domain';
+
 import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';
 import { FALLBACK_EMOTIONS } from './policy';

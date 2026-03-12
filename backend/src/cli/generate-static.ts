@@ -1,9 +1,11 @@
 import 'dotenv/config';
-import fs from 'fs';
-import { fileURLToPath, pathToFileURL } from 'node:url';
-import path from 'path';
 
 import { randomUUID } from 'node:crypto';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+import fs from 'fs';
+import path from 'path';
+
 import type { LoggerPort } from '../application/ports/output/LoggerPort';
 import { getAggregatedProfiles } from '../application/usecases/queries/getAggregatedProfiles';
 import { getLastReport } from '../application/usecases/queries/getLastReport';

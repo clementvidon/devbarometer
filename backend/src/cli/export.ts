@@ -1,8 +1,11 @@
 import 'dotenv/config';
-import fs from 'fs';
+
 import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
+
+import fs from 'fs';
 import path from 'path';
+
 import type { LoggerPort } from '../application/ports/output/LoggerPort';
 import { loadCoreConfig } from '../infrastructure/config/loaders';
 import { makeLogger } from '../infrastructure/logging/root';

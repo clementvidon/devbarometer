@@ -1,4 +1,5 @@
 import type { Report } from '@devbarometer/shared/domain';
+
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 
 export async function getLastReport(

@@ -3,6 +3,7 @@ import type {
   TonalityScores,
 } from '@devbarometer/shared/domain';
 import { describe, expect, test } from 'vitest';
+
 import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import {
   evaluateTone,
@@ -12,8 +13,8 @@ import {
   MIN_STANDOUT_SCORE,
   pickStandoutsByScore,
   RELATIVE_GAP,
-  summarizeProfile,
   type StrengthLabel,
+  summarizeProfile,
 } from './summarizeProfile';
 
 const justBelow = (t: number) =>

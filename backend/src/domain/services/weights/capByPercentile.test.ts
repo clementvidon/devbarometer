@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+
 import type { WeightedItem } from '../../entities';
 import { capByPercentile, type CapParams } from './capByPercentile';
 

@@ -3,6 +3,7 @@ import type {
   AggregatedSentimentProfileDto,
   HeadlineDto,
 } from '@devbarometer/shared/dtos';
+
 import type { SnapshotQueryPort } from '../../ports/input/SnapshotQueryPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 import { getAggregatedProfiles } from './getAggregatedProfiles';

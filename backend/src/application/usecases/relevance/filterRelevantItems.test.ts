@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test, vi, type Mocked } from 'vitest';
+import { afterEach, describe, expect, type Mocked, test, vi } from 'vitest';
 
 vi.mock('./isRelevant', () => ({
   isRelevant: vi.fn((_logger, item: Item, _llm, _options) =>

@@ -1,14 +1,15 @@
 import { z } from 'zod';
+
 import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 import { NodeFetchAdapter } from '../../infrastructure/fetch/NodeFetchAdapter';
-import {
-  buildRedditHeaders,
-  createRedditBackoff,
-} from '../../infrastructure/items/RedditItemsAdapter';
 import {
   getRedditAccessToken as getSharedRedditAccessToken,
   type RedditCredentials,
 } from '../../infrastructure/items/redditAuth';
+import {
+  buildRedditHeaders,
+  createRedditBackoff,
+} from '../../infrastructure/items/RedditItemsAdapter';
 import { ConsoleLoggerAdapter } from '../../infrastructure/logging/ConsoleLoggerAdapter';
 import { sleep } from '../../lib/async/sleep';
 import { fetchWithRetry } from '../../lib/http/fetchWithRetry';

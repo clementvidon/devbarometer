@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+
 import { makeReportMessages } from './llmMessages';
 import type { SentimentProfileSummary } from './summarizeProfile';
 

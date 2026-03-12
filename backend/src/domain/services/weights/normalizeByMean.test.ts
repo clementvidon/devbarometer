@@ -1,4 +1,5 @@
 import { describe, expect, test } from 'vitest';
+
 import type { WeightedItem } from '../../entities';
 import { normalizeByMean, type NormalizeByMeanParams } from './normalizeByMean';
 

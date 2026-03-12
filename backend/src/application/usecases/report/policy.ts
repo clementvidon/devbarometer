@@ -1,4 +1,5 @@
 import type { Report } from '@devbarometer/shared/domain';
+
 import type { LlmRunOptions } from '../../ports/output/LlmPort';
 
 export const REPORT_LLM_OPTIONS = {

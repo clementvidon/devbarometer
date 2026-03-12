@@ -1,9 +1,10 @@
 import {
+  type EmotionScores,
   TONALITY_AXIS_FIELDS,
   TONALITY_AXIS_KEYS,
-  type EmotionScores,
   type TonalityAxisKey,
 } from '@devbarometer/shared/domain';
+
 import type { AggregatedSentimentProfile } from '../../../domain/entities';
 
 export type StrengthLabel =

@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, test, vi, type Mocked } from 'vitest';
+import { afterEach, describe, expect, type Mocked, test, vi } from 'vitest';
+
 import type { LoggerPort } from '../ports/output/LoggerPort';
 import { withSpan } from './withSpan';
 

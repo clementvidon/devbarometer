@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, test, vi, type Mocked } from 'vitest';
+import { afterEach, describe, expect, type Mocked, test, vi } from 'vitest';
+
 import type { Item } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';

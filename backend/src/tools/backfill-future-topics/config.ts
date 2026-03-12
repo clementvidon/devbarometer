@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { parseEnv } from '../../infrastructure/config/loaders';
 import { DEFAULT_REDDIT_USER_AGENT } from '../../infrastructure/items/redditAuth';
 import type { RedditBackfillConfig } from './types';

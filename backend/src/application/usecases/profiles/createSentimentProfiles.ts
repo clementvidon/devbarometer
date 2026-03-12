@@ -1,4 +1,5 @@
 import pLimit from 'p-limit';
+
 import type { RelevantItem, SentimentProfile } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';

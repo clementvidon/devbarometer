@@ -1,4 +1,4 @@
-import { describe, expect, test, vi, type Mocked } from 'vitest';
+import { describe, expect, type Mocked, test, vi } from 'vitest';
 
 vi.mock('./parseEmotion', () => ({
   parseEmotion: vi.fn((raw: string) =>
@@ -62,6 +62,7 @@ import type {
   EmotionScores,
   TonalityScores,
 } from '@devbarometer/shared/domain';
+
 import type { WeightedItem } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';

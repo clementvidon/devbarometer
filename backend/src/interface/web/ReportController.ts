@@ -1,4 +1,5 @@
 import express, { type Express } from 'express';
+
 import type { ReportingAgentPort } from '../../application/ports/input/ReportingAgentPort';
 import type { SnapshotQueryPort } from '../../application/ports/input/SnapshotQueryPort';
 import type { LoggerPort } from '../../application/ports/output/LoggerPort';

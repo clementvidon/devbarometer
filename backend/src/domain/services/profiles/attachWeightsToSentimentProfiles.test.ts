@@ -3,6 +3,7 @@ import type {
   TonalityScores,
 } from '@devbarometer/shared/domain';
 import { describe, expect, test } from 'vitest';
+
 import type { SentimentProfile, WeightedItem } from '../../entities';
 import { attachWeightsToSentimentProfiles } from './attachWeightsToSentimentProfiles';
 

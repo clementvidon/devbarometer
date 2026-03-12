@@ -1,4 +1,5 @@
 import type { Report } from '@devbarometer/shared/domain';
+
 import { type AggregatedSentimentProfile } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
