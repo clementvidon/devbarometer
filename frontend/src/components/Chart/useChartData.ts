@@ -26,9 +26,16 @@ export function useChartData() {
       try {
         const baseUrl = import.meta.env.BASE_URL;
         const res = await fetch(baseUrl + 'chart.json');
-        const profiles = AggregatedSentimentProfileDtoSchema.array().parse(
-          await res.json(),
-        );
+        const payload: unknown = await res.json();
+        const result =
+          AggregatedSentimentProfileDtoSchema.array().safeParse(payload);
+        if (!result.success) {
+          setError(new Error(result.error.message));
+          setEmotionData([]);
+          setTonalityData([]);
+          return;
+        }
+        const profiles = result.data;
         setEmotionData(
           smoothUX(
             buildEmotionSeries(profiles),
