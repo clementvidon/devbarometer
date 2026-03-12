@@ -53,14 +53,19 @@
   },
   "lint-staged": {
     "frontend/src/**/*.{ts,tsx}": [
-      "npm --workspace frontend run format",
-      "npm --workspace frontend run lint",
-      "npm --workspace frontend run test:changed"
+      "npm --workspace frontend exec -- prettier --write --ignore-unknown",
+      "npm --workspace frontend exec -- eslint --fix --cache --max-warnings=0",
+      "npm --workspace frontend exec -- vitest related --run"
     ],
     "backend/src/**/*.{ts,tsx}": [
-      "npm --workspace backend run format",
-      "npm --workspace backend run lint",
-      "npm --workspace backend run test:changed"
+      "npm --workspace backend exec -- prettier --write --ignore-unknown",
+      "npm --workspace backend exec -- eslint --fix --cache --max-warnings=0",
+      "npm --workspace backend exec -- vitest related --run"
+    ],
+    "shared/src/**/*.ts": [
+      "npm --workspace shared exec -- prettier --write --ignore-unknown",
+      "npm --workspace shared exec -- eslint --fix --cache --max-warnings=0",
+      "npm --workspace shared exec -- vitest related --run"
     ]
   },
   "devDependencies": {
