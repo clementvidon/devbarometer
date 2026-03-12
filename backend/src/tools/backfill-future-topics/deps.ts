@@ -1,10 +1,3 @@
-/**
- * TEMP SCRIPT
- * Backfills future topics.
- * Can violate hexagonal boundaries.
- * Do not reuse in production code.
- */
-
 import postgres from 'postgres';
 
 export function makeDb(databaseUrl: string) {

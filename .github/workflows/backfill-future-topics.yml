@@ -37,7 +37,7 @@ jobs:
         run: npm run build-shared
 
       - name: Run backfill
-        run: npm --workspace backend exec -- tsx src/tools/backfillFutureTopics/index.ts
+        run: npm --workspace backend exec -- tsx src/tools/backfill-future-topics/index.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}

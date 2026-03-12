@@ -1,10 +1,3 @@
-/**
- * TEMP SCRIPT
- * Backfills future topics.
- * Can violate hexagonal boundaries.
- * Do not reuse in production code.
- */
-
 export type RedditBackfillConfig = {
   databaseUrl: string;
   redditClientId: string;

@@ -1,10 +1,3 @@
-/**
- * TEMP SCRIPT
- * Backfills future topics.
- * Can violate hexagonal boundaries.
- * Do not reuse in production code.
- */
-
 import { z } from 'zod';
 import { parseEnv } from '../../infrastructure/config/loaders';
 import { DEFAULT_REDDIT_USER_AGENT } from '../../infrastructure/items/redditAuth';

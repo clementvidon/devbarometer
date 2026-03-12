@@ -1,10 +1,3 @@
-/**
- * VIBE CODED TEMP SCRIPT
- * Backfills future topics.
- * Can violate hexagonal boundaries.
- * Do not reuse in production code.
- */
-
 import { z } from 'zod';
 import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 import { NodeFetchAdapter } from '../../infrastructure/fetch/NodeFetchAdapter';
@@ -396,7 +389,7 @@ export async function runBackfillFutureTopics() {
   const tokenState: TokenState = { token: '' };
   const logger = new ConsoleLoggerAdapter(
     { level: 'info', pretty: true },
-    { module: 'tools.backfillFutureTopics' },
+    { module: 'tools.backfill-future-topics' },
   );
 
   try {
