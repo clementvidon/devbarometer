@@ -4,6 +4,7 @@ import {
 } from '@devbarometer/shared/domain';
 import { AggregatedSentimentProfileDtoSchema } from '@devbarometer/shared/dtos';
 import { useEffect, useState } from 'react';
+
 import { smoothUX } from './smoothing';
 import {
   buildEmotionSeries,

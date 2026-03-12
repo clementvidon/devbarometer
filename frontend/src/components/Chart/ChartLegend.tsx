@@ -2,6 +2,7 @@ import {
   EMOTION_SCORE_FIELDS,
   TONALITY_AXIS_KEYS,
 } from '@devbarometer/shared/domain';
+
 import styles from './Chart.module.css';
 import {
   EMOTION_COLORS,

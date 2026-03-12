@@ -1,4 +1,4 @@
-import { ReportSchema, type Report } from '@devbarometer/shared/domain';
+import { type Report, ReportSchema } from '@devbarometer/shared/domain';
 import { useEffect, useState } from 'react';
 
 function parseReportJson(data: unknown): Report {

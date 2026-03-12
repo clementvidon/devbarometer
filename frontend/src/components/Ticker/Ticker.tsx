@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
 import styles from './Ticker.module.css';
 import { useTickerData } from './useTickerData';
 import { useTickerScroll } from './useTickerScroll';

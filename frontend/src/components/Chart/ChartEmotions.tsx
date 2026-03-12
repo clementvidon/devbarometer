@@ -1,4 +1,5 @@
 import { EMOTION_SCORE_FIELDS } from '@devbarometer/shared/domain';
+
 import { ChartCanvas } from './ChartCanvas';
 import { EMOTION_COLORS, EMOTION_LABELS } from './config';
 import type { EmotionSeriesPoint } from './transformChartSeries';

@@ -7,6 +7,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+
 import styles from './Chart.module.css';
 import { THEME } from './config';
 import { dateFmtAxis, dateFmtTooltip, numFmt } from './formatters';

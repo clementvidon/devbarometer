@@ -1,5 +1,6 @@
 import { type HeadlineDto, HeadlineDtoSchema } from '@devbarometer/shared/dtos';
 import { useEffect, useState } from 'react';
+
 import { shuffleArray } from '../../utils/shuffle';
 
 export function useTickerData() {

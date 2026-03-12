@@ -1,4 +1,5 @@
 import { TONALITY_AXIS_KEYS } from '@devbarometer/shared/domain';
+
 import { ChartCanvas } from './ChartCanvas';
 import { TONALITY_COLORS, TONALITY_LABELS } from './config';
 import type { TonalitySeriesPoint } from './transformChartSeries';

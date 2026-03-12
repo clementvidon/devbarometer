@@ -4,6 +4,7 @@ import {
   type TonalityAxisKey,
 } from '@devbarometer/shared/domain';
 import type { AggregatedSentimentProfileDto } from '@devbarometer/shared/dtos';
+
 import { EMOTION_COLORS } from './config';
 import { dateFmtTooltip } from './formatters';
 

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { Chart } from '../components/Chart/Chart';
 import { Report } from '../components/Report/Report';
 import { Ticker } from '../components/Ticker/Ticker';
