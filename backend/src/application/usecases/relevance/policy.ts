@@ -11,3 +11,9 @@ export const RELEVANCE_LLM_OPTIONS = {
 } satisfies LlmRunOptions & { model: string };
 
 export const DEFAULT_RELEVANCE_ON_ERROR = false;
+
+export const DEFAULT_RELEVANCE_PREFILTER_OPTIONS = {
+  enabled: true,
+  rejectTitleOnly: true,
+  applyTitleBlocklist: true,
+} as const;

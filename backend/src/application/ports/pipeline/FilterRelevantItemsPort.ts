@@ -2,6 +2,12 @@ import type { Item, RelevantItem } from '../../../domain/entities';
 import type { LlmRunOptions } from '../output/LlmPort';
 import type { LoggerPort } from '../output/LoggerPort';
 
+export interface RelevancePrefilterOptions {
+  enabled: boolean;
+  rejectTitleOnly: boolean;
+  applyTitleBlocklist: boolean;
+}
+
 export interface FilterRelevantItemsOptions {
   /** Prompt système utilisé pour la pertinence */
   prompt: string;
@@ -9,6 +15,8 @@ export interface FilterRelevantItemsOptions {
   concurrency: number;
   /** Options LLM finales (incluant le modèle) */
   llmOptions: LlmRunOptions & { model: string };
+  /** Préfiltre déterministe sans LLM */
+  prefilter: RelevancePrefilterOptions;
 }
 
 /**

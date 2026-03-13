@@ -92,4 +92,22 @@ describe(filterRelevantItems.name, () => {
     expect(result).toEqual([]);
     expect(isRelevant).not.toHaveBeenCalled();
   });
+
+  test('does not call isRelevant for prefiltered items', async () => {
+    const logger = makeLogger();
+    const llm = makeLlm();
+    const items = [
+      makeItem({ title: "[MegaThread] Recherches/Offres d'emploi" }),
+      makeItem({
+        title: 'Stack Overflow se penche sur les salaires',
+        content: '   ',
+      }),
+      makeItem({ title: 'yes', content: 'content' }),
+    ];
+
+    const result = await filterRelevantItems(logger, items, llm);
+
+    expect(result).toEqual([items[2]]);
+    expect(isRelevant).toHaveBeenCalledTimes(1);
+  });
 });

@@ -6,12 +6,20 @@ import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { FilterRelevantItemsOptions } from '../../ports/pipeline/FilterRelevantItemsPort';
 import { isRelevant } from './isRelevant';
 import { CONCURRENCY, RELEVANCE_LLM_OPTIONS } from './policy';
+import { prefilterRelevance } from './prefilterRelevance';
 import { relevanceFilterPrompt } from './prompts';
+
+export const DEFAULT_RELEVANCE_PREFILTER_OPTIONS = {
+  enabled: true,
+  rejectTitleOnly: true,
+  applyTitleBlocklist: true,
+} as const;
 
 const DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS = {
   prompt: relevanceFilterPrompt,
   concurrency: CONCURRENCY,
   llmOptions: RELEVANCE_LLM_OPTIONS,
+  prefilter: DEFAULT_RELEVANCE_PREFILTER_OPTIONS,
 } satisfies FilterRelevantItemsOptions;
 
 function mergeFilterRelevantItemsOptions(
@@ -21,10 +29,15 @@ function mergeFilterRelevantItemsOptions(
     ...DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS.llmOptions,
     ...(opts.llmOptions ?? {}),
   };
+  const mergedPrefilter = {
+    ...DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS.prefilter,
+    ...(opts.prefilter ?? {}),
+  };
   return {
     ...DEFAULT_FILTER_RELEVANT_ITEMS_OPTIONS,
     ...opts,
     llmOptions: mergedLlmOptions,
+    prefilter: mergedPrefilter,
   };
 }
 
@@ -46,15 +59,26 @@ export async function filterRelevantItems(
     return [];
   }
 
-  const { prompt, concurrency, llmOptions } =
+  const { prompt, concurrency, llmOptions, prefilter } =
     mergeFilterRelevantItemsOptions(opts);
 
   const limit = pLimit(concurrency);
   const { model, ...runOpts } = llmOptions;
+  let prefilterTitleOnlyDiscarded = 0;
+  let prefilterTitleBlocklistDiscarded = 0;
 
   const labeledItems: LabeledItem[] = await Promise.all(
     items.map((item) =>
       limit(async () => {
+        const prefilterDecision = prefilterRelevance(item, prefilter);
+        if (prefilterDecision.kind === 'reject') {
+          if (prefilterDecision.reason === 'title_only') {
+            prefilterTitleOnlyDiscarded++;
+          } else {
+            prefilterTitleBlocklistDiscarded++;
+          }
+          return { item, ok: false };
+        }
         const ok = await isRelevant(logger, item, llm, {
           prompt,
           model,
@@ -71,6 +95,8 @@ export async function filterRelevantItems(
     total: items.length,
     relevant: relevantItems.length,
     discarded: items.length - relevantItems.length,
+    prefilterTitleOnlyDiscarded,
+    prefilterTitleBlocklistDiscarded,
   });
 
   return relevantItems;
