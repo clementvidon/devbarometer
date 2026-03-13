@@ -163,9 +163,9 @@ export class ReportingAgentService implements ReportingAgentPort {
       const topShare = total > 0 ? top.weight / total : 0;
       log.info('Weights summary', {
         N: weightedItems.length,
-        totalWeight: Number.isFinite(total) ? total : 0,
-        topWeight: top.weight,
-        topShare,
+        totalWeight: Number.isFinite(total) ? formatFloat(total) : 0,
+        topWeight: formatFloat(top.weight),
+        topShare: formatFloat(topShare),
       });
     }
     log.debug('Aggregated profile', { aggregated });
