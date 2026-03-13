@@ -5,7 +5,6 @@ import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { FilterRelevantItemsOptions } from '../../ports/pipeline/FilterRelevantItemsPort';
 import { analyzeOneItemRelevance } from './analyzeOneItemRelevance';
-import { DEFAULT_RELEVANCE_PREFILTER_OPTIONS } from './filterRelevantItems';
 import {
   CONCURRENCY,
   FALLBACK_ITEM_RELEVANCE,
@@ -13,6 +12,12 @@ import {
 } from './policy';
 import { prefilterRelevance } from './prefilterRelevance';
 import { relevanceFilterPrompt } from './prompts';
+
+export const DEFAULT_RELEVANCE_PREFILTER_OPTIONS = {
+  enabled: true,
+  rejectTitleOnly: true,
+  applyTitleBlocklist: true,
+} as const;
 
 const DEFAULT_ANALYZE_ITEMS_RELEVANCE_OPTIONS = {
   prompt: relevanceFilterPrompt,

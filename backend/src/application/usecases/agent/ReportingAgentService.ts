@@ -48,12 +48,16 @@ export class ReportingAgentService implements ReportingAgentPort {
     }));
     log.info('Items fetched', { count: items.length });
 
-    const relevant = await withSpan(
+    const relevanceResult = await withSpan(
       log,
       this.relevance.filterRelevantItems.name,
       () => this.relevance.filterRelevantItems(log, items),
     );
-    log.info('Relevant items filtered', { relevant: relevant.length });
+    const relevant = relevanceResult.relevantItems;
+    log.info('Relevant items filtered', {
+      relevant: relevant.length,
+      analyzed: relevanceResult.itemsRelevance.length,
+    });
 
     const [presentProfiles, previousRelevantItems] = await Promise.all([
       withSpan(log, this.profiles.createSentimentProfiles.name, () =>

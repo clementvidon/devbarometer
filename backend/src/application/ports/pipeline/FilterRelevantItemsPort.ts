@@ -1,4 +1,8 @@
-import type { Item, RelevantItem } from '../../../domain/entities';
+import type {
+  Item,
+  ItemRelevance,
+  RelevantItem,
+} from '../../../domain/entities';
 import type { LlmRunOptions } from '../output/LlmPort';
 import type { LoggerPort } from '../output/LoggerPort';
 
@@ -19,6 +23,11 @@ export interface FilterRelevantItemsOptions {
   prefilter: RelevancePrefilterOptions;
 }
 
+export interface FilterRelevantItemsResult {
+  relevantItems: RelevantItem[];
+  itemsRelevance: ItemRelevance[];
+}
+
 /**
  * Filter relevant items for the pipeline.
  *
@@ -33,5 +42,5 @@ export interface FilterRelevantItemsPort {
     logger: LoggerPort,
     items: Item[],
     opts?: Partial<FilterRelevantItemsOptions>,
-  ): Promise<RelevantItem[]>;
+  ): Promise<FilterRelevantItemsResult>;
 }
