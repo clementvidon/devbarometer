@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { roundNumber } from '../../lib/number/roundNumber';
 import {
   AggregatedSentimentProfileSchema,
+  ItemRelevanceSchema,
   ItemSchema,
   WeightedItemSchema,
   WeightedSentimentProfileSchema,
@@ -27,6 +28,7 @@ function equalRounded(a: number, b: number): boolean {
 export const SnapshotDataShape = z
   .object({
     fetchedItems: z.array(ItemSchema),
+    itemsRelevance: z.array(ItemRelevanceSchema),
     weightedItems: z.array(WeightedItemSchema),
     weightedSentimentProfiles: z.array(WeightedSentimentProfileSchema),
     aggregatedSentimentProfile: AggregatedSentimentProfileSchema,
@@ -41,10 +43,34 @@ function validateSnapshotConsistency(
   ctx: z.RefinementCtx,
 ) {
   const {
+    fetchedItems,
+    itemsRelevance,
     weightedItems,
     weightedSentimentProfiles,
     aggregatedSentimentProfile,
   } = snapshot;
+
+  if (fetchedItems.length !== itemsRelevance.length) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ['itemsRelevance'],
+      message: 'fetchedItems and itemsRelevance must have the same length.',
+    });
+  }
+
+  const relevancePairCount = Math.min(
+    fetchedItems.length,
+    itemsRelevance.length,
+  );
+  for (let i = 0; i < relevancePairCount; i++) {
+    if (fetchedItems[i].itemRef !== itemsRelevance[i].itemRef) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['itemsRelevance', i, 'itemRef'],
+        message: 'fetchedItems and itemsRelevance must stay aligned.',
+      });
+    }
+  }
 
   if (weightedItems.length !== weightedSentimentProfiles.length) {
     ctx.addIssue({

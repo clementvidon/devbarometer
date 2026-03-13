@@ -106,6 +106,15 @@ export class ReportingAgentService implements ReportingAgentPort {
       weight: roundNumber(item.weight),
     }));
 
+    const persistedItemsRelevance = relevanceResult.itemsRelevance.map(
+      (itemRelevance) => ({
+        ...itemRelevance,
+        topicScore: roundNumber(itemRelevance.topicScore),
+        emotionScore: roundNumber(itemRelevance.emotionScore),
+        genreScore: roundNumber(itemRelevance.genreScore),
+      }),
+    );
+
     const persistedWeightedProfiles = weightedProfiles.map((profile) => ({
       ...profile,
       weight: roundNumber(profile.weight),
@@ -138,6 +147,7 @@ export class ReportingAgentService implements ReportingAgentPort {
     await withSpan(log, this.persistence.storeSnapshotAt.name, () =>
       this.persistence.storeSnapshotAt(createdAt, {
         fetchedItems: items,
+        itemsRelevance: persistedItemsRelevance,
         weightedItems: persistedWeightedItems,
         weightedSentimentProfiles: persistedWeightedProfiles,
         aggregatedSentimentProfile: persistedAggregated,

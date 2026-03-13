@@ -44,6 +44,7 @@ describe(getLastRelevantItemsBefore.name, () => {
       id: 'id',
       createdAt: '2001-01-01',
       fetchedItems: [],
+      itemsRelevance: [],
       weightedItems: [],
       weightedSentimentProfiles: [],
       aggregatedSentimentProfile: {

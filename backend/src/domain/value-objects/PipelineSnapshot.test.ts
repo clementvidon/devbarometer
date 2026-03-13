@@ -21,6 +21,16 @@ function makeSnapshotData(): SnapshotData {
         score: 42,
       },
     ],
+    itemsRelevance: [
+      {
+        itemRef: 'item',
+        relevant: true,
+        category: 'emotional_insight',
+        topicScore: 0.9,
+        emotionScore: 0.8,
+        genreScore: 0.95,
+      },
+    ],
     weightedItems: [
       {
         sourceFetchRef: 'sourceFetchRef',
@@ -88,6 +98,12 @@ describe('SnapshotDataSchema', () => {
   test('rejects snapshots missing fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const { fetchedItems: _fetchedItems, ...invalid } = snapshot;
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects snapshots missing itemsRelevance', () => {
+    const snapshot = makeSnapshotData();
+    const { itemsRelevance: _itemsRelevance, ...invalid } = snapshot;
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
@@ -361,6 +377,29 @@ describe('SnapshotDataSchema', () => {
         count: 0,
         totalWeight: 0,
       },
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects snapshots when fetchedItems and itemsRelevance lengths differ', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      itemsRelevance: [],
+    };
+
+    expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
+  });
+  test('rejects snapshots when fetchedItems and itemsRelevance are not aligned', () => {
+    const snapshot = makeSnapshotData();
+    const invalid = {
+      ...snapshot,
+      itemsRelevance: [
+        {
+          ...snapshot.itemsRelevance[0],
+          itemRef: 'other-item',
+        },
+      ],
     };
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
