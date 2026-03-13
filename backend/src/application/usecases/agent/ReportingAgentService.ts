@@ -3,6 +3,7 @@ import { aggregateSentimentProfiles } from '../../../domain/services/profiles/ag
 import { attachWeightsToSentimentProfiles } from '../../../domain/services/profiles/attachWeightsToSentimentProfiles';
 import { formatFloat } from '../../../lib/number/formatFloat';
 import { roundNumber } from '../../../lib/number/roundNumber';
+import { canonicalizeRedditItemRef } from '../../../lib/reddit/canonicalizeRedditItemRef';
 import { nowIso } from '../../../lib/time/nowIso';
 import { withSpan } from '../../observability/withSpan';
 import type { ReportingAgentPort } from '../../ports/input/ReportingAgentPort';
@@ -38,7 +39,13 @@ export class ReportingAgentService implements ReportingAgentPort {
 
     log.info('Snapshot started', { createdAt, snapshotDay });
 
-    const items = await withSpan(log, 'getItems', () => this.items.getItems());
+    const rawItems = await withSpan(log, 'getItems', () =>
+      this.items.getItems(),
+    );
+    const items = rawItems.map((item) => ({
+      ...item,
+      itemRef: canonicalizeRedditItemRef(item.itemRef),
+    }));
     log.info('Items fetched', { count: items.length });
 
     const relevant = await withSpan(

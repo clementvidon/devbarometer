@@ -1,4 +1,5 @@
 import type { RelevantItem } from '../../../domain/entities';
+import { canonicalizeRedditItemRef } from '../../../lib/reddit/canonicalizeRedditItemRef';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 
 export async function getLastRelevantItemsBefore(
@@ -13,5 +14,10 @@ export async function getLastRelevantItemsBefore(
     .sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt))
     .at(0);
 
-  return prev?.weightedItems.map(({ weight: _weight, ...item }) => item) ?? [];
+  return (
+    prev?.weightedItems.map(({ weight: _weight, ...item }) => ({
+      ...item,
+      itemRef: canonicalizeRedditItemRef(item.itemRef),
+    })) ?? []
+  );
 }

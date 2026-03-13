@@ -6,6 +6,7 @@ import type { LoggerPort } from '../../application/ports/output/LoggerPort';
 import type { Item } from '../../domain/entities';
 import { filterByScore } from '../../domain/services/items/filterByScore';
 import { fetchWithRetry } from '../../lib/http/fetchWithRetry';
+import { canonicalizeRedditItemRef } from '../../lib/reddit/canonicalizeRedditItemRef';
 import { normalizeWhitespace } from '../../lib/string/normalizeWhitespace';
 import {
   DEFAULT_REDDIT_USER_AGENT,
@@ -56,7 +57,7 @@ function mapRedditChildToItem(
   const d = child.data;
   return {
     sourceFetchRef,
-    itemRef: `https://reddit.com/comments/${d.id}`,
+    itemRef: canonicalizeRedditItemRef(`https://reddit.com/comments/${d.id}`),
     title: normalizeWhitespace(d.title),
     content: normalizeWhitespace(d.selftext),
     score: d.ups,
