@@ -5,6 +5,7 @@ import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { FilterRelevantItemsOptions } from '../../ports/pipeline/FilterRelevantItemsPort';
 import { analyzeOneItemRelevance } from './analyzeOneItemRelevance';
+import { applyRelevanceGates } from './applyRelevanceGates';
 import {
   CONCURRENCY,
   FALLBACK_ITEM_RELEVANCE,
@@ -19,11 +20,18 @@ export const DEFAULT_RELEVANCE_PREFILTER_OPTIONS = {
   applyTitleBlocklist: true,
 } as const;
 
+export const DEFAULT_RELEVANCE_GATE_OPTIONS = {
+  enabled: true,
+  topicMin: 0.55,
+  genreMin: 0.6,
+} as const;
+
 const DEFAULT_ANALYZE_ITEMS_RELEVANCE_OPTIONS = {
   prompt: relevanceFilterPrompt,
   concurrency: CONCURRENCY,
   llmOptions: RELEVANCE_LLM_OPTIONS,
   prefilter: DEFAULT_RELEVANCE_PREFILTER_OPTIONS,
+  gates: DEFAULT_RELEVANCE_GATE_OPTIONS,
 } satisfies FilterRelevantItemsOptions;
 
 function mergeAnalyzeItemsRelevanceOptions(
@@ -37,11 +45,16 @@ function mergeAnalyzeItemsRelevanceOptions(
     ...DEFAULT_ANALYZE_ITEMS_RELEVANCE_OPTIONS.prefilter,
     ...(opts.prefilter ?? {}),
   };
+  const mergedGates = {
+    ...DEFAULT_ANALYZE_ITEMS_RELEVANCE_OPTIONS.gates,
+    ...(opts.gates ?? {}),
+  };
   return {
     ...DEFAULT_ANALYZE_ITEMS_RELEVANCE_OPTIONS,
     ...opts,
     llmOptions: mergedLlmOptions,
     prefilter: mergedPrefilter,
+    gates: mergedGates,
   };
 }
 
@@ -63,7 +76,7 @@ export async function analyzeItemsRelevance(
     return [];
   }
 
-  const { prompt, concurrency, llmOptions, prefilter } =
+  const { prompt, concurrency, llmOptions, prefilter, gates } =
     mergeAnalyzeItemsRelevanceOptions(opts);
 
   const limit = pLimit(concurrency);
@@ -87,11 +100,12 @@ export async function analyzeItemsRelevance(
           };
         }
 
-        return analyzeOneItemRelevance(logger, item, llm, {
+        const relevance = await analyzeOneItemRelevance(logger, item, llm, {
           prompt,
           model,
           runOpts,
         });
+        return applyRelevanceGates(relevance, gates);
       }),
     ),
   );

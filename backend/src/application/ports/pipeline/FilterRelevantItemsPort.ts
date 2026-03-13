@@ -12,6 +12,12 @@ export interface RelevancePrefilterOptions {
   applyTitleBlocklist: boolean;
 }
 
+export interface RelevanceGateOptions {
+  enabled: boolean;
+  topicMin: number;
+  genreMin: number;
+}
+
 export interface FilterRelevantItemsOptions {
   /** Prompt système utilisé pour la pertinence */
   prompt: string;
@@ -21,6 +27,8 @@ export interface FilterRelevantItemsOptions {
   llmOptions: LlmRunOptions & { model: string };
   /** Préfiltre déterministe sans LLM */
   prefilter: RelevancePrefilterOptions;
+  /** Seuils post-LLM sur topicScore/genreScore */
+  gates: RelevanceGateOptions;
 }
 
 export interface FilterRelevantItemsResult {
