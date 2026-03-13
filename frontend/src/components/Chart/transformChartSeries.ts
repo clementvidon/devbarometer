@@ -11,6 +11,7 @@ import { dateFmtTooltip } from './formatters';
 export type EmotionSeriesPoint = {
   dateLabel: string;
   createdAt: string;
+  confidenceMass: number;
 } & Record<keyof typeof EMOTION_COLORS, number>;
 
 export function buildEmotionSeries(
@@ -20,7 +21,7 @@ export function buildEmotionSeries(
   return profiles
     .slice()
     .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
-    .map(({ createdAt, emotions }) => {
+    .map(({ createdAt, confidenceMass, emotions }) => {
       const base = {} as Record<keyof typeof EMOTION_COLORS, number>;
 
       for (const key of keys) base[key] = emotions[key];
@@ -28,6 +29,7 @@ export function buildEmotionSeries(
       return {
         dateLabel: dateFmtTooltip.format(new Date(createdAt)),
         createdAt,
+        confidenceMass,
         ...base,
       };
     });
@@ -35,6 +37,7 @@ export function buildEmotionSeries(
 
 export type TonalitySeriesPoint = {
   createdAt: string;
+  confidenceMass: number;
 } & Record<TonalityAxisKey, number>;
 
 export function buildTonalitySeries(
@@ -43,7 +46,7 @@ export function buildTonalitySeries(
   return profiles
     .slice()
     .sort((a, b) => +new Date(a.createdAt) - +new Date(b.createdAt))
-    .map(({ createdAt, tonalities }) => {
+    .map(({ createdAt, confidenceMass, tonalities }) => {
       const base = {} as Record<TonalityAxisKey, number>;
 
       for (const key of TONALITY_AXIS_KEYS) {
@@ -53,6 +56,7 @@ export function buildTonalitySeries(
 
       return {
         createdAt,
+        confidenceMass,
         ...base,
       };
     });

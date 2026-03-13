@@ -1,5 +1,11 @@
 export type SmoothLevel = 'detail' | 'custom' | 'clean' | 'narrative';
 
+type SmoothOptions<T extends Record<string, unknown>> = {
+  weightKey?: NumericKey<T>;
+  minInfluence?: number;
+  massHalfSaturation?: number;
+};
+
 type Preset = { K: number; passes: number; anchors: number };
 const PRESETS: Record<SmoothLevel, Preset> = {
   detail: { K: 8, passes: 1, anchors: 8 },
@@ -19,18 +25,35 @@ function alphaFromHalfLife(h: number): number {
   return Math.min(0.95, Math.max(0.02, a));
 }
 
+function saturateMass(mass: number, halfSaturation: number): number {
+  if (!Number.isFinite(mass) || mass <= 0) return 0;
+  return mass / (mass + Math.max(halfSaturation, 1e-6));
+}
+
 function emaPass<T extends Record<string, unknown>>(
   data: readonly T[],
   keys: readonly NumericKey<T>[],
   alpha: number,
+  opts: SmoothOptions<T> = {},
 ): T[] {
   const acc = {} as Partial<Record<NumericKey<T>, number>>;
   return data.map((p, i) => {
     const out: Writeable<T> = { ...p };
+    const rawMass =
+      opts.weightKey && typeof p[opts.weightKey] === 'number'
+        ? (p[opts.weightKey] as number)
+        : 1;
+    const influence =
+      (opts.minInfluence ?? 0.15) +
+      (1 - (opts.minInfluence ?? 0.15)) *
+        saturateMass(rawMass, opts.massHalfSaturation ?? 8);
+    const effectiveAlpha = alpha * influence;
+
     for (const k of keys) {
       const v = p[k];
       if (typeof v !== 'number') continue;
-      const prev = i === 0 ? v : alpha * v + (1 - alpha) * (acc[k] ?? v);
+      const prev =
+        i === 0 ? v : effectiveAlpha * v + (1 - effectiveAlpha) * (acc[k] ?? v);
       (out as unknown as Record<NumericKey<T>, number>)[k] = prev;
       acc[k] = prev;
     }
@@ -113,6 +136,7 @@ export function smoothUX<T extends Record<string, unknown>>(
   data: readonly T[],
   numericKeys: readonly NumericKey<T>[],
   level: SmoothLevel = 'clean',
+  opts: SmoothOptions<T> = {},
 ): T[] {
   const N = data.length;
   if (N <= 2) return [...data];
@@ -121,7 +145,7 @@ export function smoothUX<T extends Record<string, unknown>>(
   const alpha = alphaFromHalfLife(Math.max(2, N / kPreset));
   let tmp: T[] = [...data];
   for (let i = 0; i < passes; i++) {
-    tmp = emaPass(tmp, numericKeys, alpha);
+    tmp = emaPass(tmp, numericKeys, alpha, opts);
   }
 
   const safeAnchors = Math.min(Math.max(3, anchors), N);

@@ -38,14 +38,28 @@ export function useChartData() {
         }
         const profiles = result.data;
         setEmotionData(
-          smoothUX(
+          smoothUX<EmotionSeriesPoint>(
             buildEmotionSeries(profiles),
             EMOTION_SCORE_FIELDS,
             'custom',
+            {
+              weightKey: 'confidenceMass',
+              minInfluence: 0.15,
+              massHalfSaturation: 8,
+            },
           ),
         );
         setTonalityData(
-          smoothUX(buildTonalitySeries(profiles), TONALITY_AXIS_KEYS, 'custom'),
+          smoothUX<TonalitySeriesPoint>(
+            buildTonalitySeries(profiles),
+            TONALITY_AXIS_KEYS,
+            'custom',
+            {
+              weightKey: 'confidenceMass',
+              minInfluence: 0.15,
+              massHalfSaturation: 8,
+            },
+          ),
         );
       } catch (e) {
         setError(e instanceof Error ? e : new Error('Erreur inconnue'));
