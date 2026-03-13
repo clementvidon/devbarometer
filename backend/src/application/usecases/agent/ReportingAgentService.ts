@@ -1,6 +1,7 @@
 import type { WeightedItem } from '../../../domain/entities';
 import { aggregateSentimentProfiles } from '../../../domain/services/profiles/aggregateSentimentProfiles';
 import { attachWeightsToSentimentProfiles } from '../../../domain/services/profiles/attachWeightsToSentimentProfiles';
+import { blendRelevanceWeight } from '../../../domain/services/weights/blendRelevanceWeight';
 import { formatFloat } from '../../../lib/number/formatFloat';
 import { roundNumber } from '../../../lib/number/roundNumber';
 import { canonicalizeRedditItemRef } from '../../../lib/reddit/canonicalizeRedditItemRef';
@@ -72,11 +73,15 @@ export class ReportingAgentService implements ReportingAgentPort {
       count: previousRelevantItems.length,
     });
 
-    const weightedItems = await withSpan(
+    const momentumWeightedItems = await withSpan(
       log,
       this.weights.computeMomentumWeights.name,
       () =>
         this.weights.computeMomentumWeights(relevant, previousRelevantItems),
+    );
+    const weightedItems = blendRelevanceWeight(
+      momentumWeightedItems,
+      relevanceResult.itemsRelevance,
     );
     log.info('Momentum weights computed', { count: weightedItems.length });
 
