@@ -49,7 +49,9 @@ describe(isRelevant.name, () => {
     const logger = makeLogger();
     const item = makeItem();
     const llm = makeLlm();
-    llm.run.mockResolvedValue('{ "relevant": true }');
+    llm.run.mockResolvedValue(
+      '{ "relevant": true, "category": "emotional_insight", "topicScore": 0.9, "emotionScore": 0.8, "genreScore": 0.9 }',
+    );
 
     const result = await isRelevant(logger, item, llm, {
       prompt: 'prompt',
@@ -66,7 +68,9 @@ describe(isRelevant.name, () => {
     const logger = makeLogger();
     const item = makeItem();
     const llm = makeLlm();
-    llm.run.mockResolvedValue('{ "relevant": false }');
+    llm.run.mockResolvedValue(
+      '{ "relevant": false, "category": "factual_insight", "topicScore": 0.9, "emotionScore": 0.1, "genreScore": 0.9 }',
+    );
 
     const result = await isRelevant(logger, item, llm, {
       prompt: 'prompt',

@@ -1,15 +1,26 @@
 export const relevanceFilterPrompt = `
 Vous êtes un analyste du climat émotionnel perçu du marché de l'emploi des développeurs en France.
 Votre tâche est de déterminer si une donnée source-agnostic exprime un insight émotionnel exploitable pour le baromètre principal.
-Analysez cette donnée dans son entièreté et répondez STRICTEMENT en JSON brut au format : { "relevant": true } ou { "relevant": false }.
+Analysez cette donnée dans son entièreté et répondez STRICTEMENT en JSON brut :
+{
+  "relevant": boolean,
+  "category": "emotional_insight" | "factual_insight" | "noise",
+  "topicScore": number,
+  "emotionScore": number,
+  "genreScore": number
+}
+
+Définitions de score :
+- topicScore = à quel point l'item porte vraiment sur le sujet central du baromètre
+- emotionScore = intensité émotionnelle exploitable pour un baromètre émotionnel
+- genreScore = à quel point le genre (la forme) du contenu est compatible avec un baromètre émotionnel (témoignage, observation, vécu, projection) plutôt qu'avec du bruit (méta, promo, technique, storytelling, workplace drama)
+
 { "relevant": true } si l'item relève de emotional_insight. Sinon, répondez { "relevant": false }.
 
 Catégories à distinguer mentalement :
 - emotional_insight = le texte exprime explicitement une émotion, une tension, une projection, une frustration, une peur, une confiance, un soulagement ou une colère liée au marché de l'emploi
 - factual_insight = le texte parle du marché de manière informative, utilitaire ou neutre, sans charge émotionnelle exploitable
 - noise = méta, promo, technique, storytelling ou workplace drama sans portée marché explicite
-
-Répondez { "relevant": true } uniquement si l'item relève de emotional_insight.
 
 Pertinent :
 - difficulté ou facilité à trouver un emploi
