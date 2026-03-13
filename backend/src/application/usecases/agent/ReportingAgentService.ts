@@ -125,7 +125,7 @@ export class ReportingAgentService implements ReportingAgentPort {
       weight: roundNumber(profile.weight),
     }));
 
-    const persistedTotalWeight = roundNumber(
+    const persistedConfidenceMass = roundNumber(
       persistedWeightedProfiles.reduce(
         (sum, profile) => sum + profile.weight,
         0,
@@ -134,7 +134,7 @@ export class ReportingAgentService implements ReportingAgentPort {
 
     const persistedAggregated = {
       ...aggregated,
-      totalWeight: persistedTotalWeight,
+      confidenceMass: persistedConfidenceMass,
       emotions: Object.fromEntries(
         Object.entries(aggregated.emotions).map(([key, value]) => [
           key,
@@ -189,7 +189,7 @@ export class ReportingAgentService implements ReportingAgentPort {
       const topShare = total > 0 ? top.weight / total : 0;
       log.info('Weights summary', {
         N: weightedItems.length,
-        totalWeight: Number.isFinite(total) ? formatFloat(total) : 0,
+        confidenceMass: Number.isFinite(total) ? formatFloat(total) : 0,
         topWeight: formatFloat(top.weight),
         topShare: formatFloat(topShare),
       });

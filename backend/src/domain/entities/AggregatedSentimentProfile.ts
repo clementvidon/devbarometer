@@ -7,7 +7,7 @@ import { z } from 'zod';
 export const AggregatedSentimentProfileSchema = z
   .object({
     count: z.number().int().nonnegative(),
-    totalWeight: z.number().finite().nonnegative(),
+    confidenceMass: z.number().finite().nonnegative(),
     emotions: EmotionScoresSchema,
     tonalities: TonalityScoresSchema,
   })

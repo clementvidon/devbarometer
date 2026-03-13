@@ -116,16 +116,19 @@ function validateSnapshotConsistency(
     });
   }
 
-  const totalWeight = weightedSentimentProfiles.reduce(
+  const confidenceMass = weightedSentimentProfiles.reduce(
     (sum, profile) => sum + profile.weight,
     0,
   );
 
-  if (!equalRounded(aggregatedSentimentProfile.totalWeight, totalWeight)) {
+  if (
+    !equalRounded(aggregatedSentimentProfile.confidenceMass, confidenceMass)
+  ) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      path: ['aggregatedSentimentProfile', 'totalWeight'],
-      message: 'Aggregated totalWeight must equal the sum of profile weights.',
+      path: ['aggregatedSentimentProfile', 'confidenceMass'],
+      message:
+        'Aggregated confidenceMass must equal the sum of profile weights.',
     });
   }
 }

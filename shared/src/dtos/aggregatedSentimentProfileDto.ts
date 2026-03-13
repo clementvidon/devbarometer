@@ -7,7 +7,7 @@ export const AggregatedSentimentProfileDtoSchema = z
   .object({
     createdAt: IsoDateStringSchema,
     count: z.number().int().nonnegative(),
-    totalWeight: z.number().nonnegative(),
+    confidenceMass: z.number().nonnegative(),
     emotions: EmotionScoresSchema,
     tonalities: TonalityScoresSchema,
   })

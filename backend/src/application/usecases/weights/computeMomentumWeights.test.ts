@@ -5,12 +5,11 @@ import {
   computeMomentumWeights,
   DEFAULT_CAP_OPTIONS,
   DEFAULT_MOMENTUM_OPTIONS,
-  DEFAULT_NORMALIZE_OPTIONS,
 } from './computeMomentumWeights';
 
 /**
  * Spec: Orchestrate momentum weights computation
- * - Applies the configured step toggles (momentum/cap/normalize).
+ * - Applies the configured step toggles (momentum/cap).
  * - If momentum is disabled, assigns baseWeight to all items.
  * - Preserves input order and never mutates inputs.
  */
@@ -29,7 +28,7 @@ describe(computeMomentumWeights.name, () => {
       ...overrides,
     };
   }
-  test('momentum enabled, cap/normalize disabled', async () => {
+  test('momentum enabled, cap disabled', async () => {
     const prev = [
       makeRelevantItem({ itemRef: 'increase', score: 2 }),
       makeRelevantItem({ itemRef: 'decrease', score: 10 }),
@@ -44,7 +43,6 @@ describe(computeMomentumWeights.name, () => {
     const opts = {
       momentum: { ...DEFAULT_MOMENTUM_OPTIONS, enabled: true },
       cap: { ...DEFAULT_CAP_OPTIONS, enabled: false },
-      normalize: { ...DEFAULT_NORMALIZE_OPTIONS, enabled: false },
     };
 
     const result = await computeMomentumWeights(items, prev, opts);
@@ -72,7 +70,6 @@ describe(computeMomentumWeights.name, () => {
     const opts = {
       momentum: { ...DEFAULT_MOMENTUM_OPTIONS, enabled: false },
       cap: { ...DEFAULT_CAP_OPTIONS, enabled: false },
-      normalize: { ...DEFAULT_NORMALIZE_OPTIONS, enabled: false },
     };
 
     const result = await computeMomentumWeights(items, prev, opts);
@@ -96,7 +93,6 @@ describe(computeMomentumWeights.name, () => {
     const opts = {
       momentum: { ...DEFAULT_MOMENTUM_OPTIONS, enabled: true },
       cap: { ...DEFAULT_CAP_OPTIONS, enabled: true },
-      normalize: { ...DEFAULT_NORMALIZE_OPTIONS, enabled: true },
     };
 
     const itemsBefore = structuredClone(items);

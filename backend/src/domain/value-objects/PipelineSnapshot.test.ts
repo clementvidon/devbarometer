@@ -66,7 +66,7 @@ function makeSnapshotData(): SnapshotData {
     ],
     aggregatedSentimentProfile: {
       count: 1,
-      totalWeight: 1.5,
+      confidenceMass: 1.5,
       emotions: {
         joy: 0.1,
         trust: 0.2,
@@ -375,7 +375,7 @@ describe('SnapshotDataSchema', () => {
       aggregatedSentimentProfile: {
         ...makeSnapshotData().aggregatedSentimentProfile,
         count: 0,
-        totalWeight: 0,
+        confidenceMass: 0,
       },
     };
 
@@ -451,13 +451,13 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
-  test('rejects snapshots with inconsistent aggregatedSentimentProfile.totalWeight', () => {
+  test('rejects snapshots with inconsistent aggregatedSentimentProfile.confidenceMass', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
       ...snapshot,
       aggregatedSentimentProfile: {
         ...snapshot.aggregatedSentimentProfile,
-        totalWeight: 999,
+        confidenceMass: 999,
       },
     };
 
@@ -475,9 +475,9 @@ describe('PipelineSnapshotSchema', () => {
 
     expect(() => PipelineSnapshotSchema.parse(snapshot)).not.toThrow();
   });
-  test('rejects a persisted snapshot with inconsistent aggregated totalWeight', () => {
+  test('rejects a persisted snapshot with inconsistent aggregated confidenceMass', () => {
     const profileWeight = 1.5;
-    const inconsistentTotalWeight = 999;
+    const inconsistentConfidenceMass = 999;
     const snapshot = makeSnapshotData();
 
     const invalid = {
@@ -492,7 +492,7 @@ describe('PipelineSnapshotSchema', () => {
       ],
       aggregatedSentimentProfile: {
         ...makeSnapshotData().aggregatedSentimentProfile,
-        totalWeight: inconsistentTotalWeight,
+        confidenceMass: inconsistentConfidenceMass,
       },
     };
 

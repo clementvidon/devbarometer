@@ -49,7 +49,7 @@ describe(getLastRelevantItemsBefore.name, () => {
       weightedSentimentProfiles: [],
       aggregatedSentimentProfile: {
         count: 0,
-        totalWeight: 0,
+        confidenceMass: 0,
         emotions: {
           joy: 0,
           trust: 0,

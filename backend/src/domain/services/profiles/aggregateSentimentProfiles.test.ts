@@ -9,9 +9,9 @@ import { aggregateSentimentProfiles } from './aggregateSentimentProfiles';
 
 /**
  * Spec: Aggregate a list of sentiment profiles into a weighted-average aggregated profile.
- * - Computes `count` and `totalWeight`.
- * - Computes weighted averages for emotions and tonalities when `totalWeight > 0`.
- * - Returns all-zero scores when `totalWeight === 0`.
+ * - Computes `count` and `confidenceMass`.
+ * - Computes weighted averages for emotions and tonalities when `confidenceMass > 0`.
+ * - Returns all-zero scores when `confidenceMass === 0`.
  * - Throws on empty input.
  */
 
@@ -71,7 +71,7 @@ describe(aggregateSentimentProfiles.name, () => {
     const result = aggregateSentimentProfiles(profiles);
 
     expect(result.count).toBe(2);
-    expect(result.totalWeight).toBe(4);
+    expect(result.confidenceMass).toBe(4);
     expect(result.emotions.joy).toBeCloseTo(0.25);
     expect(result.tonalities.positive_surprise).toBeCloseTo(0.5);
   });
@@ -92,7 +92,7 @@ describe(aggregateSentimentProfiles.name, () => {
     const result = aggregateSentimentProfiles(profiles);
 
     expect(result.count).toBe(2);
-    expect(result.totalWeight).toBe(0);
+    expect(result.confidenceMass).toBe(0);
     expect(result.emotions.joy).toBe(0);
     expect(result.tonalities.positive_surprise).toBe(0);
   });

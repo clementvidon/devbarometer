@@ -51,6 +51,6 @@ export function aggregateSentimentProfiles(
     count: profiles.length,
     emotions: averagedEmotions,
     tonalities: averagedTonalities,
-    totalWeight: weightSum,
+    confidenceMass: weightSum,
   };
 }

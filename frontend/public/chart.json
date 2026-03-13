@@ -2,7 +2,7 @@
   {
     "createdAt": "2026-03-12T11:28:40.998Z",
     "count": 11,
-    "totalWeight": 10.999998,
+    "confidenceMass": 10.999998,
     "emotions": {
       "joy": 0.146214,
       "trust": 0.268778,
@@ -23,7 +23,7 @@
   {
     "createdAt": "2026-03-11T08:40:08.007Z",
     "count": 13,
-    "totalWeight": 13.000003,
+    "confidenceMass": 13.000003,
     "emotions": {
       "joy": 0.111955,
       "trust": 0.283549,
@@ -44,7 +44,7 @@
   {
     "createdAt": "2026-03-10T08:40:09.347Z",
     "count": 16,
-    "totalWeight": 15.999997,
+    "confidenceMass": 15.999997,
     "emotions": {
       "joy": 0.112888,
       "trust": 0.294236,
@@ -65,7 +65,7 @@
   {
     "createdAt": "2026-03-09T08:46:35.962Z",
     "count": 15,
-    "totalWeight": 15.000001,
+    "confidenceMass": 15.000001,
     "emotions": {
       "joy": 0.131451,
       "trust": 0.258988,
@@ -86,7 +86,7 @@
   {
     "createdAt": "2026-03-08T08:26:31.626Z",
     "count": 13,
-    "totalWeight": 13,
+    "confidenceMass": 13,
     "emotions": {
       "joy": 0.103898,
       "trust": 0.266287,
@@ -107,7 +107,7 @@
   {
     "createdAt": "2026-03-07T08:24:59.954Z",
     "count": 13,
-    "totalWeight": 12.999999,
+    "confidenceMass": 12.999999,
     "emotions": {
       "joy": 0.102041,
       "trust": 0.301904,
@@ -128,7 +128,7 @@
   {
     "createdAt": "2026-03-06T08:36:16.004Z",
     "count": 9,
-    "totalWeight": 8.999998,
+    "confidenceMass": 8.999998,
     "emotions": {
       "joy": 0.087454,
       "trust": 0.295495,
@@ -149,7 +149,7 @@
   {
     "createdAt": "2026-03-05T08:39:33.004Z",
     "count": 8,
-    "totalWeight": 8.000002,
+    "confidenceMass": 8.000002,
     "emotions": {
       "joy": 0.089946,
       "trust": 0.250272,
@@ -170,7 +170,7 @@
   {
     "createdAt": "2026-03-04T08:37:22.871Z",
     "count": 4,
-    "totalWeight": 4,
+    "confidenceMass": 4,
     "emotions": {
       "joy": 0.114346,
       "trust": 0.303481,
@@ -191,7 +191,7 @@
   {
     "createdAt": "2026-03-03T08:40:07.742Z",
     "count": 6,
-    "totalWeight": 5.999999,
+    "confidenceMass": 5.999999,
     "emotions": {
       "joy": 0.07996,
       "trust": 0.25059,
@@ -212,7 +212,7 @@
   {
     "createdAt": "2026-03-02T08:43:41.673Z",
     "count": 7,
-    "totalWeight": 7.000001,
+    "confidenceMass": 7.000001,
     "emotions": {
       "joy": 0.162992,
       "trust": 0.304435,
@@ -233,7 +233,7 @@
   {
     "createdAt": "2026-03-01T08:51:29.152Z",
     "count": 9,
-    "totalWeight": 9.000003,
+    "confidenceMass": 9.000003,
     "emotions": {
       "joy": 0.122668,
       "trust": 0.24147,
@@ -254,7 +254,7 @@
   {
     "createdAt": "2026-02-28T08:24:43.617Z",
     "count": 8,
-    "totalWeight": 8,
+    "confidenceMass": 8,
     "emotions": {
       "joy": 0.117394,
       "trust": 0.258724,
@@ -275,7 +275,7 @@
   {
     "createdAt": "2026-02-27T08:38:45.750Z",
     "count": 10,
-    "totalWeight": 10,
+    "confidenceMass": 10,
     "emotions": {
       "joy": 0.138364,
       "trust": 0.25338,
@@ -296,7 +296,7 @@
   {
     "createdAt": "2026-02-26T08:47:40.505Z",
     "count": 10,
-    "totalWeight": 10.000003,
+    "confidenceMass": 10.000003,
     "emotions": {
       "joy": 0.106726,
       "trust": 0.253157,
@@ -317,7 +317,7 @@
   {
     "createdAt": "2026-02-25T08:52:37.497Z",
     "count": 9,
-    "totalWeight": 8.999997,
+    "confidenceMass": 8.999997,
     "emotions": {
       "joy": 0.170118,
       "trust": 0.309222,
@@ -338,7 +338,7 @@
   {
     "createdAt": "2026-02-24T08:51:11.964Z",
     "count": 8,
-    "totalWeight": 7.999999,
+    "confidenceMass": 7.999999,
     "emotions": {
       "joy": 0.092588,
       "trust": 0.219818,
@@ -359,7 +359,7 @@
   {
     "createdAt": "2026-02-23T08:52:10.124Z",
     "count": 8,
-    "totalWeight": 7.999997,
+    "confidenceMass": 7.999997,
     "emotions": {
       "joy": 0.060438,
       "trust": 0.17487,
@@ -380,7 +380,7 @@
   {
     "createdAt": "2026-02-22T08:27:29.173Z",
     "count": 11,
-    "totalWeight": 10.999998,
+    "confidenceMass": 10.999998,
     "emotions": {
       "joy": 0.090014,
       "trust": 0.245391,
@@ -401,7 +401,7 @@
   {
     "createdAt": "2026-02-21T08:27:44.956Z",
     "count": 13,
-    "totalWeight": 13,
+    "confidenceMass": 13,
     "emotions": {
       "joy": 0.072633,
       "trust": 0.224801,
@@ -422,7 +422,7 @@
   {
     "createdAt": "2026-02-20T08:38:28.898Z",
     "count": 15,
-    "totalWeight": 14.999997,
+    "confidenceMass": 14.999997,
     "emotions": {
       "joy": 0.075778,
       "trust": 0.276146,
@@ -443,7 +443,7 @@
   {
     "createdAt": "2026-02-19T08:43:44.674Z",
     "count": 15,
-    "totalWeight": 15,
+    "confidenceMass": 15,
     "emotions": {
       "joy": 0.096875,
       "trust": 0.300015,
@@ -464,7 +464,7 @@
   {
     "createdAt": "2026-02-18T08:45:40.533Z",
     "count": 19,
-    "totalWeight": 18.999998,
+    "confidenceMass": 18.999998,
     "emotions": {
       "joy": 0.122673,
       "trust": 0.37937,
@@ -485,7 +485,7 @@
   {
     "createdAt": "2026-02-17T08:46:15.787Z",
     "count": 18,
-    "totalWeight": 17.999998,
+    "confidenceMass": 17.999998,
     "emotions": {
       "joy": 0.107924,
       "trust": 0.340214,
@@ -506,7 +506,7 @@
   {
     "createdAt": "2026-02-16T08:51:28.325Z",
     "count": 20,
-    "totalWeight": 20.000002,
+    "confidenceMass": 20.000002,
     "emotions": {
       "joy": 0.12125,
       "trust": 0.285138,
@@ -527,7 +527,7 @@
   {
     "createdAt": "2026-02-15T08:28:10.084Z",
     "count": 17,
-    "totalWeight": 16.999999,
+    "confidenceMass": 16.999999,
     "emotions": {
       "joy": 0.090093,
       "trust": 0.280941,
@@ -548,7 +548,7 @@
   {
     "createdAt": "2026-02-14T08:28:19.524Z",
     "count": 18,
-    "totalWeight": 17.999994,
+    "confidenceMass": 17.999994,
     "emotions": {
       "joy": 0.11718,
       "trust": 0.334749,
@@ -569,7 +569,7 @@
   {
     "createdAt": "2026-02-13T08:39:57.624Z",
     "count": 16,
-    "totalWeight": 15.999999,
+    "confidenceMass": 15.999999,
     "emotions": {
       "joy": 0.119712,
       "trust": 0.283222,
@@ -590,7 +590,7 @@
   {
     "createdAt": "2026-02-12T08:48:13.493Z",
     "count": 16,
-    "totalWeight": 15.999996,
+    "confidenceMass": 15.999996,
     "emotions": {
       "joy": 0.080375,
       "trust": 0.237702,
@@ -611,7 +611,7 @@
   {
     "createdAt": "2026-02-11T08:51:47.617Z",
     "count": 17,
-    "totalWeight": 17.000002,
+    "confidenceMass": 17.000002,
     "emotions": {
       "joy": 0.062798,
       "trust": 0.20414,
@@ -632,7 +632,7 @@
   {
     "createdAt": "2026-02-10T08:54:30.691Z",
     "count": 16,
-    "totalWeight": 16.000005,
+    "confidenceMass": 16.000005,
     "emotions": {
       "joy": 0.066446,
       "trust": 0.211625,
@@ -653,7 +653,7 @@
   {
     "createdAt": "2026-02-09T08:56:20.135Z",
     "count": 15,
-    "totalWeight": 15.000001,
+    "confidenceMass": 15.000001,
     "emotions": {
       "joy": 0.044967,
       "trust": 0.171383,
@@ -674,7 +674,7 @@
   {
     "createdAt": "2026-02-08T08:28:28.369Z",
     "count": 16,
-    "totalWeight": 15.999999,
+    "confidenceMass": 15.999999,
     "emotions": {
       "joy": 0.04237,
       "trust": 0.167376,
@@ -695,7 +695,7 @@
   {
     "createdAt": "2026-02-07T08:26:57.571Z",
     "count": 16,
-    "totalWeight": 15.999995,
+    "confidenceMass": 15.999995,
     "emotions": {
       "joy": 0.064231,
       "trust": 0.161717,
@@ -716,7 +716,7 @@
   {
     "createdAt": "2026-02-06T08:40:32.757Z",
     "count": 14,
-    "totalWeight": 13.999998,
+    "confidenceMass": 13.999998,
     "emotions": {
       "joy": 0.029546,
       "trust": 0.160559,
@@ -737,7 +737,7 @@
   {
     "createdAt": "2026-02-05T08:41:30.727Z",
     "count": 18,
-    "totalWeight": 17.999997,
+    "confidenceMass": 17.999997,
     "emotions": {
       "joy": 0.070878,
       "trust": 0.191718,
@@ -758,7 +758,7 @@
   {
     "createdAt": "2026-02-04T08:38:57.470Z",
     "count": 14,
-    "totalWeight": 14.000002,
+    "confidenceMass": 14.000002,
     "emotions": {
       "joy": 0.141598,
       "trust": 0.209424,
@@ -779,7 +779,7 @@
   {
     "createdAt": "2026-02-03T08:41:02.503Z",
     "count": 16,
-    "totalWeight": 16.000003,
+    "confidenceMass": 16.000003,
     "emotions": {
       "joy": 0.128316,
       "trust": 0.22791,
@@ -800,7 +800,7 @@
   {
     "createdAt": "2026-02-02T08:45:10.675Z",
     "count": 19,
-    "totalWeight": 19.000005,
+    "confidenceMass": 19.000005,
     "emotions": {
       "joy": 0.125335,
       "trust": 0.219494,
@@ -821,7 +821,7 @@
   {
     "createdAt": "2026-02-01T08:27:05.904Z",
     "count": 17,
-    "totalWeight": 17.000001,
+    "confidenceMass": 17.000001,
     "emotions": {
       "joy": 0.144349,
       "trust": 0.238011,
@@ -842,7 +842,7 @@
   {
     "createdAt": "2026-01-31T08:26:15.740Z",
     "count": 20,
-    "totalWeight": 20.000004,
+    "confidenceMass": 20.000004,
     "emotions": {
       "joy": 0.195958,
       "trust": 0.282406,
@@ -863,7 +863,7 @@
   {
     "createdAt": "2026-01-30T08:35:12.837Z",
     "count": 16,
-    "totalWeight": 16.000001,
+    "confidenceMass": 16.000001,
     "emotions": {
       "joy": 0.110628,
       "trust": 0.246347,
@@ -884,7 +884,7 @@
   {
     "createdAt": "2026-01-29T08:37:46.688Z",
     "count": 15,
-    "totalWeight": 15.000001,
+    "confidenceMass": 15.000001,
     "emotions": {
       "joy": 0.08079,
       "trust": 0.259279,
@@ -905,7 +905,7 @@
   {
     "createdAt": "2026-01-28T08:30:08.420Z",
     "count": 17,
-    "totalWeight": 17.000004,
+    "confidenceMass": 17.000004,
     "emotions": {
       "joy": 0.075537,
       "trust": 0.272668,
@@ -926,7 +926,7 @@
   {
     "createdAt": "2026-01-27T08:29:12.855Z",
     "count": 15,
-    "totalWeight": 15.000001,
+    "confidenceMass": 15.000001,
     "emotions": {
       "joy": 0.079692,
       "trust": 0.260962,
@@ -947,7 +947,7 @@
   {
     "createdAt": "2026-01-26T08:27:57.510Z",
     "count": 15,
-    "totalWeight": 15,
+    "confidenceMass": 15,
     "emotions": {
       "joy": 0.069107,
       "trust": 0.24797,
@@ -968,7 +968,7 @@
   {
     "createdAt": "2026-01-25T08:23:01.516Z",
     "count": 14,
-    "totalWeight": 13.999998,
+    "confidenceMass": 13.999998,
     "emotions": {
       "joy": 0.06404,
       "trust": 0.237607,
@@ -989,7 +989,7 @@
   {
     "createdAt": "2026-01-24T08:22:21.985Z",
     "count": 16,
-    "totalWeight": 15.999997,
+    "confidenceMass": 15.999997,
     "emotions": {
       "joy": 0.050197,
       "trust": 0.222991,
@@ -1010,7 +1010,7 @@
   {
     "createdAt": "2026-01-23T08:26:10.108Z",
     "count": 17,
-    "totalWeight": 17.000001,
+    "confidenceMass": 17.000001,
     "emotions": {
       "joy": 0.066868,
       "trust": 0.210811,
@@ -1031,7 +1031,7 @@
   {
     "createdAt": "2026-01-22T08:28:22.471Z",
     "count": 17,
-    "totalWeight": 17.000006,
+    "confidenceMass": 17.000006,
     "emotions": {
       "joy": 0.051533,
       "trust": 0.170594,
@@ -1052,7 +1052,7 @@
   {
     "createdAt": "2026-01-21T08:30:27.017Z",
     "count": 13,
-    "totalWeight": 13.000002,
+    "confidenceMass": 13.000002,
     "emotions": {
       "joy": 0.05359,
       "trust": 0.203711,
@@ -1073,7 +1073,7 @@
   {
     "createdAt": "2026-01-20T08:28:49.274Z",
     "count": 10,
-    "totalWeight": 10.000002,
+    "confidenceMass": 10.000002,
     "emotions": {
       "joy": 0.053238,
       "trust": 0.212062,
@@ -1094,7 +1094,7 @@
   {
     "createdAt": "2026-01-19T08:30:32.691Z",
     "count": 11,
-    "totalWeight": 11.000003,
+    "confidenceMass": 11.000003,
     "emotions": {
       "joy": 0.055562,
       "trust": 0.233082,
@@ -1115,7 +1115,7 @@
   {
     "createdAt": "2026-01-18T08:22:44.702Z",
     "count": 12,
-    "totalWeight": 11.999996,
+    "confidenceMass": 11.999996,
     "emotions": {
       "joy": 0.066317,
       "trust": 0.222081,
@@ -1136,7 +1136,7 @@
   {
     "createdAt": "2026-01-17T08:20:57.137Z",
     "count": 11,
-    "totalWeight": 10.999999,
+    "confidenceMass": 10.999999,
     "emotions": {
       "joy": 0.067445,
       "trust": 0.235648,
@@ -1157,7 +1157,7 @@
   {
     "createdAt": "2026-01-16T08:25:18.169Z",
     "count": 14,
-    "totalWeight": 14.000001,
+    "confidenceMass": 14.000001,
     "emotions": {
       "joy": 0.056746,
       "trust": 0.204308,
@@ -1178,7 +1178,7 @@
   {
     "createdAt": "2026-01-15T08:26:18.125Z",
     "count": 15,
-    "totalWeight": 15.000001,
+    "confidenceMass": 15.000001,
     "emotions": {
       "joy": 0.060319,
       "trust": 0.208378,
@@ -1199,7 +1199,7 @@
   {
     "createdAt": "2026-01-14T08:27:06.719Z",
     "count": 17,
-    "totalWeight": 17.000002,
+    "confidenceMass": 17.000002,
     "emotions": {
       "joy": 0.077775,
       "trust": 0.25116,
@@ -1220,7 +1220,7 @@
   {
     "createdAt": "2026-01-13T08:25:45.582Z",
     "count": 19,
-    "totalWeight": 18.999994,
+    "confidenceMass": 18.999994,
     "emotions": {
       "joy": 0.07392,
       "trust": 0.245698,
@@ -1241,7 +1241,7 @@
   {
     "createdAt": "2026-01-12T08:26:50.982Z",
     "count": 17,
-    "totalWeight": 16.999996,
+    "confidenceMass": 16.999996,
     "emotions": {
       "joy": 0.088351,
       "trust": 0.248197,
@@ -1262,7 +1262,7 @@
   {
     "createdAt": "2026-01-11T08:22:13.786Z",
     "count": 14,
-    "totalWeight": 14.000002,
+    "confidenceMass": 14.000002,
     "emotions": {
       "joy": 0.063377,
       "trust": 0.249958,
@@ -1283,7 +1283,7 @@
   {
     "createdAt": "2026-01-10T08:21:06.302Z",
     "count": 17,
-    "totalWeight": 16.999998,
+    "confidenceMass": 16.999998,
     "emotions": {
       "joy": 0.067977,
       "trust": 0.261978,
@@ -1304,7 +1304,7 @@
   {
     "createdAt": "2026-01-09T08:24:39.642Z",
     "count": 11,
-    "totalWeight": 11.000003,
+    "confidenceMass": 11.000003,
     "emotions": {
       "joy": 0.069772,
       "trust": 0.267885,
@@ -1325,7 +1325,7 @@
   {
     "createdAt": "2026-01-08T08:25:52.144Z",
     "count": 10,
-    "totalWeight": 9.999999,
+    "confidenceMass": 9.999999,
     "emotions": {
       "joy": 0.067947,
       "trust": 0.288858,
@@ -1346,7 +1346,7 @@
   {
     "createdAt": "2026-01-07T08:26:06.861Z",
     "count": 8,
-    "totalWeight": 7.999998,
+    "confidenceMass": 7.999998,
     "emotions": {
       "joy": 0.082711,
       "trust": 0.302522,
@@ -1367,7 +1367,7 @@
   {
     "createdAt": "2026-01-06T08:25:11.103Z",
     "count": 7,
-    "totalWeight": 7.000002,
+    "confidenceMass": 7.000002,
     "emotions": {
       "joy": 0.10901,
       "trust": 0.30901,
@@ -1388,7 +1388,7 @@
   {
     "createdAt": "2026-01-05T08:26:27.085Z",
     "count": 8,
-    "totalWeight": 7.999998,
+    "confidenceMass": 7.999998,
     "emotions": {
       "joy": 0.074607,
       "trust": 0.240292,
@@ -1409,7 +1409,7 @@
   {
     "createdAt": "2026-01-04T08:21:03.147Z",
     "count": 5,
-    "totalWeight": 5.000001,
+    "confidenceMass": 5.000001,
     "emotions": {
       "joy": 0.058782,
       "trust": 0.237825,
@@ -1430,7 +1430,7 @@
   {
     "createdAt": "2026-01-03T08:21:28.485Z",
     "count": 8,
-    "totalWeight": 8.000003,
+    "confidenceMass": 8.000003,
     "emotions": {
       "joy": 0.081611,
       "trust": 0.272605,
@@ -1451,7 +1451,7 @@
   {
     "createdAt": "2026-01-02T08:22:32.244Z",
     "count": 6,
-    "totalWeight": 6,
+    "confidenceMass": 6,
     "emotions": {
       "joy": 0.054479,
       "trust": 0.194703,
@@ -1472,7 +1472,7 @@
   {
     "createdAt": "2026-01-01T08:23:57.388Z",
     "count": 9,
-    "totalWeight": 8.999997,
+    "confidenceMass": 8.999997,
     "emotions": {
       "joy": 0.072923,
       "trust": 0.215282,
@@ -1493,7 +1493,7 @@
   {
     "createdAt": "2025-12-31T08:23:20.263Z",
     "count": 10,
-    "totalWeight": 10.000003,
+    "confidenceMass": 10.000003,
     "emotions": {
       "joy": 0.072276,
       "trust": 0.226469,
@@ -1514,7 +1514,7 @@
   {
     "createdAt": "2025-12-30T08:24:52.642Z",
     "count": 9,
-    "totalWeight": 9.000003,
+    "confidenceMass": 9.000003,
     "emotions": {
       "joy": 0.074132,
       "trust": 0.217871,
@@ -1535,7 +1535,7 @@
   {
     "createdAt": "2025-12-29T08:24:47.462Z",
     "count": 10,
-    "totalWeight": 10.000001,
+    "confidenceMass": 10.000001,
     "emotions": {
       "joy": 0.075721,
       "trust": 0.231541,
@@ -1556,7 +1556,7 @@
   {
     "createdAt": "2025-12-28T08:21:33.972Z",
     "count": 15,
-    "totalWeight": 14.999998,
+    "confidenceMass": 14.999998,
     "emotions": {
       "joy": 0.041168,
       "trust": 0.17662,
@@ -1577,7 +1577,7 @@
   {
     "createdAt": "2025-12-27T08:21:11.810Z",
     "count": 15,
-    "totalWeight": 15.000005,
+    "confidenceMass": 15.000005,
     "emotions": {
       "joy": 0.055508,
       "trust": 0.195568,
@@ -1598,7 +1598,7 @@
   {
     "createdAt": "2025-12-26T08:23:01.684Z",
     "count": 15,
-    "totalWeight": 14.999998,
+    "confidenceMass": 14.999998,
     "emotions": {
       "joy": 0.071375,
       "trust": 0.212681,
@@ -1619,7 +1619,7 @@
   {
     "createdAt": "2025-12-25T08:23:02.435Z",
     "count": 16,
-    "totalWeight": 16.000006,
+    "confidenceMass": 16.000006,
     "emotions": {
       "joy": 0.0715,
       "trust": 0.209428,
@@ -1640,7 +1640,7 @@
   {
     "createdAt": "2025-12-24T08:22:51.076Z",
     "count": 13,
-    "totalWeight": 13.000003,
+    "confidenceMass": 13.000003,
     "emotions": {
       "joy": 0.076048,
       "trust": 0.23267,
@@ -1661,7 +1661,7 @@
   {
     "createdAt": "2025-12-23T08:24:59.405Z",
     "count": 11,
-    "totalWeight": 11.000001,
+    "confidenceMass": 11.000001,
     "emotions": {
       "joy": 0.063339,
       "trust": 0.195274,
@@ -1682,7 +1682,7 @@
   {
     "createdAt": "2025-12-22T08:24:05.519Z",
     "count": 11,
-    "totalWeight": 11,
+    "confidenceMass": 11,
     "emotions": {
       "joy": 0.060946,
       "trust": 0.203612,
@@ -1703,7 +1703,7 @@
   {
     "createdAt": "2025-12-21T08:21:12.521Z",
     "count": 6,
-    "totalWeight": 6.000001,
+    "confidenceMass": 6.000001,
     "emotions": {
       "joy": 0.067028,
       "trust": 0.223302,
@@ -1724,7 +1724,7 @@
   {
     "createdAt": "2025-12-20T08:20:29.584Z",
     "count": 8,
-    "totalWeight": 8,
+    "confidenceMass": 8,
     "emotions": {
       "joy": 0.054361,
       "trust": 0.198662,
@@ -1745,7 +1745,7 @@
   {
     "createdAt": "2025-12-19T08:24:36.579Z",
     "count": 8,
-    "totalWeight": 8.000003,
+    "confidenceMass": 8.000003,
     "emotions": {
       "joy": 0.062554,
       "trust": 0.198689,
@@ -1766,7 +1766,7 @@
   {
     "createdAt": "2025-12-18T08:24:27.617Z",
     "count": 9,
-    "totalWeight": 8.999998,
+    "confidenceMass": 8.999998,
     "emotions": {
       "joy": 0.059426,
       "trust": 0.192415,
@@ -1787,7 +1787,7 @@
   {
     "createdAt": "2025-12-17T08:25:28.571Z",
     "count": 9,
-    "totalWeight": 9,
+    "confidenceMass": 9,
     "emotions": {
       "joy": 0.078774,
       "trust": 0.27485,
@@ -1808,7 +1808,7 @@
   {
     "createdAt": "2025-12-16T08:26:54.357Z",
     "count": 14,
-    "totalWeight": 14.000002,
+    "confidenceMass": 14.000002,
     "emotions": {
       "joy": 0.068381,
       "trust": 0.251617,
@@ -1829,7 +1829,7 @@
   {
     "createdAt": "2025-12-15T08:27:25.316Z",
     "count": 17,
-    "totalWeight": 17.000001,
+    "confidenceMass": 17.000001,
     "emotions": {
       "joy": 0.07304,
       "trust": 0.248099,
@@ -1850,7 +1850,7 @@
   {
     "createdAt": "2025-12-14T08:20:55.479Z",
     "count": 22,
-    "totalWeight": 21.999997,
+    "confidenceMass": 21.999997,
     "emotions": {
       "joy": 0.066284,
       "trust": 0.23619,
@@ -1871,7 +1871,7 @@
   {
     "createdAt": "2025-12-13T08:20:35.368Z",
     "count": 23,
-    "totalWeight": 22.999999,
+    "confidenceMass": 22.999999,
     "emotions": {
       "joy": 0.063775,
       "trust": 0.243651,
@@ -1892,7 +1892,7 @@
   {
     "createdAt": "2025-12-12T08:24:07.723Z",
     "count": 23,
-    "totalWeight": 22.999998,
+    "confidenceMass": 22.999998,
     "emotions": {
       "joy": 0.068626,
       "trust": 0.206525,
@@ -1913,7 +1913,7 @@
   {
     "createdAt": "2025-12-11T08:25:46.483Z",
     "count": 21,
-    "totalWeight": 21.000001,
+    "confidenceMass": 21.000001,
     "emotions": {
       "joy": 0.06795,
       "trust": 0.216423,
@@ -1934,7 +1934,7 @@
   {
     "createdAt": "2025-12-10T08:26:08.726Z",
     "count": 24,
-    "totalWeight": 24.000009,
+    "confidenceMass": 24.000009,
     "emotions": {
       "joy": 0.067034,
       "trust": 0.222359,
@@ -1955,7 +1955,7 @@
   {
     "createdAt": "2025-12-09T08:26:22.699Z",
     "count": 21,
-    "totalWeight": 20.999997,
+    "confidenceMass": 20.999997,
     "emotions": {
       "joy": 0.106099,
       "trust": 0.262987,
@@ -1976,7 +1976,7 @@
   {
     "createdAt": "2025-12-08T08:24:57.708Z",
     "count": 16,
-    "totalWeight": 15.999996,
+    "confidenceMass": 15.999996,
     "emotions": {
       "joy": 0.109119,
       "trust": 0.258388,
@@ -1997,7 +1997,7 @@
   {
     "createdAt": "2025-12-07T08:19:34.823Z",
     "count": 18,
-    "totalWeight": 18.000001,
+    "confidenceMass": 18.000001,
     "emotions": {
       "joy": 0.100113,
       "trust": 0.24142,
@@ -2018,7 +2018,7 @@
   {
     "createdAt": "2025-12-06T08:20:08.861Z",
     "count": 13,
-    "totalWeight": 13.000001,
+    "confidenceMass": 13.000001,
     "emotions": {
       "joy": 0.083679,
       "trust": 0.207495,
@@ -2039,7 +2039,7 @@
   {
     "createdAt": "2025-12-05T08:22:50.902Z",
     "count": 12,
-    "totalWeight": 12.000003,
+    "confidenceMass": 12.000003,
     "emotions": {
       "joy": 0.079366,
       "trust": 0.231743,
@@ -2060,7 +2060,7 @@
   {
     "createdAt": "2025-12-04T08:25:10.570Z",
     "count": 12,
-    "totalWeight": 11.999998,
+    "confidenceMass": 11.999998,
     "emotions": {
       "joy": 0.08394,
       "trust": 0.213798,
@@ -2081,7 +2081,7 @@
   {
     "createdAt": "2025-12-03T08:25:17.148Z",
     "count": 9,
-    "totalWeight": 9,
+    "confidenceMass": 9,
     "emotions": {
       "joy": 0.083536,
       "trust": 0.213238,
@@ -2102,7 +2102,7 @@
   {
     "createdAt": "2025-12-02T08:24:33.205Z",
     "count": 10,
-    "totalWeight": 10.000002,
+    "confidenceMass": 10.000002,
     "emotions": {
       "joy": 0.089081,
       "trust": 0.193245,
@@ -2123,7 +2123,7 @@
   {
     "createdAt": "2025-12-01T08:25:33.410Z",
     "count": 9,
-    "totalWeight": 8.999999,
+    "confidenceMass": 8.999999,
     "emotions": {
       "joy": 0.076919,
       "trust": 0.239685,
@@ -2144,7 +2144,7 @@
   {
     "createdAt": "2025-11-30T08:19:45.273Z",
     "count": 11,
-    "totalWeight": 10.999997,
+    "confidenceMass": 10.999997,
     "emotions": {
       "joy": 0.103894,
       "trust": 0.244814,
@@ -2165,7 +2165,7 @@
   {
     "createdAt": "2025-11-29T08:19:58.555Z",
     "count": 11,
-    "totalWeight": 10.999998,
+    "confidenceMass": 10.999998,
     "emotions": {
       "joy": 0.065999,
       "trust": 0.203119,
@@ -2186,7 +2186,7 @@
   {
     "createdAt": "2025-11-28T08:22:41.615Z",
     "count": 12,
-    "totalWeight": 11.999998,
+    "confidenceMass": 11.999998,
     "emotions": {
       "joy": 0.07358,
       "trust": 0.269118,
@@ -2207,7 +2207,7 @@
   {
     "createdAt": "2025-11-27T08:23:49.985Z",
     "count": 11,
-    "totalWeight": 11,
+    "confidenceMass": 11,
     "emotions": {
       "joy": 0.061606,
       "trust": 0.24979,
@@ -2228,7 +2228,7 @@
   {
     "createdAt": "2025-11-26T08:24:01.929Z",
     "count": 11,
-    "totalWeight": 11,
+    "confidenceMass": 11,
     "emotions": {
       "joy": 0.097836,
       "trust": 0.279536,
@@ -2249,7 +2249,7 @@
   {
     "createdAt": "2025-11-25T08:24:53.687Z",
     "count": 11,
-    "totalWeight": 11.000002,
+    "confidenceMass": 11.000002,
     "emotions": {
       "joy": 0.079812,
       "trust": 0.250933,
@@ -2270,7 +2270,7 @@
   {
     "createdAt": "2025-11-24T08:24:13.349Z",
     "count": 11,
-    "totalWeight": 10.999999,
+    "confidenceMass": 10.999999,
     "emotions": {
       "joy": 0.073347,
       "trust": 0.250826,
@@ -2291,7 +2291,7 @@
   {
     "createdAt": "2025-11-23T08:19:32.896Z",
     "count": 10,
-    "totalWeight": 10,
+    "confidenceMass": 10,
     "emotions": {
       "joy": 0.086894,
       "trust": 0.303339,
@@ -2312,7 +2312,7 @@
   {
     "createdAt": "2025-11-22T08:19:23.448Z",
     "count": 8,
-    "totalWeight": 8.000002,
+    "confidenceMass": 8.000002,
     "emotions": {
       "joy": 0.082958,
       "trust": 0.269548,
@@ -2333,7 +2333,7 @@
   {
     "createdAt": "2025-11-21T08:21:30.894Z",
     "count": 10,
-    "totalWeight": 10.000002,
+    "confidenceMass": 10.000002,
     "emotions": {
       "joy": 0.075566,
       "trust": 0.234435,
@@ -2354,7 +2354,7 @@
   {
     "createdAt": "2025-11-20T08:22:35.991Z",
     "count": 8,
-    "totalWeight": 7.999999,
+    "confidenceMass": 7.999999,
     "emotions": {
       "joy": 0.066651,
       "trust": 0.220398,
@@ -2375,7 +2375,7 @@
   {
     "createdAt": "2025-11-19T08:23:01.189Z",
     "count": 8,
-    "totalWeight": 7.999998,
+    "confidenceMass": 7.999998,
     "emotions": {
       "joy": 0.071096,
       "trust": 0.226779,
@@ -2396,7 +2396,7 @@
   {
     "createdAt": "2025-11-18T08:23:50.195Z",
     "count": 6,
-    "totalWeight": 6.000001,
+    "confidenceMass": 6.000001,
     "emotions": {
       "joy": 0.073053,
       "trust": 0.265265,
@@ -2417,7 +2417,7 @@
   {
     "createdAt": "2025-11-17T08:23:58.115Z",
     "count": 8,
-    "totalWeight": 8.000001,
+    "confidenceMass": 8.000001,
     "emotions": {
       "joy": 0.064106,
       "trust": 0.222858,
@@ -2438,7 +2438,7 @@
   {
     "createdAt": "2025-11-16T08:19:53.636Z",
     "count": 7,
-    "totalWeight": 7,
+    "confidenceMass": 7,
     "emotions": {
       "joy": 0.059512,
       "trust": 0.250858,
@@ -2459,7 +2459,7 @@
   {
     "createdAt": "2025-11-15T08:19:18.687Z",
     "count": 8,
-    "totalWeight": 8.000002,
+    "confidenceMass": 8.000002,
     "emotions": {
       "joy": 0.059019,
       "trust": 0.232385,
@@ -2480,7 +2480,7 @@
   {
     "createdAt": "2025-11-14T08:22:44.856Z",
     "count": 9,
-    "totalWeight": 8.999998,
+    "confidenceMass": 8.999998,
     "emotions": {
       "joy": 0.062893,
       "trust": 0.231149,
@@ -2501,7 +2501,7 @@
   {
     "createdAt": "2025-11-13T08:23:20.882Z",
     "count": 12,
-    "totalWeight": 11.999999,
+    "confidenceMass": 11.999999,
     "emotions": {
       "joy": 0.044814,
       "trust": 0.210866,
@@ -2522,7 +2522,7 @@
   {
     "createdAt": "2025-11-12T08:23:30.085Z",
     "count": 12,
-    "totalWeight": 11.999998,
+    "confidenceMass": 11.999998,
     "emotions": {
       "joy": 0.05747,
       "trust": 0.216087,
@@ -2543,7 +2543,7 @@
   {
     "createdAt": "2025-11-11T08:22:58.211Z",
     "count": 12,
-    "totalWeight": 12,
+    "confidenceMass": 12,
     "emotions": {
       "joy": 0.048048,
       "trust": 0.197274,
@@ -2564,7 +2564,7 @@
   {
     "createdAt": "2025-11-10T08:24:34.624Z",
     "count": 16,
-    "totalWeight": 16.000003,
+    "confidenceMass": 16.000003,
     "emotions": {
       "joy": 0.077061,
       "trust": 0.220798,
@@ -2585,7 +2585,7 @@
   {
     "createdAt": "2025-11-09T08:18:29.882Z",
     "count": 15,
-    "totalWeight": 14.999996,
+    "confidenceMass": 14.999996,
     "emotions": {
       "joy": 0.109682,
       "trust": 0.24433,
@@ -2606,7 +2606,7 @@
   {
     "createdAt": "2025-11-08T08:18:43.549Z",
     "count": 13,
-    "totalWeight": 13.000001,
+    "confidenceMass": 13.000001,
     "emotions": {
       "joy": 0.078161,
       "trust": 0.217272,
@@ -2627,7 +2627,7 @@
   {
     "createdAt": "2025-11-07T08:22:19.144Z",
     "count": 15,
-    "totalWeight": 14.999998,
+    "confidenceMass": 14.999998,
     "emotions": {
       "joy": 0.108371,
       "trust": 0.262158,
@@ -2648,7 +2648,7 @@
   {
     "createdAt": "2025-11-06T08:23:36.427Z",
     "count": 11,
-    "totalWeight": 11.000001,
+    "confidenceMass": 11.000001,
     "emotions": {
       "joy": 0.101429,
       "trust": 0.255509,
@@ -2669,7 +2669,7 @@
   {
     "createdAt": "2025-11-05T08:22:53.557Z",
     "count": 12,
-    "totalWeight": 12.000003,
+    "confidenceMass": 12.000003,
     "emotions": {
       "joy": 0.108788,
       "trust": 0.291266,
@@ -2690,7 +2690,7 @@
   {
     "createdAt": "2025-11-04T08:23:50.966Z",
     "count": 10,
-    "totalWeight": 10.000001,
+    "confidenceMass": 10.000001,
     "emotions": {
       "joy": 0.159454,
       "trust": 0.294545,
@@ -2711,7 +2711,7 @@
   {
     "createdAt": "2025-11-03T08:23:31.889Z",
     "count": 10,
-    "totalWeight": 10.000001,
+    "confidenceMass": 10.000001,
     "emotions": {
       "joy": 0.103723,
       "trust": 0.253195,
@@ -2732,7 +2732,7 @@
   {
     "createdAt": "2025-11-02T08:18:31.487Z",
     "count": 10,
-    "totalWeight": 9.999997,
+    "confidenceMass": 9.999997,
     "emotions": {
       "joy": 0.09782,
       "trust": 0.269403,
@@ -2753,7 +2753,7 @@
   {
     "createdAt": "2025-11-01T08:18:48.200Z",
     "count": 8,
-    "totalWeight": 7.999999,
+    "confidenceMass": 7.999999,
     "emotions": {
       "joy": 0.101988,
       "trust": 0.260521,
@@ -2774,7 +2774,7 @@
   {
     "createdAt": "2025-10-31T08:21:01.800Z",
     "count": 7,
-    "totalWeight": 6.999999,
+    "confidenceMass": 6.999999,
     "emotions": {
       "joy": 0.072077,
       "trust": 0.216232,
@@ -2795,7 +2795,7 @@
   {
     "createdAt": "2025-10-30T08:21:21.212Z",
     "count": 8,
-    "totalWeight": 8,
+    "confidenceMass": 8,
     "emotions": {
       "joy": 0.067873,
       "trust": 0.221794,
@@ -2816,7 +2816,7 @@
   {
     "createdAt": "2025-10-29T08:22:09.438Z",
     "count": 8,
-    "totalWeight": 8.000001,
+    "confidenceMass": 8.000001,
     "emotions": {
       "joy": 0.058744,
       "trust": 0.273009,
@@ -2837,7 +2837,7 @@
   {
     "createdAt": "2025-10-28T08:22:19.990Z",
     "count": 9,
-    "totalWeight": 8.999997,
+    "confidenceMass": 8.999997,
     "emotions": {
       "joy": 0.062282,
       "trust": 0.272339,
@@ -2858,7 +2858,7 @@
   {
     "createdAt": "2025-10-27T08:23:20.508Z",
     "count": 8,
-    "totalWeight": 8.000002,
+    "confidenceMass": 8.000002,
     "emotions": {
       "joy": 0.055327,
       "trust": 0.268039,
@@ -2879,7 +2879,7 @@
   {
     "createdAt": "2025-10-26T08:18:36.798Z",
     "count": 9,
-    "totalWeight": 9,
+    "confidenceMass": 9,
     "emotions": {
       "joy": 0.057862,
       "trust": 0.254116,
@@ -2900,7 +2900,7 @@
   {
     "createdAt": "2025-10-25T06:18:35.638Z",
     "count": 10,
-    "totalWeight": 9.999999,
+    "confidenceMass": 9.999999,
     "emotions": {
       "joy": 0.063629,
       "trust": 0.260908,
@@ -2921,7 +2921,7 @@
   {
     "createdAt": "2025-10-24T06:22:12.191Z",
     "count": 11,
-    "totalWeight": 11,
+    "confidenceMass": 11,
     "emotions": {
       "joy": 0.059996,
       "trust": 0.251069,
@@ -2942,7 +2942,7 @@
   {
     "createdAt": "2025-10-23T06:21:59.792Z",
     "count": 16,
-    "totalWeight": 15.999999,
+    "confidenceMass": 15.999999,
     "emotions": {
       "joy": 0.068386,
       "trust": 0.26441,
@@ -2963,7 +2963,7 @@
   {
     "createdAt": "2025-10-22T06:22:11.275Z",
     "count": 17,
-    "totalWeight": 16.999998,
+    "confidenceMass": 16.999998,
     "emotions": {
       "joy": 0.085973,
       "trust": 0.297122,
@@ -2984,7 +2984,7 @@
   {
     "createdAt": "2025-10-21T06:21:00.452Z",
     "count": 19,
-    "totalWeight": 18.999998,
+    "confidenceMass": 18.999998,
     "emotions": {
       "joy": 0.095857,
       "trust": 0.312345,
@@ -3005,7 +3005,7 @@
   {
     "createdAt": "2025-10-20T07:35:11.344Z",
     "count": 16,
-    "totalWeight": 16.000001,
+    "confidenceMass": 16.000001,
     "emotions": {
       "joy": 0.104738,
       "trust": 0.316467,
@@ -3026,7 +3026,7 @@
   {
     "createdAt": "2025-10-19T06:18:18.605Z",
     "count": 13,
-    "totalWeight": 12.999999,
+    "confidenceMass": 12.999999,
     "emotions": {
       "joy": 0.114168,
       "trust": 0.32071,
@@ -3047,7 +3047,7 @@
   {
     "createdAt": "2025-10-18T06:18:23.664Z",
     "count": 12,
-    "totalWeight": 12,
+    "confidenceMass": 12,
     "emotions": {
       "joy": 0.139356,
       "trust": 0.358078,
@@ -3068,7 +3068,7 @@
   {
     "createdAt": "2025-10-17T06:21:01.188Z",
     "count": 9,
-    "totalWeight": 9,
+    "confidenceMass": 9,
     "emotions": {
       "joy": 0.135841,
       "trust": 0.408406,
@@ -3089,7 +3089,7 @@
   {
     "createdAt": "2025-10-16T06:22:07.292Z",
     "count": 7,
-    "totalWeight": 7,
+    "confidenceMass": 7,
     "emotions": {
       "joy": 0.096967,
       "trust": 0.298142,
@@ -3110,7 +3110,7 @@
   {
     "createdAt": "2025-10-15T06:21:58.768Z",
     "count": 7,
-    "totalWeight": 6.999999,
+    "confidenceMass": 6.999999,
     "emotions": {
       "joy": 0.122493,
       "trust": 0.30325,
@@ -3131,7 +3131,7 @@
   {
     "createdAt": "2025-10-14T06:21:02.695Z",
     "count": 5,
-    "totalWeight": 5.000001,
+    "confidenceMass": 5.000001,
     "emotions": {
       "joy": 0.134411,
       "trust": 0.324596,
@@ -3152,7 +3152,7 @@
   {
     "createdAt": "2025-10-13T06:22:49.936Z",
     "count": 6,
-    "totalWeight": 6,
+    "confidenceMass": 6,
     "emotions": {
       "joy": 0.098147,
       "trust": 0.33981,
@@ -3173,7 +3173,7 @@
   {
     "createdAt": "2025-10-12T06:17:58.874Z",
     "count": 5,
-    "totalWeight": 5.000001,
+    "confidenceMass": 5.000001,
     "emotions": {
       "joy": 0.151218,
       "trust": 0.377964,
@@ -3194,7 +3194,7 @@
   {
     "createdAt": "2025-10-11T06:17:51.016Z",
     "count": 6,
-    "totalWeight": 6,
+    "confidenceMass": 6,
     "emotions": {
       "joy": 0.105498,
       "trust": 0.305498,
@@ -3215,7 +3215,7 @@
   {
     "createdAt": "2025-10-10T06:20:42.565Z",
     "count": 5,
-    "totalWeight": 5,
+    "confidenceMass": 5,
     "emotions": {
       "joy": 0.12,
       "trust": 0.33,
@@ -3236,7 +3236,7 @@
   {
     "createdAt": "2025-10-09T06:21:03.139Z",
     "count": 9,
-    "totalWeight": 9,
+    "confidenceMass": 9,
     "emotions": {
       "joy": 0.110796,
       "trust": 0.275207,
@@ -3257,7 +3257,7 @@
   {
     "createdAt": "2025-10-08T06:58:53.998Z",
     "count": 8,
-    "totalWeight": 8.000001,
+    "confidenceMass": 8.000001,
     "emotions": {
       "joy": 0.078916,
       "trust": 0.243428,
@@ -3278,7 +3278,7 @@
   {
     "createdAt": "2025-10-07T07:11:41.721Z",
     "count": 12,
-    "totalWeight": 11.999995,
+    "confidenceMass": 11.999995,
     "emotions": {
       "joy": 0.086364,
       "trust": 0.263852,
@@ -3299,7 +3299,7 @@
   {
     "createdAt": "2025-10-06T06:21:36.420Z",
     "count": 18,
-    "totalWeight": 17.999996,
+    "confidenceMass": 17.999996,
     "emotions": {
       "joy": 0.087056,
       "trust": 0.248673,
@@ -3320,7 +3320,7 @@
   {
     "createdAt": "2025-10-05T06:17:48.595Z",
     "count": 19,
-    "totalWeight": 19,
+    "confidenceMass": 19,
     "emotions": {
       "joy": 0.061043,
       "trust": 0.200027,
@@ -3341,7 +3341,7 @@
   {
     "createdAt": "2025-10-04T06:17:18.487Z",
     "count": 20,
-    "totalWeight": 19.999997,
+    "confidenceMass": 19.999997,
     "emotions": {
       "joy": 0.066946,
       "trust": 0.223348,
@@ -3362,7 +3362,7 @@
   {
     "createdAt": "2025-10-03T06:19:35.059Z",
     "count": 21,
-    "totalWeight": 21.000002,
+    "confidenceMass": 21.000002,
     "emotions": {
       "joy": 0.057506,
       "trust": 0.197157,
@@ -3383,7 +3383,7 @@
   {
     "createdAt": "2025-10-02T06:18:42.248Z",
     "count": 20,
-    "totalWeight": 20.000002,
+    "confidenceMass": 20.000002,
     "emotions": {
       "joy": 0.06447,
       "trust": 0.207604,
@@ -3404,7 +3404,7 @@
   {
     "createdAt": "2025-10-01T06:20:43.692Z",
     "count": 19,
-    "totalWeight": 18.999997,
+    "confidenceMass": 18.999997,
     "emotions": {
       "joy": 0.06437,
       "trust": 0.203329,
@@ -3425,7 +3425,7 @@
   {
     "createdAt": "2025-09-30T06:20:13.635Z",
     "count": 19,
-    "totalWeight": 19.000003,
+    "confidenceMass": 19.000003,
     "emotions": {
       "joy": 0.06219,
       "trust": 0.196389,
@@ -3446,7 +3446,7 @@
   {
     "createdAt": "2025-09-29T06:21:24.982Z",
     "count": 15,
-    "totalWeight": 15.000001,
+    "confidenceMass": 15.000001,
     "emotions": {
       "joy": 0.073874,
       "trust": 0.234714,
@@ -3467,7 +3467,7 @@
   {
     "createdAt": "2025-09-28T06:18:03.315Z",
     "count": 15,
-    "totalWeight": 14.999997,
+    "confidenceMass": 14.999997,
     "emotions": {
       "joy": 0.067865,
       "trust": 0.195078,
@@ -3488,7 +3488,7 @@
   {
     "createdAt": "2025-09-27T06:17:54.864Z",
     "count": 14,
-    "totalWeight": 14.000001,
+    "confidenceMass": 14.000001,
     "emotions": {
       "joy": 0.085099,
       "trust": 0.258746,
@@ -3509,7 +3509,7 @@
   {
     "createdAt": "2025-09-26T08:07:05.790Z",
     "count": 17,
-    "totalWeight": 16.999993,
+    "confidenceMass": 16.999993,
     "emotions": {
       "joy": 0.077134,
       "trust": 0.216372,
@@ -3530,7 +3530,7 @@
   {
     "createdAt": "2025-09-25T06:20:27.721Z",
     "count": 17,
-    "totalWeight": 17.000001,
+    "confidenceMass": 17.000001,
     "emotions": {
       "joy": 0.064903,
       "trust": 0.204457,
@@ -3551,7 +3551,7 @@
   {
     "createdAt": "2025-09-24T06:19:56.455Z",
     "count": 18,
-    "totalWeight": 17.999996,
+    "confidenceMass": 17.999996,
     "emotions": {
       "joy": 0.095584,
       "trust": 0.252348,
@@ -3572,7 +3572,7 @@
   {
     "createdAt": "2025-09-23T06:19:59.030Z",
     "count": 22,
-    "totalWeight": 21.999997,
+    "confidenceMass": 21.999997,
     "emotions": {
       "joy": 0.091145,
       "trust": 0.26795,
@@ -3593,7 +3593,7 @@
   {
     "createdAt": "2025-09-22T06:21:31.034Z",
     "count": 20,
-    "totalWeight": 19.999998,
+    "confidenceMass": 19.999998,
     "emotions": {
       "joy": 0.083342,
       "trust": 0.238057,
@@ -3614,7 +3614,7 @@
   {
     "createdAt": "2025-09-21T06:17:38.413Z",
     "count": 16,
-    "totalWeight": 16.000001,
+    "confidenceMass": 16.000001,
     "emotions": {
       "joy": 0.071159,
       "trust": 0.205076,
@@ -3635,7 +3635,7 @@
   {
     "createdAt": "2025-09-20T11:29:37.954Z",
     "count": 16,
-    "totalWeight": 16.000004,
+    "confidenceMass": 16.000004,
     "emotions": {
       "joy": 0.071964,
       "trust": 0.234797,
@@ -3656,7 +3656,7 @@
   {
     "createdAt": "2025-09-19T06:20:29.245Z",
     "count": 13,
-    "totalWeight": 13,
+    "confidenceMass": 13,
     "emotions": {
       "joy": 0.073308,
       "trust": 0.189778,
@@ -3677,7 +3677,7 @@
   {
     "createdAt": "2025-09-18T06:19:47.981Z",
     "count": 10,
-    "totalWeight": 10,
+    "confidenceMass": 10,
     "emotions": {
       "joy": 0.085196,
       "trust": 0.215212,
@@ -3698,7 +3698,7 @@
   {
     "createdAt": "2025-09-17T06:19:42.634Z",
     "count": 11,
-    "totalWeight": 11,
+    "confidenceMass": 11,
     "emotions": {
       "joy": 0.117623,
       "trust": 0.214734,
@@ -3719,7 +3719,7 @@
   {
     "createdAt": "2025-09-16T06:20:08.040Z",
     "count": 6,
-    "totalWeight": 5.999999,
+    "confidenceMass": 5.999999,
     "emotions": {
       "joy": 0.129324,
       "trust": 0.225463,
@@ -3740,7 +3740,7 @@
   {
     "createdAt": "2025-09-15T06:20:38.651Z",
     "count": 7,
-    "totalWeight": 6.999999,
+    "confidenceMass": 6.999999,
     "emotions": {
       "joy": 0.15087,
       "trust": 0.225366,
@@ -3761,7 +3761,7 @@
   {
     "createdAt": "2025-09-14T06:16:35.309Z",
     "count": 7,
-    "totalWeight": 6.999998,
+    "confidenceMass": 6.999998,
     "emotions": {
       "joy": 0.133229,
       "trust": 0.269553,
@@ -3782,7 +3782,7 @@
   {
     "createdAt": "2025-09-13T06:17:11.590Z",
     "count": 8,
-    "totalWeight": 8,
+    "confidenceMass": 8,
     "emotions": {
       "joy": 0.123411,
       "trust": 0.241776,
@@ -3803,7 +3803,7 @@
   {
     "createdAt": "2025-09-12T06:20:12.840Z",
     "count": 9,
-    "totalWeight": 8.999998,
+    "confidenceMass": 8.999998,
     "emotions": {
       "joy": 0.174848,
       "trust": 0.199476,
@@ -3824,7 +3824,7 @@
   {
     "createdAt": "2025-09-11T06:19:16.588Z",
     "count": 9,
-    "totalWeight": 9.000002,
+    "confidenceMass": 9.000002,
     "emotions": {
       "joy": 0.171958,
       "trust": 0.278119,
@@ -3845,7 +3845,7 @@
   {
     "createdAt": "2025-09-10T06:19:28.121Z",
     "count": 9,
-    "totalWeight": 8.999998,
+    "confidenceMass": 8.999998,
     "emotions": {
       "joy": 0.161789,
       "trust": 0.282555,
@@ -3866,7 +3866,7 @@
   {
     "createdAt": "2025-09-09T06:20:37.795Z",
     "count": 10,
-    "totalWeight": 10.000001,
+    "confidenceMass": 10.000001,
     "emotions": {
       "joy": 0.158725,
       "trust": 0.271573,
@@ -3887,7 +3887,7 @@
   {
     "createdAt": "2025-09-08T06:20:46.285Z",
     "count": 13,
-    "totalWeight": 13.000003,
+    "confidenceMass": 13.000003,
     "emotions": {
       "joy": 0.13166,
       "trust": 0.25254,
@@ -3908,7 +3908,7 @@
   {
     "createdAt": "2025-09-07T06:17:17.476Z",
     "count": 14,
-    "totalWeight": 13.999997,
+    "confidenceMass": 13.999997,
     "emotions": {
       "joy": 0.155648,
       "trust": 0.23472,
@@ -3929,7 +3929,7 @@
   {
     "createdAt": "2025-09-06T06:17:12.184Z",
     "count": 16,
-    "totalWeight": 16.000004,
+    "confidenceMass": 16.000004,
     "emotions": {
       "joy": 0.106549,
       "trust": 0.238096,
@@ -3950,7 +3950,7 @@
   {
     "createdAt": "2025-09-05T06:20:08.149Z",
     "count": 17,
-    "totalWeight": 16.999998,
+    "confidenceMass": 16.999998,
     "emotions": {
       "joy": 0.092342,
       "trust": 0.273122,
@@ -3971,7 +3971,7 @@
   {
     "createdAt": "2025-09-04T06:19:45.930Z",
     "count": 15,
-    "totalWeight": 15.000002,
+    "confidenceMass": 15.000002,
     "emotions": {
       "joy": 0.129777,
       "trust": 0.292422,
@@ -3992,7 +3992,7 @@
   {
     "createdAt": "2025-09-03T06:19:20.692Z",
     "count": 18,
-    "totalWeight": 17.999998,
+    "confidenceMass": 17.999998,
     "emotions": {
       "joy": 0.145725,
       "trust": 0.257989,
@@ -4013,7 +4013,7 @@
   {
     "createdAt": "2025-09-02T06:20:41.937Z",
     "count": 14,
-    "totalWeight": 14.000003,
+    "confidenceMass": 14.000003,
     "emotions": {
       "joy": 0.172584,
       "trust": 0.275489,
@@ -4034,7 +4034,7 @@
   {
     "createdAt": "2025-09-01T06:21:33.204Z",
     "count": 15,
-    "totalWeight": 15.000005,
+    "confidenceMass": 15.000005,
     "emotions": {
       "joy": 0.165431,
       "trust": 0.304368,
@@ -4055,7 +4055,7 @@
   {
     "createdAt": "2025-08-31T06:17:46.016Z",
     "count": 15,
-    "totalWeight": 14.999997,
+    "confidenceMass": 14.999997,
     "emotions": {
       "joy": 0.107646,
       "trust": 0.259841,
@@ -4076,7 +4076,7 @@
   {
     "createdAt": "2025-08-30T06:17:31.629Z",
     "count": 12,
-    "totalWeight": 11.999997,
+    "confidenceMass": 11.999997,
     "emotions": {
       "joy": 0.104269,
       "trust": 0.274674,
@@ -4097,7 +4097,7 @@
   {
     "createdAt": "2025-08-29T06:19:48.540Z",
     "count": 12,
-    "totalWeight": 11.999999,
+    "confidenceMass": 11.999999,
     "emotions": {
       "joy": 0.075043,
       "trust": 0.251568,
@@ -4118,7 +4118,7 @@
   {
     "createdAt": "2025-08-28T06:20:38.031Z",
     "count": 12,
-    "totalWeight": 11.999999,
+    "confidenceMass": 11.999999,
     "emotions": {
       "joy": 0.082419,
       "trust": 0.257241,
@@ -4139,7 +4139,7 @@
   {
     "createdAt": "2025-08-27T06:19:43.912Z",
     "count": 10,
-    "totalWeight": 9.999999,
+    "confidenceMass": 9.999999,
     "emotions": {
       "joy": 0.087734,
       "trust": 0.294845,
@@ -4160,7 +4160,7 @@
   {
     "createdAt": "2025-08-26T06:21:14.203Z",
     "count": 13,
-    "totalWeight": 13.000002,
+    "confidenceMass": 13.000002,
     "emotions": {
       "joy": 0.113327,
       "trust": 0.320008,
@@ -4181,7 +4181,7 @@
   {
     "createdAt": "2025-08-25T06:22:11.208Z",
     "count": 11,
-    "totalWeight": 11.000002,
+    "confidenceMass": 11.000002,
     "emotions": {
       "joy": 0.096241,
       "trust": 0.277773,
@@ -4202,7 +4202,7 @@
   {
     "createdAt": "2025-08-24T06:19:04.367Z",
     "count": 8,
-    "totalWeight": 7.999997,
+    "confidenceMass": 7.999997,
     "emotions": {
       "joy": 0.087609,
       "trust": 0.246966,
@@ -4223,7 +4223,7 @@
   {
     "createdAt": "2025-08-23T06:18:42.996Z",
     "count": 7,
-    "totalWeight": 7,
+    "confidenceMass": 7,
     "emotions": {
       "joy": 0.127845,
       "trust": 0.266054,
@@ -4244,7 +4244,7 @@
   {
     "createdAt": "2025-08-22T06:20:41.647Z",
     "count": 7,
-    "totalWeight": 7.000001,
+    "confidenceMass": 7.000001,
     "emotions": {
       "joy": 0.146221,
       "trust": 0.315623,
@@ -4265,7 +4265,7 @@
   {
     "createdAt": "2025-08-21T06:20:50.633Z",
     "count": 8,
-    "totalWeight": 8,
+    "confidenceMass": 8,
     "emotions": {
       "joy": 0.0875,
       "trust": 0.29375,
@@ -4286,7 +4286,7 @@
   {
     "createdAt": "2025-08-20T14:36:21.815Z",
     "count": 3,
-    "totalWeight": 3,
+    "confidenceMass": 3,
     "emotions": {
       "joy": 0.1,
       "trust": 0.3,
@@ -4307,7 +4307,7 @@
   {
     "createdAt": "2025-08-19T12:10:28.654Z",
     "count": 4,
-    "totalWeight": 4,
+    "confidenceMass": 4,
     "emotions": {
       "joy": 0.0875,
       "trust": 0.25,
@@ -4328,7 +4328,7 @@
   {
     "createdAt": "2025-08-18T02:23:57.725Z",
     "count": 2,
-    "totalWeight": 2,
+    "confidenceMass": 2,
     "emotions": {
       "joy": 0.033864,
       "trust": 0.201591,
@@ -4349,7 +4349,7 @@
   {
     "createdAt": "2025-08-17T02:20:12.992Z",
     "count": 3,
-    "totalWeight": 3,
+    "confidenceMass": 3,
     "emotions": {
       "joy": 0.078786,
       "trust": 0.154627,
@@ -4370,7 +4370,7 @@
   {
     "createdAt": "2025-08-16T02:19:07.122Z",
     "count": 5,
-    "totalWeight": 5.000001,
+    "confidenceMass": 5.000001,
     "emotions": {
       "joy": 0.078039,
       "trust": 0.178039,
@@ -4391,7 +4391,7 @@
   {
     "createdAt": "2025-08-15T02:21:28.476Z",
     "count": 6,
-    "totalWeight": 5.999998,
+    "confidenceMass": 5.999998,
     "emotions": {
       "joy": 0.076177,
       "trust": 0.189078,
@@ -4412,7 +4412,7 @@
   {
     "createdAt": "2025-08-14T02:22:56.969Z",
     "count": 8,
-    "totalWeight": 8.000003,
+    "confidenceMass": 8.000003,
     "emotions": {
       "joy": 0.081961,
       "trust": 0.180732,
@@ -4433,7 +4433,7 @@
   {
     "createdAt": "2025-08-13T02:23:01.391Z",
     "count": 9,
-    "totalWeight": 8.999999,
+    "confidenceMass": 8.999999,
     "emotions": {
       "joy": 0.07365,
       "trust": 0.19737,
@@ -4454,7 +4454,7 @@
   {
     "createdAt": "2025-08-12T02:22:38.973Z",
     "count": 8,
-    "totalWeight": 8,
+    "confidenceMass": 8,
     "emotions": {
       "joy": 0.089496,
       "trust": 0.209235,
@@ -4475,7 +4475,7 @@
   {
     "createdAt": "2025-08-11T02:24:18.019Z",
     "count": 7,
-    "totalWeight": 6.999999,
+    "confidenceMass": 6.999999,
     "emotions": {
       "joy": 0.06262,
       "trust": 0.198718,
@@ -4496,7 +4496,7 @@
   {
     "createdAt": "2025-08-10T02:21:06.205Z",
     "count": 11,
-    "totalWeight": 11,
+    "confidenceMass": 11,
     "emotions": {
       "joy": 0.095798,
       "trust": 0.260392,
@@ -4517,7 +4517,7 @@
   {
     "createdAt": "2025-08-09T02:20:35.226Z",
     "count": 8,
-    "totalWeight": 8.000001,
+    "confidenceMass": 8.000001,
     "emotions": {
       "joy": 0.120448,
       "trust": 0.267424,
@@ -4538,7 +4538,7 @@
   {
     "createdAt": "2025-08-08T10:43:36.400Z",
     "count": 7,
-    "totalWeight": 7,
+    "confidenceMass": 7,
     "emotions": {
       "joy": 0.107143,
       "trust": 0.321429,

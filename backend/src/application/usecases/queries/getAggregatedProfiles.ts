@@ -13,7 +13,7 @@ function mapAggregateToDto(
   return AggregatedSentimentProfileDtoSchema.parse({
     createdAt,
     count: aggregate.count,
-    totalWeight: aggregate.totalWeight,
+    confidenceMass: aggregate.confidenceMass,
     emotions: aggregate.emotions,
     tonalities: aggregate.tonalities,
   });

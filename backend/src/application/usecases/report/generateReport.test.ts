@@ -65,7 +65,7 @@ function makeAggregatedSentimentProfile(
 ): AggregatedSentimentProfile {
   return {
     count: 0,
-    totalWeight: 0,
+    confidenceMass: 0,
     emotions: makeEmotionScores(),
     tonalities: makeTonalityScores(),
     ...overrides,
