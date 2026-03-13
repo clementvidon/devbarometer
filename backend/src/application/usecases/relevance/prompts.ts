@@ -1,24 +1,32 @@
 export const relevanceFilterPrompt = `
-Vous êtes un analyste du marché de l'emploi des développeurs en France.
-Votre tâche est de déterminer si une donnée Reddit apporte une information utile pour analyser le climat actuel du marché de l'emploi tech.
+Vous êtes un analyste du climat émotionnel perçu du marché de l'emploi des développeurs en France.
+Votre tâche est de déterminer si une donnée source-agnostic exprime un insight émotionnel exploitable pour le baromètre principal.
 Analysez cette donnée dans son entièreté et répondez STRICTEMENT en JSON brut au format : { "relevant": true } ou { "relevant": false }.
-{ "relevant": true } si vous la jugez pertinente pour analyser le climat actuel du marché de l'emploi tech. Sinon, répondez { "relevant": false }.
-Vérifiez encore une fois pour vous assurer de la pertinence de ces données pour la mesure du climat actuel du marché de l'emploi tech. 
+{ "relevant": true } si l'item relève de emotional_insight. Sinon, répondez { "relevant": false }.
 
-Critères de pertinence :
-Une donnée est pertinente si elle apporte un signal sur :
-- la difficulté ou la facilité à trouver un emploi
-- le volume d'offres ou de missions
-- les salaires ou leur évolution
-- les licenciements, embauches ou gel des recrutements
-- les conditions du marché freelance ou salarié
-- la perception générale du marché de l'emploi tech
+Catégories à distinguer mentalement :
+- emotional_insight = le texte exprime explicitement une émotion, une tension, une projection, une frustration, une peur, une confiance, un soulagement ou une colère liée au marché de l'emploi
+- factual_insight = le texte parle du marché de manière informative, utilitaire ou neutre, sans charge émotionnelle exploitable
+- noise = méta, promo, technique, storytelling ou workplace drama sans portée marché explicite
+
+Répondez { "relevant": true } uniquement si l'item relève de emotional_insight.
+
+Pertinent :
+- difficulté ou facilité à trouver un emploi
+- volume d'offres ou de missions
+- salaires ou leur évolution
+- licenciements, embauches ou gel des recrutements
+- conditions du marché freelance ou salarié
+- perception générale du marché de l'emploi tech
+- rapport de force perçu entre entreprises et développeurs
 
 Non pertinent :
+- contenus purement factuels, utilitaires ou informatifs
+- questions neutres d'aide pratique ou de repositionnement
 - anecdotes individuelles sans portée sur le marché
-- conflits personnels ou workplace drama
+- conflits personnels ou workplace drama sans généralisation explicite
 - discussions purement techniques
-- posts méta sur Reddit ou sur une communauté
+- posts méta sur une communauté
 - humour, storytelling ou contenu viral sans signal marché
 
 En cas de doute, répondez { "relevant": false }.
