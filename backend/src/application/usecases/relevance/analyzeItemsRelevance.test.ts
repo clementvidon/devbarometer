@@ -1,10 +1,12 @@
-import { describe, expect, test, vi } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 
 import type { Item } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';
 import type { LoggerPort } from '../../ports/output/LoggerPort';
+import type { ConfirmedRelevanceCache } from '../../ports/pipeline/FilterRelevantItemsPort';
 import { analyzeItemsRelevance } from './analyzeItemsRelevance';
 import { analyzeOneItemRelevance } from './analyzeOneItemRelevance';
+import { makeRelevanceSignature } from './makeRelevanceSignature';
 
 vi.mock('./analyzeOneItemRelevance', () => ({
   analyzeOneItemRelevance: vi.fn((_logger, item: Item, _llm, _options) =>
@@ -45,6 +47,134 @@ function makeItem(overrides: Partial<Item> = {}): Item {
 }
 
 describe(analyzeItemsRelevance.name, () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('reuses a confirmed relevant=true item when title and content are unchanged', async () => {
+    const logger = makeLogger();
+    const llm = makeLlm();
+    const items = [makeItem({ itemRef: '1', title: 'same', content: 'same' })];
+
+    const confirmedRelevanceCache: ConfirmedRelevanceCache = new Map([
+      [
+        '1',
+        {
+          signature: makeRelevanceSignature(items[0]),
+          relevance: {
+            itemRef: '1',
+            relevant: true,
+            category: 'emotional_insight',
+            topicScore: 0.91,
+            emotionScore: 0.82,
+            genreScore: 0.93,
+          },
+        },
+      ],
+    ]);
+
+    const result = await analyzeItemsRelevance(logger, items, llm, {
+      confirmedRelevanceCache,
+    });
+
+    expect(result).toEqual([
+      {
+        itemRef: '1',
+        relevant: true,
+        category: 'emotional_insight',
+        topicScore: 0.91,
+        emotionScore: 0.82,
+        genreScore: 0.93,
+      },
+    ]);
+    expect(analyzeOneItemRelevance).not.toHaveBeenCalled();
+  });
+
+  test('reuses a confirmed relevant=false item when title and content are unchanged', async () => {
+    const logger = makeLogger();
+    const llm = makeLlm();
+    const items = [makeItem({ itemRef: '1', title: 'same', content: 'same' })];
+
+    const confirmedRelevanceCache: ConfirmedRelevanceCache = new Map([
+      [
+        '1',
+        {
+          signature: makeRelevanceSignature(items[0]),
+          relevance: {
+            itemRef: '1',
+            relevant: false,
+            category: 'noise',
+            topicScore: 0,
+            emotionScore: 0,
+            genreScore: 0,
+          },
+        },
+      ],
+    ]);
+
+    const result = await analyzeItemsRelevance(logger, items, llm, {
+      confirmedRelevanceCache,
+    });
+
+    expect(result).toEqual([
+      {
+        itemRef: '1',
+        relevant: false,
+        category: 'noise',
+        topicScore: 0,
+        emotionScore: 0,
+        genreScore: 0,
+      },
+    ]);
+    expect(analyzeOneItemRelevance).not.toHaveBeenCalled();
+  });
+
+  test('reruns relevance analysis when title or content changed', async () => {
+    const logger = makeLogger();
+    const llm = makeLlm();
+    const items = [
+      makeItem({ itemRef: '1', title: 'same', content: 'new body' }),
+    ];
+
+    const confirmedRelevanceCache: ConfirmedRelevanceCache = new Map([
+      [
+        '1',
+        {
+          signature: makeRelevanceSignature({
+            title: 'same',
+            content: 'old body',
+          }),
+          relevance: {
+            itemRef: '1',
+            relevant: true,
+            category: 'emotional_insight',
+            topicScore: 0.91,
+            emotionScore: 0.82,
+            genreScore: 0.93,
+          },
+        },
+      ],
+    ]);
+
+    await analyzeItemsRelevance(logger, items, llm, {
+      confirmedRelevanceCache,
+    });
+
+    expect(analyzeOneItemRelevance).toHaveBeenCalledTimes(1);
+  });
+
+  test('reruns relevance analysis when item is absent from cache', async () => {
+    const logger = makeLogger();
+    const llm = makeLlm();
+    const items = [makeItem({ itemRef: '1' })];
+
+    await analyzeItemsRelevance(logger, items, llm, {
+      confirmedRelevanceCache: new Map(),
+    });
+
+    expect(analyzeOneItemRelevance).toHaveBeenCalledTimes(1);
+  });
+
   test('returns one ItemRelevance per input item', async () => {
     const logger = makeLogger();
     const llm = makeLlm();
