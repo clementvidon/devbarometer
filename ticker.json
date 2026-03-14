@@ -1,27 +1,27 @@
 [
   {
-    "title": "Avez-vous l'impression que le marché s'améliore ?",
+    "title": "Les développeurs qui utilisent abusivement de l'IA dans le cadre professionnel et l'encensent à tout va sont des moutons et des pigeons",
+    "weight": "3",
+    "itemRef": "https://reddit.com/comments/1ree504"
+  },
+  {
+    "title": "Perdu dans l’ère de l’ia",
     "weight": "2",
-    "itemRef": "https://reddit.com/comments/1rni95y"
+    "itemRef": "https://reddit.com/comments/1rf73fk"
   },
   {
-    "title": "Je suis sous l'eau !",
-    "weight": "1",
-    "itemRef": "https://reddit.com/comments/1rnf487"
+    "title": "Parcours bac+5, expériences décevantes",
+    "weight": "2",
+    "itemRef": "https://reddit.com/comments/1rdghj6"
   },
   {
-    "title": "Étude d'Anthropic IA et Secteur",
+    "title": "Vous en pensez quoi de ce ESN?",
     "weight": "1",
-    "itemRef": "https://reddit.com/comments/1rp2xe0"
+    "itemRef": "https://reddit.com/comments/1rbpqpx"
   },
   {
-    "title": "Quand l’IA rend le code moins cher, on embauche plus de développeurs, pas moins",
+    "title": "Comment réfléchir sereinement au futur du dev avec l'IA ?",
     "weight": "1",
-    "itemRef": "https://reddit.com/comments/1rmfzjo"
-  },
-  {
-    "title": "Conseils pour un futur freelance : quelle est la température du bain ?",
-    "weight": "1",
-    "itemRef": "https://reddit.com/comments/1rmau0w"
+    "itemRef": "https://reddit.com/comments/1rclw9i"
   }
 ]
