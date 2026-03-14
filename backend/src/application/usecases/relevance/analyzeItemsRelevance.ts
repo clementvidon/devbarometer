@@ -6,6 +6,7 @@ import type { LoggerPort } from '../../ports/output/LoggerPort';
 import type { FilterRelevantItemsOptions } from '../../ports/pipeline/FilterRelevantItemsPort';
 import { analyzeOneItemRelevance } from './analyzeOneItemRelevance';
 import { applyRelevanceGates } from './applyRelevanceGates';
+import { makeRelevanceSignature } from './makeRelevanceSignature';
 import {
   CONCURRENCY,
   FALLBACK_ITEM_RELEVANCE,
@@ -81,8 +82,10 @@ export async function analyzeItemsRelevance(
 
   const limit = pLimit(concurrency);
   const { model, ...runOpts } = llmOptions;
+  const confirmedRelevanceCache = opts.confirmedRelevanceCache;
   let prefilterTitleOnlyDiscarded = 0;
   let prefilterTitleBlocklistDiscarded = 0;
+  let confirmedCacheHits = 0;
 
   const itemsRelevance = await Promise.all(
     items.map((item) =>
@@ -100,6 +103,12 @@ export async function analyzeItemsRelevance(
           };
         }
 
+        const cached = confirmedRelevanceCache?.get(item.itemRef);
+        if (cached && cached.signature === makeRelevanceSignature(item)) {
+          confirmedCacheHits++;
+          return applyRelevanceGates({ ...cached.relevance }, gates);
+        }
+
         const relevance = await analyzeOneItemRelevance(logger, item, llm, {
           prompt,
           model,
@@ -114,6 +123,7 @@ export async function analyzeItemsRelevance(
     total: items.length,
     analyzed: itemsRelevance.length,
     relevant: itemsRelevance.filter((item) => item.relevant).length,
+    confirmedCacheHits,
     prefilterTitleOnlyDiscarded,
     prefilterTitleBlocklistDiscarded,
   });

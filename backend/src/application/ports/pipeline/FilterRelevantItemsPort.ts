@@ -40,7 +40,7 @@ export interface FilterRelevantItemsOptions {
   /** Seuils post-LLM sur topicScore/genreScore */
   gates: RelevanceGateOptions;
   /** Cache des décisions confirmées 2 fois d’affilée sur item inchangé */
-  confirmedRelevantCache?: ConfirmedRelevanceCache;
+  confirmedRelevanceCache?: ConfirmedRelevanceCache;
 }
 
 export interface FilterRelevantItemsResult {

@@ -15,6 +15,7 @@ import type { ComputeMomentumWeightsPort } from '../../ports/pipeline/ComputeMom
 import type { CreateSentimentProfilesPort } from '../../ports/pipeline/CreateSentimentProfilesPort';
 import type { FilterRelevantItemsPort } from '../../ports/pipeline/FilterRelevantItemsPort';
 import type { GenerateReportPort } from '../../ports/pipeline/GenerateReportPort';
+import { getConfirmedRelevanceCacheBefore } from '../queries/getConfirmedRelevanceCacheBefore';
 import { getLastRelevantItemsBefore } from '../queries/getLastRelevantItemsBefore';
 
 export function sortByWeightDesc(items: WeightedItem[]): WeightedItem[] {
@@ -49,10 +50,22 @@ export class ReportingAgentService implements ReportingAgentPort {
     }));
     log.info('Items fetched', { count: items.length });
 
+    const confirmedRelevanceCache = await withSpan(
+      log,
+      getConfirmedRelevanceCacheBefore.name,
+      () => getConfirmedRelevanceCacheBefore(createdAt, this.persistence),
+    );
+    log.info('Confirmed relevant cache loaded', {
+      size: confirmedRelevanceCache.size,
+    });
+
     const relevanceResult = await withSpan(
       log,
       this.relevance.filterRelevantItems.name,
-      () => this.relevance.filterRelevantItems(log, items),
+      () =>
+        this.relevance.filterRelevantItems(log, items, {
+          confirmedRelevanceCache: confirmedRelevanceCache,
+        }),
     );
     const relevant = relevanceResult.relevantItems;
     log.info('Relevant items filtered', {
