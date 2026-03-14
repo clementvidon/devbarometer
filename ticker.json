@@ -1,27 +1,27 @@
 [
   {
-    "title": "Je suis sous l'eau !",
-    "weight": "2",
-    "itemRef": "https://reddit.com/comments/1rnf487"
-  },
-  {
     "title": "Se réorienter",
     "weight": "2",
     "itemRef": "https://reddit.com/comments/1rpzz14"
   },
   {
     "title": "Avez-vous l'impression que le marché s'améliore ?",
-    "weight": "2",
+    "weight": "1",
     "itemRef": "https://reddit.com/comments/1rni95y"
   },
   {
-    "title": "Conseils pour un futur freelance : quelle est la température du bain ?",
+    "title": "Pertinent de faire un doctorat en info en 2026?",
     "weight": "1",
-    "itemRef": "https://reddit.com/comments/1rmau0w"
+    "itemRef": "https://reddit.com/comments/1rssrqq"
   },
   {
-    "title": "Recrutement fictif",
+    "title": "Stratégies de recherche d’emploi pour des postes intéressants (i.e.: hors Linkedin, WttJ...)",
     "weight": "1",
-    "itemRef": "https://i.redd.it/l5n98tgrkeog1.jpeg"
+    "itemRef": "https://reddit.com/comments/1rqpkdt"
+  },
+  {
+    "title": "POEI Dev Java : vos avis sur mon cas",
+    "weight": "1",
+    "itemRef": "https://reddit.com/comments/1rr7jzv"
   }
 ]
