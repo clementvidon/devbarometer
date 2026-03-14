@@ -18,6 +18,16 @@ export interface RelevanceGateOptions {
   genreMin: number;
 }
 
+export interface ConfirmedRelevanceCacheEntry {
+  signature: string;
+  relevance: ItemRelevance;
+}
+
+export type ConfirmedRelevanceCache = ReadonlyMap<
+  string,
+  ConfirmedRelevanceCacheEntry
+>;
+
 export interface FilterRelevantItemsOptions {
   /** Prompt système utilisé pour la pertinence */
   prompt: string;
@@ -29,6 +39,8 @@ export interface FilterRelevantItemsOptions {
   prefilter: RelevancePrefilterOptions;
   /** Seuils post-LLM sur topicScore/genreScore */
   gates: RelevanceGateOptions;
+  /** Cache des décisions confirmées 2 fois d’affilée sur item inchangé */
+  confirmedRelevantCache?: ConfirmedRelevanceCache;
 }
 
 export interface FilterRelevantItemsResult {
