@@ -5,9 +5,14 @@
     "itemRef": "https://reddit.com/comments/1rpzz14"
   },
   {
-    "title": "Avez-vous l'impression que le marché s'améliore ?",
+    "title": "POEI Dev Java : vos avis sur mon cas",
+    "weight": "2",
+    "itemRef": "https://reddit.com/comments/1rr7jzv"
+  },
+  {
+    "title": "Autre métier que dev",
     "weight": "1",
-    "itemRef": "https://reddit.com/comments/1rni95y"
+    "itemRef": "https://reddit.com/comments/1rtjf27"
   },
   {
     "title": "Pertinent de faire un doctorat en info en 2026?",
@@ -18,10 +23,5 @@
     "title": "Stratégies de recherche d’emploi pour des postes intéressants (i.e.: hors Linkedin, WttJ...)",
     "weight": "1",
     "itemRef": "https://reddit.com/comments/1rqpkdt"
-  },
-  {
-    "title": "POEI Dev Java : vos avis sur mon cas",
-    "weight": "1",
-    "itemRef": "https://reddit.com/comments/1rr7jzv"
   }
 ]
