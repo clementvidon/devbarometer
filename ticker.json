@@ -1,27 +1,27 @@
 [
   {
-    "title": "Se réorienter",
-    "weight": "2",
-    "itemRef": "https://reddit.com/comments/1rpzz14"
-  },
-  {
-    "title": "POEI Dev Java : vos avis sur mon cas",
-    "weight": "2",
-    "itemRef": "https://reddit.com/comments/1rr7jzv"
-  },
-  {
     "title": "Autre métier que dev",
-    "weight": "1",
+    "weight": "3",
     "itemRef": "https://reddit.com/comments/1rtjf27"
   },
   {
+    "title": "Étude d'Anthropic IA et Secteur",
+    "weight": "2",
+    "itemRef": "https://reddit.com/comments/1rp2xe0"
+  },
+  {
+    "title": "Recrutement fictif",
+    "weight": "2",
+    "itemRef": "https://reddit.com/comments/1rqrdk0"
+  },
+  {
     "title": "Pertinent de faire un doctorat en info en 2026?",
-    "weight": "1",
+    "weight": "2",
     "itemRef": "https://reddit.com/comments/1rssrqq"
   },
   {
     "title": "Stratégies de recherche d’emploi pour des postes intéressants (i.e.: hors Linkedin, WttJ...)",
-    "weight": "1",
+    "weight": "2",
     "itemRef": "https://reddit.com/comments/1rqpkdt"
   }
 ]
