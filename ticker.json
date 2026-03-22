@@ -1,13 +1,18 @@
 [
   {
     "title": "Je tombe que sur des clients « pauvres »",
-    "weight": "2",
+    "weight": "3",
     "itemRef": "https://reddit.com/comments/1rwdqhr"
   },
   {
-    "title": "Autre métier que dev",
+    "title": "8 ans en startup, 30 ans, je pense sérieusement au freelance, retours d'expérience ?",
+    "weight": "3",
+    "itemRef": "https://reddit.com/comments/1rz2ca4"
+  },
+  {
+    "title": "Arrêter de chercher du travail et juste vendre ses propres logiciels/app. Bad idea ?",
     "weight": "2",
-    "itemRef": "https://reddit.com/comments/1rtjf27"
+    "itemRef": "https://reddit.com/comments/1rx5gce"
   },
   {
     "title": "Agences intérim et missions data",
@@ -15,13 +20,8 @@
     "itemRef": "https://reddit.com/comments/1rvc5n1"
   },
   {
-    "title": "Arrêter de chercher du travail et juste vendre ses propres logiciels/app. Bad idea ?",
+    "title": "J’ai plus envie de coder après des années d’efforts, certains d’entre vous sont dans le cas ?",
     "weight": "1",
-    "itemRef": "https://reddit.com/comments/1rx5gce"
-  },
-  {
-    "title": "8 ans en startup, 30 ans, je pense sérieusement au freelance, retours d'expérience ?",
-    "weight": "1",
-    "itemRef": "https://reddit.com/comments/1rz2ca4"
+    "itemRef": "https://reddit.com/comments/1ruegkf"
   }
 ]
