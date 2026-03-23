@@ -23,6 +23,7 @@
     "update-report": "curl -X POST http://localhost:3000/report",
     "db:push": "drizzle-kit push --config=drizzle.config.mjs",
     "db:generate": "drizzle-kit generate --config=drizzle.config.mjs",
+    "db:migrate": "tsx src/cli/db-migrate.ts",
     "db:studio": "drizzle-kit studio --config=drizzle.config.mjs"
   },
   "dependencies": {
