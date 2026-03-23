@@ -12,6 +12,13 @@ import {
 
 function makeSnapshotData(): SnapshotData {
   return {
+    status: 'ok',
+    issues: [
+      {
+        code: 'code',
+        message: 'message',
+      },
+    ],
     fetchedItems: [
       {
         sourceFetchRef: 'sourceFetchRef',
@@ -95,18 +102,57 @@ describe('SnapshotDataSchema', () => {
   test('parses correct snapshot', () => {
     expect(() => SnapshotDataSchema.parse(makeSnapshotData())).not.toThrow();
   });
+
+  describe('status and issues', () => {
+    test("accepts status 'ok' with empty issues", () => {
+      const snapshot = {
+        ...makeSnapshotData(),
+        status: 'ok',
+        issues: [],
+      };
+
+      expect(() => SnapshotDataSchema.parse(snapshot)).not.toThrow();
+    });
+
+    test("accepts status 'degraded' with issues", () => {
+      const snapshot = {
+        ...makeSnapshotData(),
+        status: 'degraded',
+        issues: [
+          {
+            code: 'missing_profiles',
+            message: 'Some sentiment profiles were generated in fallback mode.',
+          },
+        ],
+      };
+
+      expect(() => SnapshotDataSchema.parse(snapshot)).not.toThrow();
+    });
+
+    test('rejects snapshots missing status or issues', () => {
+      const snapshot = makeSnapshotData();
+      const { status: _status, ...missingStatus } = snapshot;
+      const { issues: _issues, ...missingIssues } = snapshot;
+
+      expect(() => SnapshotDataSchema.parse(missingStatus)).toThrow();
+      expect(() => SnapshotDataSchema.parse(missingIssues)).toThrow();
+    });
+  });
+
   test('rejects snapshots missing fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const { fetchedItems: _fetchedItems, ...invalid } = snapshot;
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects snapshots missing itemsRelevance', () => {
     const snapshot = makeSnapshotData();
     const { itemsRelevance: _itemsRelevance, ...invalid } = snapshot;
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects legacy weighted sentiment profiles nested under profile', () => {
     const invalid = {
       ...makeSnapshotData(),
@@ -140,6 +186,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects legacy sentiment profiles containing title', () => {
     const invalid = {
       ...makeSnapshotData(),
@@ -171,6 +218,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects legacy snapshots containing relevant items', () => {
     const invalid = {
       ...makeSnapshotData(),
@@ -179,6 +227,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects NaN weight in weighted items', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -193,6 +242,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects Infinity weight in weightedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -207,6 +257,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects negative weight in weightedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -221,6 +272,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects negative weight in weightedSentimentProfiles', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -235,6 +287,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects NaN score in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -249,6 +302,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects Infinity score in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -263,6 +317,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects NaN score in weightedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -277,6 +332,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects Infinity score in weightedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -291,6 +347,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('accepts negative score in fetchedItems and weightedItems', () => {
     const snapshot = makeSnapshotData();
     const valid = {
@@ -311,6 +368,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(valid)).not.toThrow();
   });
+
   test('rejects blank itemRef in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -325,6 +383,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects blank title in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -339,6 +398,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects blank sourceFetchRef in fetchedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -353,6 +413,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects blank sourceFetchRef in weightedItems', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -367,6 +428,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects snapshots when weightedItems and weightedSentimentProfiles lengths differ', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -381,6 +443,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects snapshots when fetchedItems and itemsRelevance lengths differ', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -390,6 +453,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects snapshots when fetchedItems and itemsRelevance are not aligned', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -404,6 +468,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects snapshots when weightedItems and weightedSentimentProfiles are not aligned', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -424,6 +489,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects fallback weighted sentiment profiles with non-zero weight', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -439,6 +505,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects snapshots with inconsistent aggregatedSentimentProfile.count', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -451,6 +518,7 @@ describe('SnapshotDataSchema', () => {
 
     expect(() => SnapshotDataSchema.parse(invalid)).toThrow();
   });
+
   test('rejects snapshots with inconsistent aggregatedSentimentProfile.confidenceMass', () => {
     const snapshot = makeSnapshotData();
     const invalid = {
@@ -475,6 +543,7 @@ describe('PipelineSnapshotSchema', () => {
 
     expect(() => PipelineSnapshotSchema.parse(snapshot)).not.toThrow();
   });
+
   test('rejects a persisted snapshot with inconsistent aggregated confidenceMass', () => {
     const profileWeight = 1.5;
     const inconsistentConfidenceMass = 999;

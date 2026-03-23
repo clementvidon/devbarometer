@@ -12,6 +12,8 @@ describe(getConfirmedRelevanceCacheBefore.name, () => {
           {
             id: '00000000-0000-0000-0000-000000000003',
             createdAt: '2025-01-03T10:00:00.000Z',
+            status: 'ok',
+            issues: [],
             fetchedItems: [
               {
                 sourceFetchRef: 'source',
@@ -61,6 +63,8 @@ describe(getConfirmedRelevanceCacheBefore.name, () => {
           {
             id: '00000000-0000-0000-0000-000000000002',
             createdAt: '2025-01-02T10:00:00.000Z',
+            status: 'ok',
+            issues: [],
             fetchedItems: [
               {
                 sourceFetchRef: 'source',

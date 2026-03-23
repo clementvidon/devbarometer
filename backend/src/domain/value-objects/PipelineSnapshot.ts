@@ -25,8 +25,17 @@ function equalRounded(a: number, b: number): boolean {
   return roundNumber(a) === roundNumber(b);
 }
 
+export const SnapshotIssueSchema = z
+  .object({
+    code: z.string().trim().min(1),
+    message: z.string().trim().min(1),
+  })
+  .strict();
+
 export const SnapshotDataShape = z
   .object({
+    status: z.enum(['ok', 'degraded']),
+    issues: z.array(SnapshotIssueSchema),
     fetchedItems: z.array(ItemSchema),
     itemsRelevance: z.array(ItemRelevanceSchema),
     weightedItems: z.array(WeightedItemSchema),
@@ -145,4 +154,5 @@ export const PipelineSnapshotSchema = SnapshotDataShape.extend({
   .superRefine(validateSnapshotConsistency);
 
 export type SnapshotData = z.infer<typeof SnapshotDataSchema>;
+export type SnapshotIssue = z.infer<typeof SnapshotIssueSchema>;
 export type PipelineSnapshot = z.infer<typeof PipelineSnapshotSchema>;

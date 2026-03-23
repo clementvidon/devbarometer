@@ -43,6 +43,8 @@ describe(getLastRelevantItemsBefore.name, () => {
     return {
       id: 'id',
       createdAt: '2001-01-01',
+      status: 'ok',
+      issues: [],
       fetchedItems: [],
       itemsRelevance: [],
       weightedItems: [],
