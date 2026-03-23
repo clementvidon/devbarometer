@@ -1,8 +1,4 @@
-# GUIDELINES QA PROMPT
-
-You review technical guidelines for backend developers and AI agents.
-
----
+# GUIDELINES REVIEW STANDARD
 
 ## REVIEW PRINCIPLES
 
