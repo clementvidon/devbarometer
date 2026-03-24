@@ -52,6 +52,9 @@
     "update-site": "npm-run-all --sequential generate-static publish"
   },
   "lint-staged": {
+    "*.{md,json,yml,yaml}": [
+      "prettier --write --ignore-unknown"
+    ],
     "frontend/src/**/*.{ts,tsx}": [
       "npm --workspace frontend exec -- prettier --write --ignore-unknown",
       "npm --workspace frontend exec -- eslint --fix --cache --max-warnings=0",
