@@ -1,4 +1,4 @@
-# Backend Workspace Documentation
+# Frontend Workspace Documentation
 
 ## Documentation structure
 
