@@ -6,3 +6,5 @@ node_modules/
 db.json
 AGENTS.md
 local/
+infra/terraform/.terraform/
+infra/terraform/generated/

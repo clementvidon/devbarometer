@@ -49,7 +49,8 @@
     "build-frontend": "npm --workspace frontend run predeploy",
     "deploy-frontend": "npm --workspace frontend run deploy",
     "publish": "npm-run-all --sequential build-frontend deploy-frontend",
-    "update-site": "npm-run-all --sequential generate-static publish"
+    "update-site": "npm-run-all --sequential generate-static publish",
+    "generate-topic-tf-input": "tsx scripts/generate-topic-tf-input.ts"
   },
   "lint-staged": {
     "*.{md,json,yml,yaml}": [
@@ -87,9 +88,12 @@
     "lint-staged": "^16.1.2",
     "npm-run-all": "^4.1.5",
     "prettier": "3.6.2",
+    "tsx": "^4.20.6",
     "typescript": "5.8.3",
     "vite": "^7.0.6",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "yaml": "^2.8.1",
+    "zod": "^3.x"
   },
   "engines": {
     "node": ">=22"
