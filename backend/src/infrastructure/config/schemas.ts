@@ -9,6 +9,7 @@ export const GlobalEnvSchema = z.object({
 });
 
 export const CoreEnvSchema = z.object({
+  BIND_HOST: z.string().min(1).default('127.0.0.1'),
   PORT: z.coerce.number().int().positive().default(3000),
   DATABASE_URL: z.string().min(1, 'DATABASE_URL missing'),
 });

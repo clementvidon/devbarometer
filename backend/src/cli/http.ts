@@ -25,6 +25,7 @@ const rootLogger = makeLogger();
 
 type Deps = {
   logger: LoggerPort;
+  bindHost: string;
   port: number;
   fetcher: FetchPort;
   persistence: PersistencePort;
@@ -59,9 +60,10 @@ export function buildDeps(
   logger: LoggerPort,
   config: ReportingAgentConfig,
 ): Deps {
-  const { port, databaseUrl, openaiApiKey, reddit } = config;
+  const { bindHost, port, databaseUrl, openaiApiKey, reddit } = config;
   return {
     logger,
+    bindHost,
     port,
     fetcher: new NodeFetchAdapter(globalThis.fetch),
     persistence: new PostgresAdapter(databaseUrl),
@@ -81,8 +83,8 @@ export function runHttpServer(logger: LoggerPort) {
   const config = loadReportingAgentConfig();
   const deps = buildDeps(log, config);
   const { app, port } = buildHttpServer(deps);
-  return app.listen(port, () => {
-    log.info('Server listening', { port });
+  return app.listen(port, deps.bindHost, () => {
+    log.info('Server listening', { bindHost: deps.bindHost, port });
   });
 }
 

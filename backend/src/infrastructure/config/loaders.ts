@@ -52,14 +52,18 @@ export function loadGlobalConfig(env: Env = process.env): GlobalConfig {
 /* ---------- core ---------- */
 
 export type CoreConfig = {
+  bindHost: string;
   port: number;
   databaseUrl: string;
 };
 
 export function loadCoreConfig(env: Env = process.env): CoreConfig {
   const core = parseEnv(CoreEnvSchema, env);
-  const port = core.PORT;
-  return { port, databaseUrl: core.DATABASE_URL };
+  return {
+    bindHost: core.BIND_HOST,
+    port: core.PORT,
+    databaseUrl: core.DATABASE_URL,
+  };
 }
 
 /* ---------- logging ---------- */
@@ -110,6 +114,7 @@ export type RedditConfig = {
 export type LlmProvider = z.infer<typeof LlmEnvSchema>['LLM_PROVIDER'];
 
 export type ReportingAgentConfig = {
+  bindHost: string;
   port: number;
   databaseUrl: string;
   openaiApiKey: string;
@@ -143,6 +148,7 @@ export function loadReportingAgentConfig(
   }
 
   return {
+    bindHost: core.BIND_HOST,
     port: core.PORT,
     databaseUrl: core.DATABASE_URL,
     openaiApiKey: llm.OPENAI_API_KEY,
