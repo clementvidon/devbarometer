@@ -8,3 +8,4 @@ AGENTS.md
 local/
 infra/terraform/.terraform/
 infra/terraform/generated/
+infra/terraform/*.tfstate*
