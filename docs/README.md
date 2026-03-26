@@ -8,3 +8,4 @@
 - `docs/frontend/` → frontend public routing, hosting, and browser-visible behavior
 - `docs/convention/` → formats, naming, style, and documentation standards
 - `docs/workflow/` → development processes and workflows
+- `docs/runbooks/` → operations, incidents, maintenance
