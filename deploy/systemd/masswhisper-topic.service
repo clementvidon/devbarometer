@@ -1,0 +1,20 @@
+[Unit]
+Description=Masswhisper topic backend
+After=network.target
+
+[Service]
+Type=simple
+User=masswhisper
+Group=masswhisper
+WorkingDirectory=/opt/masswhisper
+EnvironmentFile=/etc/masswhisper/backend.env
+ExecStart=/usr/bin/npm --workspace backend run start:http
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+
+[Install]
+WantedBy=multi-user.target

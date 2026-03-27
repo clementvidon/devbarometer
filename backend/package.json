@@ -20,6 +20,7 @@
     "fix": "npm-run-all --sequential format lint:fix",
     "check": "npm-run-all --sequential format:check lint type-check test",
     "dev": "tsx src/cli/http.ts",
+    "start:http": "tsx src/cli/http.ts",
     "update-report": "curl -X POST http://localhost:3000/report",
     "db:push": "drizzle-kit push --config=drizzle.config.mjs",
     "db:generate": "drizzle-kit generate --config=drizzle.config.mjs",
