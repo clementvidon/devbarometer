@@ -6,6 +6,14 @@ module "topic_backend_instance" {
 locals {
   app_name    = "masswhisper"
   server_name = "${local.app_name}-${module.topic_backend_instance.service_name}"
+  bootstrap = {
+    node_version = "22.22.2"
+    node_arch    = "linux-x64"
+    service_user = local.app_name
+    repo_url     = "https://github.com/clementvidon/masswhisper"
+    repo_dir     = "/opt/masswhisper"
+    service_name = "masswhisper-topic"
+  }
 }
 
 resource "hcloud_ssh_key" "default" {
@@ -18,6 +26,8 @@ resource "hcloud_server" "vm" {
   server_type = var.server_type
   location    = var.server_location
   image       = var.server_image
+
+  user_data = templatefile("${path.module}/cloud-init.yaml.tftpl", local.bootstrap)
 
   ssh_keys = [hcloud_ssh_key.default.id]
 

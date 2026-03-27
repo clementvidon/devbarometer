@@ -1,0 +1,40 @@
+#cloud-config
+package_update: true
+packages:
+  - git
+  - curl
+  - ca-certificates
+  - build-essential
+  - xz-utils
+  - gnupg
+
+runcmd:
+  - |
+    set -eu
+    NODE_VERSION="v${node_version}"
+    NODE_ARCH="${node_arch}"
+    NODE_BASENAME="node-$${NODE_VERSION}-$${NODE_ARCH}"
+    BASE_URL="https://nodejs.org/dist/$${NODE_VERSION}"
+    TMP_DIR="$(mktemp -d)"
+    trap 'rm -rf "$${TMP_DIR}"' EXIT
+    curl -fsSLo "$${TMP_DIR}/$${NODE_BASENAME}.tar.xz" "$${BASE_URL}/$${NODE_BASENAME}.tar.xz"
+    curl -fsSLo "$${TMP_DIR}/SHASUMS256.txt.asc" "$${BASE_URL}/SHASUMS256.txt.asc"
+    git clone --depth=1 https://github.com/nodejs/release-keys.git "$${TMP_DIR}/release-keys"
+    GNUPGHOME="$${TMP_DIR}/release-keys/gpg" gpg --verify "$${TMP_DIR}/SHASUMS256.txt.asc"
+    (
+        cd "$${TMP_DIR}"
+        grep " $${NODE_BASENAME}\.tar\.xz$" SHASUMS256.txt.asc | sha256sum -c -
+    )
+    tar -xJf "$${TMP_DIR}/$${NODE_BASENAME}.tar.xz" -C /usr/local --strip-components=1 --no-same-owner
+    node -v
+    npm -v
+  - id -u ${service_user} >/dev/null 2>&1 || adduser --system --group --home ${repo_dir} ${service_user}
+  - test -d ${repo_dir}/.git || git clone ${repo_url} ${repo_dir}
+  - chown -R ${service_user}:${service_user} ${repo_dir}
+  - mkdir -p /etc/masswhisper
+  - touch /etc/masswhisper/backend.env
+  - chown root:${service_user} /etc/masswhisper/backend.env
+  - chmod 640 /etc/masswhisper/backend.env
+  - su -s /bin/bash -c 'cd ${repo_dir} && npm ci && npm run build-shared' ${service_user}
+  - cp ${repo_dir}/deploy/systemd/${service_name}.service /etc/systemd/system/${service_name}.service
+  - systemctl daemon-reload
