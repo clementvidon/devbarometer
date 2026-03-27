@@ -34,14 +34,14 @@ export default defineConfig([
                 'Use `import { z } from "zod"` instead of the default import.',
             },
             {
-              name: '@devbarometer/shared',
+              name: '@masswhisper/shared',
               message:
-                'Use explicit shared subpath imports: "@devbarometer/shared/domain", "@devbarometer/shared/dtos", or "@devbarometer/shared/primitives".',
+                'Use explicit shared subpath imports: "@masswhisper/shared/domain", "@masswhisper/shared/dtos", or "@masswhisper/shared/primitives".',
             },
           ],
           patterns: [
             {
-              group: ['@devbarometer/shared/*/*'],
+              group: ['@masswhisper/shared/*/*'],
               message:
                 'Use only published shared subpath barrels, not deep internal shared paths.',
             },

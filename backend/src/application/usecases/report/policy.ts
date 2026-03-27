@@ -1,4 +1,4 @@
-import type { Report } from '@devbarometer/shared/domain';
+import type { Report } from '@masswhisper/shared/domain';
 
 import type { LlmRunOptions } from '../../ports/output/LlmPort';
 

@@ -1,7 +1,4 @@
-import type {
-  EmotionScores,
-  TonalityScores,
-} from '@devbarometer/shared/domain';
+import type { EmotionScores, TonalityScores } from '@masswhisper/shared/domain';
 
 import type { LlmRunOptions } from '../../ports/output/LlmPort';
 

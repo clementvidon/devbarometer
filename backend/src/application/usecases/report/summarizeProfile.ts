@@ -3,7 +3,7 @@ import {
   TONALITY_AXIS_FIELDS,
   TONALITY_AXIS_KEYS,
   type TonalityAxisKey,
-} from '@devbarometer/shared/domain';
+} from '@masswhisper/shared/domain';
 
 import type { AggregatedSentimentProfile } from '../../../domain/entities';
 

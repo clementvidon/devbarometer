@@ -3,7 +3,7 @@ import {
   type EmotionScores,
   TONALITY_SCORE_FIELDS,
   type TonalityScores,
-} from '@devbarometer/shared/domain';
+} from '@masswhisper/shared/domain';
 
 import type {
   AggregatedSentimentProfile,

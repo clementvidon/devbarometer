@@ -1,4 +1,4 @@
-import { type Report, ReportSchema } from '@devbarometer/shared/domain';
+import { type Report, ReportSchema } from '@masswhisper/shared/domain';
 import { useEffect, useState } from 'react';
 
 function parseReportJson(data: unknown): Report {

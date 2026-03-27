@@ -2,8 +2,8 @@ import {
   TONALITY_AXIS_FIELDS,
   TONALITY_AXIS_KEYS,
   type TonalityAxisKey,
-} from '@devbarometer/shared/domain';
-import type { AggregatedSentimentProfileDto } from '@devbarometer/shared/dtos';
+} from '@masswhisper/shared/domain';
+import type { AggregatedSentimentProfileDto } from '@masswhisper/shared/dtos';
 
 import { EMOTION_COLORS } from './config';
 import { dateFmtTooltip } from './formatters';

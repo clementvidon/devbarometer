@@ -2,7 +2,7 @@
   "name": "frontend",
   "private": true,
   "type": "module",
-  "homepage": "https://clementvidon.github.io/devbarometer",
+  "homepage": "https://clementvidon.github.io/masswhisper",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -20,7 +20,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "@devbarometer/shared": "*",
+    "@masswhisper/shared": "*",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "recharts": "^3.1.0"

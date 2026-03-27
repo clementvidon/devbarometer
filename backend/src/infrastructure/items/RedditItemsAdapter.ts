@@ -32,7 +32,7 @@ export const ItemsResponseSchema = z.object({
 export interface RedditItemsOptions {
   /** Minimum threshold of upvotes to keep the item (default: 5) */
   minScore: number;
-  /** User-Agent suffix to send to Reddit (default: devbarometer UA) */
+  /** User-Agent suffix to send to Reddit (default: masswhisper UA) */
   userAgentSuffix: string;
   /** Base backoff in milliseconds used by exponential backoff (default: 100) */
   baseBackoffMs: number;

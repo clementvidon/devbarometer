@@ -1,6 +1,6 @@
-# Contributing to DevBarometer
+# Contributing to MassWhisper
 
-Thank you for your interest in contributing to **DevBarometer**! 🎉  
+Thank you for your interest in contributing to **MassWhisper**! 🎉  
 Your contributions help make the project better, more reliable, and more impactful.
 
 ## Contribution Guidelines

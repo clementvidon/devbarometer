@@ -6,7 +6,7 @@ This document defines where data contracts live, who owns them, and where runtim
 
 - A shared type has exactly one canonical definition.
 - If a type crosses workspaces, it belongs in `shared`; otherwise it stays local to its workspace.
-- Use only published shared barrels: `@devbarometer/shared/domain`, `@devbarometer/shared/dtos`, `@devbarometer/shared/primitives`.
+- Use only published shared barrels: `@masswhisper/shared/domain`, `@masswhisper/shared/dtos`, `@masswhisper/shared/primitives`.
 - Barrels are public entrypoints, not the canonical source file.
 
 ## Ownership
@@ -56,4 +56,3 @@ Rules:
 - Replay provides no implicit legacy compatibility.
 - Legacy or raw inputs must be transformed before replay.
 - Replay validates input before execution.
-

@@ -3,7 +3,7 @@ import 'dotenv/config';
 import { randomUUID } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
 
-import { IsoDateStringSchema } from '@devbarometer/shared/primitives';
+import { IsoDateStringSchema } from '@masswhisper/shared/primitives';
 import fs from 'fs';
 import OpenAI from 'openai';
 import path from 'path';

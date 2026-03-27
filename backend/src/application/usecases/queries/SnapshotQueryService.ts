@@ -1,8 +1,8 @@
-import type { Report } from '@devbarometer/shared/domain';
+import type { Report } from '@masswhisper/shared/domain';
 import type {
   AggregatedSentimentProfileDto,
   HeadlineDto,
-} from '@devbarometer/shared/dtos';
+} from '@masswhisper/shared/dtos';
 
 import type { SnapshotQueryPort } from '../../ports/input/SnapshotQueryPort';
 import type { PersistencePort } from '../../ports/output/PersistencePort';

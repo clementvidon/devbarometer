@@ -1,8 +1,8 @@
-import type { Report } from '@devbarometer/shared/domain';
+import type { Report } from '@masswhisper/shared/domain';
 import type {
   AggregatedSentimentProfileDto,
   HeadlineDto,
-} from '@devbarometer/shared/dtos';
+} from '@masswhisper/shared/dtos';
 
 /**
  * Read-only query port for application-level snapshot data.

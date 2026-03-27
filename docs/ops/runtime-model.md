@@ -1,6 +1,6 @@
 # Runtime Model
 
-This document defines the target runtime model for the client/server phase of DevBarometer.
+This document defines the target runtime model for the client/server phase of MassWhisper.
 
 Its purpose is to remove deployment and operations ambiguity before infrastructure implementation.
 

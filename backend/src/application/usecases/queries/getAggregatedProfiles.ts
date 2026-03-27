@@ -1,7 +1,7 @@
 import {
   type AggregatedSentimentProfileDto,
   AggregatedSentimentProfileDtoSchema,
-} from '@devbarometer/shared/dtos';
+} from '@masswhisper/shared/dtos';
 
 import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import type { PersistencePort } from '../../ports/output/PersistencePort';

@@ -17,7 +17,7 @@ function App() {
         <h1 className={styles.heading}>DevBarometer</h1>
         <a
           className={styles.navButton}
-          href="https://github.com/clementvidon/devbarometer"
+          href="https://github.com/clementvidon/masswhisper"
           aria-label="Infos page"
           target="_blank"
           rel="noopener noreferrer"

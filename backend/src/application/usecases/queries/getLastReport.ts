@@ -1,4 +1,4 @@
-import type { Report } from '@devbarometer/shared/domain';
+import type { Report } from '@masswhisper/shared/domain';
 
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 

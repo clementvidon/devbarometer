@@ -1,7 +1,7 @@
 import {
   EmotionScoresSchema,
   TonalityScoresSchema,
-} from '@devbarometer/shared/domain';
+} from '@masswhisper/shared/domain';
 import { z } from 'zod';
 
 export const SentimentProfileSchema = z

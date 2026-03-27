@@ -26,7 +26,7 @@ import type {
   Report,
   TonalityScores,
   WeatherEmoji,
-} from '@devbarometer/shared/domain';
+} from '@masswhisper/shared/domain';
 
 import type { AggregatedSentimentProfile } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';

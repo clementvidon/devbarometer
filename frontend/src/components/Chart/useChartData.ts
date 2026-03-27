@@ -1,8 +1,8 @@
 import {
   EMOTION_SCORE_FIELDS,
   TONALITY_AXIS_KEYS,
-} from '@devbarometer/shared/domain';
-import { AggregatedSentimentProfileDtoSchema } from '@devbarometer/shared/dtos';
+} from '@masswhisper/shared/domain';
+import { AggregatedSentimentProfileDtoSchema } from '@masswhisper/shared/dtos';
 import { useEffect, useState } from 'react';
 
 import { smoothUX } from './smoothing';

@@ -1,5 +1,5 @@
-import { ReportSchema } from '@devbarometer/shared/domain';
-import { IsoDateStringSchema } from '@devbarometer/shared/primitives';
+import { ReportSchema } from '@masswhisper/shared/domain';
+import { IsoDateStringSchema } from '@masswhisper/shared/primitives';
 import { z } from 'zod';
 
 import { roundNumber } from '../../lib/number/roundNumber';

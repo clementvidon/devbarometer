@@ -25,7 +25,7 @@ export class LowdbAdapter implements PersistencePort {
   private dbPromise: Promise<Awaited<DbType>>;
 
   constructor() {
-    this.dbPromise = JSONFilePreset<Data>(DB_PATH, defaultData);
+    this.dbPromise = JSONFilePreset(DB_PATH, defaultData);
   }
 
   private async getDb(): Promise<Awaited<DbType>> {

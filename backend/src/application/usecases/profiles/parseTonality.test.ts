@@ -1,4 +1,4 @@
-import type { TonalityScores } from '@devbarometer/shared/domain';
+import type { TonalityScores } from '@masswhisper/shared/domain';
 import { describe, expect, test } from 'vitest';
 
 import { parseTonality } from './parseTonality';

@@ -1,7 +1,7 @@
 import {
   EMOTION_SCORE_FIELDS,
   TONALITY_AXIS_KEYS,
-} from '@devbarometer/shared/domain';
+} from '@masswhisper/shared/domain';
 
 import styles from './Chart.module.css';
 import {

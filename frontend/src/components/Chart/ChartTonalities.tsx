@@ -1,4 +1,4 @@
-import { TONALITY_AXIS_KEYS } from '@devbarometer/shared/domain';
+import { TONALITY_AXIS_KEYS } from '@masswhisper/shared/domain';
 
 import { ChartCanvas } from './ChartCanvas';
 import { TONALITY_COLORS, TONALITY_LABELS } from './config';

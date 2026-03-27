@@ -59,7 +59,7 @@ jobs:
           git config --global user.name "github-actions"
 
       - name: Authenticate with GitHub token
-        run: git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/clementvidon/devbarometer.git
+        run: git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/clementvidon/masswhisper.git
 
       - name: Deploy to GitHub Pages
         run: npm --workspace frontend run deploy

@@ -1,10 +1,10 @@
-![CI](https://github.com/clementvidon/devbarometer/actions/workflows/ci.yml/badge.svg)
-![Coverage](https://codecov.io/gh/clementvidon/devbarometer/branch/main/graph/badge.svg)
+![CI](https://github.com/clementvidon/masswhisper/actions/workflows/ci.yml/badge.svg)
+![Coverage](https://codecov.io/gh/clementvidon/masswhisper/branch/main/graph/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![TypeScript](https://img.shields.io/badge/TypeScript-✓-blue)
-![Last commit](https://img.shields.io/github/last-commit/clementvidon/devbarometer)
+![Last commit](https://img.shields.io/github/last-commit/clementvidon/masswhisper)
 
-# DevBarometer
+# MassWhisper
 
 The dev job market barometer — powered by Reddit sentiment.
 
@@ -20,18 +20,20 @@ The dev job market barometer — powered by Reddit sentiment.
 
 ## Overview
 
-DevBarometer tracks the French developer job market’s mood from Reddit activity. Posts are ingested, filtered, and scored to produce a daily sentiment report, published to GitHub Pages.
+MassWhisper tracks the French developer job market’s mood from Reddit activity. Posts are ingested, filtered, and scored to produce a daily sentiment report, published to GitHub Pages.
 
 ## Quick Start
 
 ### Requirements
+
 - Node.js >= 22 (see `package.json#engines`).
 - OpenAI API key with billing enabled (for backend analysis).
 
 ### Setup
+
 ```bash
-git clone https://github.com/clementvidon/devbarometer.git
-cd devbarometer
+git clone https://github.com/clementvidon/masswhisper.git
+cd masswhisper
 npm install
 
 # Backend env
@@ -40,10 +42,12 @@ cp backend/.env.example backend/.env
 ```
 
 ### Run locally
+
 - Backend API (Express): `npm --workspace backend run dev` then POST `http://localhost:3000/report` to update.
 - Frontend (Vite): `npm --workspace frontend run dev` and open the printed local URL.
 
 ### Useful scripts
+
 - Project checks: `npm run check` (format:check, lint, type-check, test across workspaces).
 - Tests: `npm run test` or `npm run test:coverage` (root) — or per workspace via `npm --workspace <pkg> run test`.
 

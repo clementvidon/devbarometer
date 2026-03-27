@@ -1,4 +1,4 @@
-import { WEATHER_EMOJIS } from '@devbarometer/shared/domain';
+import { WEATHER_EMOJIS } from '@masswhisper/shared/domain';
 
 export const reportPrompt = `
 Tu transformes un profil agrégé en une brève description de la santé actuelle du marché de l'emploi tech.

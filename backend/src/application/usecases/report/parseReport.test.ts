@@ -1,4 +1,4 @@
-import type { Report } from '@devbarometer/shared/domain';
+import type { Report } from '@masswhisper/shared/domain';
 import { describe, expect, test } from 'vitest';
 
 import { parseReport } from './parseReport';

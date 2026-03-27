@@ -1,6 +1,6 @@
 # Public API Surface
 
-This document defines the intended public HTTP surface for the client/server phase of DevBarometer.
+This document defines the intended public HTTP surface for the client/server phase of MassWhisper.
 
 Its purpose is to freeze what is publicly reachable, what stays private, and where the MVP intentionally draws the line.
 

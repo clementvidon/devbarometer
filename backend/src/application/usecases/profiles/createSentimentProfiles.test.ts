@@ -58,10 +58,7 @@ vi.mock('./parseTonality', () => ({
   ),
 }));
 
-import type {
-  EmotionScores,
-  TonalityScores,
-} from '@devbarometer/shared/domain';
+import type { EmotionScores, TonalityScores } from '@masswhisper/shared/domain';
 
 import type { WeightedItem } from '../../../domain/entities';
 import type { LlmPort } from '../../ports/output/LlmPort';

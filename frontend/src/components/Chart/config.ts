@@ -1,7 +1,7 @@
 import type {
   EmotionScoreField,
   TonalityAxisKey,
-} from '@devbarometer/shared/domain';
+} from '@masswhisper/shared/domain';
 
 export const THEME = {
   axisText: '#9ec3ff',

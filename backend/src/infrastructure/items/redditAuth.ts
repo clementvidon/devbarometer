@@ -17,7 +17,7 @@ export type RedditCredentials = {
 };
 
 export const DEFAULT_REDDIT_USER_AGENT =
-  'devbarometer/1.0 (https://github.com/clementvidon/devbarometer by u/clem9nt)';
+  'masswhisper/1.0 (https://github.com/clementvidon/masswhisper by u/clem9nt)';
 
 const TOKEN_FETCH_MAX_ATTEMPTS = 3;
 const TOKEN_FETCH_TIMEOUT_MS = 15_000;

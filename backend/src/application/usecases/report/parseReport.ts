@@ -1,7 +1,7 @@
 import {
   type Report,
   ReportSchema as ReportOutputSchema,
-} from '@devbarometer/shared/domain';
+} from '@masswhisper/shared/domain';
 
 import { fail, ok, type ParseResult } from '../../../lib/result/parseResult';
 import { stripCodeFences } from '../../../lib/string/stripCodeFences';

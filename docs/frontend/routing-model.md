@@ -1,6 +1,6 @@
 # Routing Model
 
-This document defines the target frontend routing model for the client/server phase of DevBarometer.
+This document defines the target frontend routing model for the client/server phase of MassWhisper.
 
 Its purpose is to freeze how public frontend URLs are resolved before Vercel cutover.
 
