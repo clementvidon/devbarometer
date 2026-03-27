@@ -10,7 +10,7 @@ import { makeRelevanceMessages } from './llmMessages';
  * - Injects item title+content into the user message.
  */
 
-describe(makeRelevanceMessages.name, () => {
+describe('makeRelevanceMessages', () => {
   test('creates a system and user message for the relevance filter', () => {
     const item = {
       title: 'my-title',

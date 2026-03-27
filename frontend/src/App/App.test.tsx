@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import App from './App';
 
-describe(App.name, () => {
+describe('App', () => {
   beforeEach(() => {
     global.fetch = vi.fn(() =>
       Promise.resolve({

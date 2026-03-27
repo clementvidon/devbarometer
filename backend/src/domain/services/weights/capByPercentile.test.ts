@@ -10,7 +10,7 @@ import { capByPercentile, type CapParams } from './capByPercentile';
  *   fallbacks to the largest observed excess (i.e. max(excess)).
  */
 
-describe(capByPercentile.name, () => {
+describe('capByPercentile', () => {
   const CAP_PARAMS: CapParams = {
     minN: 5,
     percentile: 0.95,
@@ -144,9 +144,9 @@ describe(capByPercentile.name, () => {
       expect(result.meta.capped).toStrictEqual(true);
       expect(result.meta.reason).toStrictEqual('p95_cap');
       result.cappedItems.forEach((it, i) => {
-        if (Number.isFinite(items[i].weight)) {
-          expect(it.weight).toBeLessThanOrEqual(items[i].weight);
-        }
+        const original = items[i].weight;
+        if (!Number.isFinite(original)) return;
+        expect(it.weight).toBeLessThanOrEqual(original);
       });
       result.cappedItems.forEach((it) => {
         expect(Number.isFinite(it.weight)).toBe(true);

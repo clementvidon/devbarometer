@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import type { Item, ItemRelevance } from '../../../domain/entities';
 import { selectRelevantItems } from './selectRelevantItems';
 
-describe(selectRelevantItems.name, () => {
+describe('selectRelevantItems', () => {
   test('keeps only relevant items while preserving input order', () => {
     const items: Item[] = [
       {

@@ -34,7 +34,7 @@ function makeLoggerDouble(): LoggerDouble {
  * - Executes the task exactly once; resolves/rejects exactly like the task.
  */
 
-describe(withSpan.name, () => {
+describe('withSpan', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });

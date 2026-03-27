@@ -9,7 +9,7 @@ import { sanitizeMomentumInputs } from './sanitizeMomentumInputs';
  * - Returns sanitized copies of both arrays. No logging in domain layer.
  */
 
-describe(sanitizeMomentumInputs.name, () => {
+describe('sanitizeMomentumInputs', () => {
   function makeRelevantItem(
     overrides: Partial<RelevantItem> = {},
   ): RelevantItem {

@@ -11,7 +11,7 @@ import { getLastRelevantItemsBefore } from './getLastRelevantItemsBefore';
  * - Returns that snapshot’s relevant items derived from `weightedItems`, or `[]` if no snapshot matches.
  */
 
-describe(getLastRelevantItemsBefore.name, () => {
+describe('getLastRelevantItemsBefore', () => {
   function makeRelevantItem(
     overrides: Partial<RelevantItem> = {},
   ): RelevantItem {

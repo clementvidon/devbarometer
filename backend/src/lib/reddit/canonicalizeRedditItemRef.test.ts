@@ -2,7 +2,7 @@ import { describe, expect, test } from 'vitest';
 
 import { canonicalizeRedditItemRef } from './canonicalizeRedditItemRef';
 
-describe(canonicalizeRedditItemRef.name, () => {
+describe('canonicalizeRedditItemRef', () => {
   test('keeps short reddit item refs unchanged', () => {
     expect(
       canonicalizeRedditItemRef('https://reddit.com/comments/1abc123'),

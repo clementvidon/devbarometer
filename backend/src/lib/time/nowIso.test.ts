@@ -7,7 +7,7 @@ import { nowIso } from './nowIso';
  * - Uses system time (Date) as the source of truth.
  */
 
-describe(nowIso.name, () => {
+describe('nowIso', () => {
   test('returns current date in ISO format', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2020-01-01T00:00:00.000Z'));

@@ -9,7 +9,7 @@ import { normalizeByMean, type NormalizeByMeanParams } from './normalizeByMean';
  * - mean === 0 sets all weights to 0
  */
 
-describe(normalizeByMean.name, () => {
+describe('normalizeByMean', () => {
   function makeWeightedItem(
     overrides: Partial<WeightedItem> = {},
   ): WeightedItem {

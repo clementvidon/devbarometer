@@ -10,7 +10,7 @@ import type { SentimentProfileSummary } from './summarizeProfile';
  * - Injects the JSON summary into the user message content.
  */
 
-describe(makeReportMessages.name, () => {
+describe('makeReportMessage', () => {
   test('create a system and user message for the report generation', () => {
     const summary = {
       emotionsStrength: [],

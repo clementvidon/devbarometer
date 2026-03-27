@@ -58,7 +58,7 @@ function makeLogger(): Mocked<LoggerPort> {
  * - Preserves original order of items that are kept.
  */
 
-describe(filterRelevantItems.name, () => {
+describe('filterRelevantItems', () => {
   afterEach(() => {
     vi.clearAllMocks();
     nextItemId = 0;

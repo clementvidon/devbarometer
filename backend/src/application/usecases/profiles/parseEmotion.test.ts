@@ -25,7 +25,7 @@ function makeEmotionScores(
  * - Never throws.
  */
 
-describe(parseEmotion.name, () => {
+describe('parseEmotion', () => {
   test('returns FALLBACK on invalid JSON', () => {
     expect(parseEmotion('{ wrong }')).toMatchObject({
       ok: false,

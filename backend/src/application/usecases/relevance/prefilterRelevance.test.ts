@@ -20,7 +20,7 @@ const opts = {
   applyTitleBlocklist: true,
 };
 
-describe(prefilterRelevance.name, () => {
+describe('prefilterRelevance', () => {
   test('rejects title-only items', () => {
     expect(prefilterRelevance(makeItem({ content: '   ' }), opts)).toEqual({
       kind: 'reject',

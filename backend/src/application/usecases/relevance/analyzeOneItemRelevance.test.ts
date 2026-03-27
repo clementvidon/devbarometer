@@ -30,7 +30,7 @@ function makeItem(overrides: Partial<Item> = {}): Item {
   };
 }
 
-describe(analyzeOneItemRelevance.name, () => {
+describe('analyzeOneItemRelevance', () => {
   afterEach(() => vi.restoreAllMocks());
 
   test('returns full triad output', async () => {

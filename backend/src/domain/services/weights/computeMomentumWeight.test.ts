@@ -10,7 +10,7 @@ import { computeMomentumWeight } from './computeMomentumWeight';
  * - no prev items -> all are treated as new
  */
 
-describe(computeMomentumWeight.name, () => {
+describe('computeMomentumWeight', () => {
   const BASE_WEIGHT = 10;
   function makeRelevantItem(
     overrides: Partial<RelevantItem> = {},

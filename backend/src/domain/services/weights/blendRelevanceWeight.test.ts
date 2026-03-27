@@ -3,7 +3,7 @@ import { describe, expect, test } from 'vitest';
 import type { ItemRelevance, WeightedItem } from '../../../domain/entities';
 import { blendRelevanceWeight } from './blendRelevanceWeight';
 
-describe(blendRelevanceWeight.name, () => {
+describe('blendRelevanceWeight', () => {
   test('multiplies weights by topicScore', () => {
     const weightedItems: WeightedItem[] = [
       {

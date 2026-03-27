@@ -9,7 +9,7 @@ import { parseRelevance } from './parseRelevance';
  * - Never throws.
  */
 
-describe(parseRelevance.name, () => {
+describe('parseRelevance', () => {
   test('returns FALLBACK on invalid JSON', () => {
     expect(parseRelevance('{ wrong }')).toMatchObject({
       ok: false,

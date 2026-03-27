@@ -46,7 +46,7 @@ function makeItem(overrides: Partial<Item> = {}): Item {
   };
 }
 
-describe(analyzeItemsRelevance.name, () => {
+describe('analyzeItemsRelevance', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });

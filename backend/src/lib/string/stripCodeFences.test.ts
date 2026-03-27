@@ -9,7 +9,7 @@ import { stripCodeFences } from './stripCodeFences';
  * - Does not remove inline backticks that are not fences.
  */
 
-describe(stripCodeFences.name, () => {
+describe('stripCodeFences', () => {
   test('removes code fence lines', () => {
     expect(stripCodeFences('```\ncode\n```')).toBe('code');
   });

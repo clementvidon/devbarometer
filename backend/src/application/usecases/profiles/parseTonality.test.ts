@@ -25,7 +25,7 @@ function makeTonalityScores(
  * - Never throws.
  */
 
-describe(parseTonality.name, () => {
+describe('parseTonality', () => {
   test('returns FALLBACK on invalid JSON', () => {
     expect(parseTonality('{ wrong }')).toMatchObject({
       ok: false,

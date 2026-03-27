@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import tseslint from '@typescript-eslint/eslint-plugin';
 import tsparser from '@typescript-eslint/parser';
 import importPlugin from 'eslint-plugin-import';
-import vitest from 'eslint-plugin-vitest';
+import vitest from '@vitest/eslint-plugin'
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 
@@ -68,6 +68,9 @@ export default defineConfig([
   {
     files: ['**/*.test.{ts,tsx}'],
     plugins: { vitest },
+    rules: {
+      ...vitest.configs.recommended.rules,
+    },
     languageOptions: {
       parser: tsparser,
       parserOptions: {

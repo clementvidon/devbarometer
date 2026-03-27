@@ -3,7 +3,7 @@ import { describe, expect, test, vi } from 'vitest';
 import type { PersistencePort } from '../../ports/output/PersistencePort';
 import { getConfirmedRelevanceCacheBefore } from './getConfirmedRelevanceCacheBefore';
 
-describe(getConfirmedRelevanceCacheBefore.name, () => {
+describe('getConfirmedRelevanceCacheBefore', () => {
   test('keeps only decisions confirmed twice in a row on identical content', async () => {
     const persistence: PersistencePort = {
       storeSnapshotAt: vi.fn(),

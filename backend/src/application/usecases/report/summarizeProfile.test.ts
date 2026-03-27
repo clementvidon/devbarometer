@@ -29,7 +29,7 @@ const MAX_SCORE = 1;
  * - Returns empty `standoutEmotions` when no standout exists.
  */
 
-describe(summarizeProfile.name, () => {
+describe('summarizeProfile', () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
   ): EmotionScores {
@@ -139,7 +139,7 @@ describe(summarizeProfile.name, () => {
  * - Results are sorted by score (ties follow object key order).
  */
 
-describe(pickStandoutsByScore.name, () => {
+describe('pickStandoutsByScore', () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
   ): EmotionScores {
@@ -240,7 +240,7 @@ describe(pickStandoutsByScore.name, () => {
  * - Otherwise returns positive/negative (strength based on distance).
  */
 
-describe(evaluateTone.name, () => {
+describe('evaluateTone', () => {
   const cases = [
     {
       name: 'neutral: close but low',
@@ -301,7 +301,7 @@ describe(evaluateTone.name, () => {
  * Spec: Map a numeric score to a StrengthLabel using fixed thresholds.
  */
 
-describe(getStrengthLabel.name, () => {
+describe('getStrengthLabel', () => {
   const MIN_SCORE = 0;
   const cases = [
     { score: MIN_SCORE, expected: 'very weak' },

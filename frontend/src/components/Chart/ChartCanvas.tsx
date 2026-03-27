@@ -96,11 +96,11 @@ export function ChartCanvas<T extends { createdAt: string }>({
             itemStyle={{ color: THEME.tooltipText }}
             cursor={{ stroke: THEME.axisLine, strokeDasharray: '3 3' }}
             wrapperStyle={{ display: tooltipActive ? 'block' : 'none' }}
-            labelFormatter={(label: string | number) =>
+            labelFormatter={(label) =>
               dateFmtTooltip.format(new Date(String(label)))
             }
-            formatter={(value: number, name: string) => [
-              numFmt.format(value),
+            formatter={(value, name) => [
+              numFmt.format(Number(value ?? 0)),
               name,
             ]}
             itemSorter={(item) =>

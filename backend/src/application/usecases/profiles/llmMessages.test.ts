@@ -10,7 +10,7 @@ import { makeProfileMessages } from './llmMessages';
  * - Injects item title+content into the user message.
  */
 
-describe(makeProfileMessages.name, () => {
+describe('makeProfileMessages', () => {
   test('creates a system and user message for the sentiment profile creation', () => {
     const item = {
       title: 'my-title',

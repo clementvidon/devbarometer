@@ -12,7 +12,7 @@ import { aggregateSentimentProfiles } from './aggregateSentimentProfiles';
  * - Throws on empty input.
  */
 
-describe(aggregateSentimentProfiles.name, () => {
+describe('aggregateSentimentProfiles', () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
   ): EmotionScores {

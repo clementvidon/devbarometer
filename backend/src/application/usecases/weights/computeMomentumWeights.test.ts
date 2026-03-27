@@ -14,7 +14,7 @@ import {
  * - Preserves input order and never mutates inputs.
  */
 
-describe(computeMomentumWeights.name, () => {
+describe('computeMomentumWeights', () => {
   const BASE = DEFAULT_MOMENTUM_OPTIONS.baseWeight;
   function makeRelevantItem(
     overrides: Partial<RelevantItem> = {},

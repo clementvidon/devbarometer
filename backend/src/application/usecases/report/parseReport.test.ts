@@ -19,7 +19,7 @@ function makeReport(overrides: Partial<Report> = {}): Report {
  * - Never throws.
  */
 
-describe(parseReport.name, () => {
+describe('parseReport', () => {
   test('returns FALLBACK on invalid JSON', () => {
     expect(parseReport('{ wrong }')).toMatchObject({
       ok: false,

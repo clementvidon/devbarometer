@@ -73,7 +73,7 @@ import { createSentimentProfiles } from './createSentimentProfiles';
  * - If the LLM call fails, returns a fallback profile for that item.
  */
 
-describe(createSentimentProfiles.name, () => {
+describe('createSentimentProfiles', () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
   ): EmotionScores {

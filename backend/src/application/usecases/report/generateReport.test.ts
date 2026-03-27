@@ -101,7 +101,7 @@ function makeLogger(): Mocked<LoggerPort> {
  * - Logs key steps and failures via the provided logger.
  */
 
-describe(generateReport.name, () => {
+describe('generateReport', () => {
   const VALID_REPORT: Report = {
     emoji: '☀️' satisfies WeatherEmoji,
     text: 'my-report',

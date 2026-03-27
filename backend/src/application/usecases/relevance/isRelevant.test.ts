@@ -40,7 +40,7 @@ function makeItem(overrides: Partial<Item> = {}): Item {
  * - Returns DEFAULT_RELEVANCE_ON_ERROR if the LLM call fails.
  */
 
-describe(isRelevant.name, () => {
+describe('isRelevant', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });

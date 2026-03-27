@@ -11,7 +11,7 @@ import { attachWeightsToSentimentProfiles } from './attachWeightsToSentimentProf
  * - Fallbacks forces weight = 0
  */
 
-describe(attachWeightsToSentimentProfiles.name, () => {
+describe('attachWeightsToSentimentProfiles', () => {
   function makeEmotionScores(
     overrides: Partial<EmotionScores> = {},
   ): EmotionScores {
