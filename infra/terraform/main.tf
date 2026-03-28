@@ -21,6 +21,26 @@ resource "hcloud_ssh_key" "default" {
   public_key = file(pathexpand(var.ssh_public_key_path))
 }
 
+resource "hcloud_firewall" "public_http" {
+  name = "${local.server_name}-public-http"
+
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "22"
+    source_ips = ["0.0.0.0/0", "::/0"]
+    description = "allow ssh"
+  }
+
+  rule {
+    direction  = "in"
+    protocol   = "tcp"
+    port       = "80"
+    source_ips = ["0.0.0.0/0", "::/0"]
+    description = "allow http"
+  }
+}
+
 resource "hcloud_server" "vm" {
   name        = local.server_name
   server_type = var.server_type
@@ -30,6 +50,7 @@ resource "hcloud_server" "vm" {
   user_data = templatefile("${path.module}/cloud-init.yaml.tftpl", local.bootstrap)
 
   ssh_keys = [hcloud_ssh_key.default.id]
+  firewall_ids = [hcloud_firewall.public_http.id]
 
   public_net {
     ipv4_enabled = true

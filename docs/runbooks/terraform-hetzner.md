@@ -12,7 +12,7 @@ It assumes:
 
 Terraform reads the Hetzner cloud api token from the shell environment.
 
-Example secure approach:
+Secure approach example:
 
 ```bash
 export HCLOUD_TOKEN="$(pass show masswhisper/infra/hcloud/token)"
@@ -24,10 +24,6 @@ export HCLOUD_TOKEN="$(pass show masswhisper/infra/hcloud/token)"
 npm run generate-topic-tf-input -- instances/fr-dev-job-market/prod.yaml
 ```
 
-Expected result:
-
-- `infra/terraform/generated/fr-dev-job-market-prod.tfvars.json`
-
 ## 3. Initialize Terraform
 
 ```bash
@@ -37,65 +33,60 @@ terraform -chdir=infra/terraform init
 ## 4. Review The Plan
 
 ```bash
-terraform -chdir=infra/terraform plan -var-file=generated/fr-dev-job-market-prod.tfvars.json
+terraform -chdir=infra/terraform plan \
+  -var-file=generated/fr-dev-job-market-prod.tfvars.json
 ```
 
 Expected result:
 
+- the Hetzner HTTP firewall is created or reused
 - the Hetzner SSH key is created or reused
-- the Hetzner server is created or updated
-- the server IP is exposed as an output
+- the Hetzner server is created or replaced as needed
+- the server public IPv4 is exposed as an output
 
 ## 5. Apply The Plan
 
 ```bash
-terraform -chdir=infra/terraform apply -var-file=generated/fr-dev-job-market-prod.tfvars.json
-```
-
-## 6. Read The Outputs
-
-```bash
-terraform -chdir=infra/terraform output
-terraform -chdir=infra/terraform output server_ip
+terraform -chdir=infra/terraform apply \
+  -var-file=generated/fr-dev-job-market-prod.tfvars.json
 ```
 
 Expected result:
 
-- the VM exists
-- the public IPv4 is available
+- the VM exists after apply
+- the server public IPv4 is available in the Terraform outputs
 
-## 7. Verify Cloud-Init And Bootstrap
+## 6. Verify Cloud-Init And Bootstrap
 
 ```bash
 server_ip="$(terraform -chdir=infra/terraform output -raw server_ip)"
 ssh "root@$server_ip" '
-  set -eu
-  echo "node: $(node -v)"
-  echo "npm: $(npm -v)"
-  id -u masswhisper >/dev/null
-  echo "user: ok"
-  test -d /opt/masswhisper
-  echo "repo: ok"
-  echo "env: $(stat -c "%U:%G %a" /etc/masswhisper/backend.env)"
-  test -f /etc/systemd/system/masswhisper-topic.service
-  echo "unit: ok"
+  set -u
+  printf "node: "; node -v 2>/dev/null || echo "fail"
+  printf "npm: "; npm -v 2>/dev/null || echo "fail"
+  printf "user: "; id -u masswhisper >/dev/null 2>&1 && echo "ok" || echo "fail"
+  printf "repo: "; test -d /opt/masswhisper && echo "ok" || echo "fail"
+  printf "env: "; test -f /etc/masswhisper/backend.env && stat -c "%U:%G %a %n" /etc/masswhisper/backend.env || echo "fail"
+  printf "unit: "; test -f /etc/systemd/system/masswhisper-topic.service && echo "ok" || echo "fail"
+  printf "nginx site: "; test -f /etc/nginx/sites-available/api.masswhisper.com.conf && echo "ok" || echo "fail"
+  printf "nginx link: "; test -L /etc/nginx/sites-enabled/api.masswhisper.com.conf && echo "ok" || echo "fail"
+  printf "nginx config: "; nginx -t >/dev/null 2>&1 && echo "ok" || echo "fail"
 '
 ```
 
-If the step fails, inspect the cloud-init logs:
+If the step fails, inspect the cloud-init logs first:
 
 ```bash
+server_ip="$(terraform -chdir=infra/terraform output -raw server_ip)"
 ssh "root@$server_ip" 'journalctl -u cloud-init -u cloud-final -n 40 --no-pager'
 ```
 
-Expected result:
+If cloud-init must be replayed after a template fix, recreate the server:
 
-- cloud-init completed successfully
-- Node.js and npm are installed
-- the masswhisper system user exists
-- the repository is present in /opt/masswhisper
-- /etc/masswhisper/backend.env exists and still needs secrets
-- the versioned systemd unit is installed
+```bash
+terraform -chdir=infra/terraform apply -replace=hcloud_server.vm \
+  -var-file=generated/fr-dev-job-market-prod.tfvars.json
+```
 
 ## State After This Runbook
 

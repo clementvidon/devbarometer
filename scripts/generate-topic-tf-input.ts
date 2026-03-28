@@ -56,4 +56,4 @@ const targetPath = path.join(
 fs.mkdirSync(path.dirname(targetPath), { recursive: true });
 fs.writeFileSync(targetPath, `${json}\n`);
 
-console.log(targetPath);
+console.log(`Generated: ${targetPath}`);

@@ -20,18 +20,18 @@ Ensure:
 - mode is `640`
 - the file is never committed to git
 
-Example secure approach:
+Secure approach example:
 
 ```bash
 server_ip="$(terraform -chdir=infra/terraform output -raw server_ip)"
 pass show masswhisper/runtime/fr-dev-job-market-prod/backend.env | \
-ssh "root@$server_ip" '
-  set -euo pipefail
-  install -d -m 755 /etc/masswhisper
-  tmp=$(mktemp)
-  trap "rm -f \"$tmp\"" EXIT
-  cat > "$tmp"
-  install -o root -g masswhisper -m 640 "$tmp" /etc/masswhisper/backend.env
+  ssh "root@$server_ip" '
+    set -euo pipefail
+    install -d -m 755 /etc/masswhisper
+    tmp=$(mktemp)
+    trap "rm -f \"$tmp\"" EXIT
+    cat > "$tmp"
+    install -o root -g masswhisper -m 640 "$tmp" /etc/masswhisper/backend.env
 '
 ```
 
@@ -42,12 +42,12 @@ If the service was already running, restart it after updating the env file.
 ```bash
 server_ip="$(terraform -chdir=infra/terraform output -raw server_ip)"
 ssh "root@$server_ip" '
-set -a
-source /etc/masswhisper/backend.env
-set +a
+  set -a
+  source /etc/masswhisper/backend.env
+  set +a
 
-cd /opt/masswhisper
-npm --workspace backend run db:migrate
+  cd /opt/masswhisper
+  npm --workspace backend run db:migrate
 '
 ```
 
@@ -56,9 +56,9 @@ npm --workspace backend run db:migrate
 ```bash
 server_ip="$(terraform -chdir=infra/terraform output -raw server_ip)"
 ssh "root@$server_ip" '
-systemctl enable masswhisper-topic
-systemctl start masswhisper-topic
-systemctl status masswhisper-topic
+  systemctl enable masswhisper-topic
+  systemctl start masswhisper-topic
+  systemctl status masswhisper-topic
 '
 ```
 
@@ -74,13 +74,66 @@ ssh "root@$server_ip" 'journalctl -u masswhisper-topic -n 100 --no-pager'
 ```bash
 server_ip="$(terraform -chdir=infra/terraform output -raw server_ip)"
 ssh "root@$server_ip" '
-ss -ltnp | grep 3000
-curl -i http://127.0.0.1:3000/report
+  set -u
+
+  printf "node binds local port 3000: "
+  ss -ltnp | grep -E "127\.0\.0\.1:3000.*node" >/dev/null 2>&1 && echo "ok" || echo "fail"
+
+  printf "local health endpoint reachable: "
+  curl -s -i http://127.0.0.1:3000/health \
+    | grep -q "^HTTP/1.1 200" && echo "ok" || echo "fail"
+
+  printf "nginx local health route works: "
+  curl -s -i -H "Host: api.masswhisper.com" http://127.0.0.1/health \
+    | grep -q "^HTTP/1.1 200" && echo "ok" || echo "fail"
+
+  printf "nginx local report route blocked: "
+  curl -s -i -H "Host: api.masswhisper.com" http://127.0.0.1/report \
+    | grep -q "^HTTP/1.1 404" && echo "ok" || echo "fail"
 '
+```
+
+## 6. Verify Proxied Health
+
+```bash
+server_ip="$(terraform -chdir=infra/terraform output -raw server_ip)"
+
+printf "public health endpoint reachable: "
+curl -s -i -H "Host: api.masswhisper.com" "http://$server_ip/health" \
+  | grep -q "^HTTP/1.1 200" && echo "ok" || echo "fail"
+
+printf "public report endpoint blocked: "
+curl -s -i -H "Host: api.masswhisper.com" "http://$server_ip/report" \
+  | grep -q "^HTTP/1.1 404" && echo "ok" || echo "fail"
+
+printf "public node port stays closed: "
+curl -s --max-time 5 "http://$server_ip:3000/health" >/dev/null 2>&1 \
+  && echo "fail" || echo "ok"
+```
+
+## 7. Verify Minimal Firewall Exposure
+
+```bash
+server_ip="$(terraform -chdir=infra/terraform output -raw server_ip)"
+
+printf "public tcp/22 reachable: "
+ssh -o BatchMode=yes -o ConnectTimeout=5 "root@$server_ip" true >/dev/null 2>&1 \
+  && echo "ok" || echo "fail"
+
+printf "public tcp/80 reachable: "
+curl -s --max-time 5 -o /dev/null -H "Host: api.masswhisper.com" "http://$server_ip/health" \
+  && echo "ok" || echo "fail"
+
+printf "public tcp/3000 blocked: "
+curl -s --max-time 5 "http://$server_ip:3000/health" >/dev/null 2>&1 \
+  && echo "fail" || echo "ok"
 ```
 
 ## State After This Runbook
 
 - the backend runs as a long-lived service
-- the backend is still private
-- Nginx, `/health`, DNS/TLS, and cron are not configured yet
+- the Node listener stays private on `127.0.0.1:3000`
+- Nginx is configured
+- `/health` responds locally and through Nginx
+- the public proxy surface is limited to `/health`
+- DNS/TLS and cron are not configured yet
